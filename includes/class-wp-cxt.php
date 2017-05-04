@@ -77,7 +77,7 @@ class Wp_Cxt {
 		$this->define_public_hooks();
 		add_action( 'admin_menu', array( $this, 'create_plugin_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'setup_sections' ) );
-        add_action( 'admin_init', array( $this, 'setup_fields' ) );
+		add_action( 'admin_init', array( $this, 'setup_fields' ) );
 	}
 
 	/**
@@ -237,335 +237,330 @@ class Wp_Cxt {
 	}
 
 	public function section_callback( $arguments ) {
-	switch( $arguments['id'] ){
-		case 'required_section':
-			echo 'These are required fields';
-			break;
-		case 'optional_section':
-			echo 'These are optional fields';
-			break;
-		case 'callback_section':
-			echo 'These are optional callbacks you can use to execute javascript code.';
-			break;
-	}
+		switch ( $arguments['id'] ) {
+			case 'required_section':
+				echo 'These are required fields';
+				break;
+			case 'optional_section':
+				echo 'These are optional fields';
+				break;
+			case 'callback_section':
+				echo 'These are optional callbacks you can use to execute javascript code.';
+				break;
+		}
 	}
 
-	public function plugin_settings_page_content() { ?>
-	<div class="wrap">
-		<h2>Connext Settings</h2>
-		<form method="post" action="options.php">
-            <?php
-                settings_fields( 'connext_settings' );
-                do_settings_sections( 'connext_settings' );
-                submit_button();
-            ?>
-		</form>
-	</div> <?php
+	public function plugin_settings_page_content() {
+		?>
+			<div class="wrap">
+				<h2>Connext Settings</h2>
+				<form method="post" action="options.php">
+				<?php
+					settings_fields( 'connext_settings' );
+					do_settings_sections( 'connext_settings' );
+					submit_button();
+				?>
+				</form>
+				</div>
+		<?php
 	}
 
 	public function setup_fields() {
-        $fields = array(
-		    array(
-			    'uid' => 'site_code_field',
-			    'label' => 'Site Code',
-			    'section' => 'required_section',
-			    'type' => 'text',
-			    'options' => false,
-			    'placeholder' => 'Site Code',
-			    'helper' => 'Does this help?',
-			    'supplemental' => 'This is your site code given by your PM.',
-			    'default' => ''
-		    ),
+		$fields = array(
+			array(
+				'uid' => 'site_code_field',
+				'label' => 'Site Code',
+				'section' => 'required_section',
+				'type' => 'text',
+				'options' => false,
+				'placeholder' => 'Site Code',
+				'helper' => 'Does this help?',
+				'supplemental' => 'This is your site code given by your PM.',
+				'default' => '',
+			),
 
-            array(
-			    'uid' => 'config_code_field',
-			    'label' => 'Config Code',
-			    'section' => 'required_section',
-			    'type' => 'text',
-			    'options' => false,
-			    'placeholder' => 'Config Code',
-			    'helper' => 'Help?',
-			    'supplemental' => 'This is the configuration code you want to use. You can get this from the Connext Admin.',
-			    'default' => ''
-		    ),
 			array(
-			    'uid' => 'attr_field',
-			    'label' => 'Attr',
-			    'section' => 'required_section',
-			    'type' => 'text',
-			    'options' => false,
-			    'placeholder' => 'Attr',
-			    'helper' => 'Help?',
-			    'supplemental' => 'This is the attributes.',
-			    'default' => ''
-		    ),
+				'uid' => 'config_code_field',
+				'label' => 'Config Code',
+				'section' => 'required_section',
+				'type' => 'text',
+				'options' => false,
+				'placeholder' => 'Config Code',
+				'helper' => 'Help?',
+				'supplemental' => 'This is the configuration code you want to use. You can get this from the Connext Admin.',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'settings_key_fields',
-			    'label' => 'Settings Keys',
-			    'section' => 'required_section',
-			    'type' => 'text',
-			    'options' => false,
-			    'placeholder' => 'Settings Keys',
-			    'helper' => 'Help?',
-			    'supplemental' => 'Settings key for multi paper',
-			    'default' => ''
-		    ),
+				'uid' => 'attr_field',
+				'label' => 'Attr',
+				'section' => 'required_section',
+				'type' => 'text',
+				'options' => false,
+				'placeholder' => 'Attr',
+				'helper' => 'Help?',
+				'supplemental' => 'This is the attributes.',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'papercode_key_fields',
-			    'label' => 'Paper Code',
-			    'section' => 'optional_section',
-			    'type' => 'text',
-			    'options' => false,
-			    'placeholder' => 'Settings Keys',
-			    'helper' => 'Help?',
-			    'supplemental' => 'Paper code.',
-			    'default' => ''
-		    ),
-            array(
-		        'uid' => 'debug_field',
-		        'label' => 'Debug Level',
-		        'section' => 'optional_section',
-		        'type' => 'select',
-		        'options' => array(
-			        'debug' => 'Debug',
-			        'warn' => 'Warn',
-			        'info' => 'Info',
-                    'error' => 'Error'
-		        ),
-		        'placeholder' => 'Debug Level',
-		        'helper' => 'Help?',
-		        'supplemental' => 'Controls how much is written to windows console.',
-		        'default' => 'debug'
-	            ),
-				array(
-		        'uid' => 'environment_field',
-		        'label' => 'Environment',
-		        'section' => 'optional_section',
-		        'type' => 'select',
-		        'options' => array(
+				'uid' => 'settings_key_fields',
+				'label' => 'Settings Keys',
+				'section' => 'required_section',
+				'type' => 'text',
+				'options' => false,
+				'placeholder' => 'Settings Keys',
+				'helper' => 'Help?',
+				'supplemental' => 'Settings key for multi paper',
+				'default' => '',
+			),
+			array(
+				'uid' => 'papercode_key_fields',
+				'label' => 'Paper Code',
+				'section' => 'optional_section',
+				'type' => 'text',
+				'options' => false,
+				'placeholder' => 'Settings Keys',
+				'helper' => 'Help?',
+				'supplemental' => 'Paper code.',
+				'default' => '',
+			),
+			array(
+				'uid' => 'debug_field',
+				'label' => 'Debug Level',
+				'section' => 'optional_section',
+				'type' => 'select',
+				'options' => array(
+					'debug' => 'Debug',
+					'warn' => 'Warn',
+					'info' => 'Info',
+					'error' => 'Error',
+				),
+				'placeholder' => 'Debug Level',
+				'helper' => 'Help?',
+				'supplemental' => 'Controls how much is written to windows console.',
+				'default' => 'debug',
+			),
+			array(
+				'uid' => 'environment_field',
+				'label' => 'Environment',
+				'section' => 'optional_section',
+				'type' => 'select',
+				'options' => array(
 					'test' => 'Test',
-			        'stage' => 'Stage',
-			        'prod' => 'Productin'
-		        ),
-		        'placeholder' => 'Environment',
-		        'helper' => 'Help?',
-		        'supplemental' => 'Environment.',
-		        'default' => 'test'
-	            ),
-				array(
-			    'uid' => 'onNoConfigSettingFound_key_fields',
-			    'label' => 'onNoConfigSettingFound',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onNoConfigSettingFound',
-			    'helper' => 'Help?',
-			    'supplemental' => 'On No Config Settings Found',
-			    'default' => ''
-		    ),
+					'stage' => 'Stage',
+					'prod' => 'Productin',
+				),
+				'placeholder' => 'Environment',
+				'helper' => 'Help?',
+				'supplemental' => 'Environment.',
+				'default' => 'test',
+			),
 			array(
-			    'uid' => 'onActionShow_key_fields',
-			    'label' => 'onActionShow',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onActionShow',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onNoConfigSettingFound_key_fields',
+				'label' => 'onNoConfigSettingFound',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onNoConfigSettingFound',
+				'helper' => 'Help?',
+				'supplemental' => 'On No Config Settings Found',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onActionHide_key_fields',
-			    'label' => 'onActionHide',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onActionHide',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onActionShow_key_fields',
+				'label' => 'onActionShow',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onActionShow',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onAuthenticateSuccess_key_fields',
-			    'label' => 'onAuthenticateSuccess',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onAuthenticateSuccess',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onActionHide_key_fields',
+				'label' => 'onActionHide',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onActionHide',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onAuthenticateFailure_key_fields',
-			    'label' => 'onAuthenticateFailure',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onAuthenticateFailure',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onAuthenticateSuccess_key_fields',
+				'label' => 'onAuthenticateSuccess',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onAuthenticateSuccess',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onMeterLevelSet_key_fields',
-			    'label' => 'onMeterLevelSet',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onMeterLevelSet',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onAuthenticateFailure_key_fields',
+				'label' => 'onAuthenticateFailure',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onAuthenticateFailure',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'oonHasAccessToken_key_fields',
-			    'label' => 'onHasAccessToken',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onHasAccessToken',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onMeterLevelSet_key_fields',
+				'label' => 'onMeterLevelSet',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onMeterLevelSet',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onHasUserToken_key_fields',
-			    'label' => 'onHasUserToken',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onHasUserToken',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'oonHasAccessToken_key_fields',
+				'label' => 'onHasAccessToken',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onHasAccessToken',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onUserTokenSuccess_key_fields',
-			    'label' => 'onUserTokenSuccess',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onUserTokenSuccess',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onHasUserToken_key_fields',
+				'label' => 'onHasUserToken',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onHasUserToken',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onUserTokenFailure_key_fields',
-			    'label' => 'onUserTokenFailure',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onUserTokenFailure',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onUserTokenSuccess_key_fields',
+				'label' => 'onUserTokenSuccess',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onUserTokenSuccess',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onAuthorized_key_fields',
-			    'label' => 'onAuthorized',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onAuthorized',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onUserTokenFailure_key_fields',
+				'label' => 'onUserTokenFailure',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onUserTokenFailure',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onNotAuthorized_key_fields',
-			    'label' => 'onNotAuthorized',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onNotAuthorized',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onAuthorized_key_fields',
+				'label' => 'onAuthorized',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onAuthorized',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onCheckAccessFailure_key_fields',
-			    'label' => 'onCheckAccessFailure',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onCheckAccessFailure',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onNotAuthorized_key_fields',
+				'label' => 'onNotAuthorized',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onNotAuthorized',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onCriticalError_key_fields',
-			    'label' => 'onCriticalError',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onCriticalError',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    ),
+				'uid' => 'onCheckAccessFailure_key_fields',
+				'label' => 'onCheckAccessFailure',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onCheckAccessFailure',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 			array(
-			    'uid' => 'onInit_key_fields',
-			    'label' => 'onInit',
-			    'section' => 'callback_section',
-			    'type' => 'textarea',
-			    'options' => false,
-			    'placeholder' => 'onInit',
-			    'helper' => 'Help?',
-			    'supplemental' => '',
-			    'default' => ''
-		    )
+				'uid' => 'onCriticalError_key_fields',
+				'label' => 'onCriticalError',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onCriticalError',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
+			array(
+				'uid' => 'onInit_key_fields',
+				'label' => 'onInit',
+				'section' => 'callback_section',
+				'type' => 'textarea',
+				'options' => false,
+				'placeholder' => 'onInit',
+				'helper' => 'Help?',
+				'supplemental' => '',
+				'default' => '',
+			),
 
-	    );
-        foreach( $fields as $field ){
-            add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'connext_settings', $field['section'], $field );
-            register_setting( 'connext_settings', $field['uid'] );
-        }
-		//add_settings_field( 'required_section', 'Site Code', array( $this, 'field_callback' ), 'connext_settings', 'required_section' );
-        //add_settings_field( 'required_section', 'Configuration Code', array( $this, 'field_callback' ), 'connext_settings', 'required_section' );
+		);
+		foreach ( $fields as $field ) {
+			add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'connext_settings', $field['section'], $field );
+			register_setting( 'connext_settings', $field['uid'] );
+		}
 	}
 
-    public function field_callback( $arguments ) {
-        $value = get_option( $arguments['uid'] ); // Get the current value, if there is one
-        if( ! $value ) { // If no value exists
-            $value = $arguments['default']; // Set to our default
-        }
+	public function field_callback( $arguments ) {
+		$value = get_option( $arguments['uid'] ); // Get the current value, if there is one
+		if ( ! $value ) { // If no value exists
+			$value = $arguments['default']; // Set to our default
+		}
 
-        // Check which type of field we want
-        switch( $arguments['type'] ){
-            case 'text': // If it is a text field
-                printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
-                break;
-            case 'textarea': // If it is a textarea
-                printf( '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value );
-                break;
-            case 'select': // If it is a select dropdown
-                if( ! empty ( $arguments['options'] ) && is_array( $arguments['options'] ) ){
-                    $options_markup = '';
-                    foreach( $arguments['options'] as $key => $label ){
-                        $options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value, $key, false ), $label );
-                    }
-                    printf( '<select name="%1$s" id="%1$s">%2$s</select>', $arguments['uid'], $options_markup );
-                }
-                break;
-        }
+		// Check which type of field we want
+		switch ( $arguments['type'] ) {
+			case 'text': // If it is a text field
+				printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+				break;
+			case 'textarea': // If it is a textarea
+				printf( '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value );
+				break;
+			case 'select': // If it is a select dropdown
+				if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
+					$options_markup = '';
+					foreach ( $arguments['options'] as $key => $label ) {
+						$options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value, $key, false ), $label );
+					}
+					printf( '<select name="%1$s" id="%1$s">%2$s</select>', $arguments['uid'], $options_markup );
+				}
+				break;
+		}
 
-        // If there is help text
-        if( $helper = $arguments['helper'] ){
-            printf( '<span class="helper"> %s</span>', $helper ); // Show it
-        }
+		// If there is help text
+		if ( $helper = $arguments['helper'] ) {
+			printf( '<span class="helper"> %s</span>', $helper ); // Show it
+		}
 
-        // If there is supplemental text
-        if( $supplimental = $arguments['supplemental'] ){
-            printf( '<p class="description">%s</p>', $supplimental ); // Show it
-        }
-    }
-
-	//public function field_callback( $arguments ) {
-        //echo $arguments['id'];
-		//echo '<input name="our_first_field" id="our_first_field" type="text" value="' . get_option( 'our_first_field' ) . '" />';
-	//}
+		// If there is supplemental text
+		if ( $supplimental = $arguments['supplemental'] ) {
+			printf( '<p class="description">%s</p>', $supplimental ); // Show it
+		}
+	}
 
 }
