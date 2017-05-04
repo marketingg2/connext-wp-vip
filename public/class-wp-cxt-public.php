@@ -73,7 +73,6 @@ class Wp_Cxt_Public {
 		 * class.
 		 */
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/Connext.min.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-cxt-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -134,7 +133,7 @@ class Wp_Cxt_Public {
 			'onCheckAccessFailure' => get_option('onCheckAccessFailure_key_fields'),
 			'onCriticalError' => get_option('onCriticalError_key_fields'),
 			'onInit' => get_option('onInit_key_fields')
-			
+
         );
 
         return $options;
