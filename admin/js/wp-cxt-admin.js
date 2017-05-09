@@ -17,6 +17,7 @@
      * based on whether or not the taxonomy is customizable
      */
     setMultiSelectState(event, params) {
+      // if the select box has defined a related term selector
       if (typeof event.target.dataset.termSelector !== 'undefined') {
         const childSelector = `.${event.target.dataset.termSelector}`;
         if (

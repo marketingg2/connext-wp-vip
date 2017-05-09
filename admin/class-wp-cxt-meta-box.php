@@ -34,6 +34,15 @@ class Wp_Cxt_Meta_Box {
 	 */
 	public function __construct( $plugin_name ) {
 		$this->plugin_name = $plugin_name;
+
+		/**
+		 * Allows the customization of the available post types
+		 * that the WP Connext meta box is registered on.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param    array $post_types The registered post types that have a WP Connext meta box
+		 */
 		$this->post_types = apply_filters( 'wp_cxt_meta_box_post_types', array( 'post', 'page' ) );
 	}
 
@@ -58,12 +67,22 @@ class Wp_Cxt_Meta_Box {
 		}
 	}
 
+	/**
+	 * Callback for the add_meta_box function to
+	 * render a meta box for the allowed post types
+	 *
+	 * @param     WP_Post $post The post object
+	 * @return    void
+	 */
 	public function render_meta_box( $post ) {
+		// nonce will be checked on save_post
 		wp_nonce_field( 'wp_cxt_meta_box_nonce', 'wp_cxt_meta_box_nonce' );
+		// prepopulate the meta box value from any existing meta
 		$value = get_post_meta( $post->ID, 'wp_cxt_display_script', true );
 
 		echo sprintf( '<p>%s</p>', esc_html__( 'Enable Connext', 'wp-cxt' ) );
 
+		// render the select box
 		echo sprintf(
 			'<select name="wp_cxt_display_script">
 			<option value>%1$s</option>
@@ -78,7 +97,15 @@ class Wp_Cxt_Meta_Box {
 		);
 	}
 
+	/**
+	 * Callback for the save_post hook to save
+	 * the meta from wp_cxt_display_script
+	 *
+	 * @param     int $post_id The post id of the post
+	 * @return    void
+	 */
 	public function save_meta_box( $post_id ) {
+		// return if we are missing any required data, if the nonce fails, or we're auto-saving
 		if (
 			! isset( $_POST['wp_cxt_meta_box_nonce'] ) // Input var okay.
 			|| ! isset( $_POST['wp_cxt_display_script'] ) // Input var okay.
@@ -88,6 +115,8 @@ class Wp_Cxt_Meta_Box {
 			return;
 		}
 
+		// perform a strict check against known values and do not
+		// directly save the $_POST data to the database
 		if ( 'yes' === sanitize_text_field( wp_unslash( $_POST['wp_cxt_display_script'] ) ) ) { // Input var okay.
 			$sanitized_value = 'yes';
 		} elseif ( 'no' === sanitize_text_field( wp_unslash( $_POST['wp_cxt_display_script'] ) ) ) { // Input var okay.

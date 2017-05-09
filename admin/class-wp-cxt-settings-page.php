@@ -28,7 +28,7 @@ class Wp_Cxt_Settings_Page {
 	}
 
 	/**
-	 * Render the settings page template (used for all pages)
+	 * Render the settings page template
 	 *
 	 * @access   public
 	 * @since    1.0.0

@@ -35,9 +35,7 @@ class Wp_Cxt_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 */
 	public function __construct( $plugin_name ) {
-
 		$this->plugin_name = $plugin_name;
-
 	}
 
 	/**
@@ -48,6 +46,7 @@ class Wp_Cxt_Admin {
 	public function enqueue_styles() {
 
 		$screen = get_current_screen();
+		// only enqueue the chosen css on the specific WP Connext settings page
 		if ( ! empty( $screen->id ) && 'settings_page_wp-cxt' === $screen->id ) {
 			wp_enqueue_style( 'chosen', WP_CXT_URL . 'admin/css/chosen/chosen.min.css', array(), '1.7.0', 'all' );
 		}
@@ -62,6 +61,7 @@ class Wp_Cxt_Admin {
 	public function enqueue_scripts() {
 
 		$screen = get_current_screen();
+		// only enqueue the chosen js and custom functionality on the specific WP Connext settings page
 		if ( ! empty( $screen->id ) && 'settings_page_wp-cxt' === $screen->id ) {
 			wp_enqueue_script( 'chosen', WP_CXT_URL . 'admin/js/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.7.0', true );
 			wp_enqueue_script( 'wp-cxt-admin', WP_CXT_URL . 'admin/js/wp-cxt-admin.js', array( 'chosen' ), WP_CXT_VERSION, true );

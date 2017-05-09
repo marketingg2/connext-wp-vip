@@ -58,6 +58,8 @@ class Wp_Cxt_Settings_Field {
 	 * @return   void
 	 */
 	public function render_field() {
+		// any new field types should be defined on this class and be assigned to the
+		// settings config as a callable class method
 		if ( isset( $this->field['render_function'] ) && is_callable( array( $this, $this->field['render_function'] ) ) ) {
 			call_user_func( array( $this, $this->field['render_function'] ) );
 		}
@@ -94,7 +96,7 @@ class Wp_Cxt_Settings_Field {
 	}
 
 	/**
-	 * Render a chosen select
+	 * Render a chosen select (single value select field)
 	 *
 	 * @access    private
 	 * @since     1.0.0
@@ -133,7 +135,7 @@ class Wp_Cxt_Settings_Field {
 	}
 
 	/**
-	 * Render a chosen mulitselect
+	 * Render a chosen mulitselect (array of values)
 	 *
 	 * @access    private
 	 * @since     1.0.0
@@ -155,6 +157,8 @@ class Wp_Cxt_Settings_Field {
 
 		echo '>';
 
+		// multiselect dropdowns should have an empty option on top
+		// so that chosen can render some placeholder text
 		echo '<option value></option>';
 
 		if ( ! empty( $this->field['options'] ) && is_array( $this->field['options'] ) ) {
@@ -172,7 +176,7 @@ class Wp_Cxt_Settings_Field {
 	}
 
 	/**
-	 * Helper method to echo HTML attributes from the config
+	 * Common method to echo HTML attributes from the config
 	 *
 	 * @access   private
 	 * @since    1.0.0

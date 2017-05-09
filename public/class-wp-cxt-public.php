@@ -54,6 +54,13 @@ class Wp_Cxt_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
+
+		/**
+		 * Whether or not the WP Connext script should be enqueued
+		 * on this specific public page. Fired during `wp_enqueue_scripts`
+		 *
+		 * @param    bool $connext_enabled
+		 */
 		$connext_enabled = apply_filters( 'wp_cxt_is_connext_enabled', $this->connext_enabled() );
 		if ( $connext_enabled ) {
 			wp_enqueue_style( 'wp-cxt-public', WP_CXT_URL . 'public/css/Connext.min.css', array(), WP_CXT_VERSION, 'all' );
@@ -67,6 +74,12 @@ class Wp_Cxt_Public {
 	 */
 	public function enqueue_scripts() {
 
+		/**
+		 * Whether or not the WP Connext script should be enqueued
+		 * on this specific public page. Fired during `wp_enqueue_scripts`
+		 *
+		 * @param    bool $connext_enabled
+		 */
 		$connext_enabled = apply_filters( 'wp_cxt_connext_enabled', $this->connext_enabled() );
 		if ( $connext_enabled ) {
 			wp_register_script( 'connext', WP_CXT_URL . 'public/js/Connext.min.js', array( 'jquery' ), WP_CXT_VERSION, true );
@@ -81,19 +94,36 @@ class Wp_Cxt_Public {
 
 	}
 
+	/**
+	 * Determine whether or not the WP Connext scripts should
+	 * be rendered on this specific public page.
+	 *
+	 * Uses the WP Connext Settings to set a priority level. General
+	 * Conditional Tags are evaluated first (i.e. home). Next, taxonomy
+	 * archives are evaluated. Finally singular pages are evaluated.
+	 * Singular pages that have defined "yes" or "no" on their specific
+	 * posts/pages take the highest priority. As a fallback, a post/page
+	 * is evaluated for any matching terms based on the taxonomy
+	 * settings on the settings page.
+	 *
+	 * @return bool
+	 */
 	private function connext_enabled() {
+		// First determine if the home page or front page are enabled
 		if ( is_home() && ! empty( $this->current_settings['display_home'] && 'yes' === $this->current_settings['display_home'] ) ) {
 			return true;
 		} elseif ( is_front_page() && ! empty( $this->current_settings['display_front'] && 'yes' === $this->current_settings['display_front'] ) ) {
 			return true;
 		} elseif ( is_category() || is_tag() || is_tax() ) {
 			$term = get_queried_object();
+			// If the settings have defined a general setting for this taxonomy
 			if ( ! empty( $this->current_settings[ 'display_' . $term->taxonomy ] ) ) {
 				if ( 'no' === $this->current_settings[ 'display_' . $term->taxonomy ] ) {
 					return false;
 				} elseif ( 'all' === $this->current_settings[ 'display_' . $term->taxonomy ] ) {
 					return true;
 				} elseif (
+					// If this archive is a term included in the "some" terms multiselect box
 					'some' === $this->current_settings[ 'display_' . $term->taxonomy ]
 					&& ! empty( $this->current_settings[ 'display_' . $term->taxonomy . '_terms' ] )
 					&& in_array( (string) $term->term_id, $this->current_settings[ 'display_' . $term->taxonomy . '_terms' ], true )
@@ -103,6 +133,7 @@ class Wp_Cxt_Public {
 			}
 		} elseif ( is_singular() ) {
 			$post = get_queried_object();
+			// First check the post meta as the post's specific settings should take priority
 			$wp_cxt_display_script = get_post_meta( $post->ID, 'wp_cxt_display_script', true );
 			if ( ! empty( $wp_cxt_display_script ) ) {
 				if ( 'no' === $wp_cxt_display_script ) {
@@ -111,15 +142,20 @@ class Wp_Cxt_Public {
 					return true;
 				}
 			} else {
+				// Check this post's taxonomies for any matching taxonomies that were
+				// set in the WP Connext Settings page
 				$post_taxonomies = get_object_taxonomies( $post->post_type, 'objects' );
 				if ( ! empty( $post_taxonomies ) ) {
 					foreach ( $post_taxonomies as $taxonomy ) {
+						// If this taxonomy does have a general setting configured
 						if ( ! empty( $this->current_settings[ 'display_' . $taxonomy->name ] ) ) {
+							// If the setting is "no" continue to evaluate any other taxonomies
 							if ( 'no' === $this->current_settings[ 'display_' . $taxonomy->name ] ) {
 								continue;
 							} elseif ( 'all' === $this->current_settings[ 'display_' . $taxonomy->name ] && has_term( '', $taxonomy->name ) ) {
 								return true;
 							} elseif ( 'some' === $this->current_settings[ 'display_' . $taxonomy->name ] ) {
+								// Determine if this post has any of the terms that are whitelisted in the settings page
 								if ( ! empty( $this->current_settings[ 'display_' . $taxonomy->name . '_terms' ] ) ) {
 									$term_ids = array_map( 'absint', $this->current_settings[ 'display_' . $taxonomy->name . '_terms' ] );
 									if ( has_term( $term_ids, $taxonomy->name ) ) {
@@ -133,9 +169,16 @@ class Wp_Cxt_Public {
 			}
 		}
 
+		// If no business rules were matched, do not enqueue the Connext code
 		return false;
 	}
 
+	/**
+	 * Get an array of general settings for the Connext code
+	 * which will be localized. Also escapes values for js.
+	 *
+	 * @return array
+	 */
 	private function get_connext_script_settings() {
 
 		return  array(

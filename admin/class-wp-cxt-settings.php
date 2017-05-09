@@ -30,13 +30,19 @@ class Wp_Cxt_Settings {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
+	 * @param    string    $plugin_name       The name of this plugin.
 	 */
 	public function __construct( $plugin_name ) {
 		$this->plugin_name = $plugin_name;
 		$this->current_settings = get_option( 'wp_cxt_settings', array() );
 	}
 
+	/**
+	 * Callback for admin_menu hook to create
+	 * a submenu page for the WP Connext settings
+	 *
+	 * @return void
+	 */
 	public function initialize_settings_page() {
 
 		$settings_page = new Wp_Cxt_Settings_Page( $this->plugin_name );
@@ -51,10 +57,18 @@ class Wp_Cxt_Settings {
 		);
 	}
 
+	/**
+	 * Callback for admin_init hook to configure
+	 * the WP Connext plugin settings
+	 *
+	 * @return void
+	 */
 	public function initialize_settings_fields() {
 
 		register_setting( $this->plugin_name, 'wp_cxt_settings', array( $this, 'sanitize_settings' ) );
 
+		// The settings config is made up of an array of sections with each
+		// section having it's own array of fields
 		foreach ( $this->get_settings_config() as $section_id => $section ) {
 
 			$settings_section = new Wp_Cxt_Settings_Section( $section_id, $section );
@@ -101,16 +115,25 @@ class Wp_Cxt_Settings {
 		$settings_config = $this->get_settings_config();
 		$sanitized_input = array();
 
+		// Go through each section in the config and use the
+		// config data as the baseline for valid field data
 		foreach ( $settings_config as $section ) {
 
+			// Evaulate each field that the user submitted from the settings page
 			foreach ( $user_input as $field_name => $field_value ) {
 
+				// If the user's submitted field has a valid matching validation_type
+				// setting from the settings config, validate its data type and sanitize it
 				if ( ! empty( $section['fields'][ $field_name ]['validation_type'] ) ) {
 
+					// Add additional validation types here (integers, domains, booleans, etc)
+					// and be sure to sanitize the new validation type as well.
 					switch ( $section['fields'][ $field_name ]['validation_type'] ) {
 
 						case 'alphanumeric':
 
+							// Allow the saving of empty fields or valid alphanumeric data
+							// and then sanitize it
 							if ( empty( $field_value ) || ctype_alnum( $field_value ) ) {
 								$sanitized_input[ $field_name ] = sanitize_text_field( $field_value );
 							} else {
@@ -130,6 +153,8 @@ class Wp_Cxt_Settings {
 
 						case 'alphanumeric_array':
 
+							// Ensure fields that are multiselect (arrays) only contain
+							// valid alphanumeric values
 							if ( ! empty( $field_value ) && is_array( $field_value ) ) {
 								$sanitized_array = array();
 								foreach ( $field_value as $single_value ) {
@@ -153,6 +178,8 @@ class Wp_Cxt_Settings {
 							}
 							break;
 
+						// As a precaution, if the config has defined a validation_type but it
+						// hasn't been defined here, ensure we at least sanitize it
 						default:
 							$sanitized_input[ $field_name ] = sanitize_text_field( $field_value );
 							break;
@@ -164,12 +191,19 @@ class Wp_Cxt_Settings {
 			}
 
 		}
+
+		// Any data submitted that hasn't defined a validation_type will be discarded
 		return $sanitized_input;
 
 	}
 
 	/**
-	 * Get the sections and fields for the settings
+	 * Get the sections and fields for the settings.
+	 *
+	 * The config array is a collection of section arrays
+	 * that contain fields for its section. The fields are
+	 * arrays of field settings including a render function,
+	 * validation type, etc.
 	 *
 	 * @access    private
 	 * @since     1.0.0
@@ -299,54 +333,84 @@ class Wp_Cxt_Settings {
 			),
 		);
 
+		// The taxonomy config is generated dynamically and merged into
+		// the main config. By default it is a collection of public taxonomies.
 		$config = $this->set_taxonomy_config( $config );
 
 		return $config;
 
 	}
 
+	/**
+	 * Determine which taxonomies are allowed to be part
+	 * of the WP Connext configuration settings
+	 *
+	 * @param     array $config An array of the settings config
+	 * @return    array
+	 */
 	private function set_taxonomy_config( $config ) {
 
 		$taxonomies = get_taxonomies( array(
 			'public' => true,
 		), 'objects' );
 
-		if ( ! empty( $taxonomies ) ) {
+		/**
+		 * An array of taxonomy objects that the WP Connext plugin
+		 * is aware of and capable of exposing in the settings page.
+		 * By default, all public taxonomies are available.
+		 *
+		 * @param     array $config An array of the settings config
+		 * @return    array
+		 */
+		$taxonomies = apply_filters( 'wp_cxt_settings_taxonomies', $taxonomies );
+
+		if ( ! empty( $taxonomies ) && is_array( $taxonomies ) ) {
 			foreach ( $taxonomies as $tax_name => $tax_object ) {
-				$terms = get_terms( array(
-					'taxonomy' => $tax_name,
-					'hide_empty' => false,
-				) );
+				if ( is_object( $tax_object ) ) {
+					$terms = get_terms( array(
+						'taxonomy' => $tax_name,
+						'hide_empty' => false,
+					) );
 
-				if ( ! empty( $terms ) ) {
-					$config['display_settings']['fields'][ 'display_' . $tax_name ] = array(
-						'title' => sprintf( __( 'Display on %s', 'wp-cxt' ), $tax_object->label ),
-						'render_function' => 'render_chosen_select',
-						'options' => array(
-							'no' => sprintf( __( 'No %s', 'wp-cxt' ), $tax_object->label ),
-							'all' => sprintf( __( 'All %s', 'wp-cxt' ), $tax_object->label ),
-							'some' => sprintf( __( 'Some %s', 'wp-cxt' ), $tax_object->label ),
-						),
-						'default' => 'no',
-						'validation_type' => 'alphanumeric',
-						'description' => sprintf( __( 'Should the Connext code render on No, All, or Some %s?', 'wp-cxt' ), $tax_object->label ),
-						'attributes' => array(
-							'class' => 'chosen-select display-terms-parent',
-							'data-term-selector' => 'display-' . $tax_name . '-terms',
-						),
-					);
+					// Render a select field that will allow you to enable Connext
+					// on "no", "all", or "some" terms of this taxonomy
+					if ( ! empty( $terms ) ) {
+						$config['display_settings']['fields'][ 'display_' . $tax_name ] = array(
+							'title' => sprintf( __( 'Display on %s', 'wp-cxt' ), $tax_object->label ),
+							'render_function' => 'render_chosen_select',
+							'options' => array(
+								'no' => sprintf( __( 'No %s', 'wp-cxt' ), $tax_object->label ),
+								'all' => sprintf( __( 'All %s', 'wp-cxt' ), $tax_object->label ),
+								'some' => sprintf( __( 'Some %s', 'wp-cxt' ), $tax_object->label ),
+							),
+							'default' => 'no',
+							'validation_type' => 'alphanumeric',
+							'description' => sprintf( __( 'Should the Connext code render on No, All, or Some %s?', 'wp-cxt' ), $tax_object->label ),
+							'attributes' => array(
+								'class' => 'chosen-select display-terms-parent',
+								'data-term-selector' => 'display-' . $tax_name . '-terms',
+							),
+						);
 
-					$config['display_settings']['fields'][ 'display_' . $tax_name . '_terms' ] = array(
-						'title' => sprintf( __( 'Display on some %s', 'wp-cxt' ), $tax_object->label ),
-						'render_function' => 'render_chosen_multiselect',
-						'options' => $this->build_terms_options( $terms ),
-						'validation_type' => 'alphanumeric_array',
-						'description' => __( 'Choose one or more terms.', 'wp-cxt' ),
-						'attributes' => array(
-							'class' => 'chosen-select display-' . $tax_name . '-terms',
-							'data-placeholder' => __( 'Choose one or more terms.', 'wp-cxt' ),
-						),
-					);
+						// If the user selects "some" terms they will see this additional multiselect
+						// box that will allow them to choose which terms are whitelisted for WP Connext.
+						//
+						// NOTE: This chosen multiselect field has an autocomplete feature useful for tags.
+						// The performance has been tested with up to 10,000 tags and the user experience
+						// is fine, however it's recommended to disable taxonomies with more than 10,000 terms
+						// via the `wp_cxt_settings_taxonomies` filter if performance becomes an issue.
+						$config['display_settings']['fields'][ 'display_' . $tax_name . '_terms' ] = array(
+							'title' => sprintf( __( 'Display on some %s', 'wp-cxt' ), $tax_object->label ),
+							'render_function' => 'render_chosen_multiselect',
+							'options' => $this->build_terms_options( $terms ),
+							'validation_type' => 'alphanumeric_array',
+							'description' => __( 'Choose one or more terms.', 'wp-cxt' ),
+							'attributes' => array(
+								'class' => 'chosen-select display-' . $tax_name . '-terms',
+								'data-placeholder' => __( 'Choose one or more terms.', 'wp-cxt' ),
+							),
+						);
+					}
 				}
 			}
 		}
@@ -354,6 +418,13 @@ class Wp_Cxt_Settings {
 		return $config;
 	}
 
+	/**
+	 * Helper method to create a formatted array
+	 * of terms suitable for a select box
+	 *
+	 * @param     array $terms Array of term objects
+	 * @return    array
+	 */
 	private function build_terms_options( $terms ) {
 		$term_options = array();
 		foreach ( $terms as $term ) {
