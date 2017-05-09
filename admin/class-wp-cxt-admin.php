@@ -13,9 +13,6 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
  * @package    Wp_Cxt
  * @subpackage Wp_Cxt/admin
  * @author     Marketing G2 <jscanlon@marketingg2.com>
@@ -32,26 +29,43 @@ class Wp_Cxt_Admin {
 	private $plugin_name;
 
 	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
 
 	}
 
+	/**
+	 * Register the stylesheets for the admin area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_styles() {
+
+		$screen = get_current_screen();
+		if ( ! empty( $screen->id ) && 'settings_page_wp-cxt' === $screen->id ) {
+			wp_enqueue_style( 'chosen', WP_CXT_URL . 'admin/css/chosen/chosen.min.css', array(), '1.7.0', 'all' );
+		}
+
+	}
+
+	/**
+	 * Register the JavaScript for the admin area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_scripts() {
+
+		$screen = get_current_screen();
+		if ( ! empty( $screen->id ) && 'settings_page_wp-cxt' === $screen->id ) {
+			wp_enqueue_script( 'chosen', WP_CXT_URL . 'admin/js/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.7.0', true );
+			wp_enqueue_script( 'wp-cxt-admin', WP_CXT_URL . 'admin/js/wp-cxt-admin.js', array( 'chosen' ), WP_CXT_VERSION, true );
+		}
+
+	}
 }

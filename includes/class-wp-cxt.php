@@ -19,8 +19,7 @@
  * This is used to define internationalization, admin-specific hooks, and
  * public-facing site hooks.
  *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
+ * Also maintains the unique identifier of this plugin.
  *
  * @since      1.0.0
  * @package    Wp_Cxt
@@ -34,33 +33,23 @@ class Wp_Cxt {
 	 * the plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   protected
+	 * @access   private
 	 * @var      Wp_Cxt_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
-	protected $loader;
+	private $loader;
 
 	/**
 	 * The unique identifier of this plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   protected
+	 * @access   private
 	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 	 */
-	protected $plugin_name;
-
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
-	 */
-	protected $version;
+	private $plugin_name;
 
 	/**
 	 * Define the core functionality of the plugin.
 	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
 	 * the public-facing side of the site.
 	 *
@@ -69,15 +58,12 @@ class Wp_Cxt {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-cxt';
-		$this->version = '1.0.0';
 
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-		add_action( 'admin_menu', array( $this, 'create_plugin_settings_page' ) );
-		add_action( 'admin_init', array( $this, 'setup_sections' ) );
-		add_action( 'admin_init', array( $this, 'setup_fields' ) );
+
 	}
 
 	/**
@@ -102,24 +88,33 @@ class Wp_Cxt {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-cxt-loader.php';
+		require_once WP_CXT_PATH . 'includes/class-wp-cxt-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-cxt-i18n.php';
+		require_once WP_CXT_PATH . 'includes/class-wp-cxt-i18n.php';
+
+		/**
+		 * The classes responsible for managing the plugin settings
+		 */
+		require_once WP_CXT_PATH . 'admin/class-wp-cxt-settings.php';
+		require_once WP_CXT_PATH . 'admin/class-wp-cxt-settings-page.php';
+		require_once WP_CXT_PATH . 'admin/class-wp-cxt-settings-section.php';
+		require_once WP_CXT_PATH . 'admin/class-wp-cxt-settings-field.php';
+		require_once WP_CXT_PATH . 'admin/class-wp-cxt-meta-box.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-cxt-admin.php';
+		require_once WP_CXT_PATH . 'admin/class-wp-cxt-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wp-cxt-public.php';
+		require_once WP_CXT_PATH . 'public/class-wp-cxt-public.php';
 
 		$this->loader = new Wp_Cxt_Loader();
 
@@ -137,7 +132,6 @@ class Wp_Cxt {
 	private function set_locale() {
 
 		$plugin_i18n = new Wp_Cxt_i18n();
-
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
@@ -151,10 +145,16 @@ class Wp_Cxt {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Wp_Cxt_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Wp_Cxt_Admin( $this->get_plugin_name() );
+		$plugin_settings = new Wp_Cxt_Settings( $this->get_plugin_name() );
+		$plugin_meta_box = new Wp_Cxt_Meta_Box( $this->get_plugin_name() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_menu', $plugin_settings, 'initialize_settings_page' );
+		$this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_settings_fields' );
+		$this->loader->add_action( 'add_meta_boxes', $plugin_meta_box, 'initialize_meta_box' );
+		$this->loader->add_action( 'save_post', $plugin_meta_box, 'save_meta_box' );
 
 	}
 
@@ -167,7 +167,7 @@ class Wp_Cxt {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Wp_Cxt_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Wp_Cxt_Public( $this->get_plugin_name() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -216,18 +216,6 @@ class Wp_Cxt {
 	public function get_loader() {
 		return $this->loader;
 	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	public function get_version() {
-		return $this->version;
-	}
-
-
 
 	public function setup_sections() {
 		add_settings_section( 'required_section', 'Required', array( $this, 'section_callback' ), 'connext_settings' );

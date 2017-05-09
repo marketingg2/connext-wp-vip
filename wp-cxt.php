@@ -30,11 +30,16 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+define( 'WP_CXT_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WP_CXT_URL', plugin_dir_url( __FILE__ ) );
+define( 'WP_CXT_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WP_CXT_VERSION', '1.0.0' );
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wp-cxt.php';
+require WP_CXT_PATH . 'includes/class-wp-cxt.php';
 
 /**
  * Begins execution of the plugin.
