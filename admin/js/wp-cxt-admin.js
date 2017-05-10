@@ -1,12 +1,12 @@
 /* global jQuery */
 (function wpCxtInstance($) {
-  const wpCxt = {
+  var wpCxt = {
 
     /**
      * Register event handlers
      */
     initialize() {
-      const self = this;
+      var self = this;
       // bind to the chosen ready and change events to refresh the multiselect visibility
       $('.chosen-select.display-terms-parent').on('chosen:ready change', self.setMultiSelectState);
       self.initializeChosen();
@@ -19,7 +19,7 @@
     setMultiSelectState(event, params) {
       // if the select box has defined a related term selector
       if (typeof event.target.dataset.termSelector !== 'undefined') {
-        const childSelector = `.${event.target.dataset.termSelector}`;
+        var childSelector = '.' + event.target.dataset.termSelector;
         if (
           params.selected === 'some'
           || (typeof event.target.value !== 'undefined' && event.target.value === 'some')
@@ -42,7 +42,7 @@
 
   };
 
-  $(() => {
+  $(function() {
     wpCxt.initialize();
   });
 }(jQuery));

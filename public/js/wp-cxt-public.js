@@ -1,6 +1,6 @@
 /* global jQuery Connext WP_CXT */
 (function wpCxtInstance($) {
-  const wpCxt = {
+  var wpCxt = {
 
     initialize() {
       Connext.init({
@@ -15,7 +15,7 @@
 
   };
 
-  $(() => {
+  $(function() {
     wpCxt.initialize();
   });
 }(jQuery));

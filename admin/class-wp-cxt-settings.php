@@ -365,17 +365,17 @@ class Wp_Cxt_Settings {
 		$taxonomies = apply_filters( 'wp_cxt_settings_taxonomies', $taxonomies );
 
 		if ( ! empty( $taxonomies ) && is_array( $taxonomies ) ) {
-			foreach ( $taxonomies as $tax_name => $tax_object ) {
-				if ( is_object( $tax_object ) ) {
+			foreach ( $taxonomies as $tax_object ) {
+				if ( $tax_object instanceof WP_Taxonomy ) {
 					$terms = get_terms( array(
-						'taxonomy' => $tax_name,
+						'taxonomy' => $tax_object->name,
 						'hide_empty' => false,
 					) );
 
 					// Render a select field that will allow you to enable Connext
 					// on "no", "all", or "some" terms of this taxonomy
 					if ( ! empty( $terms ) ) {
-						$config['display_settings']['fields'][ 'display_' . $tax_name ] = array(
+						$config['display_settings']['fields'][ 'display_' . $tax_object->name ] = array(
 							'title' => sprintf( __( 'Display on %s', 'wp-cxt' ), $tax_object->label ),
 							'render_function' => 'render_chosen_select',
 							'options' => array(
@@ -388,7 +388,7 @@ class Wp_Cxt_Settings {
 							'description' => sprintf( __( 'Should the Connext code render on No, All, or Some %s?', 'wp-cxt' ), $tax_object->label ),
 							'attributes' => array(
 								'class' => 'chosen-select display-terms-parent',
-								'data-term-selector' => 'display-' . $tax_name . '-terms',
+								'data-term-selector' => 'display-' . $tax_object->name . '-terms',
 							),
 						);
 
@@ -399,14 +399,14 @@ class Wp_Cxt_Settings {
 						// The performance has been tested with up to 10,000 tags and the user experience
 						// is fine, however it's recommended to disable taxonomies with more than 10,000 terms
 						// via the `wp_cxt_settings_taxonomies` filter if performance becomes an issue.
-						$config['display_settings']['fields'][ 'display_' . $tax_name . '_terms' ] = array(
+						$config['display_settings']['fields'][ 'display_' . $tax_object->name . '_terms' ] = array(
 							'title' => sprintf( __( 'Display on some %s', 'wp-cxt' ), $tax_object->label ),
 							'render_function' => 'render_chosen_multiselect',
 							'options' => $this->build_terms_options( $terms ),
 							'validation_type' => 'alphanumeric_array',
 							'description' => __( 'Choose one or more terms.', 'wp-cxt' ),
 							'attributes' => array(
-								'class' => 'chosen-select display-' . $tax_name . '-terms',
+								'class' => 'chosen-select display-' . $tax_object->name . '-terms',
 								'data-placeholder' => __( 'Choose one or more terms.', 'wp-cxt' ),
 							),
 						);
