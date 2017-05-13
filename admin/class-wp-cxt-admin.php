@@ -13,9 +13,6 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
  * @package    Wp_Cxt
  * @subpackage Wp_Cxt/admin
  * @author     Marketing G2 <jscanlon@marketingg2.com>
@@ -32,26 +29,13 @@ class Wp_Cxt_Admin {
 	private $plugin_name;
 
 	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
-
+	public function __construct( $plugin_name ) {
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-
 	}
 
 	/**
@@ -61,19 +45,11 @@ class Wp_Cxt_Admin {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Wp_Cxt_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Wp_Cxt_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-cxt-admin.css', array(), $this->version, 'all' );
+		$screen = get_current_screen();
+		// only enqueue the chosen css on the specific WP Connext settings page
+		if ( ! empty( $screen->id ) && 'settings_page_wp-cxt' === $screen->id ) {
+			wp_enqueue_style( 'chosen', WP_CXT_URL . 'admin/css/chosen/chosen.min.css', array(), '1.7.0', 'all' );
+		}
 
 	}
 
@@ -84,20 +60,12 @@ class Wp_Cxt_Admin {
 	 */
 	public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Wp_Cxt_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Wp_Cxt_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-cxt-admin.js', array( 'jquery' ), $this->version, false );
+		$screen = get_current_screen();
+		// only enqueue the chosen js and custom functionality on the specific WP Connext settings page
+		if ( ! empty( $screen->id ) && 'settings_page_wp-cxt' === $screen->id ) {
+			wp_enqueue_script( 'chosen', WP_CXT_URL . 'admin/js/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.7.0', true );
+			wp_enqueue_script( 'wp-cxt-admin', WP_CXT_URL . 'admin/js/wp-cxt-admin.js', array( 'chosen' ), WP_CXT_VERSION, true );
+		}
 
 	}
-
 }

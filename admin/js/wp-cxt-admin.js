@@ -1,32 +1,48 @@
-(function( $ ) {
-	'use strict';
+/* global jQuery */
+(function wpCxtInstance($) {
+  var wpCxt = {
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
-    console.log('Hello From Connext Admin');
-})( jQuery );
+    /**
+     * Register event handlers
+     */
+    initialize() {
+      var self = this;
+      // bind to the chosen ready and change events to refresh the multiselect visibility
+      $('.chosen-select.display-terms-parent').on('chosen:ready change', self.setMultiSelectState);
+      self.initializeChosen();
+    },
+
+    /**
+     * Set the visbility of the multiselect chosen boxes
+     * based on whether or not the taxonomy is customizable
+     */
+    setMultiSelectState(event, params) {
+      // if the select box has defined a related term selector
+      if (typeof event.target.dataset.termSelector !== 'undefined') {
+        var childSelector = '.' + event.target.dataset.termSelector;
+        if (
+          params.selected === 'some'
+          || (typeof event.target.value !== 'undefined' && event.target.value === 'some')
+        ) {
+          $(childSelector).parents('tr').show();
+        } else {
+          $(childSelector).parents('tr').hide();
+        }
+      }
+    },
+
+    /**
+     * Initialize all of the chosen selects
+     */
+    initializeChosen() {
+      $('.chosen-select').chosen({
+        width: '225px',
+      });
+    },
+
+  };
+
+  $(function() {
+    wpCxt.initialize();
+  });
+}(jQuery));

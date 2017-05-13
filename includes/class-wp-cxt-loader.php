@@ -27,19 +27,19 @@ class Wp_Cxt_Loader {
 	 * The array of actions registered with WordPress.
 	 *
 	 * @since    1.0.0
-	 * @access   protected
+	 * @access   private
 	 * @var      array    $actions    The actions registered with WordPress to fire when the plugin loads.
 	 */
-	protected $actions;
+	private $actions;
 
 	/**
 	 * The array of filters registered with WordPress.
 	 *
 	 * @since    1.0.0
-	 * @access   protected
+	 * @access   private
 	 * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
 	 */
-	protected $filters;
+	private $filters;
 
 	/**
 	 * Initialize the collections used to maintain the actions and filters.
@@ -102,7 +102,7 @@ class Wp_Cxt_Loader {
 			'component'     => $component,
 			'callback'      => $callback,
 			'priority'      => $priority,
-			'accepted_args' => $accepted_args
+			'accepted_args' => $accepted_args,
 		);
 
 		return $hooks;

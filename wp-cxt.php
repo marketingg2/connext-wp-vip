@@ -30,32 +30,16 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-wp-cxt-activator.php
- */
-function activate_wp_cxt() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-cxt-activator.php';
-	Wp_Cxt_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-wp-cxt-deactivator.php
- */
-function deactivate_wp_cxt() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-cxt-deactivator.php';
-	Wp_Cxt_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_wp_cxt' );
-register_deactivation_hook( __FILE__, 'deactivate_wp_cxt' );
+define( 'WP_CXT_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WP_CXT_URL', plugin_dir_url( __FILE__ ) );
+define( 'WP_CXT_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WP_CXT_VERSION', '1.0.0' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wp-cxt.php';
+require WP_CXT_PATH . 'includes/class-wp-cxt.php';
 
 /**
  * Begins execution of the plugin.
