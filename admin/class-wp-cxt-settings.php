@@ -287,7 +287,7 @@ class Wp_Cxt_Settings {
 						'options' => array(
 							'test' => __( 'Test', 'wp-cxt' ),
 							'stage' => __( 'Stage', 'wp-cxt' ),
-							'production' => __( 'Production', 'wp-cxt' ),
+							'prod' => __( 'Production', 'wp-cxt' ),
 						),
 						'default' => 'test',
 						'validation_type' => 'alphanumeric',
