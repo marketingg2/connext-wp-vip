@@ -275,15 +275,13 @@ class Wp_Cxt_Settings {
 						),
 					),
 					'debug' => array(
-						'title' => esc_html__( 'Debug Level', 'wp-cxt' ),
+						'title' => esc_html__( 'Debug', 'wp-cxt' ),
 						'render_function' => 'render_chosen_select',
 						'options' => array(
-							'debug' => __( 'Debug', 'wp-cxt' ),
-							'warn' => __( 'Warn', 'wp-cxt' ),
-							'info' => __( 'Info', 'wp-cxt' ),
-							'error' => __( 'Error', 'wp-cxt' ),
+							'false' => __( 'No', 'wp-cxt' ),
+							'true' => __( 'Yes', 'wp-cxt' )
 						),
-						'default' => 'debug',
+						'default' => 'true',
 						'validation_type' => 'alphanumeric',
 						'description' => __( 'Controls how much is written to windows console.', 'wp-cxt' ),
 						'attributes' => array(

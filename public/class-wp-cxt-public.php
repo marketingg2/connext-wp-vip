@@ -191,8 +191,7 @@ class Wp_Cxt_Public {
 			'configCode' => isset( $this->current_settings['config_code'] ) ? esc_js( $this->current_settings['config_code'] ) : '',
 			'attr' => isset( $this->current_settings['attributes'] ) ? esc_js( $this->current_settings['attributes'] ) : '',
 			'settingsKey' => isset( $this->current_settings['settings_key'] ) ? esc_js( $this->current_settings['settings_key'] ) : '',
-			'paper_code' => isset( $this->current_settings['papercode_key'] ) ? esc_js( $this->current_settings['papercode_key'] ) : '',
-			'debug_level' => isset( $this->current_settings['debug'] ) ? esc_js( $this->current_settings['debug'] ) : '',
+			'debug' => isset( $this->current_settings['debug'] ) ? esc_js( $this->current_settings['debug'] ) : '',
 			'environment' => isset( $this->current_settings['environment'] ) ? esc_js( $this->current_settings['environment'] ) : '',
 		);
 
