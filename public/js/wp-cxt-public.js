@@ -8,13 +8,12 @@
         configCode: WP_CXT.configCode,
         debug: WP_CXT.debug,
         settingsKey: WP_CXT.settingsKey,
-        paperCode: WP_CXT.paperCode,
         environment: WP_CXT.environment,
       });
-    },
-
+    }
+    
   };
-
+  
   $(function() {
     wpCxt.initialize();
   });
