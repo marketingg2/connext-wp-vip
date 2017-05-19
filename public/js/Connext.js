@@ -3162,12 +3162,13 @@ if (!JSON) {
                         value = result;
                     }
                 } catch (e) { }
-
-                if (!converter.write) {
-                    value = encodeURIComponent(String(value))
-						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-                } else {
-                    value = converter.write(value, key);
+                if (key != 'igmRegID') {
+                    if (!converter.write) {
+                        value = encodeURIComponent(String(value))
+                            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+                    } else {
+                        value = converter.write(value, key);
+                    }
                 }
 
                 key = encodeURIComponent(String(key));
@@ -8929,7 +8930,9 @@ var ConnextCommon = function () {
             configurationConfigCode: 'Connext_Configuration_ConfigCode',
             configurationIsCustom: 'Connext_Configuration_isCustom',
             customZip: 'CustomZip',
-            repeatablesInConv: 'repeatablesInConv'
+            repeatablesInConv: 'repeatablesInConv',
+            igmRegID: 'igmRegID',
+            igmContent: 'igmContent'
         },
         MeterLevels: {
             1: 'Free',
@@ -10318,7 +10321,7 @@ var ConnextStorage = function ($) {
             logger.debug(name, fnName);
 
             //LOGGER.info('--------- LOCAL STORAGE SIZE --------', $.jStorage.storageSize(Connext.Common.StorageKeys[key]));
-            
+
             return $.jStorage.get(Connext.Common.StorageKeys[key]);
         } catch (e) {
             console.log(name, fnName, 'EXCEPTION', e);
@@ -10366,7 +10369,7 @@ var ConnextStorage = function ($) {
     };
     var cookieRegistry = [];
     var storageRegistry = [];
-   
+
 
     var readCookie = function (name) {
         var nameEQ = name + "=";
@@ -10380,18 +10383,15 @@ var ConnextStorage = function ($) {
     };
 
 
-    var listenCookieChange = function(cookieName, callback) {
-        setInterval(function() {
-                if (cookieRegistry[cookieName]) {
-                    if (readCookie(cookieName) != cookieRegistry[cookieName]) {
-                        // update registry so we dont get triggered again
-                        cookieRegistry[cookieName] = readCookie(cookieName);
-                        return callback();
-                    }
-                } else {
-                    cookieRegistry[cookieName] = readCookie(cookieName);
-                }
-            },
+    var listenCookieChange = function (cookieName, callback) {
+        cookieRegistry[cookieName] = Cookies.get(cookieName);
+        setInterval(function () {
+            if (readCookie(cookieName) != cookieRegistry[cookieName]) {
+                // update registry so we dont get triggered again
+                cookieRegistry[cookieName] = readCookie(cookieName);
+                return callback();
+            }
+        },
             1000);
     }
 
@@ -10399,23 +10399,29 @@ var ConnextStorage = function ($) {
     var listenStorageChange = function (storageName, callback) {
         storageRegistry[storageName] = localStorage.getItem(storageName);
         setInterval(function () {
-                if (localStorage.getItem(storageName) != storageRegistry[storageName]) {
-                    // update registry so we dont get triggered again
-                    storageRegistry[storageName] = localStorage.getItem(storageName);
-                    return callback();
-                }
+            if (localStorage.getItem(storageName) != storageRegistry[storageName]) {
+                // update registry so we dont get triggered again
+                storageRegistry[storageName] = localStorage.getItem(storageName);
+                return callback();
+            }
         },
             1000);
     }
 
-    var addListners = function() {
+    var addListners = function () {
         listenStorageChange('janrainCaptureToken',
           function () {
               Connext.Storage.SetUserState(null);
               Connext.Storage.SetUserZipCodes(null);
               Connext.Run();
           });
-        
+        //listenCookieChange('igmRegID',
+        //function () {
+        //    Connext.Storage.SetUserState(null);
+        //    Connext.Storage.SetUserZipCodes(null);
+        //    Connext.Run();
+        //});
+
     };
 
     var setCookie = function (key, data) {
@@ -10430,8 +10436,13 @@ var ConnextStorage = function ($) {
                 logger.debug(name, fnName, 'HasExpiration', 'key', key, 'expiration', arguments[2]);
                 return Cookies.set(Connext.Common.StorageKeys[key], data, { expires: arguments[2] });
             } else {
+                var domains = window.location.host.split('.');
+                var curdomain = window.location.host;
+                if (domains.length >= 2) {
+                    curdomain = '.' + domains[domains.length - 2] + '.' + domains[domains.length - 1];
+                }
                 //we don't have a 3rd argument, so don't use one (this means this is a session cookie).
-                return Cookies.set(Connext.Common.StorageKeys[key], data);
+                return Cookies.set(Connext.Common.StorageKeys[key], data, { domain: curdomain });
             }
         } catch (e) {
             console.log(name, fnName, 'EXCEPTION', e);
@@ -10456,7 +10467,7 @@ var ConnextStorage = function ($) {
         GetUserState: function () {
             return $.jStorage.get(Connext.Common.StorageKeys.user.state);
         },
-        SetUserState: function(state) {
+        SetUserState: function (state) {
             return $.jStorage.set(Connext.Common.StorageKeys.user.state, state);
         },
         GetUserZipCodes: function () {
@@ -10485,7 +10496,7 @@ var ConnextStorage = function ($) {
         GetViewedArticles: function (conversationId) {
             return ($.jStorage.get(Connext.Common.StorageKeys.viewedArticles)) ? $.jStorage.get(Connext.Common.StorageKeys.viewedArticles)[conversationId] : []; //if return view articles, if none exist return empty array.
         },
-        UpdateViewedArticles: function(conversationId){
+        UpdateViewedArticles: function (conversationId) {
             //this is in this function because we don't care which configuration/conversation we are in. We hold viewed articles as a separate object and this is just updating that array with the current url.
             var newArray = Connext.Storage.GetViewedArticles(conversationId);
             if (newArray == undefined) newArray = [];
@@ -10533,6 +10544,8 @@ var ConnextStorage = function ($) {
             $.jStorage.deleteKey(Connext.Common.StorageKeys.repeatablesInConv);
             Cookies.remove(Connext.Common.StorageKeys.lastPublishDate);
             Cookies.remove(Connext.Common.StorageKeys.userToken);
+            Cookies.remove(Connext.Common.StorageKeys.igmRegID);
+            Cookies.remove(Connext.Common.StorageKeys.IgmContent);
         },
         ClearUser: function () {
             //this clears all user related  cookies
@@ -10543,6 +10556,8 @@ var ConnextStorage = function ($) {
             localStorage.removeItem('janrainCaptureProfileData');
             localStorage.removeItem('janrainCaptureReturnExperienceData');
             $.jStorage.deleteKey(Connext.Common.StorageKeys.user.zipCodes);
+            Cookies.remove(Connext.Common.StorageKeys.igmRegID);
+            Cookies.remove(Connext.Common.StorageKeys.IgmContent);
         },
         SetAccessToken: function (token) {
             //TODO: Use some sort of encryption to encrypte access token and then use that to decode.
@@ -10554,8 +10569,7 @@ var ConnextStorage = function ($) {
             logger.debug(name, 'GetAccessToken', Connext.Common.StorageKeys.accessToken);
             return getCookie('accessToken');
         },
-        GetCurrentConverstaion: function()
-        {
+        GetCurrentConverstaion: function () {
             return $.jStorage.get('CurrentConversation');
         },
         SetCurrentConverstaion: function (e) {
@@ -10567,13 +10581,25 @@ var ConnextStorage = function ($) {
         GetUserToken: function () {
             return getCookie('userToken');
         },
+        GetigmRegID: function () {
+            return Cookies.get('igmRegID');
+        },
+        GetIgmContent: function () {
+            return getCookie('igmContent');
+        },
+        SetigmRegID: function (value) {
+            return setCookie('igmRegID', value);
+        },
+        SetIgmContent: function (value) {
+            return setCookie('igmContent', value);
+        },
         SetUserRegId: function (token) {
             return setCookie('userMasterId', token, 365); //set AccessToken with an expiration of 1 day.
         },
         GetUserRegId: function () {
             return getCookie('userMasterId');
         },
-        GetJanrainUser: function() {
+        GetJanrainUser: function () {
             return localStorage.getItem(Connext.Common.StorageKeys.janrainUserProfile);
         },
         //to my mind need refactor this code & create single get/set that works with localStorage & another for work with cookie
@@ -10650,6 +10676,7 @@ var ConnextAPI = function ($) {
         GetConfiguration: _.template('configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>'),
         GetUserByEmailAndPassword: _.template('user/email/<%= email %>/password/<%= password %>'),
         GetUserByMasterId: _.template('user/id/<%= id %>'),
+        GetUserByEncryptedMasterId: _.template('user/encryptedMasterId?encryptedMasterId=<%= encryptedMasterId %>'),
         GetUserByToken: _.template('user/token/<%= token %>')
     };
     
@@ -10713,7 +10740,7 @@ var ConnextAPI = function ($) {
                 error: function (err) {
                     LOGGER.error(fnName, "Ajax.Error", err);
                     if (_.isFunction(args.options.onError)) {
-                        args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
+                        args.options.onError(err); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
                     }
                 },
                 complete: function (xhr, textStatus) {
@@ -10753,6 +10780,9 @@ var ConnextAPI = function ($) {
         },
         GetUserByMasterId: function (opts) {
             return Get({ method: 'GetUserByMasterId', options: opts });
+        },
+        GetUserByEncryptedMasterId: function (opts) {
+            return Get({ method: 'GetUserByEncryptedMasterId', options: opts });
         },
         GetLastPublishDateS3: function () {
             var fnName = 'GetLastPublishDateS3';
@@ -10829,14 +10859,16 @@ var ConnextUser = function ($) {
         Subscribed: 'Subscribed'
     };
     var USER_STATE = USER_STATES.NotLoggedIn;
+    var TIMEOUT;
 
     //TODO: MOVE GUP SETTINGS TO ADMIN.
     var GUP_SETTINGS = {
         'UserServiceBasePath': '//user-stage.jconline.com/PLAI-GUP-MG2/',
         'LoginServiceBasePath': '//login-stage.jconline.com/PLAI-GUP-MG2/'
     };
+    var incorrectCreditsMessage = 'Please try again or click on the Forgot/Reset Password link to update your password';
 
-    var NOTIFICATON = { //this handles hiding and showing notifications (green/red/blue alert boxes).
+    var NOTIFICATION = { //this handles hiding and showing notifications (green/red/blue alert boxes).
         show: function (notification) {
             try {
                 //TODO: for now just use passed in notification text, need to change to lookup of Notifications array after API is updated
@@ -10848,6 +10880,17 @@ var ConnextUser = function ($) {
         hide: function () {
             try {
                 FORM_ALERT.hide();
+            } catch (e) {
+
+            }
+        },
+        showAndHide: function (notification, delay) {
+            try {
+                FORM_ALERT.info(notification);
+                TIMEOUT = setTimeout(function() {
+                        FORM_ALERT.find('.alert').remove();
+                    },
+                    delay);
             } catch (e) {
 
             }
@@ -10878,6 +10921,117 @@ var ConnextUser = function ($) {
             LOGGER.debug(NAME, fnName, 'Initializing User...');
             UI.LoginModal = OPTIONS.LoginModal;
             setAuthType();
+            $('body').on('click', UI.LogoutButton, function (e) {
+                e.preventDefault();
+                var fnName = UI.LogoutButton + '.CLICK';
+                LOGGER.debug(NAME, fnName);
+                logoutUser();
+            });
+            $('body').on('click', '[data-dismiss="alert"]',function(e) {
+                FORM_ALERT.find('.alert').remove();
+                clearTimeout(TIMEOUT);
+            });
+
+            $('body').on('click', UI.SubscribeButton, function (e) {
+                e.preventDefault();
+                var fnName = UI.SubscribeButton + '.CLICK';
+                LOGGER.debug(NAME, fnName);
+                try {
+
+                    var $this = $(this),
+                        href = $this.attr('href'),
+                        email = $this.parents('.Mg2-connext').find('[data-mg2-input="Email"]').val();
+
+                    href = Connext.Utils.AddParameterToURL(href, 'email=' + email);
+                    $this.attr('href', href);
+                    window.location.href = href;
+                   
+                } catch (e) {
+                    console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                }
+            });
+            $('body').on('click', '.Mg2-btn-forgot', function (e) {
+                e.preventDefault();
+                var fnName = 'Forgot password btn' + '.CLICK';
+                LOGGER.debug(NAME, fnName);
+                try {
+
+                    var $this = $(this),
+                        href = $this.attr('href'),
+                        email = $this.parents('.Mg2-connext').find('[data-mg2-input="Email"]').val();
+                    href = Connext.Utils.AddParameterToURL(href, 'returnUrl=' + window.location.href);
+                    href = Connext.Utils.AddParameterToURL(href, 'email=' + email);
+                    $this.attr('href', href);
+                    
+                    if ($this[0].hasAttribute('target')) {
+                        window.open(href, '_blank');
+                    } else {
+                        window.location.href = href;
+                    }
+                } catch (e) {
+                    console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                }
+            });
+
+            //Any element with a data-mg2-submit= 'login' will fire this event.  This will attempt to submit the form this button belongs to.
+            $('body').on('click', UI.LoginButton, function (e) {
+                e.preventDefault();
+                var fnName = UI.LoginButton + '.CLICK';
+                LOGGER.debug(NAME, fnName);
+
+                try {
+
+                    FORM_SUBMIT_LOADER = $(UI.LoginButton).loader();
+                    FORM_ALERT = $(UI.LoginAlert).jalert();
+
+                    //start loader animation for login button.
+                    FORM_SUBMIT_LOADER.on();
+
+                    if (AUTH_TYPE.MG2) {
+                        //we use ':visible' because we could have multiple inputs with the same data-mg2-input values (dedicated modals, multiple actions with login forms etc...).  So we want to only grab the value of the one that is visible.
+                        MG2Authenticate($(UI.InputUsername + ':visible').val(), $(UI.InputPassword + ':visible').val());
+                    } else {
+                        JanrainAuthenticate($('[data-mg2-input=Username]:visible').val(), $('[data-mg2-input=Password]:visible').val());
+                    }
+                } catch (e) {
+                    console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                }
+            });
+
+
+            //Any element with a data-mg2-action= 'login' will fire this event.  This allows the client to set this data attribute to any element on their page and the appropriate login html will show based on the OPTIONS.Site.RegistrationTypeId.
+            $('body').on('click', UI.ActionShowLogin, function (e) {
+                e.preventDefault();
+                var fnName = UI.ActionShowLogin + '.Click';
+                try {
+                    //LOGGER.debug(NAME, fnName);
+
+                    LOGGER.debug(NAME, fnName, 'IS_LOGGED_IN', IS_LOGGED_IN)
+
+                    if (AUTH_TYPE.MG2) {
+                        //this is MG2 Auth type, show MG2 Login Modal.
+                        $(UI.LoginModal).addClass('in');
+                        $(UI.LoginModal).attr('id', 'mg2-login-modal');
+                        $(UI.LoginModal).connextmodal({ backdrop: 'true' });
+                        $(UI.LoginModal).css('display', 'block');
+                        $('[data-display-type=modal]').resize();
+
+
+                        ////FOR TESTING, auto add values.
+                        //$(UI.InputUsername).val('rmsmola+2222@gmail.com');
+                        //$(UI.InputPassword).val('testing123');
+
+                    } else if (AUTH_TYPE.GUP) {
+                        //this is a GUP AuthType, so show GUP popup modal
+                        executePopupLoginFlow(window);
+                    }
+                } catch (e) {
+                    console.error(NAME, fnName, 'Exception', e);
+                }
+            });
+
+
+            //#endregion EVENT LISTENERS
         } catch (e) {
             console.error(NAME, fnName, e);
         }
@@ -10911,15 +11065,7 @@ var ConnextUser = function ($) {
             } else {
                 throw "Unknown Registration Type";
             }
-
             registerEventlisteners();
-
-            //we have default 'LoginModal' html set, so we add it to the DOM. (this function handles any requirements based on AuthType if it is actually added to the DOM, so we call it regardless of AuthType).
-            if (OPTIONS.LoginModal) {
-                //setLoginModal(OPTIONS.LoginModal);
-            }
-
-
 
         } catch (e) {
             console.error(NAME, fnName, 'EXCEPTION', e);
@@ -10939,6 +11085,16 @@ var ConnextUser = function ($) {
 
         var deferred = $.Deferred();
         USER_STATE = Connext.Storage.GetUserState();
+        if (Connext.Storage.GetigmRegID()) {
+            if (USER_STATE == USER_STATES.NotLoggedIn && AUTH_TYPE.MG2) {
+                USER_STATE = null;
+            }
+        } else {
+            if (AUTH_TYPE.MG2) {
+                USER_STATE = USER_STATES.NotLoggedIn;
+                Connext.Storage.SetUserState(USER_STATE);
+            }
+        }
         if (USER_STATE != null && USER_STATE != undefined) {
 
             if (AUTH_TYPE.Janrain) {
@@ -10950,6 +11106,7 @@ var ConnextUser = function ($) {
 
             if (USER_STATE == USER_STATES.NotLoggedIn) {
                 Connext.Event.fire('onNotAuthorized', USER_STATE);
+                Connext.Storage.ClearUser();
                 deferred.reject('onNotAuthorized');
 
             } else {
@@ -10980,61 +11137,31 @@ var ConnextUser = function ($) {
                         if (!result) {
                             throw "No User Data Result";
                         }
-
                         if (AUTH_TYPE.MG2) {
-                            if (Connext.Storage.GetUserToken()) {
-                                Connext.API.GetUserByToken({
-                                    payload: { token: result },
-                                    onSuccess: function (data) {
-                                        LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
-                                        processSuccessfulLogin('Token', data);
-                                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                        deferred.resolve(true);
-                                        $(UI.ActionShowLogin).hide();
-                                        $(UI.LogoutButton).show();
+                            Connext.API.GetUserByEncryptedMasterId({
+                                payload: { encryptedMasterId: result },
+                                onSuccess: function (data) {
+                                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
+                                    processSuccessfulLogin('MasterId', data);
+                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                                    deferred.resolve(true);
+                                    $(UI.ActionShowLogin).hide();
+                                    $(UI.LogoutButton).show();
 
-                                    },
-                                    onNull: function () {
-                                        LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                        deferred.reject('GetUserByToken.onNull');
-                                        Connext.Event.fire('onNotAuthorized', USER_STATE);
-                                    },
-                                    onError: function (err) {
-                                        LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                        deferred.reject('GetUserByToken.onError');
-                                        Connext.Event.fire('onNotAuthorized', USER_STATE);
-                                    }
-
-                                });
-                            } else {
-                                Connext.API.GetUserByMasterId({
-                                    payload: { masterId: result },
-                                    onSuccess: function (data) {
-                                        LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
-                                        processSuccessfulLogin('MasterId', data);
-                                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                        deferred.resolve(true);
-                                        $(UI.ActionShowLogin).hide();
-                                        $(UI.LogoutButton).show();
-
-                                    },
-                                    onNull: function () {
-                                        LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                        deferred.reject('GetUserByMasterId.onNull');
-                                        Connext.Event.fire('onNotAuthorized', USER_STATE);
-                                    },
-                                    onError: function (err) {
-                                        LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                        deferred.reject('GetUserMasterId.onError');
-                                        Connext.Event.fire('onNotAuthorized', USER_STATE);
-                                    }
-
-                                });
-                            }
+                                },
+                                onNull: function () {
+                                    LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
+                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                                    deferred.reject('GetUserByMasterId.onNull');
+                                    Connext.Event.fire('onNotAuthorized', USER_STATE);
+                                },
+                                onError: function (err) {
+                                    LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
+                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                                    deferred.reject('GetUserMasterId.onError');
+                                    Connext.Event.fire('onNotAuthorized', USER_STATE);
+                                }
+                            });
                         } else if (AUTH_TYPE.Janrain) {
                             Connext.API.GetUserByMasterId({
                                 payload: { id: result },
@@ -11098,7 +11225,7 @@ var ConnextUser = function ($) {
             LOGGER.debug(NAME, fnName, 'type', type, 'data', data);
             handleUILoggedInStatus(true);
             if (!data.Subscriptions || data.Subscriptions == null) {
-                NOTIFICATON.show('NoSubscriptionData');
+                NOTIFICATION.show('NoSubscriptionData');
                 Connext.Event.fire('onNotAuthorized', USER_STATE);
             } else {
                 //we have a data.Subscriptions that is not an object, so parse it.
@@ -11115,6 +11242,12 @@ var ConnextUser = function ($) {
             }
             //handle any AUTH_TYPE specific actions below.
             if (AUTH_TYPE.MG2) {
+                if (data.IgmRegID) {
+                    Connext.Storage.SetigmRegID(data.IgmRegID);
+                }
+                if (data.IgmContent) {
+                    Connext.Storage.SetIgmContent(data.IgmContent);
+                }
                 //MG2 Auth
             } else if (AUTH_TYPE.Janrain) {
                 //Janrain Auth
@@ -11136,17 +11269,6 @@ var ConnextUser = function ($) {
                 LOGGER.debug(NAME, 'hasAccess');
                 USER_STATE = USER_STATES.Subscribed;
                 Connext.Event.fire("onHasAccess", USER_STATE);
-                //set accessToken
-                Connext.Storage.SetAccessToken(data.MasterId);
-
-                //set UserToken if this is AUTH_TYPE.MG2 (For Janrain we use SSO and GUP we use getCurrentGUPUser)
-                if (AUTH_TYPE.MG2) {
-                    if (data.UserToken) {
-                        Connext.Storage.SetUserToken(data.UserToken);
-                    } else {
-                        Connext.Storage.SetUserRegId(data.MasterId);
-                    }
-                }
 
                 //We use bootstrap modalManager to check if we have any open modals (either Login modals or any 'Action' modals).
                 //if we do then we need to update the alert section so it says we have access and then we need to hide this modal.
@@ -11161,31 +11283,18 @@ var ConnextUser = function ($) {
                     if (openModals.length > 0) {
                         if (openModals[0].isShown) {
                             //modal is shown, this is from one of our modals, show alert message and after slight delay, hide the modal and show content.
-                            NOTIFICATON.show('AuthSuccess');
+                            NOTIFICATION.show('AuthSuccess');
                             setTimeout(function () {
                                 openModals[0].$element.modal('hide');
                             }, 1500);
-                        } else {
-                            //console.log('MODAL IS NOT SHOWN');
-                            //modal is not shown, this is either from background check or from custom Authenticate call...just show content
-                            //Action.ShowContent();
                         }
-                    } else {
-
-                        //console.log('MODAL IS NOT SHOWN');
-                        //modal is not shown, this is either from background check or from custom Authenticate call...just show content
-                        //Action.ShowContent();
                     }
                 }
-                //whether we have a modal or not, we need to show content.
                 Connext.Action.ShowContent(); //show content if it is hidden.
             } else {
                 Connext.Event.fire('onNotAuthorized', USER_STATE);
             }
             Connext.Storage.SetUserState(USER_STATE);
-            //return hasAccess, we only need this for when this is called from GetSubscriptionsByMasterId.
-            //return hasAccess;
-
         } catch (e) {
             console.error(NAME, fnName, 'EXCEPTION', e);
         }
@@ -11208,8 +11317,7 @@ var ConnextUser = function ($) {
                 //if the AccessRules are a string, we need to parse them into JSON.
                 OPTIONS.AccessRules = $.parseJSON(OPTIONS.AccessRules);
             }
-            if (data.DigitalAccess)
-            {
+            if (data.DigitalAccess) {
                 return _.where([data.DigitalAccess], OPTIONS.AccessRules).length > 0;
             }
             var allowedAccts = _.where(data.Subscriptions, OPTIONS.AccessRules);
@@ -11251,30 +11359,13 @@ var ConnextUser = function ($) {
             //NOTE: if we get successful userData we are calling 'resolve' and passing in this data. The function calling this one handles the type of data returned (for MG2 it is a userToken, for Janrain it is a UUID etc...)
 
             if (AUTH_TYPE.MG2) {
-                //look for UserToken cookie and then call GetSubscriptionByUserToken
-
-                //var userToken = Cookies.get(Connext.Common.StorageKeys.userToken);
-                var userToken = Connext.Storage.GetUserToken();
-                var userMasterId = Connext.Storage.GetUserRegId();
-
-                LOGGER.debug(NAME, fnName, 'userToken', userToken);
-                if (userToken) {
-                    //we have a stored 'userToken', so resolve with that data 
-
-                    //first fire onHasUserToken event.
-                    Connext.Event.fire('onHasUserToken', { token: userToken });
-                    deferred.resolve(userToken);
+                var encryptedMasterId = Connext.Storage.GetigmRegID();
+                if (encryptedMasterId) {
+                    deferred.resolve(encryptedMasterId);
                 } else {
-                    if (userMasterId) {
-                        deferred.resolve(userToken);
-                    } else {
-                        //we don't have a stored mg2 UserToken, so we call .reject (which means we do not have any userData
-                        deferred.reject('No MG2 UserToken');
-                    }
+                    deferred.reject('No MG2 UserToken');
                 }
-
             } else if (AUTH_TYPE.Janrain) {
-
                 if (window.JANRAIN) {
                     if (!window.localStorage.getItem('janrainCaptureToken')) {
                         USER_STATE = USER_STATES.NotLoggedIn;
@@ -11426,18 +11517,18 @@ var ConnextUser = function ($) {
     var executePopupLoginFlow = function (windowHandler) {
 
         var popupWidth = 500,
-                    popupHeight = 600,
-                    popupPositionLeft = (screen.width / 2) - (popupWidth / 2),
-                    popupPositionTop = (screen.height / 2) - (popupHeight / 2),
-                    popupWindow = window.open(
-                        '//login-stage.jconline.com/PLAI-GUP-MG2/authenticate/?window-mode=popup',
-                        '_blank',
-                        'toolbar=no, scrollbars=yes, resizable=no, ' +
-                        'width=' + popupWidth + ', ' +
-                        'height=' + popupHeight + ', ' +
-                        'top=' + popupPositionTop + ', ' +
-                        'left=' + popupPositionLeft
-                    );
+            popupHeight = 600,
+            popupPositionLeft = (screen.width / 2) - (popupWidth / 2),
+            popupPositionTop = (screen.height / 2) - (popupHeight / 2),
+            popupWindow = window.open(
+                '//login-stage.jconline.com/PLAI-GUP-MG2/authenticate/?window-mode=popup',
+                '_blank',
+                'toolbar=no, scrollbars=yes, resizable=no, ' +
+                'width=' + popupWidth + ', ' +
+                'height=' + popupHeight + ', ' +
+                'top=' + popupPositionTop + ', ' +
+                'left=' + popupPositionLeft
+            );
         return;
     };
 
@@ -11503,12 +11594,14 @@ var ConnextUser = function ($) {
             //LOGGER.debug(pName, fnName);
             if (AUTH_TYPE.GUP) {
                 //this is required for GUP, when the user closes the popup login modal (regardless of successful login, if they click 'cancel' or just close the popup modal.
-                window.jQuery(window).on('focus.gup_login_popup', function () {
-                    //GUP does not have a callback for successful login, because of this and what i mentioned above about not knowing why the modal was closed, we need to call the GetUserStatus call again, to see if they are now logged in. (This is not ideal, but this is actually according to the GUP documentation).
-                    //refresh();
-                    LOGGER.debug('focus.gup_login_popup');
-                    //checkAccess();
-                });
+                window.jQuery(window)
+                    .on('focus.gup_login_popup',
+                    function () {
+                        //GUP does not have a callback for successful login, because of this and what i mentioned above about not knowing why the modal was closed, we need to call the GetUserStatus call again, to see if they are now logged in. (This is not ideal, but this is actually according to the GUP documentation).
+                        //refresh();
+                        LOGGER.debug('focus.gup_login_popup');
+                        //checkAccess();
+                    });
             }
 
 
@@ -11518,111 +11611,7 @@ var ConnextUser = function ($) {
     };
 
 
-    $('body').on('click', UI.LogoutButton, function (e) {
-        e.preventDefault();
-        var fnName = UI.LogoutButton + '.CLICK';
-        LOGGER.debug(NAME, fnName);
-        logoutUser();
-    });
 
-    $('body').on('click', UI.SubscribeButton, function (e) {
-        e.preventDefault();
-        var fnName = UI.SubscribeButton + '.CLICK';
-        LOGGER.debug(NAME, fnName);
-        try {
-
-        var $this = $(this),
-            href = $this.attr('href'),
-            email = $this.parents('.Mg2-connext').find('[data-mg2-input="Email"]').val();
-
-        href = Connext.Utils.AddParameterToURL(href, 'email=' + email);
-        $this.attr('href', href);
-        window.location.href = href;
-        } catch (e) {
-            console.error(NAME, fnName, '<<EXCEPTION>>', e);
-        }
-    });
-
-    //Any element with a data-mg2-submit= 'login' will fire this event.  This will attempt to submit the form this button belongs to.
-    $('body').on('click', UI.LoginButton, function (e) {
-        e.preventDefault();
-        var fnName = UI.LoginButton + '.CLICK';
-        LOGGER.debug(NAME, fnName);
-
-        try {
-
-            FORM_SUBMIT_LOADER = $(UI.LoginButton).loader();
-            FORM_ALERT = $(UI.LoginAlert).jalert();
-
-            //start loader animation for login button.
-            FORM_SUBMIT_LOADER.on();
-
-            if (AUTH_TYPE.MG2) {
-                //we use ':visible' because we could have multiple inputs with the same data-mg2-input values (dedicated modals, multiple actions with login forms etc...).  So we want to only grab the value of the one that is visible.
-                MG2Authenticate($(UI.InputUsername + ':visible').val(), $(UI.InputPassword + ':visible').val());
-            } else {
-                JanrainAuthenticate($('[data-mg2-input=Username]:visible').val(), $('[data-mg2-input=Password]:visible').val());
-            }
-        } catch (e) {
-            console.error(NAME, fnName, '<<EXCEPTION>>', e);
-        }
-
-
-
-
-        /////////////NEED TO MOVE THIS TO BETTER FUNCTION
-        ////////This originally was set in setLoginModal for MG2 authentication, but we need this for paywalls even if we are using janrain.
-        //////LoginLoader = $('[data-mg2-submit=login]').loader();
-        //////LoginAlert = $('[data-mg2-alert=login]').jalert();
-
-
-        ////////console.log('login submit clicked', $('[data-mg2-input=Username]:visible'), $('[data-mg2-input=Username]:visible').val(), $('[data-mg2-input=Password]:visible').val());
-        //////notification.hide(LoginAlert);
-        ////////LoginAlert.error("Login Error").show();
-        //////LoginLoader.on();
-        ////////since the data-mg2-input could appear many times in a page (client custom input form, different modals) we use the :visible qualifier so we get the one that is on the screen.
-        //////if (AuthType.MG2) {
-        //////    MG2Authenticate($('[data-mg2-input=Username]:visible').val(), $('[data-mg2-input=Password]:visible').val());
-        //////} else {
-        //////    JanrainAuthenticate($('[data-mg2-input=Username]:visible').val(), $('[data-mg2-input=Password]:visible').val());
-        //////}
-
-    });
-
-
-    //Any element with a data-mg2-action= 'login' will fire this event.  This allows the client to set this data attribute to any element on their page and the appropriate login html will show based on the OPTIONS.Site.RegistrationTypeId.
-    $('body').on('click', UI.ActionShowLogin, function (e) {
-        e.preventDefault();
-        var fnName = UI.ActionShowLogin + '.Click';
-        try {
-            //LOGGER.debug(NAME, fnName);
-
-            LOGGER.debug(NAME, fnName, 'IS_LOGGED_IN', IS_LOGGED_IN)
-
-            if (AUTH_TYPE.MG2) {
-                //this is MG2 Auth type, show MG2 Login Modal.
-                $(UI.LoginModal).addClass('in');
-                $(UI.LoginModal).attr('id', 'mg2-login-modal');
-                $(UI.LoginModal).connextmodal({ backdrop: 'true' });
-                $(UI.LoginModal).css('display', 'block');
-                $('[data-display-type=modal]').resize();
-
-
-                ////FOR TESTING, auto add values.
-                //$(UI.InputUsername).val('rmsmola+2222@gmail.com');
-                //$(UI.InputPassword).val('testing123');
-
-            } else if (AUTH_TYPE.GUP) {
-                //this is a GUP AuthType, so show GUP popup modal
-                executePopupLoginFlow(window);
-            }
-        } catch (e) {
-            console.error(NAME, fnName, 'Exception', e);
-        }
-    });
-
-
-    //#endregion EVENT LISTENERS
 
     //#region UI Functions
 
@@ -11701,45 +11690,52 @@ var ConnextUser = function ($) {
         /// <returns>None</returns>
         var fnName = 'MG2Authenticate';
         try {
+            if (!email) {
+                NOTIFICATION.showAndHide('Please enter email', 10000);
+                FORM_SUBMIT_LOADER.off();
+                return false;
+            }
+            if (!password) {
+                NOTIFICATION.showAndHide('Please enter password', 10000);
+                FORM_SUBMIT_LOADER.off();
+                return false;
+            }
             LOGGER.debug(NAME, fnName);
-
-            //need send request to api
-            //just a cap for now
-            //userToken - login
-            //Connext.Storage.SetUserToken("Logged in");
-            //FORM_SUBMIT_LOADER.off();
-            //NOTIFICATON.show('Successfully logged in!');
-            //setTimeout(function () {
-            //    $("i[data-dismiss=modal]").click();
-            //}, 1500);
             Connext.API.GetUserByEmailAndPassword({
                 payload: { email: email, password: password },
                 onSuccess: function (data) {
                     LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
                     processSuccessfulLogin('Form', data);
-                    //NOTIFICATON.show('AuthSuccess');
-
-                    //FORM_ALERT.success('Successfully Logged In').show();
-                    //we got results from the server, we need to process them to create a friendlier json object.
                     $(UI.ActionShowLogin).hide();
                     $(UI.LogoutButton).show();
-                    //$('[data-mg2-alert=login]').connextmodal('hide');
                     Connext.Run();
                 },
                 onNull: function () {
                     LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                    //FORM_ALERT.error('AuthSuccess').show();
-                    NOTIFICATON.show('NotAuthenticated');
-                    //deferred.reject('Configuration Not Found');
+                    NOTIFICATION.show('NotAuthenticated');
                 },
                 onError: function (err) {
                     LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                    NOTIFICATON.show('GenericAuthFailed');
-                    //FORM_ALERT.error('ERROR').show();
-                    //deferred.reject('Error Getting Configuration Data');
+                    var errorMessage = 'GenericAuthFailed';
+                    if (err.responseJSON) {
+                        try {
+                            LOGGER.debug(NAME, fnName, 'try parse error response');
+                            errorMessage = err.responseJSON.Message;
+                            var json = JSON.parse(err.responseJSON.Message);
+                            if (json.Message) {
+                                errorMessage = json.Message;
+                                if (errorMessage == 'UserName or Password invalid.') {
+                                    errorMessage += ' ' + incorrectCreditsMessage;
+                                }
+                            }
+                        }
+                        catch (e) {
+                            LOGGER.debug(NAME, fnName, 'Error of parse response JSON');
+                        }
+                    }
+                    NOTIFICATION.showAndHide(errorMessage, 10000);
                 },
                 onComplete: function () {
-                    //this fires no matter what...right now this is to stop animation of button no matter the result, but we might want to rethink this since if we have a success we need to process the authentication which might take think processing will be under 20ms, so we can probably keep this).
                     FORM_SUBMIT_LOADER.off();
                 }
             });
@@ -12099,7 +12095,7 @@ var ConnextMeterCalculation = function ($) {
             //We have a 'HiddenField' criteria and 'actionPassed' is still true so we need to check this.
             if (Connext.Storage.GetUserZipCodes()) {
                 $.each(Connext.Storage.GetUserZipCodes(),
-                    function (key,code) {
+                    function (key, code) {
                         if (segment.Options.Zipcodes.indexOf(code) >= 0) {
                             isPassed = segment.Options.GeoQalifier.toUpperCase() == 'IN';
                             return false;
@@ -12140,19 +12136,52 @@ var ConnextMeterCalculation = function ($) {
 
             LOGGER.debug(NAME, fnName, '-- Testing ---');
 
-            var isPassed = false;
+            var isPassed = true;
             var varValue = segment.Options.VarName;
 
-            //if (varValue != undefined) {
+            var jsValue = eval(varValue);
+            if (Object.prototype.toString.call(jsValue) == "[object Array]") {
+                jsValue = jsValue.map(function (item) {
+                    return item.trim().toLowerCase();
+                });
+                if (segment.Options.Qualifier == 'Contains' ||
+                    segment.Options.Qualifier == 'Doesn\'t contain') {
+                    if (jsValue.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
+                        isPassed = segment.Options.Qualifier == 'Contains';
+                    } else {
+                        isPassed = segment.Options.Qualifier == 'Doesn\'t contain';
+                    }
+                } else {
+                    isPassed = segment.Options.Qualifier == 'Equals';
+                }
+            } else {
+                jsValue = jsValue.toString().toLowerCase();
 
-                isPassed = Connext.Utils.JSEvaluate(
-                    varValue.toString().toUpperCase(),
-                    segment.Options.Qualifier,
-                    segment.Options.Val.toUpperCase(),
-                    "string"
-                );
-            //}
-
+                if (segment.Options.Qualifier == 'Contains' ||
+                    segment.Options.Qualifier == 'Doesn\'t contain') {
+                    if (jsValue == undefined) {
+                        isPassed = segment.Options.Qualifier == 'Doesn\'t contain';
+                    } else {
+                        var array = jsValue.split(/[,;]/g);
+                        if (array.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
+                            isPassed = segment.Options.Qualifier == 'Contains';
+                        } else {
+                            isPassed = segment.Options.Qualifier == 'Doesn\'t contain';
+                        }
+                    }
+                } else {
+                    if (Connext.Utils
+                        .JSEvaluate(jsValue,
+                            segment.Options.Qualifier,
+                            segment.Options.Val.toLowerCase(),
+                            'JavascriptCriteria')) {
+                        //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                    } else {
+                        //this failed, so set actionPassed to false;
+                        isPassed = false;
+                    }
+                }
+            }
             if (isPassed) {
                 console.log('PASSES');
                 deferred.resolve();
@@ -12165,13 +12194,13 @@ var ConnextMeterCalculation = function ($) {
             console.error(NAME, fnName, e);
             //return false;
             //_CB(false);
-            deferred.reject(false);
+            deferred.reject();
         }
 
         //return deferred promise
         return deferred.promise();
     }
-    
+
     function evalUserState(segment) {
         /// <summary>This checks evalUserState presence based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
@@ -12288,14 +12317,14 @@ var ConnextMeterCalculation = function ($) {
                 //set format for article check to DB value or if it does not exist or is set to empty string then use default value in Connext.Common.
                 var format = (_.isNothing(options.Format) ? Connext.Common.DefaultArticleFormat : options.Format);
                 LOGGER.info(NAME, fnName, 'Using Format: ', format);
-                var articleDateData = null; 
+                var articleDateData = null;
                 //get the article text based on the selector
                 if (options.Selector.indexOf('$') > -1) {
                     articleDateData = eval(options.Selector);
                 } else {
                     articleDateData = $(options.Selector).text();
                 }
-               
+
 
                 LOGGER.info(NAME, fnName, 'articleDateData', articleDateData);
 
@@ -12505,7 +12534,6 @@ var ConnextCampaign = function ($) {
 
                 //we have a stored conversation, so set global object.
                 CURRENT_CONVERSATION = storedConversation;
-
                 //since this is a stored conversation so we need to make sure it is still valid.
                 if (isConversationValid()) {
                     //current conversation is valid, so use it.
@@ -12520,6 +12548,8 @@ var ConnextCampaign = function ($) {
 
                     CURRENT_CONVERSATION = getNextConversation();
                     if (CURRENT_CONVERSATION) {
+                        setDefaultConversationProps();
+                        CURRENT_CONVERSATION.Props.views = 0;
                         return CURRENT_CONVERSATION;
                     }
 
@@ -12536,10 +12566,26 @@ var ConnextCampaign = function ($) {
 
                     //set global conversation object to this conversation.
                     CURRENT_CONVERSATION = allConversations[0];
+                    setDefaultConversationProps();
                     LOGGER.debug(NAME, fnName, 'No Current Conversation Stored....Using first conversation in campaign', CURRENT_CONVERSATION);
+                    if (isConversationValid()) {
+                        //current conversation is valid, so use it.
+
+                        //since it is valid, return the current conversation.
+                        return CURRENT_CONVERSATION;
+
+                    } else {
+                        //current conversation is not valid, so try and get the next conversation.
+                        LOGGER.debug(NAME, fnName, 'Found Stored Conversation --- NOT VALID');
+                    
+                        CURRENT_CONVERSATION = getNextConversation();
+                        if (CURRENT_CONVERSATION) {
+                            CURRENT_CONVERSATION.Props.views = 0;
+                            return CURRENT_CONVERSATION;
+                        }
+                    }
 
                     //since we know this is a new conversation, set some values (like Date started, Expirate Date ect...). We also don't need to verify this conversation since this it is new.
-                    setDefaultConversationProps();
                     return CURRENT_CONVERSATION;
 
                 } else {
@@ -12568,7 +12614,6 @@ var ConnextCampaign = function ($) {
         var fnName = 'isConversationValid';
         try {
             //LOGGER.debug(pName, fnName);
-
             //first we check we this was flagged for expiration from an USER_ACTION on a previous page load
             if (CURRENT_CONVERSATION.Props.isExpired) {
                 //this was previously flagged to expire.
@@ -12576,7 +12621,7 @@ var ConnextCampaign = function ($) {
                 return false;
             } else {
                 //this was not flagged to expire, but we need to check that it is still valid based on the expiration date.
-                if (CURRENT_CONVERSATION.Props.Date.expiration) {
+                if (CURRENT_CONVERSATION.Options.Expirations.Time) {
                     //we have a 'Time' expiration type, so check against it.
                     var now = Connext.Utils.Now();
 
@@ -12774,31 +12819,58 @@ var ConnextCampaign = function ($) {
                             if (who.JavascriptCriteria && actionPassed == true) {
                                 //We have a 'Javascript' criteria and 'actionPassed' is still true so we need to check this.
                                 LOGGER.debug(NAME, fnName, 'Checking Javscript');
-
-
                                 try {
-                                    //we need to call 'eval' on the val.Eval property, before we call the universal JSEvaluate funciton.
-                                    //this is wrapped in its own try/catch since this is calling an external javascript function which can throw an exeption which we'll catch here instead of the function wide try/catch so our looping through other criteria will still go through.
-                                    var jsValue = eval(who.JavascriptCriteria.Eval);
-                                    if (jsValue != undefined) {
-                                        jsValue = jsValue.toString().toLowerCase();
-                                    }
-                                    if (Connext.Utils
-                                        .JSEvaluate(jsValue,
-                                            who.JavascriptCriteria.Qualifier,
-                                            who.JavascriptCriteria.Val.toLowerCase(),
-                                            'JavascriptCriteria')) {
-                                        //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                                    var varValue = who.JavascriptCriteria.Eval;
+                                    var jsValue = eval(varValue);
+                                    if (Object.prototype.toString.call(jsValue) == "[object Array]") {
+                                        jsValue = jsValue.map(function (item) {
+                                            return item.trim().toLowerCase();
+                                        });
+                                        if (who.JavascriptCriteria.Qualifier == 'In' ||
+                                            who.JavascriptCriteria.Qualifier == 'NotIn') {
+                                            if (jsValue.indexOf(who.JavascriptCriteria.Val.toLowerCase()) >= 0) {
+                                                actionPassed = who.JavascriptCriteria.Qualifier == 'In';
+                                            } else {
+                                                actionPassed = who.JavascriptCriteria.Qualifier == 'NotIn';
+                                            }
+                                        } else {
+                                            actionPassed = who.JavascriptCriteria.Qualifier == '==';
+                                        }
                                     } else {
-                                        //this failed, so set actionPassed to false;
-                                        actionPassed = false;
+                                        if (jsValue != undefined && jsValue != '') {
+                                            jsValue = jsValue.toString().toLowerCase();
+                                        }
+
+                                        if (who.JavascriptCriteria.Qualifier == 'In' ||
+                                            who.JavascriptCriteria.Qualifier == 'NotIn') {
+                                            if (jsValue == undefined) {
+                                                actionPassed = who.JavascriptCriteria.Qualifier == 'NotIn';
+                                            } else {
+                                                var array = jsValue.split(/[,;]/g);
+                                                if (array.indexOf(who.JavascriptCriteria.Val.toLowerCase()) >= 0) {
+                                                    actionPassed = who.JavascriptCriteria.Qualifier == 'In';
+                                                } else {
+                                                    actionPassed = who.JavascriptCriteria.Qualifier == 'NotIn';
+                                                }
+                                            }
+                                        } else {
+                                            if (Connext.Utils
+                                                .JSEvaluate(jsValue,
+                                                    who.JavascriptCriteria.Qualifier,
+                                                    who.JavascriptCriteria.Val.toLowerCase(),
+                                                    'JavascriptCriteria')) {
+                                                //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                                            } else {
+                                                //this failed, so set actionPassed to false;
+                                                actionPassed = false;
+                                            }
+                                        }
                                     }
+
                                 } catch (e) {
                                     LOGGER.debug(NAME, fnName, 'Error evaluating javascript criteria.');
                                     actionPassed = false; //the eval through an exception so this action doesn't pass.
                                 }
-
-
                             }
 
                             //Screen size criteria
@@ -12808,7 +12880,7 @@ var ConnextCampaign = function ($) {
 
                                 if (Connext.Utils
                                     .JSEvaluate(Connext.Utils.getDeviceType(),
-                                        '==',
+                                         who.ScreenSizeCriteria.Qualifier,
                                         who.ScreenSizeCriteria.Value,
                                         'ScreenSizeCriteria',
                                         'string')) {
@@ -12875,6 +12947,9 @@ var ConnextCampaign = function ($) {
                                 LOGGER.debug(NAME, fnName, 'Checking user state', who.UserStateCriteria);
 
                                 var userState = Connext.User.getUserState();
+                                if (!userState) {
+                                    userState = 'Logged Out';
+                                }
                                 if (!Connext.Utils.JSEvaluate(userState, '==', who.UserStateCriteria.Value)) {
                                     actionPassed = false;
                                 }
@@ -12978,7 +13053,6 @@ var ConnextCampaign = function ($) {
             allcurrentConversations[METER_LEVEL] = CURRENT_CONVERSATION;
             //re-set the entire conversations.current object back to local storage.
             $.jStorage.set(Connext.Common.StorageKeys.conversations.current, allcurrentConversations);
-
             Connext.Storage.GetCurrentConversations()[METER_LEVEL];
         } catch (e) {
             console.error(NAME, fnName, 'EXCEPTION', e);
@@ -13023,7 +13097,7 @@ var ConnextCampaign = function ($) {
         try {
             LOGGER.debug(NAME, fnName);
 
-            if ($.jStorage.get('uniqueArticles')) {
+            if ($.jStorage.get('uniqueArticles') || !Connext.GetOptions().debug) {
                 //we are enforcing unique articles. So we need to check if this article has already been viewed for this user.
 
                 //this function will check if this article has been viewed. If it has not it will handle adding this article to the viewed article array as well as updating this conversations view count.
@@ -13086,12 +13160,9 @@ var ConnextCampaign = function ($) {
     };
 
     var getCurrentConversationViewCount = function () {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = 'getCurrentConversationViewCount';
         try {
-            if ($.jStorage.get('uniqueArticles')) {
+            if ($.jStorage.get('uniqueArticles') || !Connext.GetOptions().debug) {
                 return Connext.Storage.GetViewedArticles(CURRENT_CONVERSATION.id).length;
             }
             else {
@@ -13142,8 +13213,8 @@ var ConnextCampaign = function ($) {
         GetCurrentConversation: function () {
             return CURRENT_CONVERSATION;
         },
-        GetCurrentConversationViewCount: function() {
-           return getCurrentConversationViewCount();
+        GetCurrentConversationViewCount: function () {
+            return getCurrentConversationViewCount();
         },
         EventCompleted: function (event) {
             var fnName = 'EventCompleted';
@@ -13454,6 +13525,7 @@ var ConnextAction = function ($) {
             //found modal window
             if (result) {
                 $(parent).on('click.modal', targetIsSelf(function (e) {
+                    $action.addClass('hide');
                     action.closeEvent = CLOSE_CASES.ClickOutside;
                     Connext.Event.fire('onActionClosed', action);
                 }));
@@ -14458,7 +14530,7 @@ var Connext = function ($) {
 
                     //set 'moment' object so we can compare with moment
                     var localLastPublishDate = moment(configurationLastPublishDate);
-
+                    localLastPublishDate = localLastPublishDate.add(10, 's');
                     //we use moment 'isAfter' function to check if serverLastPublishDate is after the local date.
                     if (serverLastPublishDate.isAfter(localLastPublishDate)) {
                         LOGGER.debug(NAME, fnName, 'Server date is << AFTER >>');
