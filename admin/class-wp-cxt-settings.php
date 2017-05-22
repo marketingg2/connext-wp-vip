@@ -181,7 +181,7 @@ class Wp_Cxt_Settings {
 
 							// Allow the saving of empty fields or valid alphanumeric data
 							// and then sanitize it
-							if ( preg_match('/^[a-zA-Z0-9,]+$/', $field_value) ) {
+							if ( preg_match( '/^[a-zA-Z0-9,]+$/', $field_value ) ) {
 								$sanitized_input[ $field_name ] = sanitize_text_field( $field_value );
 							} else {
 								add_settings_error(
@@ -279,7 +279,7 @@ class Wp_Cxt_Settings {
 						'render_function' => 'render_chosen_select',
 						'options' => array(
 							'false' => __( 'No', 'wp-cxt' ),
-							'true' => __( 'Yes', 'wp-cxt' )
+							'true' => __( 'Yes', 'wp-cxt' ),
 						),
 						'default' => 'true',
 						'validation_type' => 'alphanumeric',

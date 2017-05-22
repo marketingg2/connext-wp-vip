@@ -82,12 +82,12 @@ class Wp_Cxt_Public {
 		 */
 		$connext_enabled = apply_filters( 'wp_cxt_connext_enabled', $this->connext_enabled() );
 		if ( $connext_enabled ) {
-			if( $this->current_settings['environment'] == 'test' ){
+			if ( 'test' === $this->current_settings['environment'] ) {
 				wp_register_script( 'connext', WP_CXT_URL . 'public/js/Connext.js', array( 'jquery' ), WP_CXT_VERSION, true );
-			}else{
+			} else {
 				wp_register_script( 'connext', WP_CXT_URL . 'public/js/Connext.min.js', array( 'jquery' ), WP_CXT_VERSION, true );
 			}
-			
+
 			wp_register_script( 'wp-connext-public', WP_CXT_URL . 'public/js/wp-cxt-public.js', array( 'jquery' ), WP_CXT_VERSION, true );
 
 			$connext_script_settings = $this->get_connext_script_settings();
