@@ -1,22 +1,3 @@
-/* ===========================================================
- * bootstrap-modal.js v2.2.5
- * ===========================================================
- * Copyright 2012 Jordan Schroter
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================== */
-
-
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -319,8 +300,6 @@
 	};
 
 
-	/* MODAL PLUGIN DEFINITION
-	* ======================= */
 
 	$.fn.connextmodal = function (option, args) {
 		return this.each(function () {
@@ -346,18 +325,15 @@
 		consumeTab: true,
 		focusOn: null,
 		replace: false,
-		resize: false,
-		attentionAnimation: 'shake',
+        resize: false,
+        attentionAnimation: false,
+		//attentionAnimation: 'shake',
 		manager: 'body',
 		spinner: '<div class="loading-spinner" style="width: 200px; margin-left: -100px;"><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div></div>',
 		backdropTemplate: '<div class="modal-backdrop" />'
 	};
 
 	$.fn.connextmodal.Constructor = Modal;
-
-
-	/* MODAL DATA-API
-	* ============== */
 
 	$(function () {
 	    $(document).off('click.modal').on('click.modal.data-api', '[data-toggle="modal"]', function (e) {
@@ -376,24 +352,6 @@
 	});
 
 }(window.jQuery);
-
-/* ===========================================================
- * bootstrap-modalmanager.js v2.2.5
- * ===========================================================
- * Copyright 2012 Jordan Schroter.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================== */
 
 !function ($) {
 
@@ -803,16 +761,6 @@
 
 }(jQuery);
 
-/*!
- * Bootstrap v3.3.7 (http://getbootstrap.com)
- * Copyright 2011-2016 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-
-/*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=249d82f90da67dd57131bdb86297e5c2)
- * Config saved to config.json and https://gist.github.com/249d82f90da67dd57131bdb86297e5c2
- */
 if (typeof jQuery === 'undefined') {
     throw new Error('Bootstrap\'s JavaScript requires jQuery')
 }
@@ -823,15 +771,6 @@ if (typeof jQuery === 'undefined') {
         throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
     }
 }(jQuery);
-
-/* ========================================================================
- * Bootstrap: affix.js v3.3.7
- * http://getbootstrap.com/javascript/#affix
- * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * ======================================================================== */
-
 
 +function ($) {
     'use strict';
@@ -986,11 +925,6 @@ if (typeof jQuery === 'undefined') {
     })
 
 }(jQuery);
-
-//     Underscore.js 1.6.0
-//     http://underscorejs.org
-//     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-//     Underscore may be freely distributed under the MIT license.
 
 (function () {
 
@@ -2619,167 +2553,6 @@ if (typeof jQuery === 'undefined') {
 }).call(this);
 
 
-/*
-    http://www.JSON.org/json2.js
-    2011-02-23
-
-    Public Domain.
-
-    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-
-    See http://www.JSON.org/js.html
-
-
-    This code should be minified before deployment.
-    See http://javascript.crockford.com/jsmin.html
-
-    USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
-    NOT CONTROL.
-
-
-    This file creates a global JSON object containing two methods: stringify
-    and parse.
-
-        JSON.stringify(value, replacer, space)
-            value       any JavaScript value, usually an object or array.
-
-            replacer    an optional parameter that determines how object
-                        values are stringified for objects. It can be a
-                        function or an array of strings.
-
-            space       an optional parameter that specifies the indentation
-                        of nested structures. If it is omitted, the text will
-                        be packed without extra whitespace. If it is a number,
-                        it will specify the number of spaces to indent at each
-                        level. If it is a string (such as '\t' or '&nbsp;'),
-                        it contains the characters used to indent at each level.
-
-            This method produces a JSON text from a JavaScript value.
-
-            When an object value is found, if the object contains a toJSON
-            method, its toJSON method will be called and the result will be
-            stringified. A toJSON method does not serialize: it returns the
-            value represented by the name/value pair that should be serialized,
-            or undefined if nothing should be serialized. The toJSON method
-            will be passed the key associated with the value, and this will be
-            bound to the value
-
-            For example, this would serialize Dates as ISO strings.
-
-                Date.prototype.toJSON = function (key) {
-                    function f(n) {
-                        // Format integers to have at least two digits.
-                        return n < 10 ? '0' + n : n;
-                    }
-
-                    return this.getUTCFullYear()   + '-' +
-                         f(this.getUTCMonth() + 1) + '-' +
-                         f(this.getUTCDate())      + 'T' +
-                         f(this.getUTCHours())     + ':' +
-                         f(this.getUTCMinutes())   + ':' +
-                         f(this.getUTCSeconds())   + 'Z';
-                };
-
-            You can provide an optional replacer method. It will be passed the
-            key and value of each member, with this bound to the containing
-            object. The value that is returned from your method will be
-            serialized. If your method returns undefined, then the member will
-            be excluded from the serialization.
-
-            If the replacer parameter is an array of strings, then it will be
-            used to select the members to be serialized. It filters the results
-            such that only members with keys listed in the replacer array are
-            stringified.
-
-            Values that do not have JSON representations, such as undefined or
-            functions, will not be serialized. Such values in objects will be
-            dropped; in arrays they will be replaced with null. You can use
-            a replacer function to replace those with JSON values.
-            JSON.stringify(undefined) returns undefined.
-
-            The optional space parameter produces a stringification of the
-            value that is filled with line breaks and indentation to make it
-            easier to read.
-
-            If the space parameter is a non-empty string, then that string will
-            be used for indentation. If the space parameter is a number, then
-            the indentation will be that many spaces.
-
-            Example:
-
-            text = JSON.stringify(['e', {pluribus: 'unum'}]);
-            // text is '["e",{"pluribus":"unum"}]'
-
-
-            text = JSON.stringify(['e', {pluribus: 'unum'}], null, '\t');
-            // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
-
-            text = JSON.stringify([new Date()], function (key, value) {
-                return this[key] instanceof Date ?
-                    'Date(' + this[key] + ')' : value;
-            });
-            // text is '["Date(---current time---)"]'
-
-
-        JSON.parse(text, reviver)
-            This method parses a JSON text to produce an object or array.
-            It can throw a SyntaxError exception.
-
-            The optional reviver parameter is a function that can filter and
-            transform the results. It receives each of the keys and values,
-            and its return value is used instead of the original value.
-            If it returns what it received, then the structure is not modified.
-            If it returns undefined then the member is deleted.
-
-            Example:
-
-            // Parse the text. Values that look like ISO date strings will
-            // be converted to Date objects.
-
-            myData = JSON.parse(text, function (key, value) {
-                var a;
-                if (typeof value === 'string') {
-                    a =
-/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-                    if (a) {
-                        return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
-                            +a[5], +a[6]));
-                    }
-                }
-                return value;
-            });
-
-            myData = JSON.parse('["Date(09/09/2001)"]', function (key, value) {
-                var d;
-                if (typeof value === 'string' &&
-                        value.slice(0, 5) === 'Date(' &&
-                        value.slice(-1) === ')') {
-                    d = new Date(value.slice(5, -1));
-                    if (d) {
-                        return d;
-                    }
-                }
-                return value;
-            });
-
-
-    This is a reference implementation. You are free to copy, modify, or
-    redistribute.
-*/
-
-/*jslint evil: true, strict: false, regexp: false */
-
-/*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
-    call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
-    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
-    lastIndex, length, parse, prototype, push, replace, slice, stringify,
-    test, toJSON, toString, valueOf
-*/
-
-
-// Create a JSON object only if one does not already exist. We create the
-// methods in a closure to avoid creating global variables.
-
 var JSON;
 if (!JSON) {
     JSON = {};
@@ -3100,13 +2873,6 @@ if (!JSON) {
     }
 }());
 
-/*!
- * JavaScript Cookie v2.1.0
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
 (function (factory) {
     var _OldCookies = window.Cookies;
     var api = window.Cookies = factory();
@@ -3254,9 +3020,7 @@ if (!JSON) {
 }));
 
 
-/* global ActiveXObject: false */
-/* jshint browser: true */
-
+var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) } function K(G, k) { var I, d, F, H, x; F = (G & 2147483648); H = (k & 2147483648); I = (G & 1073741824); d = (k & 1073741824); x = (G & 1073741823) + (k & 1073741823); if (I & d) { return (x ^ 2147483648 ^ F ^ H) } if (I | d) { if (x & 1073741824) { return (x ^ 3221225472 ^ F ^ H) } else { return (x ^ 1073741824 ^ F ^ H) } } else { return (x ^ F ^ H) } } function r(d, F, k) { return (d & F) | ((~d) & k) } function q(d, F, k) { return (d & k) | (F & (~k)) } function p(d, F, k) { return (d ^ F ^ k) } function n(d, F, k) { return (F ^ (d | (~k))) } function u(G, F, aa, Z, k, H, I) { G = K(G, K(K(r(F, aa, Z), k), I)); return K(L(G, H), F) } function f(G, F, aa, Z, k, H, I) { G = K(G, K(K(q(F, aa, Z), k), I)); return K(L(G, H), F) } function D(G, F, aa, Z, k, H, I) { G = K(G, K(K(p(F, aa, Z), k), I)); return K(L(G, H), F) } function t(G, F, aa, Z, k, H, I) { G = K(G, K(K(n(F, aa, Z), k), I)); return K(L(G, H), F) } function e(G) { var Z; var F = G.length; var x = F + 8; var k = (x - (x % 64)) / 64; var I = (k + 1) * 16; var aa = Array(I - 1); var d = 0; var H = 0; while (H < F) { Z = (H - (H % 4)) / 4; d = (H % 4) * 8; aa[Z] = (aa[Z] | (G.charCodeAt(H) << d)); H++ } Z = (H - (H % 4)) / 4; d = (H % 4) * 8; aa[Z] = aa[Z] | (128 << d); aa[I - 2] = F << 3; aa[I - 1] = F >>> 29; return aa } function B(x) { var k = "", F = "", G, d; for (d = 0; d <= 3; d++) { G = (x >>> (d * 8)) & 255; F = "0" + G.toString(16); k = k + F.substr(F.length - 2, 2) } return k } function J(k) { k = k.replace(/rn/g, "n"); var d = ""; for (var F = 0; F < k.length; F++) { var x = k.charCodeAt(F); if (x < 128) { d += String.fromCharCode(x) } else { if ((x > 127) && (x < 2048)) { d += String.fromCharCode((x >> 6) | 192); d += String.fromCharCode((x & 63) | 128) } else { d += String.fromCharCode((x >> 12) | 224); d += String.fromCharCode(((x >> 6) & 63) | 128); d += String.fromCharCode((x & 63) | 128) } } } return d } var C = Array(); var P, h, E, v, g, Y, X, W, V; var S = 7, Q = 12, N = 17, M = 22; var A = 5, z = 9, y = 14, w = 20; var o = 4, m = 11, l = 16, j = 23; var U = 6, T = 10, R = 15, O = 21; s = J(s); C = e(s); Y = 1732584193; X = 4023233417; W = 2562383102; V = 271733878; for (P = 0; P < C.length; P += 16) { h = Y; E = X; v = W; g = V; Y = u(Y, X, W, V, C[P + 0], S, 3614090360); V = u(V, Y, X, W, C[P + 1], Q, 3905402710); W = u(W, V, Y, X, C[P + 2], N, 606105819); X = u(X, W, V, Y, C[P + 3], M, 3250441966); Y = u(Y, X, W, V, C[P + 4], S, 4118548399); V = u(V, Y, X, W, C[P + 5], Q, 1200080426); W = u(W, V, Y, X, C[P + 6], N, 2821735955); X = u(X, W, V, Y, C[P + 7], M, 4249261313); Y = u(Y, X, W, V, C[P + 8], S, 1770035416); V = u(V, Y, X, W, C[P + 9], Q, 2336552879); W = u(W, V, Y, X, C[P + 10], N, 4294925233); X = u(X, W, V, Y, C[P + 11], M, 2304563134); Y = u(Y, X, W, V, C[P + 12], S, 1804603682); V = u(V, Y, X, W, C[P + 13], Q, 4254626195); W = u(W, V, Y, X, C[P + 14], N, 2792965006); X = u(X, W, V, Y, C[P + 15], M, 1236535329); Y = f(Y, X, W, V, C[P + 1], A, 4129170786); V = f(V, Y, X, W, C[P + 6], z, 3225465664); W = f(W, V, Y, X, C[P + 11], y, 643717713); X = f(X, W, V, Y, C[P + 0], w, 3921069994); Y = f(Y, X, W, V, C[P + 5], A, 3593408605); V = f(V, Y, X, W, C[P + 10], z, 38016083); W = f(W, V, Y, X, C[P + 15], y, 3634488961); X = f(X, W, V, Y, C[P + 4], w, 3889429448); Y = f(Y, X, W, V, C[P + 9], A, 568446438); V = f(V, Y, X, W, C[P + 14], z, 3275163606); W = f(W, V, Y, X, C[P + 3], y, 4107603335); X = f(X, W, V, Y, C[P + 8], w, 1163531501); Y = f(Y, X, W, V, C[P + 13], A, 2850285829); V = f(V, Y, X, W, C[P + 2], z, 4243563512); W = f(W, V, Y, X, C[P + 7], y, 1735328473); X = f(X, W, V, Y, C[P + 12], w, 2368359562); Y = D(Y, X, W, V, C[P + 5], o, 4294588738); V = D(V, Y, X, W, C[P + 8], m, 2272392833); W = D(W, V, Y, X, C[P + 11], l, 1839030562); X = D(X, W, V, Y, C[P + 14], j, 4259657740); Y = D(Y, X, W, V, C[P + 1], o, 2763975236); V = D(V, Y, X, W, C[P + 4], m, 1272893353); W = D(W, V, Y, X, C[P + 7], l, 4139469664); X = D(X, W, V, Y, C[P + 10], j, 3200236656); Y = D(Y, X, W, V, C[P + 13], o, 681279174); V = D(V, Y, X, W, C[P + 0], m, 3936430074); W = D(W, V, Y, X, C[P + 3], l, 3572445317); X = D(X, W, V, Y, C[P + 6], j, 76029189); Y = D(Y, X, W, V, C[P + 9], o, 3654602809); V = D(V, Y, X, W, C[P + 12], m, 3873151461); W = D(W, V, Y, X, C[P + 15], l, 530742520); X = D(X, W, V, Y, C[P + 2], j, 3299628645); Y = t(Y, X, W, V, C[P + 0], U, 4096336452); V = t(V, Y, X, W, C[P + 7], T, 1126891415); W = t(W, V, Y, X, C[P + 14], R, 2878612391); X = t(X, W, V, Y, C[P + 5], O, 4237533241); Y = t(Y, X, W, V, C[P + 12], U, 1700485571); V = t(V, Y, X, W, C[P + 3], T, 2399980690); W = t(W, V, Y, X, C[P + 10], R, 4293915773); X = t(X, W, V, Y, C[P + 1], O, 2240044497); Y = t(Y, X, W, V, C[P + 8], U, 1873313359); V = t(V, Y, X, W, C[P + 15], T, 4264355552); W = t(W, V, Y, X, C[P + 6], R, 2734768916); X = t(X, W, V, Y, C[P + 13], O, 1309151649); Y = t(Y, X, W, V, C[P + 4], U, 4149444226); V = t(V, Y, X, W, C[P + 11], T, 3174756917); W = t(W, V, Y, X, C[P + 2], R, 718787259); X = t(X, W, V, Y, C[P + 9], O, 3951481745); Y = K(Y, h); X = K(X, E); W = K(W, v); V = K(V, g) } var i = B(Y) + B(X) + B(W) + B(V); return i.toLowerCase() };
 (function () {
     'use strict';
 
@@ -4214,4416 +3978,9 @@ if (!JSON) {
     _init();
 
 })();
-//! moment.js
-//! version : 2.13.0
-//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
-//! license : MIT
-//! momentjs.com
-
-;(function (global, factory) {
-    //typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    //typeof define === 'function' && define.amd ? define(factory) :
-    global.moment = factory()
-}(this, function () { 'use strict';
-
-    var hookCallback;
-
-    function utils_hooks__hooks () {
-        return hookCallback.apply(null, arguments);
-    }
-
-    // This is done to register the method called with moment()
-    // without creating circular dependencies.
-    function setHookCallback (callback) {
-        hookCallback = callback;
-    }
-
-    function isArray(input) {
-        return input instanceof Array || Object.prototype.toString.call(input) === '[object Array]';
-    }
-
-    function isDate(input) {
-        return input instanceof Date || Object.prototype.toString.call(input) === '[object Date]';
-    }
-
-    function map(arr, fn) {
-        var res = [], i;
-        for (i = 0; i < arr.length; ++i) {
-            res.push(fn(arr[i], i));
-        }
-        return res;
-    }
-
-    function hasOwnProp(a, b) {
-        return Object.prototype.hasOwnProperty.call(a, b);
-    }
-
-    function extend(a, b) {
-        for (var i in b) {
-            if (hasOwnProp(b, i)) {
-                a[i] = b[i];
-            }
-        }
-
-        if (hasOwnProp(b, 'toString')) {
-            a.toString = b.toString;
-        }
-
-        if (hasOwnProp(b, 'valueOf')) {
-            a.valueOf = b.valueOf;
-        }
-
-        return a;
-    }
-
-    function create_utc__createUTC (input, format, locale, strict) {
-        return createLocalOrUTC(input, format, locale, strict, true).utc();
-    }
-
-    function defaultParsingFlags() {
-        // We need to deep clone this object.
-        return {
-            empty           : false,
-            unusedTokens    : [],
-            unusedInput     : [],
-            overflow        : -2,
-            charsLeftOver   : 0,
-            nullInput       : false,
-            invalidMonth    : null,
-            invalidFormat   : false,
-            userInvalidated : false,
-            iso             : false,
-            parsedDateParts : [],
-            meridiem        : null
-        };
-    }
-
-    function getParsingFlags(m) {
-        if (m._pf == null) {
-            m._pf = defaultParsingFlags();
-        }
-        return m._pf;
-    }
-
-    var some;
-    if (Array.prototype.some) {
-        some = Array.prototype.some;
-    } else {
-        some = function (fun) {
-            var t = Object(this);
-            var len = t.length >>> 0;
-
-            for (var i = 0; i < len; i++) {
-                if (i in t && fun.call(this, t[i], i, t)) {
-                    return true;
-                }
-            }
-
-            return false;
-        };
-    }
-
-    function valid__isValid(m) {
-        if (m._isValid == null) {
-            var flags = getParsingFlags(m);
-            var parsedParts = some.call(flags.parsedDateParts, function (i) {
-                return i != null;
-            });
-            m._isValid = !isNaN(m._d.getTime()) &&
-                flags.overflow < 0 &&
-                !flags.empty &&
-                !flags.invalidMonth &&
-                !flags.invalidWeekday &&
-                !flags.nullInput &&
-                !flags.invalidFormat &&
-                !flags.userInvalidated &&
-                (!flags.meridiem || (flags.meridiem && parsedParts));
-
-            if (m._strict) {
-                m._isValid = m._isValid &&
-                    flags.charsLeftOver === 0 &&
-                    flags.unusedTokens.length === 0 &&
-                    flags.bigHour === undefined;
-            }
-        }
-        return m._isValid;
-    }
-
-    function valid__createInvalid (flags) {
-        var m = create_utc__createUTC(NaN);
-        if (flags != null) {
-            extend(getParsingFlags(m), flags);
-        }
-        else {
-            getParsingFlags(m).userInvalidated = true;
-        }
-
-        return m;
-    }
-
-    function isUndefined(input) {
-        return input === void 0;
-    }
-
-    // Plugins that add properties should also add the key here (null value),
-    // so we can properly clone ourselves.
-    var momentProperties = utils_hooks__hooks.momentProperties = [];
-
-    function copyConfig(to, from) {
-        var i, prop, val;
-
-        if (!isUndefined(from._isAMomentObject)) {
-            to._isAMomentObject = from._isAMomentObject;
-        }
-        if (!isUndefined(from._i)) {
-            to._i = from._i;
-        }
-        if (!isUndefined(from._f)) {
-            to._f = from._f;
-        }
-        if (!isUndefined(from._l)) {
-            to._l = from._l;
-        }
-        if (!isUndefined(from._strict)) {
-            to._strict = from._strict;
-        }
-        if (!isUndefined(from._tzm)) {
-            to._tzm = from._tzm;
-        }
-        if (!isUndefined(from._isUTC)) {
-            to._isUTC = from._isUTC;
-        }
-        if (!isUndefined(from._offset)) {
-            to._offset = from._offset;
-        }
-        if (!isUndefined(from._pf)) {
-            to._pf = getParsingFlags(from);
-        }
-        if (!isUndefined(from._locale)) {
-            to._locale = from._locale;
-        }
-
-        if (momentProperties.length > 0) {
-            for (i in momentProperties) {
-                prop = momentProperties[i];
-                val = from[prop];
-                if (!isUndefined(val)) {
-                    to[prop] = val;
-                }
-            }
-        }
-
-        return to;
-    }
-
-    var updateInProgress = false;
-
-    // Moment prototype object
-    function Moment(config) {
-        copyConfig(this, config);
-        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
-        // Prevent infinite loop in case updateOffset creates new moment
-        // objects.
-        if (updateInProgress === false) {
-            updateInProgress = true;
-            utils_hooks__hooks.updateOffset(this);
-            updateInProgress = false;
-        }
-    }
-
-    function isMoment (obj) {
-        return obj instanceof Moment || (obj != null && obj._isAMomentObject != null);
-    }
-
-    function absFloor (number) {
-        if (number < 0) {
-            return Math.ceil(number);
-        } else {
-            return Math.floor(number);
-        }
-    }
-
-    function toInt(argumentForCoercion) {
-        var coercedNumber = +argumentForCoercion,
-            value = 0;
-
-        if (coercedNumber !== 0 && isFinite(coercedNumber)) {
-            value = absFloor(coercedNumber);
-        }
-
-        return value;
-    }
-
-    // compare two arrays, return the number of differences
-    function compareArrays(array1, array2, dontConvert) {
-        var len = Math.min(array1.length, array2.length),
-            lengthDiff = Math.abs(array1.length - array2.length),
-            diffs = 0,
-            i;
-        for (i = 0; i < len; i++) {
-            if ((dontConvert && array1[i] !== array2[i]) ||
-                (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
-                diffs++;
-            }
-        }
-        return diffs + lengthDiff;
-    }
-
-    function warn(msg) {
-        if (utils_hooks__hooks.suppressDeprecationWarnings === false &&
-                (typeof console !==  'undefined') && console.warn) {
-            console.warn('Deprecation warning: ' + msg);
-        }
-    }
-
-    function deprecate(msg, fn) {
-        var firstTime = true;
-
-        return extend(function () {
-            if (utils_hooks__hooks.deprecationHandler != null) {
-                utils_hooks__hooks.deprecationHandler(null, msg);
-            }
-            if (firstTime) {
-                warn(msg + '\nArguments: ' + Array.prototype.slice.call(arguments).join(', ') + '\n' + (new Error()).stack);
-                firstTime = false;
-            }
-            return fn.apply(this, arguments);
-        }, fn);
-    }
-
-    var deprecations = {};
-
-    function deprecateSimple(name, msg) {
-        if (utils_hooks__hooks.deprecationHandler != null) {
-            utils_hooks__hooks.deprecationHandler(name, msg);
-        }
-        if (!deprecations[name]) {
-            warn(msg);
-            deprecations[name] = true;
-        }
-    }
-
-    utils_hooks__hooks.suppressDeprecationWarnings = false;
-    utils_hooks__hooks.deprecationHandler = null;
-
-    function isFunction(input) {
-        return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
-    }
-
-    function isObject(input) {
-        return Object.prototype.toString.call(input) === '[object Object]';
-    }
-
-    function locale_set__set (config) {
-        var prop, i;
-        for (i in config) {
-            prop = config[i];
-            if (isFunction(prop)) {
-                this[i] = prop;
-            } else {
-                this['_' + i] = prop;
-            }
-        }
-        this._config = config;
-        // Lenient ordinal parsing accepts just a number in addition to
-        // number + (possibly) stuff coming from _ordinalParseLenient.
-        this._ordinalParseLenient = new RegExp(this._ordinalParse.source + '|' + (/\d{1,2}/).source);
-    }
-
-    function mergeConfigs(parentConfig, childConfig) {
-        var res = extend({}, parentConfig), prop;
-        for (prop in childConfig) {
-            if (hasOwnProp(childConfig, prop)) {
-                if (isObject(parentConfig[prop]) && isObject(childConfig[prop])) {
-                    res[prop] = {};
-                    extend(res[prop], parentConfig[prop]);
-                    extend(res[prop], childConfig[prop]);
-                } else if (childConfig[prop] != null) {
-                    res[prop] = childConfig[prop];
-                } else {
-                    delete res[prop];
-                }
-            }
-        }
-        return res;
-    }
-
-    function Locale(config) {
-        if (config != null) {
-            this.set(config);
-        }
-    }
-
-    var keys;
-
-    if (Object.keys) {
-        keys = Object.keys;
-    } else {
-        keys = function (obj) {
-            var i, res = [];
-            for (i in obj) {
-                if (hasOwnProp(obj, i)) {
-                    res.push(i);
-                }
-            }
-            return res;
-        };
-    }
-
-    // internal storage for locale config files
-    var locales = {};
-    var globalLocale;
-
-    function normalizeLocale(key) {
-        return key ? key.toLowerCase().replace('_', '-') : key;
-    }
-
-    // pick the locale from the array
-    // try ['en-au', 'en-gb'] as 'en-au', 'en-gb', 'en', as in move through the list trying each
-    // substring from most specific to least, but move to the next array item if it's a more specific variant than the current root
-    function chooseLocale(names) {
-        var i = 0, j, next, locale, split;
-
-        while (i < names.length) {
-            split = normalizeLocale(names[i]).split('-');
-            j = split.length;
-            next = normalizeLocale(names[i + 1]);
-            next = next ? next.split('-') : null;
-            while (j > 0) {
-                locale = loadLocale(split.slice(0, j).join('-'));
-                if (locale) {
-                    return locale;
-                }
-                if (next && next.length >= j && compareArrays(split, next, true) >= j - 1) {
-                    //the next array item is better than a shallower substring of this one
-                    break;
-                }
-                j--;
-            }
-            i++;
-        }
-        return null;
-    }
-
-    function loadLocale(name) {
-        var oldLocale = null;
-        // TODO: Find a better way to register and load all the locales in Node
-        if (!locales[name] && (typeof module !== 'undefined') &&
-                module && module.exports) {
-            try {
-                oldLocale = globalLocale._abbr;
-                require('./locale/' + name);
-                // because defineLocale currently also sets the global locale, we
-                // want to undo that for lazy loaded locales
-                locale_locales__getSetGlobalLocale(oldLocale);
-            } catch (e) { }
-        }
-        return locales[name];
-    }
-
-    // This function will load locale and then set the global locale.  If
-    // no arguments are passed in, it will simply return the current global
-    // locale key.
-    function locale_locales__getSetGlobalLocale (key, values) {
-        var data;
-        if (key) {
-            if (isUndefined(values)) {
-                data = locale_locales__getLocale(key);
-            }
-            else {
-                data = defineLocale(key, values);
-            }
-
-            if (data) {
-                // moment.duration._locale = moment._locale = data;
-                globalLocale = data;
-            }
-        }
-
-        return globalLocale._abbr;
-    }
-
-    function defineLocale (name, config) {
-        if (config !== null) {
-            config.abbr = name;
-            if (locales[name] != null) {
-                deprecateSimple('defineLocaleOverride',
-                        'use moment.updateLocale(localeName, config) to change ' +
-                        'an existing locale. moment.defineLocale(localeName, ' +
-                        'config) should only be used for creating a new locale');
-                config = mergeConfigs(locales[name]._config, config);
-            } else if (config.parentLocale != null) {
-                if (locales[config.parentLocale] != null) {
-                    config = mergeConfigs(locales[config.parentLocale]._config, config);
-                } else {
-                    // treat as if there is no base config
-                    deprecateSimple('parentLocaleUndefined',
-                            'specified parentLocale is not defined yet');
-                }
-            }
-            locales[name] = new Locale(config);
-
-            // backwards compat for now: also set the locale
-            locale_locales__getSetGlobalLocale(name);
-
-            return locales[name];
-        } else {
-            // useful for testing
-            delete locales[name];
-            return null;
-        }
-    }
-
-    function updateLocale(name, config) {
-        if (config != null) {
-            var locale;
-            if (locales[name] != null) {
-                config = mergeConfigs(locales[name]._config, config);
-            }
-            locale = new Locale(config);
-            locale.parentLocale = locales[name];
-            locales[name] = locale;
-
-            // backwards compat for now: also set the locale
-            locale_locales__getSetGlobalLocale(name);
-        } else {
-            // pass null for config to unupdate, useful for tests
-            if (locales[name] != null) {
-                if (locales[name].parentLocale != null) {
-                    locales[name] = locales[name].parentLocale;
-                } else if (locales[name] != null) {
-                    delete locales[name];
-                }
-            }
-        }
-        return locales[name];
-    }
-
-    // returns locale data
-    function locale_locales__getLocale (key) {
-        var locale;
-
-        if (key && key._locale && key._locale._abbr) {
-            key = key._locale._abbr;
-        }
-
-        if (!key) {
-            return globalLocale;
-        }
-
-        if (!isArray(key)) {
-            //short-circuit everything else
-            locale = loadLocale(key);
-            if (locale) {
-                return locale;
-            }
-            key = [key];
-        }
-
-        return chooseLocale(key);
-    }
-
-    function locale_locales__listLocales() {
-        return keys(locales);
-    }
-
-    var aliases = {};
-
-    function addUnitAlias (unit, shorthand) {
-        var lowerCase = unit.toLowerCase();
-        aliases[lowerCase] = aliases[lowerCase + 's'] = aliases[shorthand] = unit;
-    }
-
-    function normalizeUnits(units) {
-        return typeof units === 'string' ? aliases[units] || aliases[units.toLowerCase()] : undefined;
-    }
-
-    function normalizeObjectUnits(inputObject) {
-        var normalizedInput = {},
-            normalizedProp,
-            prop;
-
-        for (prop in inputObject) {
-            if (hasOwnProp(inputObject, prop)) {
-                normalizedProp = normalizeUnits(prop);
-                if (normalizedProp) {
-                    normalizedInput[normalizedProp] = inputObject[prop];
-                }
-            }
-        }
-
-        return normalizedInput;
-    }
-
-    function makeGetSet (unit, keepTime) {
-        return function (value) {
-            if (value != null) {
-                get_set__set(this, unit, value);
-                utils_hooks__hooks.updateOffset(this, keepTime);
-                return this;
-            } else {
-                return get_set__get(this, unit);
-            }
-        };
-    }
-
-    function get_set__get (mom, unit) {
-        return mom.isValid() ?
-            mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
-    }
-
-    function get_set__set (mom, unit, value) {
-        if (mom.isValid()) {
-            mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
-        }
-    }
-
-    // MOMENTS
-
-    function getSet (units, value) {
-        var unit;
-        if (typeof units === 'object') {
-            for (unit in units) {
-                this.set(unit, units[unit]);
-            }
-        } else {
-            units = normalizeUnits(units);
-            if (isFunction(this[units])) {
-                return this[units](value);
-            }
-        }
-        return this;
-    }
-
-    function zeroFill(number, targetLength, forceSign) {
-        var absNumber = '' + Math.abs(number),
-            zerosToFill = targetLength - absNumber.length,
-            sign = number >= 0;
-        return (sign ? (forceSign ? '+' : '') : '-') +
-            Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
-    }
-
-    var formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
-
-    var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
-
-    var formatFunctions = {};
-
-    var formatTokenFunctions = {};
-
-    // token:    'M'
-    // padded:   ['MM', 2]
-    // ordinal:  'Mo'
-    // callback: function () { this.month() + 1 }
-    function addFormatToken (token, padded, ordinal, callback) {
-        var func = callback;
-        if (typeof callback === 'string') {
-            func = function () {
-                return this[callback]();
-            };
-        }
-        if (token) {
-            formatTokenFunctions[token] = func;
-        }
-        if (padded) {
-            formatTokenFunctions[padded[0]] = function () {
-                return zeroFill(func.apply(this, arguments), padded[1], padded[2]);
-            };
-        }
-        if (ordinal) {
-            formatTokenFunctions[ordinal] = function () {
-                return this.localeData().ordinal(func.apply(this, arguments), token);
-            };
-        }
-    }
-
-    function removeFormattingTokens(input) {
-        if (input.match(/\[[\s\S]/)) {
-            return input.replace(/^\[|\]$/g, '');
-        }
-        return input.replace(/\\/g, '');
-    }
-
-    function makeFormatFunction(format) {
-        var array = format.match(formattingTokens), i, length;
-
-        for (i = 0, length = array.length; i < length; i++) {
-            if (formatTokenFunctions[array[i]]) {
-                array[i] = formatTokenFunctions[array[i]];
-            } else {
-                array[i] = removeFormattingTokens(array[i]);
-            }
-        }
-
-        return function (mom) {
-            var output = '', i;
-            for (i = 0; i < length; i++) {
-                output += array[i] instanceof Function ? array[i].call(mom, format) : array[i];
-            }
-            return output;
-        };
-    }
-
-    // format date using native date object
-    function formatMoment(m, format) {
-        if (!m.isValid()) {
-            return m.localeData().invalidDate();
-        }
-
-        format = expandFormat(format, m.localeData());
-        formatFunctions[format] = formatFunctions[format] || makeFormatFunction(format);
-
-        return formatFunctions[format](m);
-    }
-
-    function expandFormat(format, locale) {
-        var i = 5;
-
-        function replaceLongDateFormatTokens(input) {
-            return locale.longDateFormat(input) || input;
-        }
-
-        localFormattingTokens.lastIndex = 0;
-        while (i >= 0 && localFormattingTokens.test(format)) {
-            format = format.replace(localFormattingTokens, replaceLongDateFormatTokens);
-            localFormattingTokens.lastIndex = 0;
-            i -= 1;
-        }
-
-        return format;
-    }
-
-    var match1         = /\d/;            //       0 - 9
-    var match2         = /\d\d/;          //      00 - 99
-    var match3         = /\d{3}/;         //     000 - 999
-    var match4         = /\d{4}/;         //    0000 - 9999
-    var match6         = /[+-]?\d{6}/;    // -999999 - 999999
-    var match1to2      = /\d\d?/;         //       0 - 99
-    var match3to4      = /\d\d\d\d?/;     //     999 - 9999
-    var match5to6      = /\d\d\d\d\d\d?/; //   99999 - 999999
-    var match1to3      = /\d{1,3}/;       //       0 - 999
-    var match1to4      = /\d{1,4}/;       //       0 - 9999
-    var match1to6      = /[+-]?\d{1,6}/;  // -999999 - 999999
-
-    var matchUnsigned  = /\d+/;           //       0 - inf
-    var matchSigned    = /[+-]?\d+/;      //    -inf - inf
-
-    var matchOffset    = /Z|[+-]\d\d:?\d\d/gi; // +00:00 -00:00 +0000 -0000 or Z
-    var matchShortOffset = /Z|[+-]\d\d(?::?\d\d)?/gi; // +00 -00 +00:00 -00:00 +0000 -0000 or Z
-
-    var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
-
-    // any word (or two) characters or numbers including two/three word month in arabic.
-    // includes scottish gaelic two word and hyphenated months
-    var matchWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
-
-
-    var regexes = {};
-
-    function addRegexToken (token, regex, strictRegex) {
-        regexes[token] = isFunction(regex) ? regex : function (isStrict, localeData) {
-            return (isStrict && strictRegex) ? strictRegex : regex;
-        };
-    }
-
-    function getParseRegexForToken (token, config) {
-        if (!hasOwnProp(regexes, token)) {
-            return new RegExp(unescapeFormat(token));
-        }
-
-        return regexes[token](config._strict, config._locale);
-    }
-
-    // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
-    function unescapeFormat(s) {
-        return regexEscape(s.replace('\\', '').replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (matched, p1, p2, p3, p4) {
-            return p1 || p2 || p3 || p4;
-        }));
-    }
-
-    function regexEscape(s) {
-        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    }
-
-    var tokens = {};
-
-    function addParseToken (token, callback) {
-        var i, func = callback;
-        if (typeof token === 'string') {
-            token = [token];
-        }
-        if (typeof callback === 'number') {
-            func = function (input, array) {
-                array[callback] = toInt(input);
-            };
-        }
-        for (i = 0; i < token.length; i++) {
-            tokens[token[i]] = func;
-        }
-    }
-
-    function addWeekParseToken (token, callback) {
-        addParseToken(token, function (input, array, config, token) {
-            config._w = config._w || {};
-            callback(input, config._w, config, token);
-        });
-    }
-
-    function addTimeToArrayFromToken(token, input, config) {
-        if (input != null && hasOwnProp(tokens, token)) {
-            tokens[token](input, config._a, config, token);
-        }
-    }
-
-    var YEAR = 0;
-    var MONTH = 1;
-    var DATE = 2;
-    var HOUR = 3;
-    var MINUTE = 4;
-    var SECOND = 5;
-    var MILLISECOND = 6;
-    var WEEK = 7;
-    var WEEKDAY = 8;
-
-    var indexOf;
-
-    if (Array.prototype.indexOf) {
-        indexOf = Array.prototype.indexOf;
-    } else {
-        indexOf = function (o) {
-            // I know
-            var i;
-            for (i = 0; i < this.length; ++i) {
-                if (this[i] === o) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-    }
-
-    function daysInMonth(year, month) {
-        return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-    }
-
-    // FORMATTING
-
-    addFormatToken('M', ['MM', 2], 'Mo', function () {
-        return this.month() + 1;
-    });
-
-    addFormatToken('MMM', 0, 0, function (format) {
-        return this.localeData().monthsShort(this, format);
-    });
-
-    addFormatToken('MMMM', 0, 0, function (format) {
-        return this.localeData().months(this, format);
-    });
-
-    // ALIASES
-
-    addUnitAlias('month', 'M');
-
-    // PARSING
-
-    addRegexToken('M',    match1to2);
-    addRegexToken('MM',   match1to2, match2);
-    addRegexToken('MMM',  function (isStrict, locale) {
-        return locale.monthsShortRegex(isStrict);
-    });
-    addRegexToken('MMMM', function (isStrict, locale) {
-        return locale.monthsRegex(isStrict);
-    });
-
-    addParseToken(['M', 'MM'], function (input, array) {
-        array[MONTH] = toInt(input) - 1;
-    });
-
-    addParseToken(['MMM', 'MMMM'], function (input, array, config, token) {
-        var month = config._locale.monthsParse(input, token, config._strict);
-        // if we didn't find a month name, mark the date as invalid.
-        if (month != null) {
-            array[MONTH] = month;
-        } else {
-            getParsingFlags(config).invalidMonth = input;
-        }
-    });
-
-    // LOCALES
-
-    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
-    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
-    function localeMonths (m, format) {
-        return isArray(this._months) ? this._months[m.month()] :
-            this._months[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
-    }
-
-    var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
-    function localeMonthsShort (m, format) {
-        return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
-            this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
-    }
-
-    function units_month__handleStrictParse(monthName, format, strict) {
-        var i, ii, mom, llc = monthName.toLocaleLowerCase();
-        if (!this._monthsParse) {
-            // this is not used
-            this._monthsParse = [];
-            this._longMonthsParse = [];
-            this._shortMonthsParse = [];
-            for (i = 0; i < 12; ++i) {
-                mom = create_utc__createUTC([2000, i]);
-                this._shortMonthsParse[i] = this.monthsShort(mom, '').toLocaleLowerCase();
-                this._longMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
-            }
-        }
-
-        if (strict) {
-            if (format === 'MMM') {
-                ii = indexOf.call(this._shortMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._longMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        } else {
-            if (format === 'MMM') {
-                ii = indexOf.call(this._shortMonthsParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._longMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._longMonthsParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._shortMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        }
-    }
-
-    function localeMonthsParse (monthName, format, strict) {
-        var i, mom, regex;
-
-        if (this._monthsParseExact) {
-            return units_month__handleStrictParse.call(this, monthName, format, strict);
-        }
-
-        if (!this._monthsParse) {
-            this._monthsParse = [];
-            this._longMonthsParse = [];
-            this._shortMonthsParse = [];
-        }
-
-        // TODO: add sorting
-        // Sorting makes sure if one month (or abbr) is a prefix of another
-        // see sorting in computeMonthsParse
-        for (i = 0; i < 12; i++) {
-            // make the regex if we don't have it already
-            mom = create_utc__createUTC([2000, i]);
-            if (strict && !this._longMonthsParse[i]) {
-                this._longMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
-                this._shortMonthsParse[i] = new RegExp('^' + this.monthsShort(mom, '').replace('.', '') + '$', 'i');
-            }
-            if (!strict && !this._monthsParse[i]) {
-                regex = '^' + this.months(mom, '') + '|^' + this.monthsShort(mom, '');
-                this._monthsParse[i] = new RegExp(regex.replace('.', ''), 'i');
-            }
-            // test the regex
-            if (strict && format === 'MMMM' && this._longMonthsParse[i].test(monthName)) {
-                return i;
-            } else if (strict && format === 'MMM' && this._shortMonthsParse[i].test(monthName)) {
-                return i;
-            } else if (!strict && this._monthsParse[i].test(monthName)) {
-                return i;
-            }
-        }
-    }
-
-    // MOMENTS
-
-    function setMonth (mom, value) {
-        var dayOfMonth;
-
-        if (!mom.isValid()) {
-            // No op
-            return mom;
-        }
-
-        if (typeof value === 'string') {
-            if (/^\d+$/.test(value)) {
-                value = toInt(value);
-            } else {
-                value = mom.localeData().monthsParse(value);
-                // TODO: Another silent failure?
-                if (typeof value !== 'number') {
-                    return mom;
-                }
-            }
-        }
-
-        dayOfMonth = Math.min(mom.date(), daysInMonth(mom.year(), value));
-        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
-        return mom;
-    }
-
-    function getSetMonth (value) {
-        if (value != null) {
-            setMonth(this, value);
-            utils_hooks__hooks.updateOffset(this, true);
-            return this;
-        } else {
-            return get_set__get(this, 'Month');
-        }
-    }
-
-    function getDaysInMonth () {
-        return daysInMonth(this.year(), this.month());
-    }
-
-    var defaultMonthsShortRegex = matchWord;
-    function monthsShortRegex (isStrict) {
-        if (this._monthsParseExact) {
-            if (!hasOwnProp(this, '_monthsRegex')) {
-                computeMonthsParse.call(this);
-            }
-            if (isStrict) {
-                return this._monthsShortStrictRegex;
-            } else {
-                return this._monthsShortRegex;
-            }
-        } else {
-            return this._monthsShortStrictRegex && isStrict ?
-                this._monthsShortStrictRegex : this._monthsShortRegex;
-        }
-    }
-
-    var defaultMonthsRegex = matchWord;
-    function monthsRegex (isStrict) {
-        if (this._monthsParseExact) {
-            if (!hasOwnProp(this, '_monthsRegex')) {
-                computeMonthsParse.call(this);
-            }
-            if (isStrict) {
-                return this._monthsStrictRegex;
-            } else {
-                return this._monthsRegex;
-            }
-        } else {
-            return this._monthsStrictRegex && isStrict ?
-                this._monthsStrictRegex : this._monthsRegex;
-        }
-    }
-
-    function computeMonthsParse () {
-        function cmpLenRev(a, b) {
-            return b.length - a.length;
-        }
-
-        var shortPieces = [], longPieces = [], mixedPieces = [],
-            i, mom;
-        for (i = 0; i < 12; i++) {
-            // make the regex if we don't have it already
-            mom = create_utc__createUTC([2000, i]);
-            shortPieces.push(this.monthsShort(mom, ''));
-            longPieces.push(this.months(mom, ''));
-            mixedPieces.push(this.months(mom, ''));
-            mixedPieces.push(this.monthsShort(mom, ''));
-        }
-        // Sorting makes sure if one month (or abbr) is a prefix of another it
-        // will match the longer piece.
-        shortPieces.sort(cmpLenRev);
-        longPieces.sort(cmpLenRev);
-        mixedPieces.sort(cmpLenRev);
-        for (i = 0; i < 12; i++) {
-            shortPieces[i] = regexEscape(shortPieces[i]);
-            longPieces[i] = regexEscape(longPieces[i]);
-            mixedPieces[i] = regexEscape(mixedPieces[i]);
-        }
-
-        this._monthsRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
-        this._monthsShortRegex = this._monthsRegex;
-        this._monthsStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
-        this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
-    }
-
-    function checkOverflow (m) {
-        var overflow;
-        var a = m._a;
-
-        if (a && getParsingFlags(m).overflow === -2) {
-            overflow =
-                a[MONTH]       < 0 || a[MONTH]       > 11  ? MONTH :
-                a[DATE]        < 1 || a[DATE]        > daysInMonth(a[YEAR], a[MONTH]) ? DATE :
-                a[HOUR]        < 0 || a[HOUR]        > 24 || (a[HOUR] === 24 && (a[MINUTE] !== 0 || a[SECOND] !== 0 || a[MILLISECOND] !== 0)) ? HOUR :
-                a[MINUTE]      < 0 || a[MINUTE]      > 59  ? MINUTE :
-                a[SECOND]      < 0 || a[SECOND]      > 59  ? SECOND :
-                a[MILLISECOND] < 0 || a[MILLISECOND] > 999 ? MILLISECOND :
-                -1;
-
-            if (getParsingFlags(m)._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
-                overflow = DATE;
-            }
-            if (getParsingFlags(m)._overflowWeeks && overflow === -1) {
-                overflow = WEEK;
-            }
-            if (getParsingFlags(m)._overflowWeekday && overflow === -1) {
-                overflow = WEEKDAY;
-            }
-
-            getParsingFlags(m).overflow = overflow;
-        }
-
-        return m;
-    }
-
-    // iso 8601 regex
-    // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
-    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
-    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
-
-    var tzRegex = /Z|[+-]\d\d(?::?\d\d)?/;
-
-    var isoDates = [
-        ['YYYYYY-MM-DD', /[+-]\d{6}-\d\d-\d\d/],
-        ['YYYY-MM-DD', /\d{4}-\d\d-\d\d/],
-        ['GGGG-[W]WW-E', /\d{4}-W\d\d-\d/],
-        ['GGGG-[W]WW', /\d{4}-W\d\d/, false],
-        ['YYYY-DDD', /\d{4}-\d{3}/],
-        ['YYYY-MM', /\d{4}-\d\d/, false],
-        ['YYYYYYMMDD', /[+-]\d{10}/],
-        ['YYYYMMDD', /\d{8}/],
-        // YYYYMM is NOT allowed by the standard
-        ['GGGG[W]WWE', /\d{4}W\d{3}/],
-        ['GGGG[W]WW', /\d{4}W\d{2}/, false],
-        ['YYYYDDD', /\d{7}/]
-    ];
-
-    // iso time formats and regexes
-    var isoTimes = [
-        ['HH:mm:ss.SSSS', /\d\d:\d\d:\d\d\.\d+/],
-        ['HH:mm:ss,SSSS', /\d\d:\d\d:\d\d,\d+/],
-        ['HH:mm:ss', /\d\d:\d\d:\d\d/],
-        ['HH:mm', /\d\d:\d\d/],
-        ['HHmmss.SSSS', /\d\d\d\d\d\d\.\d+/],
-        ['HHmmss,SSSS', /\d\d\d\d\d\d,\d+/],
-        ['HHmmss', /\d\d\d\d\d\d/],
-        ['HHmm', /\d\d\d\d/],
-        ['HH', /\d\d/]
-    ];
-
-    var aspNetJsonRegex = /^\/?Date\((\-?\d+)/i;
-
-    // date from iso format
-    function configFromISO(config) {
-        var i, l,
-            string = config._i,
-            match = extendedIsoRegex.exec(string) || basicIsoRegex.exec(string),
-            allowTime, dateFormat, timeFormat, tzFormat;
-
-        if (match) {
-            getParsingFlags(config).iso = true;
-
-            for (i = 0, l = isoDates.length; i < l; i++) {
-                if (isoDates[i][1].exec(match[1])) {
-                    dateFormat = isoDates[i][0];
-                    allowTime = isoDates[i][2] !== false;
-                    break;
-                }
-            }
-            if (dateFormat == null) {
-                config._isValid = false;
-                return;
-            }
-            if (match[3]) {
-                for (i = 0, l = isoTimes.length; i < l; i++) {
-                    if (isoTimes[i][1].exec(match[3])) {
-                        // match[2] should be 'T' or space
-                        timeFormat = (match[2] || ' ') + isoTimes[i][0];
-                        break;
-                    }
-                }
-                if (timeFormat == null) {
-                    config._isValid = false;
-                    return;
-                }
-            }
-            if (!allowTime && timeFormat != null) {
-                config._isValid = false;
-                return;
-            }
-            if (match[4]) {
-                if (tzRegex.exec(match[4])) {
-                    tzFormat = 'Z';
-                } else {
-                    config._isValid = false;
-                    return;
-                }
-            }
-            config._f = dateFormat + (timeFormat || '') + (tzFormat || '');
-            configFromStringAndFormat(config);
-        } else {
-            config._isValid = false;
-        }
-    }
-
-    // date from iso format or fallback
-    function configFromString(config) {
-        var matched = aspNetJsonRegex.exec(config._i);
-
-        if (matched !== null) {
-            config._d = new Date(+matched[1]);
-            return;
-        }
-
-        configFromISO(config);
-        if (config._isValid === false) {
-            delete config._isValid;
-            utils_hooks__hooks.createFromInputFallback(config);
-        }
-    }
-
-    utils_hooks__hooks.createFromInputFallback = deprecate(
-        'moment construction falls back to js Date. This is ' +
-        'discouraged and will be removed in upcoming major ' +
-        'release. Please refer to ' +
-        'https://github.com/moment/moment/issues/1407 for more info.',
-        function (config) {
-            config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
-        }
-    );
-
-    function createDate (y, m, d, h, M, s, ms) {
-        //can't just apply() to create a date:
-        //http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
-        var date = new Date(y, m, d, h, M, s, ms);
-
-        //the date constructor remaps years 0-99 to 1900-1999
-        if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
-            date.setFullYear(y);
-        }
-        return date;
-    }
-
-    function createUTCDate (y) {
-        var date = new Date(Date.UTC.apply(null, arguments));
-
-        //the Date.UTC function remaps years 0-99 to 1900-1999
-        if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
-            date.setUTCFullYear(y);
-        }
-        return date;
-    }
-
-    // FORMATTING
-
-    addFormatToken('Y', 0, 0, function () {
-        var y = this.year();
-        return y <= 9999 ? '' + y : '+' + y;
-    });
-
-    addFormatToken(0, ['YY', 2], 0, function () {
-        return this.year() % 100;
-    });
-
-    addFormatToken(0, ['YYYY',   4],       0, 'year');
-    addFormatToken(0, ['YYYYY',  5],       0, 'year');
-    addFormatToken(0, ['YYYYYY', 6, true], 0, 'year');
-
-    // ALIASES
-
-    addUnitAlias('year', 'y');
-
-    // PARSING
-
-    addRegexToken('Y',      matchSigned);
-    addRegexToken('YY',     match1to2, match2);
-    addRegexToken('YYYY',   match1to4, match4);
-    addRegexToken('YYYYY',  match1to6, match6);
-    addRegexToken('YYYYYY', match1to6, match6);
-
-    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
-    addParseToken('YYYY', function (input, array) {
-        array[YEAR] = input.length === 2 ? utils_hooks__hooks.parseTwoDigitYear(input) : toInt(input);
-    });
-    addParseToken('YY', function (input, array) {
-        array[YEAR] = utils_hooks__hooks.parseTwoDigitYear(input);
-    });
-    addParseToken('Y', function (input, array) {
-        array[YEAR] = parseInt(input, 10);
-    });
-
-    // HELPERS
-
-    function daysInYear(year) {
-        return isLeapYear(year) ? 366 : 365;
-    }
-
-    function isLeapYear(year) {
-        return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-    }
-
-    // HOOKS
-
-    utils_hooks__hooks.parseTwoDigitYear = function (input) {
-        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
-    };
-
-    // MOMENTS
-
-    var getSetYear = makeGetSet('FullYear', true);
-
-    function getIsLeapYear () {
-        return isLeapYear(this.year());
-    }
-
-    // start-of-first-week - start-of-year
-    function firstWeekOffset(year, dow, doy) {
-        var // first-week day -- which january is always in the first week (4 for iso, 1 for other)
-            fwd = 7 + dow - doy,
-            // first-week day local weekday -- which local weekday is fwd
-            fwdlw = (7 + createUTCDate(year, 0, fwd).getUTCDay() - dow) % 7;
-
-        return -fwdlw + fwd - 1;
-    }
-
-    //http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
-    function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
-        var localWeekday = (7 + weekday - dow) % 7,
-            weekOffset = firstWeekOffset(year, dow, doy),
-            dayOfYear = 1 + 7 * (week - 1) + localWeekday + weekOffset,
-            resYear, resDayOfYear;
-
-        if (dayOfYear <= 0) {
-            resYear = year - 1;
-            resDayOfYear = daysInYear(resYear) + dayOfYear;
-        } else if (dayOfYear > daysInYear(year)) {
-            resYear = year + 1;
-            resDayOfYear = dayOfYear - daysInYear(year);
-        } else {
-            resYear = year;
-            resDayOfYear = dayOfYear;
-        }
-
-        return {
-            year: resYear,
-            dayOfYear: resDayOfYear
-        };
-    }
-
-    function weekOfYear(mom, dow, doy) {
-        var weekOffset = firstWeekOffset(mom.year(), dow, doy),
-            week = Math.floor((mom.dayOfYear() - weekOffset - 1) / 7) + 1,
-            resWeek, resYear;
-
-        if (week < 1) {
-            resYear = mom.year() - 1;
-            resWeek = week + weeksInYear(resYear, dow, doy);
-        } else if (week > weeksInYear(mom.year(), dow, doy)) {
-            resWeek = week - weeksInYear(mom.year(), dow, doy);
-            resYear = mom.year() + 1;
-        } else {
-            resYear = mom.year();
-            resWeek = week;
-        }
-
-        return {
-            week: resWeek,
-            year: resYear
-        };
-    }
-
-    function weeksInYear(year, dow, doy) {
-        var weekOffset = firstWeekOffset(year, dow, doy),
-            weekOffsetNext = firstWeekOffset(year + 1, dow, doy);
-        return (daysInYear(year) - weekOffset + weekOffsetNext) / 7;
-    }
-
-    // Pick the first defined of two or three arguments.
-    function defaults(a, b, c) {
-        if (a != null) {
-            return a;
-        }
-        if (b != null) {
-            return b;
-        }
-        return c;
-    }
-
-    function currentDateArray(config) {
-        // hooks is actually the exported moment object
-        var nowValue = new Date(utils_hooks__hooks.now());
-        if (config._useUTC) {
-            return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
-        }
-        return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
-    }
-
-    // convert an array to a date.
-    // the array should mirror the parameters below
-    // note: all values past the year are optional and will default to the lowest possible value.
-    // [year, month, day , hour, minute, second, millisecond]
-    function configFromArray (config) {
-        var i, date, input = [], currentDate, yearToUse;
-
-        if (config._d) {
-            return;
-        }
-
-        currentDate = currentDateArray(config);
-
-        //compute day of the year from weeks and weekdays
-        if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
-            dayOfYearFromWeekInfo(config);
-        }
-
-        //if the day of the year is set, figure out what it is
-        if (config._dayOfYear) {
-            yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
-
-            if (config._dayOfYear > daysInYear(yearToUse)) {
-                getParsingFlags(config)._overflowDayOfYear = true;
-            }
-
-            date = createUTCDate(yearToUse, 0, config._dayOfYear);
-            config._a[MONTH] = date.getUTCMonth();
-            config._a[DATE] = date.getUTCDate();
-        }
-
-        // Default to current date.
-        // * if no year, month, day of month are given, default to today
-        // * if day of month is given, default month and year
-        // * if month is given, default only year
-        // * if year is given, don't default anything
-        for (i = 0; i < 3 && config._a[i] == null; ++i) {
-            config._a[i] = input[i] = currentDate[i];
-        }
-
-        // Zero out whatever was not defaulted, including time
-        for (; i < 7; i++) {
-            config._a[i] = input[i] = (config._a[i] == null) ? (i === 2 ? 1 : 0) : config._a[i];
-        }
-
-        // Check for 24:00:00.000
-        if (config._a[HOUR] === 24 &&
-                config._a[MINUTE] === 0 &&
-                config._a[SECOND] === 0 &&
-                config._a[MILLISECOND] === 0) {
-            config._nextDay = true;
-            config._a[HOUR] = 0;
-        }
-
-        config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
-        // Apply timezone offset from input. The actual utcOffset can be changed
-        // with parseZone.
-        if (config._tzm != null) {
-            config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
-        }
-
-        if (config._nextDay) {
-            config._a[HOUR] = 24;
-        }
-    }
-
-    function dayOfYearFromWeekInfo(config) {
-        var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
-
-        w = config._w;
-        if (w.GG != null || w.W != null || w.E != null) {
-            dow = 1;
-            doy = 4;
-
-            // TODO: We need to take the current isoWeekYear, but that depends on
-            // how we interpret now (local, utc, fixed offset). So create
-            // a now version of current config (take local/utc/offset flags, and
-            // create now).
-            weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(local__createLocal(), 1, 4).year);
-            week = defaults(w.W, 1);
-            weekday = defaults(w.E, 1);
-            if (weekday < 1 || weekday > 7) {
-                weekdayOverflow = true;
-            }
-        } else {
-            dow = config._locale._week.dow;
-            doy = config._locale._week.doy;
-
-            weekYear = defaults(w.gg, config._a[YEAR], weekOfYear(local__createLocal(), dow, doy).year);
-            week = defaults(w.w, 1);
-
-            if (w.d != null) {
-                // weekday -- low day numbers are considered next week
-                weekday = w.d;
-                if (weekday < 0 || weekday > 6) {
-                    weekdayOverflow = true;
-                }
-            } else if (w.e != null) {
-                // local weekday -- counting starts from begining of week
-                weekday = w.e + dow;
-                if (w.e < 0 || w.e > 6) {
-                    weekdayOverflow = true;
-                }
-            } else {
-                // default to begining of week
-                weekday = dow;
-            }
-        }
-        if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
-            getParsingFlags(config)._overflowWeeks = true;
-        } else if (weekdayOverflow != null) {
-            getParsingFlags(config)._overflowWeekday = true;
-        } else {
-            temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
-            config._a[YEAR] = temp.year;
-            config._dayOfYear = temp.dayOfYear;
-        }
-    }
-
-    // constant that refers to the ISO standard
-    utils_hooks__hooks.ISO_8601 = function () {};
-
-    // date from string and format string
-    function configFromStringAndFormat(config) {
-        // TODO: Move this to another part of the creation flow to prevent circular deps
-        if (config._f === utils_hooks__hooks.ISO_8601) {
-            configFromISO(config);
-            return;
-        }
-
-        config._a = [];
-        getParsingFlags(config).empty = true;
-
-        // This array is used to make a Date, either with `new Date` or `Date.UTC`
-        var string = '' + config._i,
-            i, parsedInput, tokens, token, skipped,
-            stringLength = string.length,
-            totalParsedInputLength = 0;
-
-        tokens = expandFormat(config._f, config._locale).match(formattingTokens) || [];
-
-        for (i = 0; i < tokens.length; i++) {
-            token = tokens[i];
-            parsedInput = (string.match(getParseRegexForToken(token, config)) || [])[0];
-            // console.log('token', token, 'parsedInput', parsedInput,
-            //         'regex', getParseRegexForToken(token, config));
-            if (parsedInput) {
-                skipped = string.substr(0, string.indexOf(parsedInput));
-                if (skipped.length > 0) {
-                    getParsingFlags(config).unusedInput.push(skipped);
-                }
-                string = string.slice(string.indexOf(parsedInput) + parsedInput.length);
-                totalParsedInputLength += parsedInput.length;
-            }
-            // don't parse if it's not a known token
-            if (formatTokenFunctions[token]) {
-                if (parsedInput) {
-                    getParsingFlags(config).empty = false;
-                }
-                else {
-                    getParsingFlags(config).unusedTokens.push(token);
-                }
-                addTimeToArrayFromToken(token, parsedInput, config);
-            }
-            else if (config._strict && !parsedInput) {
-                getParsingFlags(config).unusedTokens.push(token);
-            }
-        }
-
-        // add remaining unparsed input length to the string
-        getParsingFlags(config).charsLeftOver = stringLength - totalParsedInputLength;
-        if (string.length > 0) {
-            getParsingFlags(config).unusedInput.push(string);
-        }
-
-        // clear _12h flag if hour is <= 12
-        if (getParsingFlags(config).bigHour === true &&
-                config._a[HOUR] <= 12 &&
-                config._a[HOUR] > 0) {
-            getParsingFlags(config).bigHour = undefined;
-        }
-
-        getParsingFlags(config).parsedDateParts = config._a.slice(0);
-        getParsingFlags(config).meridiem = config._meridiem;
-        // handle meridiem
-        config._a[HOUR] = meridiemFixWrap(config._locale, config._a[HOUR], config._meridiem);
-
-        configFromArray(config);
-        checkOverflow(config);
-    }
-
-
-    function meridiemFixWrap (locale, hour, meridiem) {
-        var isPm;
-
-        if (meridiem == null) {
-            // nothing to do
-            return hour;
-        }
-        if (locale.meridiemHour != null) {
-            return locale.meridiemHour(hour, meridiem);
-        } else if (locale.isPM != null) {
-            // Fallback
-            isPm = locale.isPM(meridiem);
-            if (isPm && hour < 12) {
-                hour += 12;
-            }
-            if (!isPm && hour === 12) {
-                hour = 0;
-            }
-            return hour;
-        } else {
-            // this is not supposed to happen
-            return hour;
-        }
-    }
-
-    // date from string and array of format strings
-    function configFromStringAndArray(config) {
-        var tempConfig,
-            bestMoment,
-
-            scoreToBeat,
-            i,
-            currentScore;
-
-        if (config._f.length === 0) {
-            getParsingFlags(config).invalidFormat = true;
-            config._d = new Date(NaN);
-            return;
-        }
-
-        for (i = 0; i < config._f.length; i++) {
-            currentScore = 0;
-            tempConfig = copyConfig({}, config);
-            if (config._useUTC != null) {
-                tempConfig._useUTC = config._useUTC;
-            }
-            tempConfig._f = config._f[i];
-            configFromStringAndFormat(tempConfig);
-
-            if (!valid__isValid(tempConfig)) {
-                continue;
-            }
-
-            // if there is any input that was not parsed add a penalty for that format
-            currentScore += getParsingFlags(tempConfig).charsLeftOver;
-
-            //or tokens
-            currentScore += getParsingFlags(tempConfig).unusedTokens.length * 10;
-
-            getParsingFlags(tempConfig).score = currentScore;
-
-            if (scoreToBeat == null || currentScore < scoreToBeat) {
-                scoreToBeat = currentScore;
-                bestMoment = tempConfig;
-            }
-        }
-
-        extend(config, bestMoment || tempConfig);
-    }
-
-    function configFromObject(config) {
-        if (config._d) {
-            return;
-        }
-
-        var i = normalizeObjectUnits(config._i);
-        config._a = map([i.year, i.month, i.day || i.date, i.hour, i.minute, i.second, i.millisecond], function (obj) {
-            return obj && parseInt(obj, 10);
-        });
-
-        configFromArray(config);
-    }
-
-    function createFromConfig (config) {
-        var res = new Moment(checkOverflow(prepareConfig(config)));
-        if (res._nextDay) {
-            // Adding is smart enough around DST
-            res.add(1, 'd');
-            res._nextDay = undefined;
-        }
-
-        return res;
-    }
-
-    function prepareConfig (config) {
-        var input = config._i,
-            format = config._f;
-
-        config._locale = config._locale || locale_locales__getLocale(config._l);
-
-        if (input === null || (format === undefined && input === '')) {
-            return valid__createInvalid({nullInput: true});
-        }
-
-        if (typeof input === 'string') {
-            config._i = input = config._locale.preparse(input);
-        }
-
-        if (isMoment(input)) {
-            return new Moment(checkOverflow(input));
-        } else if (isArray(format)) {
-            configFromStringAndArray(config);
-        } else if (format) {
-            configFromStringAndFormat(config);
-        } else if (isDate(input)) {
-            config._d = input;
-        } else {
-            configFromInput(config);
-        }
-
-        if (!valid__isValid(config)) {
-            config._d = null;
-        }
-
-        return config;
-    }
-
-    function configFromInput(config) {
-        var input = config._i;
-        if (input === undefined) {
-            config._d = new Date(utils_hooks__hooks.now());
-        } else if (isDate(input)) {
-            config._d = new Date(input.valueOf());
-        } else if (typeof input === 'string') {
-            configFromString(config);
-        } else if (isArray(input)) {
-            config._a = map(input.slice(0), function (obj) {
-                return parseInt(obj, 10);
-            });
-            configFromArray(config);
-        } else if (typeof(input) === 'object') {
-            configFromObject(config);
-        } else if (typeof(input) === 'number') {
-            // from milliseconds
-            config._d = new Date(input);
-        } else {
-            utils_hooks__hooks.createFromInputFallback(config);
-        }
-    }
-
-    function createLocalOrUTC (input, format, locale, strict, isUTC) {
-        var c = {};
-
-        if (typeof(locale) === 'boolean') {
-            strict = locale;
-            locale = undefined;
-        }
-        // object construction must be done this way.
-        // https://github.com/moment/moment/issues/1423
-        c._isAMomentObject = true;
-        c._useUTC = c._isUTC = isUTC;
-        c._l = locale;
-        c._i = input;
-        c._f = format;
-        c._strict = strict;
-
-        return createFromConfig(c);
-    }
-
-    function local__createLocal (input, format, locale, strict) {
-        return createLocalOrUTC(input, format, locale, strict, false);
-    }
-
-    var prototypeMin = deprecate(
-         'moment().min is deprecated, use moment.max instead. https://github.com/moment/moment/issues/1548',
-         function () {
-             var other = local__createLocal.apply(null, arguments);
-             if (this.isValid() && other.isValid()) {
-                 return other < this ? this : other;
-             } else {
-                 return valid__createInvalid();
-             }
-         }
-     );
-
-    var prototypeMax = deprecate(
-        'moment().max is deprecated, use moment.min instead. https://github.com/moment/moment/issues/1548',
-        function () {
-            var other = local__createLocal.apply(null, arguments);
-            if (this.isValid() && other.isValid()) {
-                return other > this ? this : other;
-            } else {
-                return valid__createInvalid();
-            }
-        }
-    );
-
-    // Pick a moment m from moments so that m[fn](other) is true for all
-    // other. This relies on the function fn to be transitive.
-    //
-    // moments should either be an array of moment objects or an array, whose
-    // first element is an array of moment objects.
-    function pickBy(fn, moments) {
-        var res, i;
-        if (moments.length === 1 && isArray(moments[0])) {
-            moments = moments[0];
-        }
-        if (!moments.length) {
-            return local__createLocal();
-        }
-        res = moments[0];
-        for (i = 1; i < moments.length; ++i) {
-            if (!moments[i].isValid() || moments[i][fn](res)) {
-                res = moments[i];
-            }
-        }
-        return res;
-    }
-
-    // TODO: Use [].sort instead?
-    function min () {
-        var args = [].slice.call(arguments, 0);
-
-        return pickBy('isBefore', args);
-    }
-
-    function max () {
-        var args = [].slice.call(arguments, 0);
-
-        return pickBy('isAfter', args);
-    }
-
-    var now = function () {
-        return Date.now ? Date.now() : +(new Date());
-    };
-
-    function Duration (duration) {
-        var normalizedInput = normalizeObjectUnits(duration),
-            years = normalizedInput.year || 0,
-            quarters = normalizedInput.quarter || 0,
-            months = normalizedInput.month || 0,
-            weeks = normalizedInput.week || 0,
-            days = normalizedInput.day || 0,
-            hours = normalizedInput.hour || 0,
-            minutes = normalizedInput.minute || 0,
-            seconds = normalizedInput.second || 0,
-            milliseconds = normalizedInput.millisecond || 0;
-
-        // representation for dateAddRemove
-        this._milliseconds = +milliseconds +
-            seconds * 1e3 + // 1000
-            minutes * 6e4 + // 1000 * 60
-            hours * 1000 * 60 * 60; //using 1000 * 60 * 60 instead of 36e5 to avoid floating point rounding errors https://github.com/moment/moment/issues/2978
-        // Because of dateAddRemove treats 24 hours as different from a
-        // day when working around DST, we need to store them separately
-        this._days = +days +
-            weeks * 7;
-        // It is impossible translate months into days without knowing
-        // which months you are are talking about, so we have to store
-        // it separately.
-        this._months = +months +
-            quarters * 3 +
-            years * 12;
-
-        this._data = {};
-
-        this._locale = locale_locales__getLocale();
-
-        this._bubble();
-    }
-
-    function isDuration (obj) {
-        return obj instanceof Duration;
-    }
-
-    // FORMATTING
-
-    function offset (token, separator) {
-        addFormatToken(token, 0, 0, function () {
-            var offset = this.utcOffset();
-            var sign = '+';
-            if (offset < 0) {
-                offset = -offset;
-                sign = '-';
-            }
-            return sign + zeroFill(~~(offset / 60), 2) + separator + zeroFill(~~(offset) % 60, 2);
-        });
-    }
-
-    offset('Z', ':');
-    offset('ZZ', '');
-
-    // PARSING
-
-    addRegexToken('Z',  matchShortOffset);
-    addRegexToken('ZZ', matchShortOffset);
-    addParseToken(['Z', 'ZZ'], function (input, array, config) {
-        config._useUTC = true;
-        config._tzm = offsetFromString(matchShortOffset, input);
-    });
-
-    // HELPERS
-
-    // timezone chunker
-    // '+10:00' > ['10',  '00']
-    // '-1530'  > ['-15', '30']
-    var chunkOffset = /([\+\-]|\d\d)/gi;
-
-    function offsetFromString(matcher, string) {
-        var matches = ((string || '').match(matcher) || []);
-        var chunk   = matches[matches.length - 1] || [];
-        var parts   = (chunk + '').match(chunkOffset) || ['-', 0, 0];
-        var minutes = +(parts[1] * 60) + toInt(parts[2]);
-
-        return parts[0] === '+' ? minutes : -minutes;
-    }
-
-    // Return a moment from input, that is local/utc/zone equivalent to model.
-    function cloneWithOffset(input, model) {
-        var res, diff;
-        if (model._isUTC) {
-            res = model.clone();
-            diff = (isMoment(input) || isDate(input) ? input.valueOf() : local__createLocal(input).valueOf()) - res.valueOf();
-            // Use low-level api, because this fn is low-level api.
-            res._d.setTime(res._d.valueOf() + diff);
-            utils_hooks__hooks.updateOffset(res, false);
-            return res;
-        } else {
-            return local__createLocal(input).local();
-        }
-    }
-
-    function getDateOffset (m) {
-        // On Firefox.24 Date#getTimezoneOffset returns a floating point.
-        // https://github.com/moment/moment/pull/1871
-        return -Math.round(m._d.getTimezoneOffset() / 15) * 15;
-    }
-
-    // HOOKS
-
-    // This function will be called whenever a moment is mutated.
-    // It is intended to keep the offset in sync with the timezone.
-    utils_hooks__hooks.updateOffset = function () {};
-
-    // MOMENTS
-
-    // keepLocalTime = true means only change the timezone, without
-    // affecting the local hour. So 5:31:26 +0300 --[utcOffset(2, true)]-->
-    // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist with offset
-    // +0200, so we adjust the time as needed, to be valid.
-    //
-    // Keeping the time actually adds/subtracts (one hour)
-    // from the actual represented time. That is why we call updateOffset
-    // a second time. In case it wants us to change the offset again
-    // _changeInProgress == true case, then we have to adjust, because
-    // there is no such time in the given timezone.
-    function getSetOffset (input, keepLocalTime) {
-        var offset = this._offset || 0,
-            localAdjust;
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        if (input != null) {
-            if (typeof input === 'string') {
-                input = offsetFromString(matchShortOffset, input);
-            } else if (Math.abs(input) < 16) {
-                input = input * 60;
-            }
-            if (!this._isUTC && keepLocalTime) {
-                localAdjust = getDateOffset(this);
-            }
-            this._offset = input;
-            this._isUTC = true;
-            if (localAdjust != null) {
-                this.add(localAdjust, 'm');
-            }
-            if (offset !== input) {
-                if (!keepLocalTime || this._changeInProgress) {
-                    add_subtract__addSubtract(this, create__createDuration(input - offset, 'm'), 1, false);
-                } else if (!this._changeInProgress) {
-                    this._changeInProgress = true;
-                    utils_hooks__hooks.updateOffset(this, true);
-                    this._changeInProgress = null;
-                }
-            }
-            return this;
-        } else {
-            return this._isUTC ? offset : getDateOffset(this);
-        }
-    }
-
-    function getSetZone (input, keepLocalTime) {
-        if (input != null) {
-            if (typeof input !== 'string') {
-                input = -input;
-            }
-
-            this.utcOffset(input, keepLocalTime);
-
-            return this;
-        } else {
-            return -this.utcOffset();
-        }
-    }
-
-    function setOffsetToUTC (keepLocalTime) {
-        return this.utcOffset(0, keepLocalTime);
-    }
-
-    function setOffsetToLocal (keepLocalTime) {
-        if (this._isUTC) {
-            this.utcOffset(0, keepLocalTime);
-            this._isUTC = false;
-
-            if (keepLocalTime) {
-                this.subtract(getDateOffset(this), 'm');
-            }
-        }
-        return this;
-    }
-
-    function setOffsetToParsedOffset () {
-        if (this._tzm) {
-            this.utcOffset(this._tzm);
-        } else if (typeof this._i === 'string') {
-            this.utcOffset(offsetFromString(matchOffset, this._i));
-        }
-        return this;
-    }
-
-    function hasAlignedHourOffset (input) {
-        if (!this.isValid()) {
-            return false;
-        }
-        input = input ? local__createLocal(input).utcOffset() : 0;
-
-        return (this.utcOffset() - input) % 60 === 0;
-    }
-
-    function isDaylightSavingTime () {
-        return (
-            this.utcOffset() > this.clone().month(0).utcOffset() ||
-            this.utcOffset() > this.clone().month(5).utcOffset()
-        );
-    }
-
-    function isDaylightSavingTimeShifted () {
-        if (!isUndefined(this._isDSTShifted)) {
-            return this._isDSTShifted;
-        }
-
-        var c = {};
-
-        copyConfig(c, this);
-        c = prepareConfig(c);
-
-        if (c._a) {
-            var other = c._isUTC ? create_utc__createUTC(c._a) : local__createLocal(c._a);
-            this._isDSTShifted = this.isValid() &&
-                compareArrays(c._a, other.toArray()) > 0;
-        } else {
-            this._isDSTShifted = false;
-        }
-
-        return this._isDSTShifted;
-    }
-
-    function isLocal () {
-        return this.isValid() ? !this._isUTC : false;
-    }
-
-    function isUtcOffset () {
-        return this.isValid() ? this._isUTC : false;
-    }
-
-    function isUtc () {
-        return this.isValid() ? this._isUTC && this._offset === 0 : false;
-    }
-
-    // ASP.NET json date format regex
-    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?\d*)?$/;
-
-    // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
-    // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
-    // and further modified to allow for strings containing both week and day
-    var isoRegex = /^(-)?P(?:(-?[0-9,.]*)Y)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)W)?(?:(-?[0-9,.]*)D)?(?:T(?:(-?[0-9,.]*)H)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)S)?)?$/;
-
-    function create__createDuration (input, key) {
-        var duration = input,
-            // matching against regexp is expensive, do it on demand
-            match = null,
-            sign,
-            ret,
-            diffRes;
-
-        if (isDuration(input)) {
-            duration = {
-                ms : input._milliseconds,
-                d  : input._days,
-                M  : input._months
-            };
-        } else if (typeof input === 'number') {
-            duration = {};
-            if (key) {
-                duration[key] = input;
-            } else {
-                duration.milliseconds = input;
-            }
-        } else if (!!(match = aspNetRegex.exec(input))) {
-            sign = (match[1] === '-') ? -1 : 1;
-            duration = {
-                y  : 0,
-                d  : toInt(match[DATE])        * sign,
-                h  : toInt(match[HOUR])        * sign,
-                m  : toInt(match[MINUTE])      * sign,
-                s  : toInt(match[SECOND])      * sign,
-                ms : toInt(match[MILLISECOND]) * sign
-            };
-        } else if (!!(match = isoRegex.exec(input))) {
-            sign = (match[1] === '-') ? -1 : 1;
-            duration = {
-                y : parseIso(match[2], sign),
-                M : parseIso(match[3], sign),
-                w : parseIso(match[4], sign),
-                d : parseIso(match[5], sign),
-                h : parseIso(match[6], sign),
-                m : parseIso(match[7], sign),
-                s : parseIso(match[8], sign)
-            };
-        } else if (duration == null) {// checks for null or undefined
-            duration = {};
-        } else if (typeof duration === 'object' && ('from' in duration || 'to' in duration)) {
-            diffRes = momentsDifference(local__createLocal(duration.from), local__createLocal(duration.to));
-
-            duration = {};
-            duration.ms = diffRes.milliseconds;
-            duration.M = diffRes.months;
-        }
-
-        ret = new Duration(duration);
-
-        if (isDuration(input) && hasOwnProp(input, '_locale')) {
-            ret._locale = input._locale;
-        }
-
-        return ret;
-    }
-
-    create__createDuration.fn = Duration.prototype;
-
-    function parseIso (inp, sign) {
-        // We'd normally use ~~inp for this, but unfortunately it also
-        // converts floats to ints.
-        // inp may be undefined, so careful calling replace on it.
-        var res = inp && parseFloat(inp.replace(',', '.'));
-        // apply sign while we're at it
-        return (isNaN(res) ? 0 : res) * sign;
-    }
-
-    function positiveMomentsDifference(base, other) {
-        var res = {milliseconds: 0, months: 0};
-
-        res.months = other.month() - base.month() +
-            (other.year() - base.year()) * 12;
-        if (base.clone().add(res.months, 'M').isAfter(other)) {
-            --res.months;
-        }
-
-        res.milliseconds = +other - +(base.clone().add(res.months, 'M'));
-
-        return res;
-    }
-
-    function momentsDifference(base, other) {
-        var res;
-        if (!(base.isValid() && other.isValid())) {
-            return {milliseconds: 0, months: 0};
-        }
-
-        other = cloneWithOffset(other, base);
-        if (base.isBefore(other)) {
-            res = positiveMomentsDifference(base, other);
-        } else {
-            res = positiveMomentsDifference(other, base);
-            res.milliseconds = -res.milliseconds;
-            res.months = -res.months;
-        }
-
-        return res;
-    }
-
-    function absRound (number) {
-        if (number < 0) {
-            return Math.round(-1 * number) * -1;
-        } else {
-            return Math.round(number);
-        }
-    }
-
-    // TODO: remove 'name' arg after deprecation is removed
-    function createAdder(direction, name) {
-        return function (val, period) {
-            var dur, tmp;
-            //invert the arguments, but complain about it
-            if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, 'moment().' + name  + '(period, number) is deprecated. Please use moment().' + name + '(number, period).');
-                tmp = val; val = period; period = tmp;
-            }
-
-            val = typeof val === 'string' ? +val : val;
-            dur = create__createDuration(val, period);
-            add_subtract__addSubtract(this, dur, direction);
-            return this;
-        };
-    }
-
-    function add_subtract__addSubtract (mom, duration, isAdding, updateOffset) {
-        var milliseconds = duration._milliseconds,
-            days = absRound(duration._days),
-            months = absRound(duration._months);
-
-        if (!mom.isValid()) {
-            // No op
-            return;
-        }
-
-        updateOffset = updateOffset == null ? true : updateOffset;
-
-        if (milliseconds) {
-            mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
-        }
-        if (days) {
-            get_set__set(mom, 'Date', get_set__get(mom, 'Date') + days * isAdding);
-        }
-        if (months) {
-            setMonth(mom, get_set__get(mom, 'Month') + months * isAdding);
-        }
-        if (updateOffset) {
-            utils_hooks__hooks.updateOffset(mom, days || months);
-        }
-    }
-
-    var add_subtract__add      = createAdder(1, 'add');
-    var add_subtract__subtract = createAdder(-1, 'subtract');
-
-    function moment_calendar__calendar (time, formats) {
-        // We want to compare the start of today, vs this.
-        // Getting start-of-today depends on whether we're local/utc/offset or not.
-        var now = time || local__createLocal(),
-            sod = cloneWithOffset(now, this).startOf('day'),
-            diff = this.diff(sod, 'days', true),
-            format = diff < -6 ? 'sameElse' :
-                diff < -1 ? 'lastWeek' :
-                diff < 0 ? 'lastDay' :
-                diff < 1 ? 'sameDay' :
-                diff < 2 ? 'nextDay' :
-                diff < 7 ? 'nextWeek' : 'sameElse';
-
-        var output = formats && (isFunction(formats[format]) ? formats[format]() : formats[format]);
-
-        return this.format(output || this.localeData().calendar(format, this, local__createLocal(now)));
-    }
-
-    function clone () {
-        return new Moment(this);
-    }
-
-    function isAfter (input, units) {
-        var localInput = isMoment(input) ? input : local__createLocal(input);
-        if (!(this.isValid() && localInput.isValid())) {
-            return false;
-        }
-        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
-        if (units === 'millisecond') {
-            return this.valueOf() > localInput.valueOf();
-        } else {
-            return localInput.valueOf() < this.clone().startOf(units).valueOf();
-        }
-    }
-
-    function isBefore (input, units) {
-        var localInput = isMoment(input) ? input : local__createLocal(input);
-        if (!(this.isValid() && localInput.isValid())) {
-            return false;
-        }
-        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
-        if (units === 'millisecond') {
-            return this.valueOf() < localInput.valueOf();
-        } else {
-            return this.clone().endOf(units).valueOf() < localInput.valueOf();
-        }
-    }
-
-    function isBetween (from, to, units, inclusivity) {
-        inclusivity = inclusivity || '()';
-        return (inclusivity[0] === '(' ? this.isAfter(from, units) : !this.isBefore(from, units)) &&
-            (inclusivity[1] === ')' ? this.isBefore(to, units) : !this.isAfter(to, units));
-    }
-
-    function isSame (input, units) {
-        var localInput = isMoment(input) ? input : local__createLocal(input),
-            inputMs;
-        if (!(this.isValid() && localInput.isValid())) {
-            return false;
-        }
-        units = normalizeUnits(units || 'millisecond');
-        if (units === 'millisecond') {
-            return this.valueOf() === localInput.valueOf();
-        } else {
-            inputMs = localInput.valueOf();
-            return this.clone().startOf(units).valueOf() <= inputMs && inputMs <= this.clone().endOf(units).valueOf();
-        }
-    }
-
-    function isSameOrAfter (input, units) {
-        return this.isSame(input, units) || this.isAfter(input,units);
-    }
-
-    function isSameOrBefore (input, units) {
-        return this.isSame(input, units) || this.isBefore(input,units);
-    }
-
-    function diff (input, units, asFloat) {
-        var that,
-            zoneDelta,
-            delta, output;
-
-        if (!this.isValid()) {
-            return NaN;
-        }
-
-        that = cloneWithOffset(input, this);
-
-        if (!that.isValid()) {
-            return NaN;
-        }
-
-        zoneDelta = (that.utcOffset() - this.utcOffset()) * 6e4;
-
-        units = normalizeUnits(units);
-
-        if (units === 'year' || units === 'month' || units === 'quarter') {
-            output = monthDiff(this, that);
-            if (units === 'quarter') {
-                output = output / 3;
-            } else if (units === 'year') {
-                output = output / 12;
-            }
-        } else {
-            delta = this - that;
-            output = units === 'second' ? delta / 1e3 : // 1000
-                units === 'minute' ? delta / 6e4 : // 1000 * 60
-                units === 'hour' ? delta / 36e5 : // 1000 * 60 * 60
-                units === 'day' ? (delta - zoneDelta) / 864e5 : // 1000 * 60 * 60 * 24, negate dst
-                units === 'week' ? (delta - zoneDelta) / 6048e5 : // 1000 * 60 * 60 * 24 * 7, negate dst
-                delta;
-        }
-        return asFloat ? output : absFloor(output);
-    }
-
-    function monthDiff (a, b) {
-        // difference in months
-        var wholeMonthDiff = ((b.year() - a.year()) * 12) + (b.month() - a.month()),
-            // b is in (anchor - 1 month, anchor + 1 month)
-            anchor = a.clone().add(wholeMonthDiff, 'months'),
-            anchor2, adjust;
-
-        if (b - anchor < 0) {
-            anchor2 = a.clone().add(wholeMonthDiff - 1, 'months');
-            // linear across the month
-            adjust = (b - anchor) / (anchor - anchor2);
-        } else {
-            anchor2 = a.clone().add(wholeMonthDiff + 1, 'months');
-            // linear across the month
-            adjust = (b - anchor) / (anchor2 - anchor);
-        }
-
-        //check for negative zero, return zero if negative zero
-        return -(wholeMonthDiff + adjust) || 0;
-    }
-
-    utils_hooks__hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
-    utils_hooks__hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]';
-
-    function toString () {
-        return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
-    }
-
-    function moment_format__toISOString () {
-        var m = this.clone().utc();
-        if (0 < m.year() && m.year() <= 9999) {
-            if (isFunction(Date.prototype.toISOString)) {
-                // native implementation is ~50x faster, use it when we can
-                return this.toDate().toISOString();
-            } else {
-                return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
-            }
-        } else {
-            return formatMoment(m, 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
-        }
-    }
-
-    function format (inputString) {
-        if (!inputString) {
-            inputString = this.isUtc() ? utils_hooks__hooks.defaultFormatUtc : utils_hooks__hooks.defaultFormat;
-        }
-        var output = formatMoment(this, inputString);
-        return this.localeData().postformat(output);
-    }
-
-    function from (time, withoutSuffix) {
-        if (this.isValid() &&
-                ((isMoment(time) && time.isValid()) ||
-                 local__createLocal(time).isValid())) {
-            return create__createDuration({to: this, from: time}).locale(this.locale()).humanize(!withoutSuffix);
-        } else {
-            return this.localeData().invalidDate();
-        }
-    }
-
-    function fromNow (withoutSuffix) {
-        return this.from(local__createLocal(), withoutSuffix);
-    }
-
-    function to (time, withoutSuffix) {
-        if (this.isValid() &&
-                ((isMoment(time) && time.isValid()) ||
-                 local__createLocal(time).isValid())) {
-            return create__createDuration({from: this, to: time}).locale(this.locale()).humanize(!withoutSuffix);
-        } else {
-            return this.localeData().invalidDate();
-        }
-    }
-
-    function toNow (withoutSuffix) {
-        return this.to(local__createLocal(), withoutSuffix);
-    }
-
-    // If passed a locale key, it will set the locale for this
-    // instance.  Otherwise, it will return the locale configuration
-    // variables for this instance.
-    function locale (key) {
-        var newLocaleData;
-
-        if (key === undefined) {
-            return this._locale._abbr;
-        } else {
-            newLocaleData = locale_locales__getLocale(key);
-            if (newLocaleData != null) {
-                this._locale = newLocaleData;
-            }
-            return this;
-        }
-    }
-
-    var lang = deprecate(
-        'moment().lang() is deprecated. Instead, use moment().localeData() to get the language configuration. Use moment().locale() to change languages.',
-        function (key) {
-            if (key === undefined) {
-                return this.localeData();
-            } else {
-                return this.locale(key);
-            }
-        }
-    );
-
-    function localeData () {
-        return this._locale;
-    }
-
-    function startOf (units) {
-        units = normalizeUnits(units);
-        // the following switch intentionally omits break keywords
-        // to utilize falling through the cases.
-        switch (units) {
-        case 'year':
-            this.month(0);
-            /* falls through */
-        case 'quarter':
-        case 'month':
-            this.date(1);
-            /* falls through */
-        case 'week':
-        case 'isoWeek':
-        case 'day':
-        case 'date':
-            this.hours(0);
-            /* falls through */
-        case 'hour':
-            this.minutes(0);
-            /* falls through */
-        case 'minute':
-            this.seconds(0);
-            /* falls through */
-        case 'second':
-            this.milliseconds(0);
-        }
-
-        // weeks are a special case
-        if (units === 'week') {
-            this.weekday(0);
-        }
-        if (units === 'isoWeek') {
-            this.isoWeekday(1);
-        }
-
-        // quarters are also special
-        if (units === 'quarter') {
-            this.month(Math.floor(this.month() / 3) * 3);
-        }
-
-        return this;
-    }
-
-    function endOf (units) {
-        units = normalizeUnits(units);
-        if (units === undefined || units === 'millisecond') {
-            return this;
-        }
-
-        // 'date' is an alias for 'day', so it should be considered as such.
-        if (units === 'date') {
-            units = 'day';
-        }
-
-        return this.startOf(units).add(1, (units === 'isoWeek' ? 'week' : units)).subtract(1, 'ms');
-    }
-
-    function to_type__valueOf () {
-        return this._d.valueOf() - ((this._offset || 0) * 60000);
-    }
-
-    function unix () {
-        return Math.floor(this.valueOf() / 1000);
-    }
-
-    function toDate () {
-        return this._offset ? new Date(this.valueOf()) : this._d;
-    }
-
-    function toArray () {
-        var m = this;
-        return [m.year(), m.month(), m.date(), m.hour(), m.minute(), m.second(), m.millisecond()];
-    }
-
-    function toObject () {
-        var m = this;
-        return {
-            years: m.year(),
-            months: m.month(),
-            date: m.date(),
-            hours: m.hours(),
-            minutes: m.minutes(),
-            seconds: m.seconds(),
-            milliseconds: m.milliseconds()
-        };
-    }
-
-    function toJSON () {
-        // new Date(NaN).toJSON() === null
-        return this.isValid() ? this.toISOString() : null;
-    }
-
-    function moment_valid__isValid () {
-        return valid__isValid(this);
-    }
-
-    function parsingFlags () {
-        return extend({}, getParsingFlags(this));
-    }
-
-    function invalidAt () {
-        return getParsingFlags(this).overflow;
-    }
-
-    function creationData() {
-        return {
-            input: this._i,
-            format: this._f,
-            locale: this._locale,
-            isUTC: this._isUTC,
-            strict: this._strict
-        };
-    }
-
-    // FORMATTING
-
-    addFormatToken(0, ['gg', 2], 0, function () {
-        return this.weekYear() % 100;
-    });
-
-    addFormatToken(0, ['GG', 2], 0, function () {
-        return this.isoWeekYear() % 100;
-    });
-
-    function addWeekYearFormatToken (token, getter) {
-        addFormatToken(0, [token, token.length], 0, getter);
-    }
-
-    addWeekYearFormatToken('gggg',     'weekYear');
-    addWeekYearFormatToken('ggggg',    'weekYear');
-    addWeekYearFormatToken('GGGG',  'isoWeekYear');
-    addWeekYearFormatToken('GGGGG', 'isoWeekYear');
-
-    // ALIASES
-
-    addUnitAlias('weekYear', 'gg');
-    addUnitAlias('isoWeekYear', 'GG');
-
-    // PARSING
-
-    addRegexToken('G',      matchSigned);
-    addRegexToken('g',      matchSigned);
-    addRegexToken('GG',     match1to2, match2);
-    addRegexToken('gg',     match1to2, match2);
-    addRegexToken('GGGG',   match1to4, match4);
-    addRegexToken('gggg',   match1to4, match4);
-    addRegexToken('GGGGG',  match1to6, match6);
-    addRegexToken('ggggg',  match1to6, match6);
-
-    addWeekParseToken(['gggg', 'ggggg', 'GGGG', 'GGGGG'], function (input, week, config, token) {
-        week[token.substr(0, 2)] = toInt(input);
-    });
-
-    addWeekParseToken(['gg', 'GG'], function (input, week, config, token) {
-        week[token] = utils_hooks__hooks.parseTwoDigitYear(input);
-    });
-
-    // MOMENTS
-
-    function getSetWeekYear (input) {
-        return getSetWeekYearHelper.call(this,
-                input,
-                this.week(),
-                this.weekday(),
-                this.localeData()._week.dow,
-                this.localeData()._week.doy);
-    }
-
-    function getSetISOWeekYear (input) {
-        return getSetWeekYearHelper.call(this,
-                input, this.isoWeek(), this.isoWeekday(), 1, 4);
-    }
-
-    function getISOWeeksInYear () {
-        return weeksInYear(this.year(), 1, 4);
-    }
-
-    function getWeeksInYear () {
-        var weekInfo = this.localeData()._week;
-        return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
-    }
-
-    function getSetWeekYearHelper(input, week, weekday, dow, doy) {
-        var weeksTarget;
-        if (input == null) {
-            return weekOfYear(this, dow, doy).year;
-        } else {
-            weeksTarget = weeksInYear(input, dow, doy);
-            if (week > weeksTarget) {
-                week = weeksTarget;
-            }
-            return setWeekAll.call(this, input, week, weekday, dow, doy);
-        }
-    }
-
-    function setWeekAll(weekYear, week, weekday, dow, doy) {
-        var dayOfYearData = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy),
-            date = createUTCDate(dayOfYearData.year, 0, dayOfYearData.dayOfYear);
-
-        this.year(date.getUTCFullYear());
-        this.month(date.getUTCMonth());
-        this.date(date.getUTCDate());
-        return this;
-    }
-
-    // FORMATTING
-
-    addFormatToken('Q', 0, 'Qo', 'quarter');
-
-    // ALIASES
-
-    addUnitAlias('quarter', 'Q');
-
-    // PARSING
-
-    addRegexToken('Q', match1);
-    addParseToken('Q', function (input, array) {
-        array[MONTH] = (toInt(input) - 1) * 3;
-    });
-
-    // MOMENTS
-
-    function getSetQuarter (input) {
-        return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
-    }
-
-    // FORMATTING
-
-    addFormatToken('w', ['ww', 2], 'wo', 'week');
-    addFormatToken('W', ['WW', 2], 'Wo', 'isoWeek');
-
-    // ALIASES
-
-    addUnitAlias('week', 'w');
-    addUnitAlias('isoWeek', 'W');
-
-    // PARSING
-
-    addRegexToken('w',  match1to2);
-    addRegexToken('ww', match1to2, match2);
-    addRegexToken('W',  match1to2);
-    addRegexToken('WW', match1to2, match2);
-
-    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (input, week, config, token) {
-        week[token.substr(0, 1)] = toInt(input);
-    });
-
-    // HELPERS
-
-    // LOCALES
-
-    function localeWeek (mom) {
-        return weekOfYear(mom, this._week.dow, this._week.doy).week;
-    }
-
-    var defaultLocaleWeek = {
-        dow : 0, // Sunday is the first day of the week.
-        doy : 6  // The week that contains Jan 1st is the first week of the year.
-    };
-
-    function localeFirstDayOfWeek () {
-        return this._week.dow;
-    }
-
-    function localeFirstDayOfYear () {
-        return this._week.doy;
-    }
-
-    // MOMENTS
-
-    function getSetWeek (input) {
-        var week = this.localeData().week(this);
-        return input == null ? week : this.add((input - week) * 7, 'd');
-    }
-
-    function getSetISOWeek (input) {
-        var week = weekOfYear(this, 1, 4).week;
-        return input == null ? week : this.add((input - week) * 7, 'd');
-    }
-
-    // FORMATTING
-
-    addFormatToken('D', ['DD', 2], 'Do', 'date');
-
-    // ALIASES
-
-    addUnitAlias('date', 'D');
-
-    // PARSING
-
-    addRegexToken('D',  match1to2);
-    addRegexToken('DD', match1to2, match2);
-    addRegexToken('Do', function (isStrict, locale) {
-        return isStrict ? locale._ordinalParse : locale._ordinalParseLenient;
-    });
-
-    addParseToken(['D', 'DD'], DATE);
-    addParseToken('Do', function (input, array) {
-        array[DATE] = toInt(input.match(match1to2)[0], 10);
-    });
-
-    // MOMENTS
-
-    var getSetDayOfMonth = makeGetSet('Date', true);
-
-    // FORMATTING
-
-    addFormatToken('d', 0, 'do', 'day');
-
-    addFormatToken('dd', 0, 0, function (format) {
-        return this.localeData().weekdaysMin(this, format);
-    });
-
-    addFormatToken('ddd', 0, 0, function (format) {
-        return this.localeData().weekdaysShort(this, format);
-    });
-
-    addFormatToken('dddd', 0, 0, function (format) {
-        return this.localeData().weekdays(this, format);
-    });
-
-    addFormatToken('e', 0, 0, 'weekday');
-    addFormatToken('E', 0, 0, 'isoWeekday');
-
-    // ALIASES
-
-    addUnitAlias('day', 'd');
-    addUnitAlias('weekday', 'e');
-    addUnitAlias('isoWeekday', 'E');
-
-    // PARSING
-
-    addRegexToken('d',    match1to2);
-    addRegexToken('e',    match1to2);
-    addRegexToken('E',    match1to2);
-    addRegexToken('dd',   function (isStrict, locale) {
-        return locale.weekdaysMinRegex(isStrict);
-    });
-    addRegexToken('ddd',   function (isStrict, locale) {
-        return locale.weekdaysShortRegex(isStrict);
-    });
-    addRegexToken('dddd',   function (isStrict, locale) {
-        return locale.weekdaysRegex(isStrict);
-    });
-
-    addWeekParseToken(['dd', 'ddd', 'dddd'], function (input, week, config, token) {
-        var weekday = config._locale.weekdaysParse(input, token, config._strict);
-        // if we didn't get a weekday name, mark the date as invalid
-        if (weekday != null) {
-            week.d = weekday;
-        } else {
-            getParsingFlags(config).invalidWeekday = input;
-        }
-    });
-
-    addWeekParseToken(['d', 'e', 'E'], function (input, week, config, token) {
-        week[token] = toInt(input);
-    });
-
-    // HELPERS
-
-    function parseWeekday(input, locale) {
-        if (typeof input !== 'string') {
-            return input;
-        }
-
-        if (!isNaN(input)) {
-            return parseInt(input, 10);
-        }
-
-        input = locale.weekdaysParse(input);
-        if (typeof input === 'number') {
-            return input;
-        }
-
-        return null;
-    }
-
-    // LOCALES
-
-    var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
-    function localeWeekdays (m, format) {
-        return isArray(this._weekdays) ? this._weekdays[m.day()] :
-            this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
-    }
-
-    var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
-    function localeWeekdaysShort (m) {
-        return this._weekdaysShort[m.day()];
-    }
-
-    var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
-    function localeWeekdaysMin (m) {
-        return this._weekdaysMin[m.day()];
-    }
-
-    function day_of_week__handleStrictParse(weekdayName, format, strict) {
-        var i, ii, mom, llc = weekdayName.toLocaleLowerCase();
-        if (!this._weekdaysParse) {
-            this._weekdaysParse = [];
-            this._shortWeekdaysParse = [];
-            this._minWeekdaysParse = [];
-
-            for (i = 0; i < 7; ++i) {
-                mom = create_utc__createUTC([2000, 1]).day(i);
-                this._minWeekdaysParse[i] = this.weekdaysMin(mom, '').toLocaleLowerCase();
-                this._shortWeekdaysParse[i] = this.weekdaysShort(mom, '').toLocaleLowerCase();
-                this._weekdaysParse[i] = this.weekdays(mom, '').toLocaleLowerCase();
-            }
-        }
-
-        if (strict) {
-            if (format === 'dddd') {
-                ii = indexOf.call(this._weekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else if (format === 'ddd') {
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        } else {
-            if (format === 'dddd') {
-                ii = indexOf.call(this._weekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else if (format === 'ddd') {
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._weekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._weekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        }
-    }
-
-    function localeWeekdaysParse (weekdayName, format, strict) {
-        var i, mom, regex;
-
-        if (this._weekdaysParseExact) {
-            return day_of_week__handleStrictParse.call(this, weekdayName, format, strict);
-        }
-
-        if (!this._weekdaysParse) {
-            this._weekdaysParse = [];
-            this._minWeekdaysParse = [];
-            this._shortWeekdaysParse = [];
-            this._fullWeekdaysParse = [];
-        }
-
-        for (i = 0; i < 7; i++) {
-            // make the regex if we don't have it already
-
-            mom = create_utc__createUTC([2000, 1]).day(i);
-            if (strict && !this._fullWeekdaysParse[i]) {
-                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
-                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
-                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
-            }
-            if (!this._weekdaysParse[i]) {
-                regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
-                this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
-            }
-            // test the regex
-            if (strict && format === 'dddd' && this._fullWeekdaysParse[i].test(weekdayName)) {
-                return i;
-            } else if (strict && format === 'ddd' && this._shortWeekdaysParse[i].test(weekdayName)) {
-                return i;
-            } else if (strict && format === 'dd' && this._minWeekdaysParse[i].test(weekdayName)) {
-                return i;
-            } else if (!strict && this._weekdaysParse[i].test(weekdayName)) {
-                return i;
-            }
-        }
-    }
-
-    // MOMENTS
-
-    function getSetDayOfWeek (input) {
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
-        if (input != null) {
-            input = parseWeekday(input, this.localeData());
-            return this.add(input - day, 'd');
-        } else {
-            return day;
-        }
-    }
-
-    function getSetLocaleDayOfWeek (input) {
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        var weekday = (this.day() + 7 - this.localeData()._week.dow) % 7;
-        return input == null ? weekday : this.add(input - weekday, 'd');
-    }
-
-    function getSetISODayOfWeek (input) {
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        // behaves the same as moment#day except
-        // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
-        // as a setter, sunday should belong to the previous week.
-        return input == null ? this.day() || 7 : this.day(this.day() % 7 ? input : input - 7);
-    }
-
-    var defaultWeekdaysRegex = matchWord;
-    function weekdaysRegex (isStrict) {
-        if (this._weekdaysParseExact) {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                computeWeekdaysParse.call(this);
-            }
-            if (isStrict) {
-                return this._weekdaysStrictRegex;
-            } else {
-                return this._weekdaysRegex;
-            }
-        } else {
-            return this._weekdaysStrictRegex && isStrict ?
-                this._weekdaysStrictRegex : this._weekdaysRegex;
-        }
-    }
-
-    var defaultWeekdaysShortRegex = matchWord;
-    function weekdaysShortRegex (isStrict) {
-        if (this._weekdaysParseExact) {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                computeWeekdaysParse.call(this);
-            }
-            if (isStrict) {
-                return this._weekdaysShortStrictRegex;
-            } else {
-                return this._weekdaysShortRegex;
-            }
-        } else {
-            return this._weekdaysShortStrictRegex && isStrict ?
-                this._weekdaysShortStrictRegex : this._weekdaysShortRegex;
-        }
-    }
-
-    var defaultWeekdaysMinRegex = matchWord;
-    function weekdaysMinRegex (isStrict) {
-        if (this._weekdaysParseExact) {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                computeWeekdaysParse.call(this);
-            }
-            if (isStrict) {
-                return this._weekdaysMinStrictRegex;
-            } else {
-                return this._weekdaysMinRegex;
-            }
-        } else {
-            return this._weekdaysMinStrictRegex && isStrict ?
-                this._weekdaysMinStrictRegex : this._weekdaysMinRegex;
-        }
-    }
-
-
-    function computeWeekdaysParse () {
-        function cmpLenRev(a, b) {
-            return b.length - a.length;
-        }
-
-        var minPieces = [], shortPieces = [], longPieces = [], mixedPieces = [],
-            i, mom, minp, shortp, longp;
-        for (i = 0; i < 7; i++) {
-            // make the regex if we don't have it already
-            mom = create_utc__createUTC([2000, 1]).day(i);
-            minp = this.weekdaysMin(mom, '');
-            shortp = this.weekdaysShort(mom, '');
-            longp = this.weekdays(mom, '');
-            minPieces.push(minp);
-            shortPieces.push(shortp);
-            longPieces.push(longp);
-            mixedPieces.push(minp);
-            mixedPieces.push(shortp);
-            mixedPieces.push(longp);
-        }
-        // Sorting makes sure if one weekday (or abbr) is a prefix of another it
-        // will match the longer piece.
-        minPieces.sort(cmpLenRev);
-        shortPieces.sort(cmpLenRev);
-        longPieces.sort(cmpLenRev);
-        mixedPieces.sort(cmpLenRev);
-        for (i = 0; i < 7; i++) {
-            shortPieces[i] = regexEscape(shortPieces[i]);
-            longPieces[i] = regexEscape(longPieces[i]);
-            mixedPieces[i] = regexEscape(mixedPieces[i]);
-        }
-
-        this._weekdaysRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
-        this._weekdaysShortRegex = this._weekdaysRegex;
-        this._weekdaysMinRegex = this._weekdaysRegex;
-
-        this._weekdaysStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
-        this._weekdaysShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
-        this._weekdaysMinStrictRegex = new RegExp('^(' + minPieces.join('|') + ')', 'i');
-    }
-
-    // FORMATTING
-
-    addFormatToken('DDD', ['DDDD', 3], 'DDDo', 'dayOfYear');
-
-    // ALIASES
-
-    addUnitAlias('dayOfYear', 'DDD');
-
-    // PARSING
-
-    addRegexToken('DDD',  match1to3);
-    addRegexToken('DDDD', match3);
-    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
-        config._dayOfYear = toInt(input);
-    });
-
-    // HELPERS
-
-    // MOMENTS
-
-    function getSetDayOfYear (input) {
-        var dayOfYear = Math.round((this.clone().startOf('day') - this.clone().startOf('year')) / 864e5) + 1;
-        return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
-    }
-
-    // FORMATTING
-
-    function hFormat() {
-        return this.hours() % 12 || 12;
-    }
-
-    function kFormat() {
-        return this.hours() || 24;
-    }
-
-    addFormatToken('H', ['HH', 2], 0, 'hour');
-    addFormatToken('h', ['hh', 2], 0, hFormat);
-    addFormatToken('k', ['kk', 2], 0, kFormat);
-
-    addFormatToken('hmm', 0, 0, function () {
-        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2);
-    });
-
-    addFormatToken('hmmss', 0, 0, function () {
-        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2) +
-            zeroFill(this.seconds(), 2);
-    });
-
-    addFormatToken('Hmm', 0, 0, function () {
-        return '' + this.hours() + zeroFill(this.minutes(), 2);
-    });
-
-    addFormatToken('Hmmss', 0, 0, function () {
-        return '' + this.hours() + zeroFill(this.minutes(), 2) +
-            zeroFill(this.seconds(), 2);
-    });
-
-    function meridiem (token, lowercase) {
-        addFormatToken(token, 0, 0, function () {
-            return this.localeData().meridiem(this.hours(), this.minutes(), lowercase);
-        });
-    }
-
-    meridiem('a', true);
-    meridiem('A', false);
-
-    // ALIASES
-
-    addUnitAlias('hour', 'h');
-
-    // PARSING
-
-    function matchMeridiem (isStrict, locale) {
-        return locale._meridiemParse;
-    }
-
-    addRegexToken('a',  matchMeridiem);
-    addRegexToken('A',  matchMeridiem);
-    addRegexToken('H',  match1to2);
-    addRegexToken('h',  match1to2);
-    addRegexToken('HH', match1to2, match2);
-    addRegexToken('hh', match1to2, match2);
-
-    addRegexToken('hmm', match3to4);
-    addRegexToken('hmmss', match5to6);
-    addRegexToken('Hmm', match3to4);
-    addRegexToken('Hmmss', match5to6);
-
-    addParseToken(['H', 'HH'], HOUR);
-    addParseToken(['a', 'A'], function (input, array, config) {
-        config._isPm = config._locale.isPM(input);
-        config._meridiem = input;
-    });
-    addParseToken(['h', 'hh'], function (input, array, config) {
-        array[HOUR] = toInt(input);
-        getParsingFlags(config).bigHour = true;
-    });
-    addParseToken('hmm', function (input, array, config) {
-        var pos = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos));
-        array[MINUTE] = toInt(input.substr(pos));
-        getParsingFlags(config).bigHour = true;
-    });
-    addParseToken('hmmss', function (input, array, config) {
-        var pos1 = input.length - 4;
-        var pos2 = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos1));
-        array[MINUTE] = toInt(input.substr(pos1, 2));
-        array[SECOND] = toInt(input.substr(pos2));
-        getParsingFlags(config).bigHour = true;
-    });
-    addParseToken('Hmm', function (input, array, config) {
-        var pos = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos));
-        array[MINUTE] = toInt(input.substr(pos));
-    });
-    addParseToken('Hmmss', function (input, array, config) {
-        var pos1 = input.length - 4;
-        var pos2 = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos1));
-        array[MINUTE] = toInt(input.substr(pos1, 2));
-        array[SECOND] = toInt(input.substr(pos2));
-    });
-
-    // LOCALES
-
-    function localeIsPM (input) {
-        // IE8 Quirks Mode & IE7 Standards Mode do not allow accessing strings like arrays
-        // Using charAt should be more compatible.
-        return ((input + '').toLowerCase().charAt(0) === 'p');
-    }
-
-    var defaultLocaleMeridiemParse = /[ap]\.?m?\.?/i;
-    function localeMeridiem (hours, minutes, isLower) {
-        if (hours > 11) {
-            return isLower ? 'pm' : 'PM';
-        } else {
-            return isLower ? 'am' : 'AM';
-        }
-    }
-
-
-    // MOMENTS
-
-    // Setting the hour should keep the time, because the user explicitly
-    // specified which hour he wants. So trying to maintain the same hour (in
-    // a new timezone) makes sense. Adding/subtracting hours does not follow
-    // this rule.
-    var getSetHour = makeGetSet('Hours', true);
-
-    // FORMATTING
-
-    addFormatToken('m', ['mm', 2], 0, 'minute');
-
-    // ALIASES
-
-    addUnitAlias('minute', 'm');
-
-    // PARSING
-
-    addRegexToken('m',  match1to2);
-    addRegexToken('mm', match1to2, match2);
-    addParseToken(['m', 'mm'], MINUTE);
-
-    // MOMENTS
-
-    var getSetMinute = makeGetSet('Minutes', false);
-
-    // FORMATTING
-
-    addFormatToken('s', ['ss', 2], 0, 'second');
-
-    // ALIASES
-
-    addUnitAlias('second', 's');
-
-    // PARSING
-
-    addRegexToken('s',  match1to2);
-    addRegexToken('ss', match1to2, match2);
-    addParseToken(['s', 'ss'], SECOND);
-
-    // MOMENTS
-
-    var getSetSecond = makeGetSet('Seconds', false);
-
-    // FORMATTING
-
-    addFormatToken('S', 0, 0, function () {
-        return ~~(this.millisecond() / 100);
-    });
-
-    addFormatToken(0, ['SS', 2], 0, function () {
-        return ~~(this.millisecond() / 10);
-    });
-
-    addFormatToken(0, ['SSS', 3], 0, 'millisecond');
-    addFormatToken(0, ['SSSS', 4], 0, function () {
-        return this.millisecond() * 10;
-    });
-    addFormatToken(0, ['SSSSS', 5], 0, function () {
-        return this.millisecond() * 100;
-    });
-    addFormatToken(0, ['SSSSSS', 6], 0, function () {
-        return this.millisecond() * 1000;
-    });
-    addFormatToken(0, ['SSSSSSS', 7], 0, function () {
-        return this.millisecond() * 10000;
-    });
-    addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
-        return this.millisecond() * 100000;
-    });
-    addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
-        return this.millisecond() * 1000000;
-    });
-
-
-    // ALIASES
-
-    addUnitAlias('millisecond', 'ms');
-
-    // PARSING
-
-    addRegexToken('S',    match1to3, match1);
-    addRegexToken('SS',   match1to3, match2);
-    addRegexToken('SSS',  match1to3, match3);
-
-    var token;
-    for (token = 'SSSS'; token.length <= 9; token += 'S') {
-        addRegexToken(token, matchUnsigned);
-    }
-
-    function parseMs(input, array) {
-        array[MILLISECOND] = toInt(('0.' + input) * 1000);
-    }
-
-    for (token = 'S'; token.length <= 9; token += 'S') {
-        addParseToken(token, parseMs);
-    }
-    // MOMENTS
-
-    var getSetMillisecond = makeGetSet('Milliseconds', false);
-
-    // FORMATTING
-
-    addFormatToken('z',  0, 0, 'zoneAbbr');
-    addFormatToken('zz', 0, 0, 'zoneName');
-
-    // MOMENTS
-
-    function getZoneAbbr () {
-        return this._isUTC ? 'UTC' : '';
-    }
-
-    function getZoneName () {
-        return this._isUTC ? 'Coordinated Universal Time' : '';
-    }
-
-    var momentPrototype__proto = Moment.prototype;
-
-    momentPrototype__proto.add               = add_subtract__add;
-    momentPrototype__proto.calendar          = moment_calendar__calendar;
-    momentPrototype__proto.clone             = clone;
-    momentPrototype__proto.diff              = diff;
-    momentPrototype__proto.endOf             = endOf;
-    momentPrototype__proto.format            = format;
-    momentPrototype__proto.from              = from;
-    momentPrototype__proto.fromNow           = fromNow;
-    momentPrototype__proto.to                = to;
-    momentPrototype__proto.toNow             = toNow;
-    momentPrototype__proto.get               = getSet;
-    momentPrototype__proto.invalidAt         = invalidAt;
-    momentPrototype__proto.isAfter           = isAfter;
-    momentPrototype__proto.isBefore          = isBefore;
-    momentPrototype__proto.isBetween         = isBetween;
-    momentPrototype__proto.isSame            = isSame;
-    momentPrototype__proto.isSameOrAfter     = isSameOrAfter;
-    momentPrototype__proto.isSameOrBefore    = isSameOrBefore;
-    momentPrototype__proto.isValid           = moment_valid__isValid;
-    momentPrototype__proto.lang              = lang;
-    momentPrototype__proto.locale            = locale;
-    momentPrototype__proto.localeData        = localeData;
-    momentPrototype__proto.max               = prototypeMax;
-    momentPrototype__proto.min               = prototypeMin;
-    momentPrototype__proto.parsingFlags      = parsingFlags;
-    momentPrototype__proto.set               = getSet;
-    momentPrototype__proto.startOf           = startOf;
-    momentPrototype__proto.subtract          = add_subtract__subtract;
-    momentPrototype__proto.toArray           = toArray;
-    momentPrototype__proto.toObject          = toObject;
-    momentPrototype__proto.toDate            = toDate;
-    momentPrototype__proto.toISOString       = moment_format__toISOString;
-    momentPrototype__proto.toJSON            = toJSON;
-    momentPrototype__proto.toString          = toString;
-    momentPrototype__proto.unix              = unix;
-    momentPrototype__proto.valueOf           = to_type__valueOf;
-    momentPrototype__proto.creationData      = creationData;
-
-    // Year
-    momentPrototype__proto.year       = getSetYear;
-    momentPrototype__proto.isLeapYear = getIsLeapYear;
-
-    // Week Year
-    momentPrototype__proto.weekYear    = getSetWeekYear;
-    momentPrototype__proto.isoWeekYear = getSetISOWeekYear;
-
-    // Quarter
-    momentPrototype__proto.quarter = momentPrototype__proto.quarters = getSetQuarter;
-
-    // Month
-    momentPrototype__proto.month       = getSetMonth;
-    momentPrototype__proto.daysInMonth = getDaysInMonth;
-
-    // Week
-    momentPrototype__proto.week           = momentPrototype__proto.weeks        = getSetWeek;
-    momentPrototype__proto.isoWeek        = momentPrototype__proto.isoWeeks     = getSetISOWeek;
-    momentPrototype__proto.weeksInYear    = getWeeksInYear;
-    momentPrototype__proto.isoWeeksInYear = getISOWeeksInYear;
-
-    // Day
-    momentPrototype__proto.date       = getSetDayOfMonth;
-    momentPrototype__proto.day        = momentPrototype__proto.days             = getSetDayOfWeek;
-    momentPrototype__proto.weekday    = getSetLocaleDayOfWeek;
-    momentPrototype__proto.isoWeekday = getSetISODayOfWeek;
-    momentPrototype__proto.dayOfYear  = getSetDayOfYear;
-
-    // Hour
-    momentPrototype__proto.hour = momentPrototype__proto.hours = getSetHour;
-
-    // Minute
-    momentPrototype__proto.minute = momentPrototype__proto.minutes = getSetMinute;
-
-    // Second
-    momentPrototype__proto.second = momentPrototype__proto.seconds = getSetSecond;
-
-    // Millisecond
-    momentPrototype__proto.millisecond = momentPrototype__proto.milliseconds = getSetMillisecond;
-
-    // Offset
-    momentPrototype__proto.utcOffset            = getSetOffset;
-    momentPrototype__proto.utc                  = setOffsetToUTC;
-    momentPrototype__proto.local                = setOffsetToLocal;
-    momentPrototype__proto.parseZone            = setOffsetToParsedOffset;
-    momentPrototype__proto.hasAlignedHourOffset = hasAlignedHourOffset;
-    momentPrototype__proto.isDST                = isDaylightSavingTime;
-    momentPrototype__proto.isDSTShifted         = isDaylightSavingTimeShifted;
-    momentPrototype__proto.isLocal              = isLocal;
-    momentPrototype__proto.isUtcOffset          = isUtcOffset;
-    momentPrototype__proto.isUtc                = isUtc;
-    momentPrototype__proto.isUTC                = isUtc;
-
-    // Timezone
-    momentPrototype__proto.zoneAbbr = getZoneAbbr;
-    momentPrototype__proto.zoneName = getZoneName;
-
-    // Deprecations
-    momentPrototype__proto.dates  = deprecate('dates accessor is deprecated. Use date instead.', getSetDayOfMonth);
-    momentPrototype__proto.months = deprecate('months accessor is deprecated. Use month instead', getSetMonth);
-    momentPrototype__proto.years  = deprecate('years accessor is deprecated. Use year instead', getSetYear);
-    momentPrototype__proto.zone   = deprecate('moment().zone is deprecated, use moment().utcOffset instead. https://github.com/moment/moment/issues/1779', getSetZone);
-
-    var momentPrototype = momentPrototype__proto;
-
-    function moment__createUnix (input) {
-        return local__createLocal(input * 1000);
-    }
-
-    function moment__createInZone () {
-        return local__createLocal.apply(null, arguments).parseZone();
-    }
-
-    var defaultCalendar = {
-        sameDay : '[Today at] LT',
-        nextDay : '[Tomorrow at] LT',
-        nextWeek : 'dddd [at] LT',
-        lastDay : '[Yesterday at] LT',
-        lastWeek : '[Last] dddd [at] LT',
-        sameElse : 'L'
-    };
-
-    function locale_calendar__calendar (key, mom, now) {
-        var output = this._calendar[key];
-        return isFunction(output) ? output.call(mom, now) : output;
-    }
-
-    var defaultLongDateFormat = {
-        LTS  : 'h:mm:ss A',
-        LT   : 'h:mm A',
-        L    : 'MM/DD/YYYY',
-        LL   : 'MMMM D, YYYY',
-        LLL  : 'MMMM D, YYYY h:mm A',
-        LLLL : 'dddd, MMMM D, YYYY h:mm A'
-    };
-
-    function longDateFormat (key) {
-        var format = this._longDateFormat[key],
-            formatUpper = this._longDateFormat[key.toUpperCase()];
-
-        if (format || !formatUpper) {
-            return format;
-        }
-
-        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
-            return val.slice(1);
-        });
-
-        return this._longDateFormat[key];
-    }
-
-    var defaultInvalidDate = 'Invalid date';
-
-    function invalidDate () {
-        return this._invalidDate;
-    }
-
-    var defaultOrdinal = '%d';
-    var defaultOrdinalParse = /\d{1,2}/;
-
-    function ordinal (number) {
-        return this._ordinal.replace('%d', number);
-    }
-
-    function preParsePostFormat (string) {
-        return string;
-    }
-
-    var defaultRelativeTime = {
-        future : 'in %s',
-        past   : '%s ago',
-        s  : 'a few seconds',
-        m  : 'a minute',
-        mm : '%d minutes',
-        h  : 'an hour',
-        hh : '%d hours',
-        d  : 'a day',
-        dd : '%d days',
-        M  : 'a month',
-        MM : '%d months',
-        y  : 'a year',
-        yy : '%d years'
-    };
-
-    function relative__relativeTime (number, withoutSuffix, string, isFuture) {
-        var output = this._relativeTime[string];
-        return (isFunction(output)) ?
-            output(number, withoutSuffix, string, isFuture) :
-            output.replace(/%d/i, number);
-    }
-
-    function pastFuture (diff, output) {
-        var format = this._relativeTime[diff > 0 ? 'future' : 'past'];
-        return isFunction(format) ? format(output) : format.replace(/%s/i, output);
-    }
-
-    var prototype__proto = Locale.prototype;
-
-    prototype__proto._calendar       = defaultCalendar;
-    prototype__proto.calendar        = locale_calendar__calendar;
-    prototype__proto._longDateFormat = defaultLongDateFormat;
-    prototype__proto.longDateFormat  = longDateFormat;
-    prototype__proto._invalidDate    = defaultInvalidDate;
-    prototype__proto.invalidDate     = invalidDate;
-    prototype__proto._ordinal        = defaultOrdinal;
-    prototype__proto.ordinal         = ordinal;
-    prototype__proto._ordinalParse   = defaultOrdinalParse;
-    prototype__proto.preparse        = preParsePostFormat;
-    prototype__proto.postformat      = preParsePostFormat;
-    prototype__proto._relativeTime   = defaultRelativeTime;
-    prototype__proto.relativeTime    = relative__relativeTime;
-    prototype__proto.pastFuture      = pastFuture;
-    prototype__proto.set             = locale_set__set;
-
-    // Month
-    prototype__proto.months            =        localeMonths;
-    prototype__proto._months           = defaultLocaleMonths;
-    prototype__proto.monthsShort       =        localeMonthsShort;
-    prototype__proto._monthsShort      = defaultLocaleMonthsShort;
-    prototype__proto.monthsParse       =        localeMonthsParse;
-    prototype__proto._monthsRegex      = defaultMonthsRegex;
-    prototype__proto.monthsRegex       = monthsRegex;
-    prototype__proto._monthsShortRegex = defaultMonthsShortRegex;
-    prototype__proto.monthsShortRegex  = monthsShortRegex;
-
-    // Week
-    prototype__proto.week = localeWeek;
-    prototype__proto._week = defaultLocaleWeek;
-    prototype__proto.firstDayOfYear = localeFirstDayOfYear;
-    prototype__proto.firstDayOfWeek = localeFirstDayOfWeek;
-
-    // Day of Week
-    prototype__proto.weekdays       =        localeWeekdays;
-    prototype__proto._weekdays      = defaultLocaleWeekdays;
-    prototype__proto.weekdaysMin    =        localeWeekdaysMin;
-    prototype__proto._weekdaysMin   = defaultLocaleWeekdaysMin;
-    prototype__proto.weekdaysShort  =        localeWeekdaysShort;
-    prototype__proto._weekdaysShort = defaultLocaleWeekdaysShort;
-    prototype__proto.weekdaysParse  =        localeWeekdaysParse;
-
-    prototype__proto._weekdaysRegex      = defaultWeekdaysRegex;
-    prototype__proto.weekdaysRegex       =        weekdaysRegex;
-    prototype__proto._weekdaysShortRegex = defaultWeekdaysShortRegex;
-    prototype__proto.weekdaysShortRegex  =        weekdaysShortRegex;
-    prototype__proto._weekdaysMinRegex   = defaultWeekdaysMinRegex;
-    prototype__proto.weekdaysMinRegex    =        weekdaysMinRegex;
-
-    // Hours
-    prototype__proto.isPM = localeIsPM;
-    prototype__proto._meridiemParse = defaultLocaleMeridiemParse;
-    prototype__proto.meridiem = localeMeridiem;
-
-    function lists__get (format, index, field, setter) {
-        var locale = locale_locales__getLocale();
-        var utc = create_utc__createUTC().set(setter, index);
-        return locale[field](utc, format);
-    }
-
-    function listMonthsImpl (format, index, field) {
-        if (typeof format === 'number') {
-            index = format;
-            format = undefined;
-        }
-
-        format = format || '';
-
-        if (index != null) {
-            return lists__get(format, index, field, 'month');
-        }
-
-        var i;
-        var out = [];
-        for (i = 0; i < 12; i++) {
-            out[i] = lists__get(format, i, field, 'month');
-        }
-        return out;
-    }
-
-    // ()
-    // (5)
-    // (fmt, 5)
-    // (fmt)
-    // (true)
-    // (true, 5)
-    // (true, fmt, 5)
-    // (true, fmt)
-    function listWeekdaysImpl (localeSorted, format, index, field) {
-        if (typeof localeSorted === 'boolean') {
-            if (typeof format === 'number') {
-                index = format;
-                format = undefined;
-            }
-
-            format = format || '';
-        } else {
-            format = localeSorted;
-            index = format;
-            localeSorted = false;
-
-            if (typeof format === 'number') {
-                index = format;
-                format = undefined;
-            }
-
-            format = format || '';
-        }
-
-        var locale = locale_locales__getLocale(),
-            shift = localeSorted ? locale._week.dow : 0;
-
-        if (index != null) {
-            return lists__get(format, (index + shift) % 7, field, 'day');
-        }
-
-        var i;
-        var out = [];
-        for (i = 0; i < 7; i++) {
-            out[i] = lists__get(format, (i + shift) % 7, field, 'day');
-        }
-        return out;
-    }
-
-    function lists__listMonths (format, index) {
-        return listMonthsImpl(format, index, 'months');
-    }
-
-    function lists__listMonthsShort (format, index) {
-        return listMonthsImpl(format, index, 'monthsShort');
-    }
-
-    function lists__listWeekdays (localeSorted, format, index) {
-        return listWeekdaysImpl(localeSorted, format, index, 'weekdays');
-    }
-
-    function lists__listWeekdaysShort (localeSorted, format, index) {
-        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort');
-    }
-
-    function lists__listWeekdaysMin (localeSorted, format, index) {
-        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin');
-    }
-
-    locale_locales__getSetGlobalLocale('en', {
-        ordinalParse: /\d{1,2}(th|st|nd|rd)/,
-        ordinal : function (number) {
-            var b = number % 10,
-                output = (toInt(number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-            return number + output;
-        }
-    });
-
-    // Side effect imports
-    utils_hooks__hooks.lang = deprecate('moment.lang is deprecated. Use moment.locale instead.', locale_locales__getSetGlobalLocale);
-    utils_hooks__hooks.langData = deprecate('moment.langData is deprecated. Use moment.localeData instead.', locale_locales__getLocale);
-
-    var mathAbs = Math.abs;
-
-    function duration_abs__abs () {
-        var data           = this._data;
-
-        this._milliseconds = mathAbs(this._milliseconds);
-        this._days         = mathAbs(this._days);
-        this._months       = mathAbs(this._months);
-
-        data.milliseconds  = mathAbs(data.milliseconds);
-        data.seconds       = mathAbs(data.seconds);
-        data.minutes       = mathAbs(data.minutes);
-        data.hours         = mathAbs(data.hours);
-        data.months        = mathAbs(data.months);
-        data.years         = mathAbs(data.years);
-
-        return this;
-    }
-
-    function duration_add_subtract__addSubtract (duration, input, value, direction) {
-        var other = create__createDuration(input, value);
-
-        duration._milliseconds += direction * other._milliseconds;
-        duration._days         += direction * other._days;
-        duration._months       += direction * other._months;
-
-        return duration._bubble();
-    }
-
-    // supports only 2.0-style add(1, 's') or add(duration)
-    function duration_add_subtract__add (input, value) {
-        return duration_add_subtract__addSubtract(this, input, value, 1);
-    }
-
-    // supports only 2.0-style subtract(1, 's') or subtract(duration)
-    function duration_add_subtract__subtract (input, value) {
-        return duration_add_subtract__addSubtract(this, input, value, -1);
-    }
-
-    function absCeil (number) {
-        if (number < 0) {
-            return Math.floor(number);
-        } else {
-            return Math.ceil(number);
-        }
-    }
-
-    function bubble () {
-        var milliseconds = this._milliseconds;
-        var days         = this._days;
-        var months       = this._months;
-        var data         = this._data;
-        var seconds, minutes, hours, years, monthsFromDays;
-
-        // if we have a mix of positive and negative values, bubble down first
-        // check: https://github.com/moment/moment/issues/2166
-        if (!((milliseconds >= 0 && days >= 0 && months >= 0) ||
-                (milliseconds <= 0 && days <= 0 && months <= 0))) {
-            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
-            days = 0;
-            months = 0;
-        }
-
-        // The following code bubbles up values, see the tests for
-        // examples of what that means.
-        data.milliseconds = milliseconds % 1000;
-
-        seconds           = absFloor(milliseconds / 1000);
-        data.seconds      = seconds % 60;
-
-        minutes           = absFloor(seconds / 60);
-        data.minutes      = minutes % 60;
-
-        hours             = absFloor(minutes / 60);
-        data.hours        = hours % 24;
-
-        days += absFloor(hours / 24);
-
-        // convert days to months
-        monthsFromDays = absFloor(daysToMonths(days));
-        months += monthsFromDays;
-        days -= absCeil(monthsToDays(monthsFromDays));
-
-        // 12 months -> 1 year
-        years = absFloor(months / 12);
-        months %= 12;
-
-        data.days   = days;
-        data.months = months;
-        data.years  = years;
-
-        return this;
-    }
-
-    function daysToMonths (days) {
-        // 400 years have 146097 days (taking into account leap year rules)
-        // 400 years have 12 months === 4800
-        return days * 4800 / 146097;
-    }
-
-    function monthsToDays (months) {
-        // the reverse of daysToMonths
-        return months * 146097 / 4800;
-    }
-
-    function as (units) {
-        var days;
-        var months;
-        var milliseconds = this._milliseconds;
-
-        units = normalizeUnits(units);
-
-        if (units === 'month' || units === 'year') {
-            days   = this._days   + milliseconds / 864e5;
-            months = this._months + daysToMonths(days);
-            return units === 'month' ? months : months / 12;
-        } else {
-            // handle milliseconds separately because of floating point math errors (issue #1867)
-            days = this._days + Math.round(monthsToDays(this._months));
-            switch (units) {
-                case 'week'   : return days / 7     + milliseconds / 6048e5;
-                case 'day'    : return days         + milliseconds / 864e5;
-                case 'hour'   : return days * 24    + milliseconds / 36e5;
-                case 'minute' : return days * 1440  + milliseconds / 6e4;
-                case 'second' : return days * 86400 + milliseconds / 1000;
-                // Math.floor prevents floating point math errors here
-                case 'millisecond': return Math.floor(days * 864e5) + milliseconds;
-                default: throw new Error('Unknown unit ' + units);
-            }
-        }
-    }
-
-    // TODO: Use this.as('ms')?
-    function duration_as__valueOf () {
-        return (
-            this._milliseconds +
-            this._days * 864e5 +
-            (this._months % 12) * 2592e6 +
-            toInt(this._months / 12) * 31536e6
-        );
-    }
-
-    function makeAs (alias) {
-        return function () {
-            return this.as(alias);
-        };
-    }
-
-    var asMilliseconds = makeAs('ms');
-    var asSeconds      = makeAs('s');
-    var asMinutes      = makeAs('m');
-    var asHours        = makeAs('h');
-    var asDays         = makeAs('d');
-    var asWeeks        = makeAs('w');
-    var asMonths       = makeAs('M');
-    var asYears        = makeAs('y');
-
-    function duration_get__get (units) {
-        units = normalizeUnits(units);
-        return this[units + 's']();
-    }
-
-    function makeGetter(name) {
-        return function () {
-            return this._data[name];
-        };
-    }
-
-    var milliseconds = makeGetter('milliseconds');
-    var seconds      = makeGetter('seconds');
-    var minutes      = makeGetter('minutes');
-    var hours        = makeGetter('hours');
-    var days         = makeGetter('days');
-    var months       = makeGetter('months');
-    var years        = makeGetter('years');
-
-    function weeks () {
-        return absFloor(this.days() / 7);
-    }
-
-    var round = Math.round;
-    var thresholds = {
-        s: 45,  // seconds to minute
-        m: 45,  // minutes to hour
-        h: 22,  // hours to day
-        d: 26,  // days to month
-        M: 11   // months to year
-    };
-
-    // helper function for moment.fn.from, moment.fn.fromNow, and moment.duration.fn.humanize
-    function substituteTimeAgo(string, number, withoutSuffix, isFuture, locale) {
-        return locale.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
-    }
-
-    function duration_humanize__relativeTime (posNegDuration, withoutSuffix, locale) {
-        var duration = create__createDuration(posNegDuration).abs();
-        var seconds  = round(duration.as('s'));
-        var minutes  = round(duration.as('m'));
-        var hours    = round(duration.as('h'));
-        var days     = round(duration.as('d'));
-        var months   = round(duration.as('M'));
-        var years    = round(duration.as('y'));
-
-        var a = seconds < thresholds.s && ['s', seconds]  ||
-                minutes <= 1           && ['m']           ||
-                minutes < thresholds.m && ['mm', minutes] ||
-                hours   <= 1           && ['h']           ||
-                hours   < thresholds.h && ['hh', hours]   ||
-                days    <= 1           && ['d']           ||
-                days    < thresholds.d && ['dd', days]    ||
-                months  <= 1           && ['M']           ||
-                months  < thresholds.M && ['MM', months]  ||
-                years   <= 1           && ['y']           || ['yy', years];
-
-        a[2] = withoutSuffix;
-        a[3] = +posNegDuration > 0;
-        a[4] = locale;
-        return substituteTimeAgo.apply(null, a);
-    }
-
-    // This function allows you to set a threshold for relative time strings
-    function duration_humanize__getSetRelativeTimeThreshold (threshold, limit) {
-        if (thresholds[threshold] === undefined) {
-            return false;
-        }
-        if (limit === undefined) {
-            return thresholds[threshold];
-        }
-        thresholds[threshold] = limit;
-        return true;
-    }
-
-    function humanize (withSuffix) {
-        var locale = this.localeData();
-        var output = duration_humanize__relativeTime(this, !withSuffix, locale);
-
-        if (withSuffix) {
-            output = locale.pastFuture(+this, output);
-        }
-
-        return locale.postformat(output);
-    }
-
-    var iso_string__abs = Math.abs;
-
-    function iso_string__toISOString() {
-        // for ISO strings we do not use the normal bubbling rules:
-        //  * milliseconds bubble up until they become hours
-        //  * days do not bubble at all
-        //  * months bubble up until they become years
-        // This is because there is no context-free conversion between hours and days
-        // (think of clock changes)
-        // and also not between days and months (28-31 days per month)
-        var seconds = iso_string__abs(this._milliseconds) / 1000;
-        var days         = iso_string__abs(this._days);
-        var months       = iso_string__abs(this._months);
-        var minutes, hours, years;
-
-        // 3600 seconds -> 60 minutes -> 1 hour
-        minutes           = absFloor(seconds / 60);
-        hours             = absFloor(minutes / 60);
-        seconds %= 60;
-        minutes %= 60;
-
-        // 12 months -> 1 year
-        years  = absFloor(months / 12);
-        months %= 12;
-
-
-        // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
-        var Y = years;
-        var M = months;
-        var D = days;
-        var h = hours;
-        var m = minutes;
-        var s = seconds;
-        var total = this.asSeconds();
-
-        if (!total) {
-            // this is the same as C#'s (Noda) and python (isodate)...
-            // but not other JS (goog.date)
-            return 'P0D';
-        }
-
-        return (total < 0 ? '-' : '') +
-            'P' +
-            (Y ? Y + 'Y' : '') +
-            (M ? M + 'M' : '') +
-            (D ? D + 'D' : '') +
-            ((h || m || s) ? 'T' : '') +
-            (h ? h + 'H' : '') +
-            (m ? m + 'M' : '') +
-            (s ? s + 'S' : '');
-    }
-
-    var duration_prototype__proto = Duration.prototype;
-
-    duration_prototype__proto.abs            = duration_abs__abs;
-    duration_prototype__proto.add            = duration_add_subtract__add;
-    duration_prototype__proto.subtract       = duration_add_subtract__subtract;
-    duration_prototype__proto.as             = as;
-    duration_prototype__proto.asMilliseconds = asMilliseconds;
-    duration_prototype__proto.asSeconds      = asSeconds;
-    duration_prototype__proto.asMinutes      = asMinutes;
-    duration_prototype__proto.asHours        = asHours;
-    duration_prototype__proto.asDays         = asDays;
-    duration_prototype__proto.asWeeks        = asWeeks;
-    duration_prototype__proto.asMonths       = asMonths;
-    duration_prototype__proto.asYears        = asYears;
-    duration_prototype__proto.valueOf        = duration_as__valueOf;
-    duration_prototype__proto._bubble        = bubble;
-    duration_prototype__proto.get            = duration_get__get;
-    duration_prototype__proto.milliseconds   = milliseconds;
-    duration_prototype__proto.seconds        = seconds;
-    duration_prototype__proto.minutes        = minutes;
-    duration_prototype__proto.hours          = hours;
-    duration_prototype__proto.days           = days;
-    duration_prototype__proto.weeks          = weeks;
-    duration_prototype__proto.months         = months;
-    duration_prototype__proto.years          = years;
-    duration_prototype__proto.humanize       = humanize;
-    duration_prototype__proto.toISOString    = iso_string__toISOString;
-    duration_prototype__proto.toString       = iso_string__toISOString;
-    duration_prototype__proto.toJSON         = iso_string__toISOString;
-    duration_prototype__proto.locale         = locale;
-    duration_prototype__proto.localeData     = localeData;
-
-    // Deprecations
-    duration_prototype__proto.toIsoString = deprecate('toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)', iso_string__toISOString);
-    duration_prototype__proto.lang = lang;
-
-    // Side effect imports
-
-    // FORMATTING
-
-    addFormatToken('X', 0, 0, 'unix');
-    addFormatToken('x', 0, 0, 'valueOf');
-
-    // PARSING
-
-    addRegexToken('x', matchSigned);
-    addRegexToken('X', matchTimestamp);
-    addParseToken('X', function (input, array, config) {
-        config._d = new Date(parseFloat(input, 10) * 1000);
-    });
-    addParseToken('x', function (input, array, config) {
-        config._d = new Date(toInt(input));
-    });
-
-    // Side effect imports
-
-
-    utils_hooks__hooks.version = '2.13.0';
-
-    setHookCallback(local__createLocal);
-
-    utils_hooks__hooks.fn                    = momentPrototype;
-    utils_hooks__hooks.min                   = min;
-    utils_hooks__hooks.max                   = max;
-    utils_hooks__hooks.now                   = now;
-    utils_hooks__hooks.utc                   = create_utc__createUTC;
-    utils_hooks__hooks.unix                  = moment__createUnix;
-    utils_hooks__hooks.months                = lists__listMonths;
-    utils_hooks__hooks.isDate                = isDate;
-    utils_hooks__hooks.locale                = locale_locales__getSetGlobalLocale;
-    utils_hooks__hooks.invalid               = valid__createInvalid;
-    utils_hooks__hooks.duration              = create__createDuration;
-    utils_hooks__hooks.isMoment              = isMoment;
-    utils_hooks__hooks.weekdays              = lists__listWeekdays;
-    utils_hooks__hooks.parseZone             = moment__createInZone;
-    utils_hooks__hooks.localeData            = locale_locales__getLocale;
-    utils_hooks__hooks.isDuration            = isDuration;
-    utils_hooks__hooks.monthsShort           = lists__listMonthsShort;
-    utils_hooks__hooks.weekdaysMin           = lists__listWeekdaysMin;
-    utils_hooks__hooks.defineLocale          = defineLocale;
-    utils_hooks__hooks.updateLocale          = updateLocale;
-    utils_hooks__hooks.locales               = locale_locales__listLocales;
-    utils_hooks__hooks.weekdaysShort         = lists__listWeekdaysShort;
-    utils_hooks__hooks.normalizeUnits        = normalizeUnits;
-    utils_hooks__hooks.relativeTimeThreshold = duration_humanize__getSetRelativeTimeThreshold;
-    utils_hooks__hooks.prototype             = momentPrototype;
-
-    var _moment = utils_hooks__hooks;
-
-    return _moment;
-
-}));
 !function (o) { o.fn.viewportChecker = function (e) { var t = { classToAdd: "visible", classToRemove: "invisible", classToAddForFullView: "full-visible", removeClassAfterAnimation: !1, offset: 100, repeat: !1, invertBottomOffset: !0, callbackFunctionBeforeAddClass: function (o) { }, callbackFunction: function (o, e) { }, scrollHorizontal: !1, scrollBox: window }; o.extend(t, e); var a = this, s = { height: o(t.scrollBox).height(), width: o(t.scrollBox).width() }, l = -1 != navigator.userAgent.toLowerCase().indexOf("webkit") || -1 != navigator.userAgent.toLowerCase().indexOf("windows phone") ? "body" : "html"; return this.checkElements = function () { var e, i; t.scrollHorizontal ? (e = o(l).scrollLeft(), i = e + s.width) : (e = o(l).scrollTop(), i = e + s.height), a.each(function () { var a = o(this), l = {}, n = {}; if (a.data("vp-add-class") && (n.classToAdd = a.data("vp-add-class")), a.data("vp-remove-class") && (n.classToRemove = a.data("vp-remove-class")), a.data("vp-add-class-full-view") && (n.classToAddForFullView = a.data("vp-add-class-full-view")), a.data("vp-keep-add-class") && (n.removeClassAfterAnimation = a.data("vp-remove-after-animation")), a.data("vp-offset") && (n.offset = a.data("vp-offset")), a.data("vp-repeat") && (n.repeat = a.data("vp-repeat")), a.data("vp-scrollHorizontal") && (n.scrollHorizontal = a.data("vp-scrollHorizontal")), a.data("vp-invertBottomOffset") && (n.scrollHorizontal = a.data("vp-invertBottomOffset")), o.extend(l, t), o.extend(l, n), !a.data("vp-animated") || l.repeat) { String(l.offset).indexOf("%") > 0 && (l.offset = parseInt(l.offset) / 100 * s.height); var d = l.scrollHorizontal ? a.offset().left : a.offset().top, r = l.scrollHorizontal ? d + a.width() : d + a.height(), c = Math.round(d) + l.offset, f = l.scrollHorizontal ? c + a.width() : c + a.height(); l.invertBottomOffset && (f -= 2 * l.offset), i > c && f > e ? (l.callbackFunctionBeforeAddClass(a), a.removeClass(l.classToRemove), a.addClass(l.classToAdd), l.callbackFunction(a, "add"), i >= r && d >= e ? a.addClass(l.classToAddForFullView) : a.removeClass(l.classToAddForFullView), a.data("vp-animated", !0), l.removeClassAfterAnimation && a.one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () { a.removeClass(l.classToAdd) })) : a.hasClass(l.classToAdd) && l.repeat && (a.removeClass(l.classToAdd + " " + l.classToAddForFullView), l.callbackFunction(a, "remove"), a.data("vp-animated", !1)) } }) }, ("ontouchstart" in window || "onmsgesturechange" in window) && o(document).bind("touchmove MSPointerMove pointermove", this.checkElements), o(t.scrollBox).bind("load scroll", this.checkElements), o(window).resize(function (e) { s = { height: o(t.scrollBox).height(), width: o(t.scrollBox).width() }, a.checkElements() }), this.checkElements(), this } }(jQuery);
 
 
-/*jslint browser:true, nomen:true, regexp:true, unparam:true */
-/*global google:false */
-
-
-/** @license  Geolocator Javascript Lib v.1.2.9
- *  (c) 2014-2015 Onur Yildirim (onur@cutepilot.com)
- *  https://github.com/onury/geolocator
- *  MIT License
- */
-var geolocator = (function () {
-
-    'use strict';
-
-    // ---------------------------------------
-    // PRIVATE PROPERTIES & FIELDS
-    // ---------------------------------------
-
-    var
-        // Storage for the callback function to be executed when the location
-        // is successfully fetched.
-        onSuccess,
-        // Storage for the callback function to be executed when the location
-        // could not be fetched due to an error.
-        onError,
-        // HTML element ID for the Google Maps.
-        mCanvasId,
-        // Google Maps URL.
-        googleLoaderURL = 'https://www.google.com/jsapi',
-        // Google Maps version to be loaded
-        mapsVersion = '3.18',
-        // Array of source services that provide location-by-IP information.
-        ipGeoSources = [
-            { url: 'http://freegeoip.net/json/', cbParam: 'callback' }, // 0
-            { url: 'https://www.geoplugin.net/json.gp', cbParam: 'jsoncallback' }, // 1
-            { url: 'https://geoiplookup.wikimedia.org/', cbParam: '' } // 2
-            // maxmind Not implemented. Requires attribution.
-            // See http://dev.maxmind.com/geoip/javascript
-            //,{ url: 'http://j.maxmind.com/app/geoip.js', cbParam: '' }
-        ],
-        defaultSourceIndex = 1, // (geoplugin)
-        // The index of the current IP source service.
-        sourceIndex;
-
-    // ---------------------------------------
-    // PRIVATE METHODS
-    // ---------------------------------------
-
-    /** Non-blocking method for loading scripts dynamically.
-     */
-    function loadScript(url, callback, removeOnCallback) {
-        var script = document.createElement('script');
-        script.async = true;
-
-        function execCb(cb, data) {
-            if (removeOnCallback && script.parentNode) {
-                script.parentNode.removeChild(script);
-            }
-            if (typeof cb === 'function') {
-                cb(data);
-            }
-        }
-
-        if (script.readyState) {
-            script.onreadystatechange = function (e) {
-                if (script.readyState === 'loaded' || script.readyState === 'complete') {
-                    script.onreadystatechange = null;
-                    execCb(callback);
-                }
-            };
-        } else {
-            script.onload = function (e) { execCb(callback); };
-        }
-
-        script.onerror = function (e) {
-            var errMsg = 'Could not load source at ' + String(url).replace(/\?.*$/, '');
-            execCb(onError, new Error(errMsg));
-        };
-
-        script.src = url;
-        document.getElementsByTagName('head')[0].appendChild(script);
-    }
-
-    /** Loads Google Maps API and executes the callback function when done.
-     */
-    function loadGoogleMaps(callback) {
-        function loadMaps() {
-            if (geolocator.__glcb) { delete geolocator.__glcb; }
-            google.load('maps', mapsVersion, { other_params: '', callback: callback });
-        }
-        if (window.google !== undefined && google.maps !== undefined) {
-            if (callback) { callback(); }
-        } else {
-            if (window.google !== undefined && google.loader !== undefined) {
-                loadMaps();
-            } else {
-                geolocator.__glcb = loadMaps;
-                loadScript(googleLoaderURL + '?callback=geolocator.__glcb');
-            }
-        }
-    }
-
-    /** Draws the map from the fetched geo information.
-     */
-    function drawMap(elemId, mapOptions, infoContent) {
-        var map, marker, infowindow,
-            elem = document.getElementById(elemId);
-        if (elem) {
-            map = new google.maps.Map(elem, mapOptions);
-            marker = new google.maps.Marker({
-                position: mapOptions.center,
-                map: map
-            });
-            infowindow = new google.maps.InfoWindow();
-            infowindow.setContent(infoContent);
-            //infowindow.open(map, marker);
-            google.maps.event.addListener(marker, 'click', function () {
-                infowindow.open(map, marker);
-            });
-            geolocator.location.map = {
-                canvas: elem,
-                map: map,
-                options: mapOptions,
-                marker: marker,
-                infoWindow: infowindow
-            };
-        } else {
-            geolocator.location.map = null;
-        }
-    }
-
-    /** Runs a reverse-geo lookup for the specified lat-lon coords.
-     */
-    function reverseGeoLookup(latlng, callback) {
-        var geocoder = new google.maps.Geocoder();
-        function onReverseGeo(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                if (callback) { callback(results); }
-            }
-        }
-        geocoder.geocode({ 'latLng': latlng }, onReverseGeo);
-    }
-
-    /** Fetches additional details (from the reverse-geo result) for the address property of the location object.
-     */
-    function fetchDetailsFromLookup(data) {
-        if (data && data.length > 0) {
-            var i, c, o = {},
-                comps = data[0].address_components;
-            for (i = 0; i < comps.length; i += 1) {
-                c = comps[i];
-                if (c.types && c.types.length > 0) {
-                    o[c.types[0]] = c.long_name;
-                    o[c.types[0] + '_s'] = c.short_name;
-                }
-            }
-            geolocator.location.formattedAddress = data[0].formatted_address;
-            geolocator.location.address = {
-                street: o.route || '',
-                neighborhood: o.neighborhood || '',
-                town: o.sublocality || '',
-                city: o.locality || '',
-                region: o.administrative_area_level_1 || '',
-                country: o.country || '',
-                countryCode: o.country_s || '',
-                postalCode: o.postal_code || '',
-                streetNumber: o.street_number || ''
-            };
-        }
-    }
-
-    /** Finalizes the location object via reverse-geocoding and draws the map (if required).
-     */
-    function finalize(coords) {
-        var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
-        function onGeoLookup(data) {
-            fetchDetailsFromLookup(data);
-            var zoom = geolocator.location.ipGeoSource === null ? 14 : 7, //zoom out if we got the lcoation from IP.
-                mapOptions = {
-                    zoom: zoom,
-                    center: latlng,
-                    mapTypeId: 'roadmap'
-                };
-            drawMap(mCanvasId, mapOptions, data[0].formatted_address);
-            if (onSuccess) { onSuccess.call(null, geolocator.location); }
-        }
-        reverseGeoLookup(latlng, onGeoLookup);
-    }
-
-    /** Gets the geo-position via HTML5 geolocation (if supported).
-     */
-    function getPosition(fallbackToIP, html5Options) {
-        geolocator.location = null;
-
-        function fallback(error) {
-            var ipsIndex = fallbackToIP === true ? 0 : (typeof fallbackToIP === 'number' ? fallbackToIP : -1);
-            if (ipsIndex >= 0) {
-                geolocator.locateByIP(onSuccess, onError, ipsIndex, mCanvasId);
-            } else {
-                if (onError) { onError(error); }
-            }
-        }
-
-        function geoSuccess(position) {
-            geolocator.location = {
-                ipGeoSource: null,
-                coords: position.coords,
-                timestamp: (new Date()).getTime() //overwrite timestamp (Safari-Mac and iOS devices use different epoch; so better use this).
-            };
-            finalize(geolocator.location.coords);
-        }
-
-        function geoError(error) {
-            fallback(error);
-        }
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(geoSuccess, geoError, html5Options);
-        } else { // not supported
-            fallback(new Error('geolocation is not supported.'));
-        }
-    }
-
-    /** Builds the location object from the source data.
-     */
-    function buildLocation(ipSourceIndex, data) {
-        switch (ipSourceIndex) {
-            case 0: // freegeoip
-                geolocator.location = {
-                    coords: {
-                        latitude: data.latitude,
-                        longitude: data.longitude
-                    },
-                    address: {
-                        city: data.city,
-                        country: data.country_name,
-                        countryCode: data.country_code,
-                        region: data.region_name
-                    }
-                };
-                break;
-            case 1: // geoplugin
-                geolocator.location = {
-                    coords: {
-                        latitude: data.geoplugin_latitude,
-                        longitude: data.geoplugin_longitude
-                    },
-                    address: {
-                        city: data.geoplugin_city,
-                        country: data.geoplugin_countryName,
-                        countryCode: data.geoplugin_countryCode,
-                        region: data.geoplugin_regionName
-                    }
-                };
-                break;
-            case 2: // Wikimedia
-                geolocator.location = {
-                    coords: {
-                        latitude: data.lat,
-                        longitude: data.lon
-                    },
-                    address: {
-                        city: data.city,
-                        country: '',
-                        countryCode: data.country,
-                        region: ''
-                    }
-                };
-                break;
-        }
-        if (geolocator.location) {
-            geolocator.location.coords.accuracy = null;
-            geolocator.location.coords.altitude = null;
-            geolocator.location.coords.altitudeAccuracy = null;
-            geolocator.location.coords.heading = null;
-            geolocator.location.coords.speed = null;
-            geolocator.location.timestamp = new Date().getTime();
-            geolocator.location.ipGeoSource = ipGeoSources[ipSourceIndex];
-            geolocator.location.ipGeoSource.data = data;
-        }
-    }
-
-    /** The callback that is executed when the location data is fetched from the source.
-     */
-    function onGeoSourceCallback(data) {
-        var initialized = false;
-        geolocator.location = null;
-        delete geolocator.__ipscb;
-
-        function gLoadCallback() {
-            if (sourceIndex === 2) { // Wikimedia
-                if (window.Geo !== undefined) {
-                    buildLocation(sourceIndex, window.Geo);
-                    delete window.Geo;
-                    initialized = true;
-                }
-            } else {
-                if (data !== undefined && typeof data !== 'string') {
-                    buildLocation(sourceIndex, data);
-                    initialized = true;
-                }
-            }
-
-            if (initialized === true) {
-                finalize(geolocator.location.coords);
-            } else {
-                if (onError) { onError(new Error(data || 'Could not get location.')); }
-            }
-        }
-
-        loadGoogleMaps(gLoadCallback);
-    }
-
-    /** Loads the (jsonp) source. If the source does not support json-callbacks;
-     *  the callback is executed dynamically when the source is loaded completely.
-     */
-    function loadIpGeoSource(source) {
-        if (source.cbParam === undefined || source.cbParam === null || source.cbParam === '') {
-            loadScript(source.url, onGeoSourceCallback, true);
-        } else {
-            loadScript(source.url + '?' + source.cbParam + '=geolocator.__ipscb', undefined, true); //ip source callback
-        }
-    }
-
-    return {
-
-        // ---------------------------------------
-        // PUBLIC PROPERTIES
-        // ---------------------------------------
-
-        /** The recent location information fetched as an object.
-         */
-        location: null,
-
-        // ---------------------------------------
-        // PUBLIC METHODS
-        // ---------------------------------------
-
-        /** Gets the geo-location by requesting user's permission.
-         */
-        locate: function (successCallback, errorCallback, fallbackToIP, html5Options, mapCanvasId) {
-            onSuccess = successCallback;
-            onError = errorCallback;
-            mCanvasId = mapCanvasId;
-            function gLoadCallback() { getPosition(fallbackToIP, html5Options); }
-            loadGoogleMaps(gLoadCallback);
-        },
-
-        /** Gets the geo-location from the user's IP.
-         */
-        locateByIP: function (successCallback, errorCallback, ipSourceIndex, mapCanvasId) {
-            sourceIndex = (typeof ipSourceIndex !== 'number' ||
-                (ipSourceIndex < 0 || ipSourceIndex >= ipGeoSources.length)) ? defaultSourceIndex : ipSourceIndex;
-            onSuccess = successCallback;
-            onError = errorCallback;
-            mCanvasId = mapCanvasId;
-            geolocator.__ipscb = onGeoSourceCallback;
-            loadIpGeoSource(ipGeoSources[sourceIndex]);
-        },
-
-        /** Checks whether the type of the given object is HTML5
-         *  `PositionError` and returns a `Boolean` value.
-         */
-        isPositionError: function (error) {
-            return Object.prototype.toString.call(error) === '[object PositionError]';
-        }
-    };
-}());
 (function ($) {
 
     $.fn.jalert = function (options) {
@@ -8637,9 +3994,9 @@ var geolocator = (function () {
             useTitles: false
         };
 
-        var tmpl = '<div class="alert alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span><%= msg %></span></div>';
+        var tmpl = '<div class="alert alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span><%= msg %></span></div>';
 
-        var $alert = $('<div class="alert alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span></span></div>'); //holds reference to actual alert object, this is checked if it already exists since the alert dismissal will actually remove the alert.
+        var $alert = $('<div class="alert alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span></span></div>'); //holds reference to actual alert object, this is checked if it already exists since the alert dismissal will actually remove the alert.
 
 
 
@@ -8759,6 +4116,7 @@ var geolocator = (function () {
                     $this = el;
                 }
                 text = $this.html();
+                $this.attr('data-mg2-submit', '');
                 if (settings.location == 'in') {
                     //el.append(img);
                     $this.html(img);
@@ -8771,6 +4129,7 @@ var geolocator = (function () {
 
         this.off = function () {
             try {
+                $this.attr('data-mg2-submit', 'login');
                 $this.html(text);
                 img.remove();
             } catch (e) {
@@ -8795,8 +4154,6 @@ var geolocator = (function () {
 var ConnextLogger = function ($) {
 
     //#region GLOBALS
-
-    var pName = 'Logger';
 
     var isDebugging = true; //default logLevel is 'debug'
 
@@ -8825,7 +4182,7 @@ var ConnextLogger = function ($) {
             //once we hit an object we exit loop and create a string of from str array + the object.
             if (argsLen > 0) {
                 $.each(args, function (k, v) {
-                    if (typeof v == 'string') {
+                    if (typeof v == "string") {
                         arrStrs.push(v);
                     } else {
                         arrObjs.push(v);
@@ -8853,26 +4210,26 @@ var ConnextLogger = function ($) {
             var args = arguments;
             //only call log if we are debugging
             if (isDebugging) {
-                log('log', 'Connext >>>> DEBUG <<<<< ', args);
+                log("log", "Connext >>>> DEBUG <<<<< ", args);
                 
             }
         },
         log: function () {
-            log('log', 'Connext >>>> LOG <<<<< ', arguments);
+            log("log", "Connext >>>> LOG <<<<< ", arguments);
         },
         info: function () {
-            log('info', 'Connext >>>> INFO <<<<< ', arguments);
+            log("info", "Connext >>>> INFO <<<<< ", arguments);
         },
         warn: function () {
-            log('warn', 'Connext >>>> WARN <<<<< ', arguments);
+            log("warn", "Connext >>>> WARN <<<<< ", arguments);
         },
         error: function () {
             //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
-            log('exception', 'MG2Connext >>>> ERROR <<<<< ', arguments);
+            log("exception", "MG2Connext >>>> ERROR <<<<< ", arguments);
         },
         exception: function () {
             //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
-            log('error', 'MG2Connext >>>> EXCEPTION <<<<< ', arguments);
+            log("error", "MG2Connext >>>> EXCEPTION <<<<< ", arguments);
         },
         setDebug: function (_isDebugging) {
             isDebugging = _isDebugging;
@@ -8885,11 +4242,12 @@ var ConnextCommon = function () {
     //Holds common objects, enums and lookups.
     return {
         S3RootUrl: {
-            dev: 'https://s3.amazonaws.com/connext.dev/',
-            test: 'https://s3.amazonaws.com/connext.test/',
-            prod: 'https://s3.amazonaws.com/connext.prod/',
-            stage: 'https://s3.amazonaws.com/connext.stage/',
-            prod: 'https://s3.amazonaws.com/connext.prod/'
+            dev: 'https://mg2assetsdev.blob.core.windows.net/connext/dev/',
+            test: 'https://mg2assetsdev.blob.core.windows.net/connext/test/',
+            demo: 'https://mg2assetsdev.blob.core.windows.net/connext/demo/',
+            stage: 'https://prodmg2.blob.core.windows.net/connext/stage/',
+            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/',
+            prod: 'https://prodmg2.blob.core.windows.net/connext/prod/'
         },
         S3LastPublishDatePath: 'data/last_publish/<%= siteCode %>.json',
         CSSPluginUrl: {
@@ -8897,6 +4255,7 @@ var ConnextCommon = function () {
             dev: 'https://mg2assetsdev.blob.core.windows.net/connext/dev/1.3/themes/',
             test: 'https://mg2assetsdev.blob.core.windows.net/connext/test/1.3/themes/',
             stage: 'https://mg2assetsdev.blob.core.windows.net/connext/stage/1.3/themes/',
+            stage: 'https://mg2assetsdev.blob.core.windows.net/connext/test20/1.6/themes/',
             demo: 'https://mg2assetsdev.blob.core.windows.net/connext/demo/1.3/themes/',
             prod: 'https://cdn.mg2connext.com/prod/1.3/themes/'
         },
@@ -8905,10 +4264,11 @@ var ConnextCommon = function () {
             dev: 'https://dev-connext-api.azurewebsites.net/',
             test: 'https://test-connext-api.azurewebsites.net/',
             stage: 'https://stage-connext-api.azurewebsites.net/',
+            test20: 'https://test20-connext-api.azurewebsites.net/',
             demo: 'https://demo-connext-api.azurewebsites.net/',
             prod: 'https://api.mg2connext.com/'
         },
-        Environments: ['localhost', 'dev', 'test', 'stage', 'demo', 'prod'],
+        Environments: ['localhost', 'dev', 'test', 'stage', 'demo', 'prod', 'test20'],
         IPInfo: window.location.protocol + '//freegeoip.net/json/',
         StorageKeys: {
             configuration: 'Connext_Configuration',
@@ -8943,11 +4303,12 @@ var ConnextCommon = function () {
             2: 'Time',
             6: 'Register',
             11: 'CustomAction',
-            27: 'UserState'
+            27: 'UserState',
+
         },
         ActionOptionMap: { //this maps action option values to this parent name...this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
-            Who: [11, 12, 5, 6, 14, 16, 17, 18, 19, 20, 21], //ActionOption classes for WHO
-            What: [2,7,13,20,15,22], //ActionOption classes for WHO
+            Who: [11, 12, 5, 6, 14, 16, 17, 18, 19, 21, 23], //ActionOption classes for WHO
+            What: [2, 7, 13, 20, 15, 22], //ActionOption classes for WHO
             When: [8,9,10] //ActionOption classes for WHEN
         },
         WhenClassMap: { //this maps the when options based on ClassId....this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
@@ -8961,7 +4322,11 @@ var ConnextCommon = function () {
             "=": "==",
             "Equal": "==",
             "Equals": "==",
-            "Not Equals": "!="
+            "Not Equals": "!=",
+            "More Then": ">",
+            "Less Then": ">",
+            "More Or Equal Then": ">=",
+            "Less Or Equal Then": "<="
         },
         ERROR: {
             NO_CONFIG: {
@@ -8981,17 +4346,17 @@ var ConnextEvents = function ($) {
 
     //#region GLOBALS
 
-    var NAME = 'Events';
+    var NAME = "Events";
 
     var OPTIONS;
 
     //local reference to Connext.Logger
     var LOGGER;
-    
     //not sure if there is a better way to do this, but this holds refernces to functions we should fire on certain events. (since the passed in 'event' on 'fire' is just a string we can't check if that string is a function.
     //NOTE: DEFAULT_FUNCTIONS are only fired when debug=true, since these are mainly used for Logging or updating the Debug Details panel. (This check is handled in the 'fire' function, so we don't need to check this again within any of the default functions).
     var DEFAULT_FUNCTIONS = { 
         "onMeterLevelSet": onMeterLevelSet,
+        "onDynamicMeterFound":onDynamicMeterFound,
         "onCampaignFound": onCampaignFound,
         "onConversationDetermined": onConversationDetermined,
         "onHasAccessToken": onHasAccessToken,
@@ -9007,7 +4372,7 @@ var ConnextEvents = function ($) {
         "onActionClosed": onActionClosed,
         "onFlittzButtonClick": onFlittzButtonClick,
         "onInit": onInit,
-        "onButtonClick": onButtonClick,
+        "onButtonClick": onButtonClick
     };
 
     var NOTES = []; //(only used in debugging) - Holds array of messages from Events fired from the plugin. This array is displayed in the 'Notes' section of the Debug Details. It let's a user know major events and their results without having to dig through the console. Array is parsed using NOTES.join('<BR />') so they are displayed on separate lines within the Notes section (easier and faster than using UL and add LI's).
@@ -9020,9 +4385,9 @@ var ConnextEvents = function ($) {
         /// <summary>Instantite the plugin.</summary>
         /// <param>Nothing</param>
         /// <returns>Nothing</returns>
-        var fnName = 'Init';
+        var fnName = "Init";
         try {
-            LOGGER.debug(NAME, fnName, 'Initializing Events...');
+            LOGGER.debug(NAME, fnName, "Initializing Events...");
 
         } catch (e) {
             console.error(NAME, fnName, e);
@@ -9037,56 +4402,57 @@ var ConnextEvents = function ($) {
         /// <summary>This just adds to the NOTES array to show in the debug detail panel</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onCriticalError';
+        var fnName = "onCriticalError";
         try {
             //LOGGER.debug('Fire Default onCriticalError function.', e);
-            
-            NOTES.push(note);
-            $('#ddNote').html(note);
+            if (Connext.GetOptions().debug) {
+                NOTES.push(note);
+                $("#ddNote").html(note);
+            }
             
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
     function onInit(e) {
-        var fnName = 'onInit';
+        var fnName = "onInit";
         try {
-            LOGGER.debug('Fire Default onInit function.', e);
+            LOGGER.debug("Fire Default onInit function.", e);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
     function onFlittzPaywallShown(e) {
-        var fnName = 'onFlittzPaywallShown';
+        var fnName = "onFlittzPaywallShown";
         try {
-            if ((typeof Flittz) != undefined) {
-                e.conversation = Connext.Storage.GetCurrentConverstaion();
-                e.viewCount = Connext.Campaign.GetCurrentConversationViewCount();
-                e.hasFlittz = (typeof Flittz) != undefined;
-                Flittz.PushData('Connext-onFlittzPaywallShown', e);
+            if (OPTIONS.integrateFlittz) {
+                e.EventData.conversation = Connext.Storage.GetCurrentConverstaion();
+                e.EventData.viewCount = Connext.Campaign.GetCurrentConversationViewCount();
+                e.EventData.hasFlittz = OPTIONS.integrateFlittz;
+                window.Flittz.PushData("Connext-onFlittzPaywallShown", e);
             }
-            LOGGER.debug('Flittz paywall shown', e);
+            LOGGER.debug("Flittz paywall shown", e);
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
     function onFlittzButtonClick(e) {
-        var fnName = 'onFlittzButtonClick';
+        var fnName = "onFlittzButtonClick";
         try {
-            if ((typeof Flittz) != undefined) {
-                e.conversation = Connext.Storage.GetCurrentConverstaion();
-                e.viewCount = Connext.Campaign.GetCurrentConversationViewCount();
-                e.hasFlittz = (typeof Flittz) != undefined;
-                Flittz.PushData('Connext-onFlittzButtonClick', e);
+            if (OPTIONS.integrateFlittz) {
+                e.EventData.conversation = Connext.Storage.GetCurrentConverstaion();
+                e.EventData.viewCount = Connext.Campaign.GetCurrentConversationViewCount();
+                e.EventData.hasFlittz = OPTIONS.integrateFlittz;
+                window.Flittz.PushData("Connext-onFlittzButtonClick", e);
             }
-            LOGGER.debug('Click on Flittz button', e);
+            LOGGER.debug("Click on Flittz button", e);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9094,27 +4460,45 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onCriticalError';
+        var fnName = "onCriticalError";
         try {
-            LOGGER.debug('Fire Default onCriticalError function.', e);
-            NOTES.push(e.message);
-            $('#ddNote').html(e.message);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onCriticalError function.", e);
+                NOTES.push(e.EventData.message);
+                $("#ddNote").html(e.EventData.message);
+            }
             
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
-
+    function onDynamicMeterFound(e) {
+        /// <summary></summary>
+        /// <param name="" type=""></param>
+        /// <returns>None</returns>
+        var fnName = "onDynamicMeterFound";
+        try {
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onDynamicMeterFound function.", e);
+                $("#ddMeterSet").html(e.EventData);
+            }
+        } catch (e) {
+            console.error(NAME, fnName, "EXCEPTION", e);
+        }
+    }
     function onMeterLevelSet(e) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onMeterLevelSet';
+        var fnName = "onMeterLevelSet";
         try {
-            LOGGER.debug('Fire Default onMeterLevelSet function.', e);
-            $('#ddMeterLevel').html(Connext.Common.MeterLevels[e.level] + ' (' + e.method + ')');
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onMeterLevelSet function.", e);
+                e.EventData.levelName = Connext.Common.MeterLevels[e.EventData.level];
+                $("#ddMeterLevel").html(e.EventData.levelName + " (" + e.EventData.method + ")");
+            }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
     
@@ -9122,13 +4506,15 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onHasAccessToken';
+        var fnName = "onHasAccessToken";
         try {
-            LOGGER.debug('Fire Default onHasAccessToken function.', e);
-            onDebugNote(e);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onHasAccessToken function.", e);
+                onDebugNote(e);
+            }
             //$('#ddMeterLevel').html(Connext.Common.MeterLevels[e.level] + ' (' + e.method + ')');
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9136,12 +4522,14 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onHasAccess';
+        var fnName = "onHasAccess";
         try {
-            LOGGER.debug('Fire Default onHasAccess function.', e);
-            onDebugNote(e);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onHasAccess function.", e);
+                onDebugNote(e);
+            }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9149,28 +4537,31 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onHasUserToken';
+        var fnName = "onHasUserToken";
         try {
-            LOGGER.debug('Fire Default onHasUserToken function.', e);
-            onDebugNote(e);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onHasUserToken function.", e);
+                onDebugNote(e);
+            }
             //$('#ddMeterLevel').html(Connext.Common.MeterLevels[e.level] + ' (' + e.method + ')');
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
-
     
     function onUserTokenSuccess(e) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onUserTokenSuccess';
+        var fnName = "onUserTokenSuccess";
         try {
-            LOGGER.debug('Fire Default onUserTokenSuccess function.', e);
-            onDebugNote(e);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onUserTokenSuccess function.", e);
+                onDebugNote(e);
+            }
             //$('#ddMeterLevel').html(Connext.Common.MeterLevels[e.level] + ' (' + e.method + ')');
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9178,13 +4569,15 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onAuthorized';
+        var fnName = "onAuthorized";
         try {
-            LOGGER.debug('Fire Default onAuthorized function.', e);
-            onDebugNote(e);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onAuthorized function.", e);
+                onDebugNote(e);
+            }
             //$('#ddMeterLevel').html(Connext.Common.MeterLevels[e.level] + ' (' + e.method + ')');
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9192,13 +4585,15 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onNotAuthorized';
+        var fnName = "onNotAuthorized";
         try {
-            LOGGER.debug('Fire Default onNotAuthorized function.', e);
-            onDebugNote(e);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onNotAuthorized function.", e);
+                onDebugNote(e);
+            }
             //$('#ddMeterLevel').html(Connext.Common.MeterLevels[e.level] + ' (' + e.method + ')');
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9206,12 +4601,14 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onCampaignFound';
+        var fnName = "onCampaignFound";
         try {
-            LOGGER.debug('Fire Default onCampaignFound function.', e);
-            $('#ddCampaign').html(e.Name);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onCampaignFound function.", e);
+                $("#ddCampaign").html(e.EventData.Name);
+            }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
@@ -9219,53 +4616,56 @@ var ConnextEvents = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'onConversationDetermined';
+        var fnName = "onConversationDetermined";
         try {
-            LOGGER.debug('Fire Default onConversationDetermined function.', e);
-            $('#ddCurrentConversation').html(e.Name);
-            if ($.jStorage.get('uniqueArticles')) {
-                $('#ddCurrentConversationArticleViews').html(Connext.Storage.GetViewedArticles(e.id).length);
-            } else $('#ddCurrentConversationArticleViews').html(e.Props.views);
+            if (Connext.GetOptions().debug) {
+                LOGGER.debug("Fire Default onConversationDetermined function.", e);
+                $("#ddCurrentConversation").html(e.EventData.Name);
+                var views = Connext.Campaign.GetCurrentConversationViewCount();
+                $("#ddCurrentConversationArticleViews").html(views);
+            }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     }
 
     function onActionShown(e) {
         
-        var fnName = 'onActionShown';
+        var fnName = "onActionShown";
         try {
-            LOGGER.debug('Fire Default onActionShown', e);
-            if (e.actionDom.hasClass('flittz'))
+            LOGGER.debug("Fire Default onActionShown", e);
+            if (e.EventData.actionDom.hasClass("flittz"))
             {
-                fire("onFlittzPaywallShown", e);
+                Connext.Event.fire("onFlittzPaywallShown", e);
             }
             Connext.Action.actionStartTime = Date.now();
+
         } catch (exc) {
-            console.error(Name, fnName, 'EXCEPTION', exc);
+            console.error(NAME, fnName, "EXCEPTION", exc);
         }
     }
 
     function onActionClosed(e) {
         
-        var fnName = 'onActionClosed';
+        var fnName = "onActionClosed";
         try {
-            LOGGER.debug('Fire Default onActionClosed', e);
-
-            Connext.Action.actionEndTime = Date.now();
-            var difference = Connext.Action.actionEndTime - Connext.Action.actionStartTime;
-            $("#ddViewTime")[0].textContent = difference + 'ms';
+            LOGGER.debug("Fire Default onActionClosed", e);
+            if (Connext.GetOptions().debug) {
+                Connext.Action.actionEndTime = Date.now();
+                var difference = Connext.Action.actionEndTime - Connext.Action.actionStartTime;
+                $("#ddViewTime")[0].textContent = difference + "ms";
+            }
         } catch (exc) {
-            console.error(Name, fnName, 'EXCEPTION', exc);
+            console.error(NAME, fnName, "EXCEPTION", exc);
         }
     }
 
     function onButtonClick(e) {
-        var fnName = 'onButtonClick';
+        var fnName = "onButtonClick";
         try {
-            LOGGER.debug('Fire Default onButtonClick', e);
+            LOGGER.debug("Fire Default onButtonClick", e);
         } catch (exc) {
-            console.error(Name, fnName, 'EXCEPTION', exc);
+            console.error(NAME, fnName, "EXCEPTION", exc);
         }
     }
     
@@ -9280,28 +4680,43 @@ var ConnextEvents = function ($) {
             //return this;
         },
         fire: function (event, data) {
-            var fnName = 'fire';
+            var fnName = "fire";
             try {
-                //checks if we have a callback in Options with the passed in 'event' name. i.e Options['onNoConfigSettingFound']
-                //if (OPTIONS.debug) {
-                    //we are debugging, so check if this event has a default function we should fire.
-                    if (_.isFunction(DEFAULT_FUNCTIONS[event])) {
-                        //LOGGER.debug(NAME, fnName, 'DEFAULT Event function EXISTS');
-                        DEFAULT_FUNCTIONS[event](data);
-                    } else {
-                        //LOGGER.debug(NAME, fnName, 'DEFAULT Event function does not exist');
-                    }
-                //}
+                //add common data
+                var eventResult = {
+                    EventData: data
+                };
 
-                if (_.isFunction(OPTIONS[event])) {
-                    //we have a function for this event, so call it with the passed in 'data' argument.
-                    OPTIONS[event](data);
-                } else {
-                    //no callback function set.
-                    //LOGGER.debug(NAME, fnName, event, ' is not function');
+                var currentConversation = Connext.Storage.GetCurrentConverstaion();
+                    
+                if(currentConversation) {
+                    eventResult.Conversation = currentConversation;
+                    eventResult.Compaing = currentConversation.Name;
+                    eventResult.CampaignId = currentConversation.CampaignId;
+                    eventResult.MeterLevel = Connext.Common.MeterLevels[currentConversation.MeterLevelId];
+                    eventResult.MeterLevelId = currentConversation.MeterLevelId;
                 }
+
+                eventResult.Config = Connext.Storage.GetLocalConfiguration();
+
+                if (_.isFunction(DEFAULT_FUNCTIONS[event])) {
+                    //invoke default event function
+                    DEFAULT_FUNCTIONS[event](eventResult);
+
+                    if (_.isFunction(OPTIONS[event])) {
+                        //invoke custom event function
+                        OPTIONS[event](eventResult);
+                    }
+
+                    //send native custom event (this uses in wordpress)
+                    var customEvent = new CustomEvent(event, { detail: eventResult });
+                    document.dispatchEvent(customEvent);
+                } else {
+                    LOGGER.debug(NAME, fnName, "Event function does not exist");
+                }
+
             } catch (e) {
-                console.error(NAME, 'on', 'EXCEPTION', e);
+                console.error(NAME, "on", "EXCEPTION", e);
             }
         }
     };
@@ -9312,12 +4727,12 @@ var ConnextUtils = function ($) {
 
     //region GLOBALS
 
-    var NAME = 'Utils'; //base name for logging.
+    var NAME = "Utils"; //base name for logging.
 
     //create local reference to logger
     var LOGGER;
+    var curSite;
 
-    
 
     //endregion GLOBALS
 
@@ -9327,36 +4742,35 @@ var ConnextUtils = function ($) {
         /// <summary>This process a configuration into a friendlier JSON object by grouping conversations by meter level and grouping optionv values by class</summary>
         /// <param name="data" type="Object">Configuration object from API</param>
         /// <returns type="Object">Processed Configuration object</returns>
-        var fnName = 'processConfiguration';
+        var fnName = "processConfiguration";
         try {
-            LOGGER.debug(NAME, fnName, 'starting to process...');
-
+            LOGGER.debug(NAME, fnName, "starting to process...");
+            curSite = data.Site;
             //create parent config object we will populate.
             var configuration = {};
 
             //create settings property with only relevant  keys
-            configuration['Settings'] = _.pick(data, 'AccessRules', 'Active', 'Code', 'DefaultMeterLevel', 'CampaignId', 'DynamicMeterId', 'Name', 'LastPublishDate');
-
+            configuration["Settings"] = _.pick(data, "AccessRules", "Active", "Code", "DefaultMeterLevel", "CampaignId", "DynamicMeterId", "Name", "LastPublishDate", "Settings");
+            Connext.Event.fire("onDynamicMeterFound", data.DynamicMeter.Name);
             //check if we have a LastPublishDate;
             configuration.Settings = checkForLastPublishDate(configuration.Settings);
-            configuration.Settings['LoginModal'] = data.Template ? data.Template.Html : '';
+            configuration.Settings["LoginModal"] = data.Template ? data.Template.Html : "";
             //set 'Site' specific settings, no need to process, just assign entire Site object.
-            configuration['Site'] = data.Site;
+            configuration["Site"] = data.Site;
 
             //process the campaign data (group/organize all conversations and conversation actions).
-            configuration['Campaign'] = processCampaignData(data.Campaign);
-
+            configuration["Campaign"] = processCampaignData(data.Campaign);
             //we don't need to process this object, except to make sure the rules are ordered correctly.
             data.DynamicMeter.Rules = _.sortBy(data.DynamicMeter.Rules, function (obj) {
                 return obj.Priority;
             });
-            configuration['DynamicMeter'] = processDynamicMeter(data.DynamicMeter);
+            configuration["DynamicMeter"] = processDynamicMeter(data.DynamicMeter);
 
-            LOGGER.debug(NAME, fnName, 'done processing configuration', configuration);
+            LOGGER.debug(NAME, fnName, "done processing configuration", configuration);
 
             return configuration;
         } catch (e) {
-            console.log(NAME, fnName, 'EXCEPTION', e);
+            console.log(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9364,17 +4778,17 @@ var ConnextUtils = function ($) {
         /// <summary>This checks if we have a LastPublishDate setting. This should always be set (when a new configuration is saved in the Admin this should be populated with the current datetime), but just in case we check it here. If it is null, we set this to today's date. We do this because this field is required when we check if a configuration is old.</summary>
         /// <param name="configurationSettings" type="Object">configuration.Settings object</param>
         /// <returns type="Object">Returns modified or same configuration.Settings</returns>
-        var fnName = 'checkForLastPublishDate';
+        var fnName = "checkForLastPublishDate";
         try {
             //LOGGER.debug(pName, fnName);
             if (!configurationSettings.LastPublishDate) {
-                LOGGER.warn(NAME, fnName, 'Configuration.Settings.LastPublishDate is null...setting it to todays datetime.');
-                configurationSettings.LastPublishDate = moment().format();
+                LOGGER.warn(NAME, fnName, "Configuration.Settings.LastPublishDate is null...setting it to todays datetime.");
+                configurationSettings.LastPublishDate = new Date().format();
             }
 
             return configurationSettings;
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return configurationSettings; //even if error, return original configurationSettings no matter what.
         }
     };
@@ -9383,21 +4797,21 @@ var ConnextUtils = function ($) {
         /// <summary>Takes the Campaign property from a Configuration and processes it.  This will group coversations by MeterLevel, process Action array and add/set any Conversation properties that are determined here.</summary>
         /// <param name="campaign" type="Object">Campaign object</param>
         /// <returns type="Object">Processed Campaign object</returns>
-        var fnName = 'processCampaignData';
+        var fnName = "processCampaignData";
         try {
             LOGGER.debug(NAME, fnName);
 
             //for now, at the Campaign level we are only picking the Name and id keys to return
-            var processedCampaign = _.pick(campaign, 'id', 'Name', 'Conversations');
+            var processedCampaign = _.pick(campaign, "id", "Name", "Conversations");
 
             processedCampaign.Conversations = processConversationData(processedCampaign.Conversations);
 
 
-            LOGGER.debug(NAME, fnName, 'processedCampaign', processedCampaign);
+            LOGGER.debug(NAME, fnName, "processedCampaign", processedCampaign);
             return processedCampaign;
 
         } catch (e) {
-            console.log(pName, fnName, 'EXCEPTION', e);
+            console.log(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9406,13 +4820,13 @@ var ConnextUtils = function ($) {
         /// <summary>Takes the conversation object from Configuration.Campaign.Conversations and processes it.  This will group coversations by MeterLevel, process Action array and add/set any Conversation properties that are determined here.</summary>
         /// <param name="conversations" type="Object">Conversation object</param>
         /// <returns type="Object">Processed Conversation object</returns>
-        var fnName = 'processConversationData';
+        var fnName = "processConversationData";
         try {
-            LOGGER.debug(NAME, fnName, 'conversations', conversations);
+            LOGGER.debug(NAME, fnName, "conversations", conversations);
 
             //create new conversation object we will populate.
             var defaultConversationProps = {
-                views: 0, //current number of views
+                //views: 0, //current number of views
                 paywallLimit: null, //paywall limit (set when we process this conversation actions)
                 isExpired: false, //flags this conversation as expired so on next article view we know we need to move this user into another conversation (set below).
                 expiredReason: null, //this will be set with the reason this conversation expired (Time, CustomActionName, Registration etc...).
@@ -9428,9 +4842,9 @@ var ConnextUtils = function ($) {
 
             $.each(conversations, function (key, val) {
                 //'val' is a single conversation object.  We use this to group val.options and fix naming conventions.
-                
-                LOGGER.debug(NAME, fnName, 'conversations.EACH', key, val);
-                
+
+                LOGGER.debug(NAME, fnName, "conversations.EACH", key, val);
+
                 var groupedOptions = _.groupBy(val.Options, function (obj) {
                     //console.log('obj', obj);
                     return obj.ConversationOption.ParentConversationOptionId;
@@ -9439,7 +4853,7 @@ var ConnextUtils = function ($) {
                 var processedGroup = {};
 
                 $.each(groupedOptions, function (key, val) {
-                    console.info('GROUPEDOPTIONS.EACH', key, val);
+                    console.info("GROUPEDOPTIONS.EACH", key, val);
                     var optionObj = {};
 
                     $.each(val, function (k, v) {
@@ -9459,11 +4873,11 @@ var ConnextUtils = function ($) {
                 val.Actions = processConversationActions(val.Actions);
 
             });
-            
+
 
             //group conversations by MeterLevelId
-            var groupedConversationsByMeterLevel = _.groupBy(conversations, 'MeterLevelId');
-            
+            var groupedConversationsByMeterLevel = _.groupBy(conversations, "MeterLevelId");
+
             //we grouped by 'MeterLevelId', replace these keys (which are integers) into their string equaliviants (from Connext.Common.MeterLevels).
             groupedConversationsByMeterLevel = _.replaceObjKeysByMap(groupedConversationsByMeterLevel, Connext.Common.MeterLevels);
 
@@ -9473,7 +4887,7 @@ var ConnextUtils = function ($) {
             return groupedConversationsByMeterLevel;
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9482,27 +4896,36 @@ var ConnextUtils = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'processConversationActions';
+        var fnName = "processConversationActions";
         try {
             //LOGGER.debug(NAME, fnName, 'actions', actions);
 
             //loop through actions to process action option values and group them into 'Who' 'What' and 'When' properties
             $.each(actions, function (key, val) {
                 //val is an Action object    
-
+                
+                var exceptions = curSite.Client ? curSite.Client.Client_ActionOption_Exceptions : [];
+                $.each(exceptions,
+                    function (key, value) {
+                        val.ActionOptionValues = _.reject(val.ActionOptionValues,
+                            function (a) {
+                                return a.ActionOptionId == value.ActionOptionId ||
+                                    a.ActionOption.ActionOptionParentId == value.ActionOptionId;
+                            });
+                    });
                 var whoOptions = _.filter(val.ActionOptionValues, function (obj) {
                     //console.log('obj', obj, obj.ActionOption.Action_OptionClass.id);
-                    return _.contains(Connext.Common.ActionOptionMap.Who, obj.ActionOption.Action_OptionClass.id);
+                    return _.contains(Connext.Common.ActionOptionMap.Who, obj.ActionOption.ClassId);
                 });
 
                 var whatOptions = _.filter(val.ActionOptionValues, function (obj) {
                     //console.log('obj', obj, obj.ActionOption.Action_OptionClass.id);
-                    return _.contains(Connext.Common.ActionOptionMap.What, obj.ActionOption.Action_OptionClass.id);
+                    return _.contains(Connext.Common.ActionOptionMap.What, obj.ActionOption.ClassId);
                 });
 
                 var whenOptions = _.filter(val.ActionOptionValues, function (obj) {
                     //console.log('obj', obj, obj.ActionOption.Action_OptionClass.id);
-                    return _.contains(Connext.Common.ActionOptionMap.When, obj.ActionOption.Action_OptionClass.id);
+                    return _.contains(Connext.Common.ActionOptionMap.When, obj.ActionOption.ClassId);
                 });
 
                 //process who actions and assign returned object to val.Who property
@@ -9516,15 +4939,15 @@ var ConnextUtils = function ($) {
 
                 //we are done processing optionValues, so remove this key since the data is no longer needed.
                 //referencing actions by key since val is a local object, we want to effect parent actions key since that is what is returned.
-                actions[key] = _.omit(val, 'ActionOptionValues');
-                
+                actions[key] = _.omit(val, "ActionOptionValues");
+
             });
 
             //actions have been processed so sort them by 'Order' property.
-            return _.sortBy(actions, 'Order');
+            return _.sortBy(actions, "Order");
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9533,7 +4956,7 @@ var ConnextUtils = function ($) {
         /// <summary>Takes an array of 'WHO' action options and creates a more readable object for processing.</summary>
         /// <param name="options" type="Array">Array of who options for a given action.</param>
         /// <returns type="Object">Proccessed 'Who' object</returns>
-        var fnName = 'processWhoOptions';
+        var fnName = "processWhoOptions";
         try {
             //LOGGER.debug(NAME, fnName, 'options', options);
 
@@ -9558,7 +4981,7 @@ var ConnextUtils = function ($) {
 
                     //group View options based on Action_OptionClass
                     var groupedViewOptions = _.groupBy(val, function (obj) {
-                        return obj.ActionOption.Action_OptionClass.id;
+                        return obj.ActionOption.ClassId;
                     });
 
                     //LOGGER.warn(NAME, fnName, 'groupedViewOptions.EACH', groupedViewOptions);
@@ -9570,15 +4993,15 @@ var ConnextUtils = function ($) {
 
                         //add view object to who.Views array.
                         var viewOptions = {}; //empty object to assign options to based on DisplayName and Value
-                        viewOptions[val[0].ActionOption.DisplayName] = val[0].Value
-                        viewOptions[val[1].ActionOption.DisplayName] = val[1].Value
+                        viewOptions[val[0].ActionOption.DisplayName] = val[0].Value;
+                        viewOptions[val[1].ActionOption.DisplayName] = val[1].Value;
 
                         who.Views.push(viewOptions);
                     });
 
                 } else {
                     //not a view article option, so loop through all options in this group. Create a new object based on ClassOption name and assign child properties based on DisplayName and Value.
-                    
+
                     var optionObj = {}; //empty object to assign prop/val based on DisplayName and Value.
 
                     $.each(val, function (key, val) {
@@ -9587,18 +5010,18 @@ var ConnextUtils = function ($) {
                     });
 
                     //set to the who object with the property being the OptionClass name (i.e JavascriptCriteria, GeoCriteria) so all grouped options live under the same property within 'who'
-                    who[val[0].ActionOption.Action_OptionClass.Name] = optionObj
+                    who[val[0].ActionOption.Action_OptionClass.Name] = optionObj;
 
                 }
 
 
 
             });
-            
+
             return who;
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9607,7 +5030,7 @@ var ConnextUtils = function ($) {
         /// <summary>Takes an array of 'WHAT' action options and creates a more readable object for processing.</summary>
         /// <param name="options" type="Array">Array of what options for a given action.</param>
         /// <returns type="Object">Proccessed 'What' object</returns>
-        var fnName = 'processWhatOptions';
+        var fnName = "processWhatOptions";
         try {
             //LOGGER.debug(NAME, fnName, 'options', options);
             var what = {}; //empty object to assign properties to based on options
@@ -9620,7 +5043,7 @@ var ConnextUtils = function ($) {
             return what;
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9629,7 +5052,7 @@ var ConnextUtils = function ($) {
         /// <summary>Takes an array of 'WHEN' action options and creates a more readable object for processing.</summary>
         /// <param name="options" type="Array">Array of WHEN options for a given action.</param>
         /// <returns type="Object">Proccessed 'When' object</returns>
-        var fnName = 'processWhenOptions';
+        var fnName = "processWhenOptions";
         try {
             //LOGGER.debug(NAME, fnName, 'options', options);
 
@@ -9642,11 +5065,11 @@ var ConnextUtils = function ($) {
 
             });
             //since these when 'options' are all the same 'type' we assign the when object with a property based on the WhenClassMap and the first object in the options array OptionClassId (not ideal, needs updated).
-            when[Connext.Common.WhenClassMap[options[0].ActionOption.Action_OptionClass.id]] = whenOptions;
+            when[Connext.Common.WhenClassMap[options[0].ActionOption.ClassId]] = whenOptions;
             return when;
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9654,7 +5077,7 @@ var ConnextUtils = function ($) {
         /// <summary>Segments are already grouped, this is just taking segmentoptionvalues and creating a more user friendly json object.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'processDynamicMeter';
+        var fnName = "processDynamicMeter";
         try {
             LOGGER.debug(NAME, fnName, dynamicmeter);
 
@@ -9669,39 +5092,50 @@ var ConnextUtils = function ($) {
                     ////LOGGER.debug('classname', className);
 
                     var segmentOptions = {}; //empty object which we'll populate with key/val based on DisplayName and Value
+                    var exceptions = curSite.Client ? curSite.Client.Client_SegmentOption_Exceptions : [];
+                    var newSegmentOptionValues;
+                    $.each(exceptions,
+                        function (key, value) {
+                            newSegmentOptionValues = _.reject(v.SegmentOptionValues,
+                                function (a) {
+                                    return a.SegmentOptionId == value.SegmentOptionId ||
+                                        a.SegmentOption.SegmentOptionParentId == value.SegmentOptionId;
+                                });
+                            if (newSegmentOptionValues.length != v.SegmentOptionValues.length) {
+                                val.Segments[k] = null;
+                            }
+                        });
+                    if (val.Segments[k] != null) {
+                        $.each(v.SegmentOptionValues,
+                            function(key, val) {
+                                //segmentObject[val.SegmentOption.Segment_OptionClass.Name][val.SegmentOption.DisplayName] = val.Value;
+                                segmentOptions[val.SegmentOption.DisplayName] = val.Value;
+                            });
 
-                    $.each(v.SegmentOptionValues, function (key, val) {
-                        //segmentObject[val.SegmentOption.Segment_OptionClass.Name][val.SegmentOption.DisplayName] = val.Value;
-                        segmentOptions[val.SegmentOption.DisplayName] = val.Value;
-                    });
+                        //create/set new property called Options with newly processed options object
+                        v.Options = segmentOptions;
 
-                    //create/set new property called Options with newly processed options object
-                    v.Options = segmentOptions;
-
-                    //add 'SegmentType' property based on the 'className' we determined.  This will be used when calculating the meter level so we don't have to look into the Options object.
-                    v.SegmentType = className;
-
-                    //remove the SegmentOptionValues array (referencing 'val' object by key since 'v' is a local object, we want to effect parent segment key since that is what is returned)
-                    val.Segments[k] = _.omit(v, 'SegmentOptionValues');
-
+                        //add 'SegmentType' property based on the 'className' we determined.  This will be used when calculating the meter level so we don't have to look into the Options object.
+                        v.SegmentType = className;
+                        //remove the SegmentOptionValues array (referencing 'val' object by key since 'v' is a local object, we want to effect parent segment key since that is what is returned)
+                        val.Segments[k] = _.omit(v, "SegmentOptionValues");
+                    }
                 });
+                val.Segments = _.filter(val.Segments, function (s) { return s != null });
 
             });
 
             return dynamicmeter;
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var mergeConfiguration = function (newConfig) {
-        /// <summary>Saves and overwrites current local configuration with newConfig from DB. We also update all 'current' conversations with the data from newConfig, while maintaining any user specific data.</summary>
-        /// <param name="newConfig" type="Object">New Configuration from DB/param>
-        /// <returns>None</returns>
-        var fnName = 'mergeConfiguration';
+        var fnName = "mergeConfiguration";
         try {
-            LOGGER.debug(NAME, fnName, 'newConfig', newConfig);
+            LOGGER.debug(NAME, fnName, "newConfig", newConfig);
 
             //We don't really merge the 'configuration' object, we are actually going to replace the current configuration with the new configuration.  
             //This is because the 'configuration' object doesn't hold any user specific data that is stored for each user besides the conversations, but the configuration.Campaign.Conversations array just holds the data that we use to determine FUTURE conversations/actions.  
@@ -9713,12 +5147,12 @@ var ConnextUtils = function ($) {
             ////var mergedConfig = $.extend(true, currentLocalConfig, newConfig);
             //////we extend the currentLocalConfig and the newConfig.
 
-            
+
 
             //get the array of current conversations from local storage.
             var currentConversations = Connext.Storage.GetCurrentConversations();
 
-            LOGGER.debug(NAME, fnName, 'CurrentConversations', currentConversations);
+            LOGGER.debug(NAME, fnName, "CurrentConversations", currentConversations);
 
             //create empty object to store the new conversations.  
             //we are doing this so we don't have to worry about removing a stored conversation if it no longer exists in the newConfig.Campaign.Conversations array. 
@@ -9727,14 +5161,14 @@ var ConnextUtils = function ($) {
             //we now loop through the current (local) conversations and do 2 things A) Check if this conversation still exists in the new configuration, B) update/merge appropriate conversation data based on any changes in the new configuration, but still maintain current 'user related data'.
             $.each(currentConversations, function (key, val) {
                 //'key' is the meterlevel name for this conversation (Free, Metered, Premium) and 'val' is the conversation object.
-                LOGGER.debug(NAME, fnName, 'currentConversations.EACH', key, val);
+                LOGGER.debug(NAME, fnName, "currentConversations.EACH", key, val);
 
                 //this searches the _Newconfig object to see if this conversation still exists. If it does we update this conversation in the _Newconfig object with stored user data (right now, just views).
                 //var foundStoredConvo = _.findByKey(newConfig.Campaign.Conversations[MeterLevelsDict[key]], { id: val.id });
 
                 //search the newConfig.Campaign.Conversations.METERLEVEL array on id and val.id. 
                 var foundStoredConvo = _.findByKey(newConfig.Campaign.Conversations[key], { id: val.id });
-                LOGGER.debug(NAME, fnName, 'currentConversations.EACH', 'foundStoredConvo', foundStoredConvo);
+                LOGGER.debug(NAME, fnName, "currentConversations.EACH", "foundStoredConvo", foundStoredConvo);
 
                 if (foundStoredConvo) {
                     //this stored conversation still exists in the newConfigration.Campaign.Conversations array
@@ -9745,25 +5179,26 @@ var ConnextUtils = function ($) {
                     newCurrentConversations[key] = $.extend({}, foundStoredConvo); //using $.extend because this creates a new object and not a reference.;
 
                     //the newCurrentConversations[key] object has all the settings from the newConfig object, now we replace the 'Props' key which holds any user specific data that we need to preserve (views, Date.Start, Date.Expiration etc...).
+                    console.log("val.Props", val.Props);
                     newCurrentConversations[key].Props = val.Props;
                 }
-                
+
             });
-            
+
             //we now save the 'newCurrentConversations' Object to local storage.  Since we created a new 'current conversation' object and only added conversations from the 'newConfig' object to this new Object we automatically take care of the scenario that a user is in a conversation that is then deleted from the Admin.  
             //Since this conversation doesn't exist in the 'newConfig' object, we will not add it to the 'newConversation' object, therefore if this user was in a conversation that was deleted they will just move into a new conversation (as if this was there first time visiting, so first conversation in this campaign).
             Connext.Storage.SetCurrentConversations(newCurrentConversations);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var saveConfiguration = function () {
-        var siteCode = $('#ConnextSiteCode').val();
-        var configCode = $('#ConnextConfigCode').val();
-        var isCustomConfiguration = $('#ConnextCustomConfiguration').prop('checked');
-        
+        var siteCode = $("#ConnextSiteCode").val();
+        var configCode = $("#ConnextConfigCode").val();
+        var isCustomConfiguration = $("#ConnextCustomConfiguration").prop("checked");
+
         if (isCustomConfiguration) {
             //remove all configuration
             Connext.Storage.ClearConfigSettings();
@@ -9778,86 +5213,87 @@ var ConnextUtils = function ($) {
         /// <summary>This sets up the Debug Details panel and any event listeners for the debug panel.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'handleDebugDetails';
+        var fnName = "handleDebugDetails";
         try {
             try {
                 //creates and appends debug details html.
-                var html = '<div class="debug_details opened" style="left: 0;"><div class="debug_details_icon">&nbsp;</div><div class="debug_details_content"><h4>Debug Details</h4><ul><li class="debug_details_header hide_on_mobile"><label>Meter Level: <strong id="ddMeterLevel">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Campaign: <strong id="ddCampaign">...</strong></label><label>Conversation: <strong id="ddCurrentConversation">...</strong></label><label>Article Views: <strong id="ddCurrentConversationArticleViews">...</strong></label><label>Articles Left: <strong id="ddCurrentConversationArticleLeft">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>View Time: <strong id="ddViewTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Current Zip: <strong id="ddZipCode">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Auth Time: <strong id="ddAuthTime">...</strong></label><label>Processing Time: <strong id="ddProcessingTime">...</strong></label><label>Total Time: <strong id="ddTotalProcessingTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Note: <strong id="ddNote">...</strong></label></li><li class="debug_details_header hide_on_mobile"><div id="ConnextCustomConfigurationDiv"><label for="ConnextSiteCode">Site code: </label><input type="text" id="ConnextSiteCode"><label for="ConnextConfigCode">Config code: </label><input type="text" id="ConnextConfigCode"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomConfiguration">Set configuration</a></div><label class="overlay_label check" for="ConnextCustomConfiguration">Use custom configuration: </label> <input type="checkbox" id="ConnextCustomConfiguration"><label class="overlay_label check" for="ConnextCustomConfiguration">Unique Articles Count: </label> <input type="checkbox" id="uniqueArticles"></li><li class="debug_details_header hide_on_mobile"><label for="ConnextCustomTimeChk" class="overlay_label check">Custom Time: </label> <input type="checkbox" id="ConnextCustomTimeChk"><div id="ConnextCustomTimeDiv"><input type="text" id="ConnextCustomTimeTxt" placeholder="MM/DD/YYYY" value="" name="name" class="text_input hint"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomTimeBtn">Set</a></div></li><li class="debug_details_header hide_on_mobile"><a href="#" class="more highlight margin_top_15" id="connextClearAllData">Clear All Data</a></li></ul></div></div>';
-                $('body').append(html);
+                var html = '<div class="debug_details opened" style="left: 0;"><div class="debug_details_icon">&nbsp;</div><div class="debug_details_content"><h4>Debug Details</h4><ul><li class="debug_details_header hide_on_mobile"><label>Meter Level: <strong id="ddMeterLevel">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Meter Set: <strong id="ddMeterSet">...</strong></label><label>Campaign: <strong id="ddCampaign">...</strong></label><label>Conversation: <strong id="ddCurrentConversation">...</strong></label><label>Article Views: <strong id="ddCurrentConversationArticleViews">...</strong></label><label>Articles Left: <strong id="ddCurrentConversationArticleLeft">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>View Time: <strong id="ddViewTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Current Zip: <strong id="ddZipCode">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Auth Time: <strong id="ddAuthTime">...</strong></label><label>Processing Time: <strong id="ddProcessingTime">...</strong></label><label>Total Time: <strong id="ddTotalProcessingTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Note: <strong id="ddNote">...</strong></label></li><li class="debug_details_header hide_on_mobile"><div id="ConnextCustomConfigurationDiv"><label for="ConnextSiteCode">Site code: </label><input type="text" id="ConnextSiteCode"><label for="ConnextConfigCode">Config code: </label><input type="text" id="ConnextConfigCode"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomConfiguration">Set configuration</a></div><label class="overlay_label check" for="ConnextCustomConfiguration">Use custom configuration: </label> <input type="checkbox" id="ConnextCustomConfiguration"><label class="overlay_label check" for="ConnextCustomConfiguration">Unique Articles Count: </label> <input type="checkbox" id="uniqueArticles"></li><li class="debug_details_header hide_on_mobile"><label for="ConnextCustomTimeChk" class="overlay_label check">Custom Time: </label> <input type="checkbox" id="ConnextCustomTimeChk"><div id="ConnextCustomTimeDiv"><input type="text" id="ConnextCustomTimeTxt" placeholder="MM/DD/YYYY" value="" name="name" class="text_input hint"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomTimeBtn">Set</a></div></li><li class="debug_details_header hide_on_mobile"><a href="#" class="more highlight margin_top_15" id="connextClearAllData">Clear All Data</a></li></ul></div></div>';
+                $("body").append(html);
 
-                $('#ConnextSetCustomConfiguration').on('click', saveConfiguration);
+                $("#ConnextSetCustomConfiguration").on("click", saveConfiguration);
 
                 //handles when a user clicks the hide/show icon.
-                $('.debug_details_icon').on('click', handleDebugDetailsDisplayClick);
+                $(".debug_details_icon").on("click", handleDebugDetailsDisplayClick);
 
                 //registers 'clearAllData' button click event.
-                $('#connextClearAllData').on('click', clearAllSettings);
+                $("#connextClearAllData").on("click", clearAllSettings);
 
                 //handle custom time section (call this before we setup event listeners for the time checkbox so we set initial values correctly.
                 handleCustomTime();
                 handleCustomConfiguration();
 
                 if (Connext.Storage.GetUserZipCodes()) {
-                    $('#ddZipCode').html(Connext.Storage.GetUserZipCodes().toString());
+                    $("#ddZipCode").html(Connext.Storage.GetUserZipCodes().toString());
                 } else {
-                    $('#ddZipCode').html($.jStorage.get('CustomZip'));
+                    $("#ddZipCode").html($.jStorage.get("CustomZip"));
                 }
-                if ($.jStorage.get('uniqueArticles')) {
-                    $('#uniqueArticles').attr('checked', 'checked');
+                if ($.jStorage.get("uniqueArticles")) {
+                    $("#uniqueArticles").attr("checked", "checked");
                 }
 
-                $('#ConnextCustomConfiguration').on('change', function () {
+                $("#ConnextCustomConfiguration").on("change", function () {
                     var $this = $(this);
-                    if ($this.prop('checked')) {
-                        $('#ConnextCustomConfigurationDiv').show();
+                    if ($this.prop("checked")) {
+                        $("#ConnextCustomConfigurationDiv").show();
                     }
                     else {
-                        $('#ConnextCustomConfigurationDiv').hide();
+                        $("#ConnextCustomConfigurationDiv").hide();
                         Connext.Storage.SetIsCustomConfiguration(false);
                     }
                 });
 
                 //event listener when checkbox is clicked.
-                $('#ConnextCustomTimeChk').on('change', function () {
+                $("#ConnextCustomTimeChk").on("change", function () {
                     var $this = $(this);
-                    if ($this.prop('checked')) {
-                        $('#ConnextCustomTimeDiv').show();
+                    if ($this.prop("checked")) {
+                        $("#ConnextCustomTimeDiv").show();
                         //set custom time
                     } else {
                         //remove custom time.
-                        $('#ConnextCustomTimeDiv').hide();
-                        $.jStorage.deleteKey('CustomTime');
+                        $("#ConnextCustomTimeDiv").hide();
+                        $.jStorage.deleteKey("CustomTime");
                     }
                 });
-                $('#uniqueArticles').on('change', function () {
+
+                $("#uniqueArticles").on("change", function () {
+                    console.log("uniqueArticles - change");
                     var $this = $(this);
-                    $.jStorage.set('uniqueArticles', $this.prop('checked'));
+                    $.jStorage.set("uniqueArticles", $this.prop("checked"));
                 });
 
-
                 //event listener when 'Set' button is clicked.
-                $('#ConnextSetCustomTimeBtn').on('click', function (e) {
+                $("#ConnextSetCustomTimeBtn").on("click", function (e) {
                     e.preventDefault();
-                    $.jStorage.set('CustomTime', $('#ConnextCustomTimeTxt').val());
-                   // Connext.Storage.SetLocalConfiguration('');
+                    $.jStorage.set("CustomTime", $("#ConnextCustomTimeTxt").val());
+                    // Connext.Storage.SetLocalConfiguration('');
                 });
 
             } catch (err) {
-                console.error(pName, 'CreateDebugDetailPanel');
+                console.error(NAME, fnName, "CreateDebugDetailPanel");
             }
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
-    
+
     //#endregion FUNCTIONS
-    
+
     //#region EVENT LISTENERS
 
 
     //#endregion EVENT LISTENERS
-    
+
 
     //#region HELPERS
 
@@ -9865,17 +5301,17 @@ var ConnextUtils = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'handleDebugDetailsDisplayClick';
+        var fnName = "handleDebugDetailsDisplayClick";
         try {
             e.preventDefault();
             //get debug details div
-            var $panel = $(this).parent('div');
-            $panel.toggleClass('opened');
+            var $panel = $(this).parent("div");
+            $panel.toggleClass("opened");
             //console.log($panel);
-            
+
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -9883,22 +5319,22 @@ var ConnextUtils = function ($) {
         /// <summary>This is mainly used when debugging so we can clear all local storage and cookies in between test.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'clearAllSettings';
+        var fnName = "clearAllSettings";
         try {
             e.preventDefault();
-            LOGGER.debug(NAME, fnName, 'clearAllSettings');
+            LOGGER.debug(NAME, fnName, "clearAllSettings");
             Connext.Storage.ClearConfigSettings();
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var handleCustomConfiguration = function () {
         if (Connext.Storage.GetIsCustomConfiguration()) {
-            $('#ConnextCustomConfigurationDiv').show();
+            $("#ConnextCustomConfigurationDiv").show();
         }
         else {
-            $('#ConnextCustomConfigurationDiv').hide();
+            $("#ConnextCustomConfigurationDiv").hide();
         }
     }
 
@@ -9906,25 +5342,36 @@ var ConnextUtils = function ($) {
         /// <summary>This handles initial custom time settings. Any changes are handled in event listeners set in the above handleDebugDetails function.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'handleCustomTime';
+        var fnName = "handleCustomTime";
         try {
             //LOGGER.debug(NAME, fnName);
 
-            if ($.jStorage.get('CustomTime')) {
-                $('#ConnextCustomTimeChk').prop('checked', true);
-                $('#ConnextCustomTimeTxt').val($.jStorage.get('CustomTime'));
-                $('#ConnextCustomTimeDiv').show();
+            if ($.jStorage.get("CustomTime")) {
+                $("#ConnextCustomTimeChk").prop("checked", true);
+                $("#ConnextCustomTimeTxt").val($.jStorage.get("CustomTime"));
+                $("#ConnextCustomTimeDiv").show();
             } else {
-                $('#ConnextCustomTimeChk').prop('checked', false);
-                $('#ConnextCustomTimeDiv').hide();
-                $('#ConnextCustomTimeTxt').val(moment().format('MM/DD/YYYY'));
+                $("#ConnextCustomTimeChk").prop("checked", false);
+                $("#ConnextCustomTimeDiv").hide();
+                $("#ConnextCustomTimeTxt").val(new Date());
             }
 
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
+
+    var nextLetter = function (s) {
+        return s.replace(/([a-zA-Z])[^a-zA-Z]*$/, function (a) {
+            var c = a.charCodeAt(0);
+            switch (c) {
+                case 90: return "A";
+                case 122: return "a";
+                default: return String.fromCharCode(++c);
+            }
+        });
+    }
 
     //#endregion HELPERS
 
@@ -9933,18 +5380,21 @@ var ConnextUtils = function ($) {
     return {
         init: function () {
             LOGGER = Connext.Logger;
+            String.prototype.replaceAt = function (index, replacement) {
+                return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+            }
         },
         Now: function () {
             //this returns the current date/time based on either the current real datetime or a datetime set in the debug panel.
             try {
-                if ($.jStorage.get('CustomTime')) {
-                    return moment($.jStorage.get('CustomTime'), 'MM/DD/YYYY');
+                if ($.jStorage.get("CustomTime")) {
+                    return new Date(Date.parse($.jStorage.get("CustomTime")));
                 } else {
                     //no custom time set, so return the current moment object.                  
-                    return moment();
+                    return new Date();
                 }
             } catch (e) {
-                console.error(NAME, 'Now', e);
+                console.error(NAME, "Now", e);
             }
         },
         ProcessConfiguration: function (data) { //typically Utils is reserverd for functions that can be used throughout the App, but we have ProcessConfiguration here because it requires alot of other functions and its cleaner to have that all in here instead of in the main 'Connext.Core' file.
@@ -9956,9 +5406,13 @@ var ConnextUtils = function ($) {
         CreateDebugDetailPanel: function () {
             handleDebugDetails();
         },
+        AddParameterToURL: function (_url, param) {
+            _url += (_url.split("?")[1] ? "&" : "?") + param;
+            return _url;
+        },
         GetUrlParam: function (paramName) {
             var searchString = window.location.search.substring(1),
-              i, val, params = searchString.split("&");
+                i, val, params = searchString.split("&");
 
             for (i = 0; i < params.length; i++) {
                 val = params[i].split("=");
@@ -9968,83 +5422,99 @@ var ConnextUtils = function ($) {
             }
             return null;
         },
-        ParseCustomDate: function (str) {
-            if (!str) return new Date();
-            var dateComponents = str.split('/');
-            var date = new Date(+dateComponents[2], +dateComponents[0] -1, +dateComponents[1]);
-            return date;
+        ParseCustomDate: function (input, format) {
+            format = format || "dd.mm.yyyy"; // some default format'
+            if (!input) return new Date();
+            var parts = input.match(/(\d+)/g),
+                i = 0,
+                fmt = {};
+            // extract date-part indexes from the format
+            format.replace(/(yyyy|dd|mm)/g, function (part) { fmt[part] = i++; });
+            return new Date(parts[fmt["yyyy"]], parts[fmt["mm"]] - 1, parts[fmt["dd"]]);
+        },
+        ParseCustomDates: function (input) {
+            var output = input.replace(/(\d+)([a-zA-Z,()\\";?]+)/, "$1 ");
+            output = Date.parse(output);
+            return new Date(output);
+        },
+        Diff: function (currDate, articleDate) {
+            var diff = +currDate - +articleDate;
+            diff = parseInt(diff / 86400000);
+            return diff;
         },
         GetUrl: function () {
-            //this returns URL without any url parameters, used for article tracking.
-            return location.protocol + '//' + location.host + location.pathname
+            return location.protocol + "//" + location.host + location.pathname;
         },
         GetHiddenFormFieldValue: function (selector) { //we take any jquery selector, so it can be a class, id, data atrribute etc...
             try {
-                var hidValue = $('#' + selector).val();
-                LOGGER.debug(NAME, 'GetHiddenFormFieldValue', 'hidValue', hidValue);
+                var hidValue = $("#" + selector).val();
+                LOGGER.debug(NAME, "GetHiddenFormFieldValue", "hidValue", hidValue);
                 return hidValue;//$(selector).val();
             } catch (e) {
-                console.error(NAME, 'GetHiddenFormFieldValue', e);
-                return ''; //we return empty string on error so any checks that call this function can still be evaluated.
+                console.error(NAME, "GetHiddenFormFieldValue", e);
+                return ""; //we return empty string on error so any checks that call this function can still be evaluated.
             }
         },
-       /* GetUserZipcode: function () {
-            var fnName = 'Utils.GetUserZipcode';
-            //needs to use _CB callback instead of a return so we wait for zip code to be figured out.
-            try {
-                //create deferred object
-                var deferred = $.Deferred();
-
-                //we check if we have a saved zipcode, if we do we just return that, otherwise we determine zip by geolocation.
-                if ($.jStorage.get('CustomZip')) {
-                    LOGGER.debug(NAME, fnName, 'CustomZip');
-                    deferred.resolve($.jStorage.get('CustomZip'))
-                    //_CB($.jStorage.get('CustomZip'));
-                    //return moment($.jStorage.get('CustomTime'), 'MM/DD/YYYY HH:mm');
-                } else {
-                    setTimeout(function () {
-                        LOGGER.debug(NAME, fnName, 'DONE SIMULATING GETTING ZIPCODE');
-                        //_CB(19123);
-                        deferred.resolve(19454);
-                    }, 0);
-
-                    
-                    geolocator.locateByIP(function (location) {
-                        getZipFromLocation(location, function (_ZipCode) {
-                            _CB(_ZipCode);
-                        });
-                    }, function (error) {
-                        Logger.error(fnName, 'Error getting location by IP', error);
-                        _CB(false);
-                    }, 0);
-                    
-                }
-            } catch (e) {
-                LOGGER.exception(NAME, fnName, e);
-            }
-            //return deferred promise
-            return deferred.promise();
-        },*/
+        /* GetUserZipcode: function () {
+             var fnName = 'Utils.GetUserZipcode';
+             //needs to use _CB callback instead of a return so we wait for zip code to be figured out.
+             try {
+                 //create deferred object
+                 var deferred = $.Deferred();
+ 
+                 //we check if we have a saved zipcode, if we do we just return that, otherwise we determine zip by geolocation.
+                 if ($.jStorage.get('CustomZip')) {
+                     LOGGER.debug(NAME, fnName, 'CustomZip');
+                     deferred.resolve($.jStorage.get('CustomZip'))
+                     //_CB($.jStorage.get('CustomZip'));
+                     //return moment($.jStorage.get('CustomTime'), 'MM/DD/YYYY HH:mm');
+                 } else {
+                     setTimeout(function () {
+                         LOGGER.debug(NAME, fnName, 'DONE SIMULATING GETTING ZIPCODE');
+                         //_CB(19123);
+                         deferred.resolve(19454);
+                     }, 0);
+ 
+                     
+                     geolocator.locateByIP(function (location) {
+                         getZipFromLocation(location, function (_ZipCode) {
+                             _CB(_ZipCode);
+                         });
+                     }, function (error) {
+                         Logger.error(fnName, 'Error getting location by IP', error);
+                         _CB(false);
+                     }, 0);
+                     
+                 }
+             } catch (e) {
+                 LOGGER.exception(NAME, fnName, e);
+             }
+             //return deferred promise
+             return deferred.promise();
+         },*/
         JSEvaluate: function (value1, qualifier, value2) { //this calls JS 'eval' to test a javascript condition. We take 2 values and a qualifier and return the result.
             try {
-                var label = (arguments[3]) ? arguments[3] + ' ---- ' : ''; //set label to what we are evaluating (the label is the 4th argument passed in, if one is not passed in we set this to an empty string.  We do this here so we don't need to hanldle debugging tests for each type of evaluation.
-                var type = (arguments[4]) ? arguments[4] : 'string'; //5th argument is the type of values (for view counts we can't wrap them in a single quote...we default to string, unless passed in).
+                var label = (arguments[3]) ? arguments[3] + " ---- " : ""; //set label to what we are evaluating (the label is the 4th argument passed in, if one is not passed in we set this to an empty string.  We do this here so we don't need to hanldle debugging tests for each type of evaluation.
+                var type = (arguments[4]) ? arguments[4] : "string"; //5th argument is the type of values (for view counts we can't wrap them in a single quote...we default to string, unless passed in).
                 var fixedqualifier = Connext.Utils.FixQualifier(qualifier);
 
-                var evalString = (type == 'string') ? "'" + value1 + "'" + fixedqualifier + "'" + value2 + "'" : "" + value1 + "" + fixedqualifier + "" + value2 + "";
+                var evalString = (type == "string") ? "'" + value1 + "'" + fixedqualifier + "'" + value2 + "'" : "" + value1 + "" + fixedqualifier + "" + value2 + "";
                 //LOGGER.debug(NAME, 'JSEvaluate', 'evalString', evalString);
                 if (eval(evalString)) {
-                    LOGGER.debug(NAME, 'JSEvalute --- <<<<< ' + evalString, ' >>>>> ---- PASSES');
+                    LOGGER.debug(NAME, "JSEvalute --- <<<<< " + evalString, " >>>>> ---- PASSES");
                     return true;
                 } else {
-                    LOGGER.debug(NAME, label + 'JSEvalute --- <<<<< ' + evalString, ' >>>>> ---- FAILS');
+                    LOGGER.debug(NAME, label + "JSEvalute --- <<<<< " + evalString, " >>>>> ---- FAILS");
                     return false;
                 }
             } catch (e) {
-                console.error(NAME, 'JSEvaluate', e);
+                console.error(NAME, "JSEvaluate", e);
                 return false;//if there is an error we return false since we don't know the true determination of this evaluation.
             }
 
+        },
+        GetNextLetter: function (a) {
+            return nextLetter(a);
         },
         FixQualifier: function (qualifier) {
             try {
@@ -10057,14 +5527,14 @@ var ConnextUtils = function ($) {
                 }
 
             } catch (e) {
-                console.error(NAME, fnName, 'EXCEPTION', e);
+                console.error(NAME, null, "EXCEPTION", e);
                 return qualifier; //if we fail, return original qualifier.
             }
         },
         getFileName: function () {
             //gets file name including extension.  If an argument is passed in then we use that otherwise we use the current location.href
             var url = (arguments[0]) ? arguments[0] : window.location.href;
-            return url.substring(url.lastIndexOf('/') + 1);
+            return url.substring(url.lastIndexOf("/") + 1);
         },
         getCurPageName: function () {
             return location.pathname.substring(1);
@@ -10072,7 +5542,7 @@ var ConnextUtils = function ($) {
         getParam: function (paramName) {
             //returns value of param if it exists, if not we return null.
             var searchString = window.location.search.substring(1),
-              i, val, params = searchString.split("&");
+                i, val, params = searchString.split("&");
 
             for (i = 0; i < params.length; i++) {
                 val = params[i].split("=");
@@ -10085,40 +5555,36 @@ var ConnextUtils = function ($) {
         hasParam: function (paramName) {
             //just return true/false depending if we have that param (does not return value).
             var searchString = window.location.search.substring(1),
-              i, val, params = searchString.split("&"), test;
+                i, val, params = searchString.split("&"), test;
 
             for (i = 0; i < params.length; i++) {
                 val = params[i].split("=");
                 if (val[0] == paramName) {
                     test = unescape(val[1]);
-                    return (test.length > 0 && typeof test == 'string') ? true : false;
+                    return (test.length > 0 && typeof test == "string") ? true : false;
                 }
             }
             return false;
         },
         GetUserZipcode: function () {
 
-            var fnName = 'Utils.GetUserZipcode';
+            var fnName = "Utils.GetUserZipcode";
 
-            LOGGER.debug(NAME, fnName, 'CustomZip');
+            LOGGER.debug(NAME, fnName, "CustomZip");
 
             //return deferred promise
-            return $.jStorage.get('CustomZip');
+            return $.jStorage.get("CustomZip");
         },
-        EncryptAccessToken: function (masterId) {
+        EncryptAccessToken: function () {
             //TODO: Right now this isn't really encrypting anything. It is just returning a random string, but we set it up with a masterId argument so when we do implement this, we don't need to change any functions that are calling this.
             var len = 64;
-            var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var randomString = '';
+            var charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var randomString = "";
             for (var i = 0; i < len; i++) {
                 var randomPoz = Math.floor(Math.random() * charSet.length);
                 randomString += charSet.substring(randomPoz, randomPoz + 1);
             }
             return randomString;
-        },
-        DecryptAccessToken: function (masterId) {
-            //TODO: Right now this isn't really decrypting anything. It is always returning true, but we set it up with a masterId argument so when we do implement this, we don't need to change any functions that are calling this.
-            return true;
         },
         getScreenSize: function () {
 
@@ -10131,7 +5597,7 @@ var ConnextUtils = function ($) {
             }
 
             //return Math.min(screenWidth, screenHeight);
-           
+
             return screenWidth;
         },
         getDeviceType: function () {
@@ -10153,75 +5619,75 @@ var ConnextUtils = function ($) {
             };
 
             device.iphone = function () {
-                return !device.windows() && find('iphone');
+                return !device.windows() && find("iphone");
             };
 
             device.ipod = function () {
-                return find('ipod');
+                return find("ipod");
             };
 
             device.ipad = function () {
-                return find('ipad');
+                return find("ipad");
             };
 
             device.android = function () {
-                return !device.windows() && find('android');
+                return !device.windows() && find("android");
             };
 
             device.androidPhone = function () {
-                return device.android() && find('mobile');
+                return device.android() && find("mobile");
             };
 
             device.androidTablet = function () {
-                return device.android() && !find('mobile');
+                return device.android() && !find("mobile");
             };
 
             device.blackberry = function () {
-                return find('blackberry') || find('bb10') || find('rim');
+                return find("blackberry") || find("bb10") || find("rim");
             };
 
             device.blackberryPhone = function () {
-                return device.blackberry() && !find('tablet');
+                return device.blackberry() && !find("tablet");
             };
 
             device.blackberryTablet = function () {
-                return device.blackberry() && find('tablet');
+                return device.blackberry() && find("tablet");
             };
 
             device.windows = function () {
-                return find('windows');
+                return find("windows");
             };
 
             device.windowsPhone = function () {
-                return device.windows() && find('phone');
+                return device.windows() && find("phone");
             };
 
             device.windowsTablet = function () {
-                return device.windows() && (find('touch') && !device.windowsPhone());
+                return device.windows() && (find("touch") && !device.windowsPhone());
             };
 
             device.fxos = function () {
-                return (find('(mobile;') || find('(tablet;')) && find('; rv:');
+                return (find("(mobile;") || find("(tablet;")) && find("; rv:");
             };
 
             device.fxosPhone = function () {
-                return device.fxos() && find('mobile');
+                return device.fxos() && find("mobile");
             };
 
             device.fxosTablet = function () {
-                return device.fxos() && find('tablet');
+                return device.fxos() && find("tablet");
             };
 
             device.meego = function () {
-                return find('meego');
+                return find("meego");
             };
 
             device.cordova = function () {
-                return window.cordova && location.protocol === 'file:';
+                return window.cordova && location.protocol === "file:";
             };
 
             device.nodeWebkit = function () {
-                return typeof window.process === 'object';
+                return typeof window.process === "object";
             };
 
             device.mobile = function () {
@@ -10243,24 +5709,55 @@ var ConnextUtils = function ($) {
             };
 
             if (device.mobile()) {
-                return 'Mobile'
+                return "Mobile";
             } else if (device.tablet()) {
-                return 'Tablet'
+                return "Tablet";
             } else if (device.desktop()) {
-                return 'Desktop'
+                return "Desktop";
             }
         },
+        DetectEnvironment: function () {
+            var environment = "prod";
+
+            if (~location.hostname.indexOf("localhost")) { 
+                environment = "localhost";
+            } else if (~location.hostname.indexOf("dev.")) {
+                environment = "dev";
+            } else if (~location.hostname.indexOf("test.")) {
+                environment = "test";
+            } else if (~location.hostname.indexOf("test20.")) {
+                environment = "test20";
+            } else if (~location.hostname.indexOf("demo.")) {
+                environment = "demo";
+            } else if (~location.hostname.indexOf("stage.")) {
+                environment = "stage";
+            } else if (~location.hostname.indexOf("preprod.")) {
+                environment = "preprod";
+            }
+
+            return environment;
+        },
+        GetViewedArticlesCookiesName: function (conversationId) {
+            // depend on sitecode, environment, configcode, conversationId
+            var config = Connext.Storage.GetLocalConfiguration();
+
+            return Connext.Common.StorageKeys.viewedArticles
+                + "_site=" + config.Site.SiteCode
+                + "_environment=" + Connext.Utils.DetectEnvironment()
+                + "_config=" + config.Settings.Code
+                + "_conversation=" + conversationId;
+        },
         AddParameterToURL: function (_url, param) {
-            _url += (_url.split('?')[1] ? '&' : '?') + param;
+            _url += (_url.split("?")[1] ? "&" : "?") + param;
             return _url;
         },
         getUrlParam: function (urlParam) {
 
-            var paramValue = '';
+            var paramValue = "";
             var url = document.location.search.substr(1);
-            var paramArray = url.split('&');
+            var paramArray = url.split("&");
             paramArray.every(function (elem) {
-                var arr = elem.split('=');
+                var arr = elem.split("=");
                 if (arr[0] == urlParam) {
                     paramValue = arr[1];
                     return false;
@@ -10273,27 +5770,57 @@ var ConnextUtils = function ($) {
         },
         getSubdomains: function () {
 
-            var array = document.location.origin.split('.');
+            var array = document.location.origin.split(".");
             //remove domain name .com
             array.pop();
             //domain 
             array.pop();
 
             if (array.length) {
-                var str = array[0].substring(array[0].lastIndexOf('/') + 1);
-                if (str === 'www') {
+                var str = array[0].substring(array[0].lastIndexOf("/") + 1);
+                if (str === "www") {
                     array.shift();
                 }
                 else {
                     array[0] = str;
-                }  
+                }
             }
 
             return array;
         },
         getMetaTagsWithKeywords: function () {
 
-            return $('meta[name=keywords]');
+            return $("meta[name=keywords]");
+        },
+        detectAdBlock: function () {
+            var adBlockEnabled = false;
+            var testAd = document.getElementById("TestAdBlock");
+
+            if (testAd.offsetHeight === 0) {
+                adBlockEnabled = true;
+            }
+
+            return adBlockEnabled;
+        },
+        getQueryParamByName: function (name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+
+            name = name.replace(/[\[\]]/g, "\\$&");
+
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+
+            if (!results) {
+                return null;
+            }
+
+            if (!results[2]) {
+                return "";
+            }
+
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
     };
 
@@ -10303,7 +5830,7 @@ var ConnextStorage = function ($) {
 
     //#region GLOBALS
 
-    var name = 'STORAGE';
+    var name = "STORAGE";
 
     //create local reference to Connext.Logger
     var logger;
@@ -10316,15 +5843,12 @@ var ConnextStorage = function ($) {
         // <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'getLocalStorage';
+        var fnName = "getLocalStorage";
         try {
             logger.debug(name, fnName);
-
-            //LOGGER.info('--------- LOCAL STORAGE SIZE --------', $.jStorage.storageSize(Connext.Common.StorageKeys[key]));
-
             return $.jStorage.get(Connext.Common.StorageKeys[key]);
         } catch (e) {
-            console.log(name, fnName, 'EXCEPTION', e);
+            console.log(name, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10332,68 +5856,27 @@ var ConnextStorage = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'setLocalStorage';
+        var fnName = "setLocalStorage";
         try {
             logger.debug(name, fnName);
             return $.jStorage.set(Connext.Common.StorageKeys[key], val);
         } catch (e) {
-            console.log(pName, fnName, 'EXCEPTION', e);
+            console.log(name, fnName, "EXCEPTION", e);
         }
     };
-
-    var deleteLocalStorage = function (key) {
-        /// <summary>Deletes a local storage setting based on key.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = 'deleteLocalStorage';
-        try {
-            //console.log(pName, fnName);
-            logger.debug(name, fnName);
-            return $.jStorage.deleteKey(Connext.Common.StorageKeys[key]);
-        } catch (e) {
-            console.log(pName, fnName, 'EXCEPTION', e);
-        }
-    };
-
     var getCookie = function (key) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'getCookie';
+        var fnName = "getCookie";
         try {
-            logger.debug(name, fnName, key, 'Connext.Common.StorageKeys[key]', Connext.Common.StorageKeys[key]);
-            return Cookies.get(Connext.Common.StorageKeys[key]);
+            logger.debug(name, fnName, key, "Connext.Common.StorageKeys[key] || key", Connext.Common.StorageKeys[key] || key);
+            return Cookies.get(Connext.Common.StorageKeys[key] || key);
         } catch (e) {
-            console.log(name, fnName, 'EXCEPTION', e);
+            console.log(name, fnName, "EXCEPTION", e);
         }
     };
-    var cookieRegistry = [];
     var storageRegistry = [];
-
-
-    var readCookie = function (name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
-    };
-
-
-    var listenCookieChange = function (cookieName, callback) {
-        cookieRegistry[cookieName] = Cookies.get(cookieName);
-        setInterval(function () {
-            if (readCookie(cookieName) != cookieRegistry[cookieName]) {
-                // update registry so we dont get triggered again
-                cookieRegistry[cookieName] = readCookie(cookieName);
-                return callback();
-            }
-        },
-            1000);
-    }
 
     // ask local storage every second 
     var listenStorageChange = function (storageName, callback) {
@@ -10409,7 +5892,7 @@ var ConnextStorage = function ($) {
     }
 
     var addListners = function () {
-        listenStorageChange('janrainCaptureToken',
+        listenStorageChange("janrainCaptureToken",
           function () {
               Connext.Storage.SetUserState(null);
               Connext.Storage.SetUserZipCodes(null);
@@ -10428,41 +5911,60 @@ var ConnextStorage = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'setCookie';
+        var fnName = "setCookie";
         try {
             logger.debug(name, fnName);
             if (arguments[2]) {
                 //we have a 3rd argument which will be an expiration. 
-                logger.debug(name, fnName, 'HasExpiration', 'key', key, 'expiration', arguments[2]);
-                return Cookies.set(Connext.Common.StorageKeys[key], data, { expires: arguments[2] });
+                logger.debug(name, fnName, "HasExpiration", "key", key, "expiration", arguments[2]);
+                return Cookies.set(Connext.Common.StorageKeys[key] || key, data, { expires: arguments[2] });
             } else {
-                var domains = window.location.host.split('.');
+                var domains = window.location.host.split(".");
                 var curdomain = window.location.host;
                 if (domains.length >= 2) {
-                    curdomain = '.' + domains[domains.length - 2] + '.' + domains[domains.length - 1];
+                    curdomain = "." + domains[domains.length - 2] + "." + domains[domains.length - 1];
                 }
                 //we don't have a 3rd argument, so don't use one (this means this is a session cookie).
-                return Cookies.set(Connext.Common.StorageKeys[key], data, { domain: curdomain });
+                return Cookies.set(Connext.Common.StorageKeys[key] || key, data, { domain: curdomain });
             }
         } catch (e) {
-            console.log(name, fnName, 'EXCEPTION', e);
+            console.log(name, fnName, "EXCEPTION", e);
         }
     };
 
+    var removeCookie = function (key) {
+        /// <summary></summary>
+        /// <param name="" type=""></param>
+        /// <returns>None</returns>
+        var fnName = "removeCookie";
+        try {
+            logger.debug(name, fnName);
+
+            var domains = window.location.host.split(".");
+            var curdomain = window.location.host;
+            if (domains.length >= 2) {
+                curdomain = "." + domains[domains.length - 2] + "." + domains[domains.length - 1];
+            }
+            //we don't have a 3rd argument, so don't use one (this means this is a session cookie).
+            return Cookies.set(Connext.Common.StorageKeys[key] || key, 'null', { domain: curdomain, expires: -1 });
+
+        } catch (e) {
+            console.log(name, fnName, "EXCEPTION", e);
+        }
+    };
     //#endregion LOCAL STORAGE FUNCTIONS
 
     return {
         init: function () {
             logger = Connext.Logger; //assign local reference to Connext.Logger
-            //OPTIONS = (options) ? options : {}; //if not options set to blank object
             logger.debug(name, "Init");
             addListners();
         },
         GetLocalConfiguration: function () {
-            return getLocalStorage('configuration');
+            return getLocalStorage("configuration");
         },
         SetLocalConfiguration: function (data) {
-            return setLocalStorage('configuration', data);
+            return setLocalStorage("configuration", data);
         },
         GetUserState: function () {
             return $.jStorage.get(Connext.Common.StorageKeys.user.state);
@@ -10477,13 +5979,14 @@ var ConnextStorage = function ($) {
             return $.jStorage.set(Connext.Common.StorageKeys.user.zipCodes, codes);
         },
         GetLastPublishDate: function () {
-            return getCookie('lastPublishDate');
+            return getCookie("lastPublishDate");
         },
         SetLastPublishDate: function (data, expired) {
-            return setCookie('lastPublishDate', data, expired);
+            return setCookie("lastPublishDate", data, expired);
         },
         GetCurrentConversations: function () {
             var currentConvos = $.jStorage.get(Connext.Common.StorageKeys.conversations.current);
+            console.log("GetCurrentConversations", currentConvos);
             return (currentConvos) ? currentConvos : {}; //if we don't have any stored conversation object then return an empty one so we don't get an error trying to set properties.
         },
         SetCurrentConversations: function (curConvos) {
@@ -10494,17 +5997,62 @@ var ConnextStorage = function ($) {
             return $.jStorage.get(Connext.Common.StorageKeys.configuration).Campaign;
         },
         GetViewedArticles: function (conversationId) {
-            return ($.jStorage.get(Connext.Common.StorageKeys.viewedArticles)) ? $.jStorage.get(Connext.Common.StorageKeys.viewedArticles)[conversationId] : []; //if return view articles, if none exist return empty array.
+            var fnName = "GetViewedArticles";
+
+            try {
+                var cookiesName = Connext.Utils.GetViewedArticlesCookiesName(conversationId);
+
+                console.log("GetViewedArticles!!!!!", "--- cookiesName: " + cookiesName, Cookies.get(cookiesName));
+                var articles = Cookies.get(cookiesName);
+                if (articles) {
+                    articles = JSON.parse(articles);
+                } else {
+                    articles = [];
+                }
+                
+                return articles;
+            } catch (ex) {
+                console.error(name, fnName, "EXCEPTION", ex);
+                return [];
+            }
+        },
+        SetViewedArticles: function (articles, conversationId) {
+            var cookiesName = Connext.Utils.GetViewedArticlesCookiesName(conversationId);
+
+            console.log("SetViewedArticles!!!!!", "--- cookiesName: " + cookiesName, articles);
+
+            //todo make this big date as a standard constant for infinite cookies
+            setCookie(cookiesName, articles, new Date('31 Dec 9999 23:59:59 GMT'));
         },
         UpdateViewedArticles: function (conversationId) {
+            console.log("UpdateViewedArticles", conversationId);
             //this is in this function because we don't care which configuration/conversation we are in. We hold viewed articles as a separate object and this is just updating that array with the current url.
-            var newArray = Connext.Storage.GetViewedArticles(conversationId);
-            if (newArray == undefined) newArray = [];
-            newArray.push(Connext.Utils.GetUrl());
-            var obj = $.jStorage.get(Connext.Common.StorageKeys.viewedArticles) ? $.jStorage.get(Connext.Common.StorageKeys.viewedArticles) : { conversationId: newArray };
-            obj[conversationId] = newArray;
-            console.warn('new array', newArray);
-            $.jStorage.set(Connext.Common.StorageKeys.viewedArticles, obj);
+            var viewedArticles = Connext.Storage.GetViewedArticles(conversationId),
+                articleUrl = Connext.Utils.GetUrl(),
+                options = Connext.GetOptions(),
+                articleHash;
+
+            if (options.articlesCounter && options.articlesCounter.params && options.articlesCounter.params.length) {
+                var params = options.articlesCounter.params,
+                    domain = location.hostname,
+                    indicatorOfTheArticle = domain + "_";
+                
+                params.forEach(function (param) {
+                    var paramValue = Connext.Utils.getQueryParamByName(param);
+
+                    if (paramValue) {
+                        indicatorOfTheArticle += (param + "=" + paramValue);
+                    }
+                });
+
+                articleHash = MD5(indicatorOfTheArticle);
+                viewedArticles.push(articleHash);
+            } else {
+                articleHash = MD5(articleUrl);
+                viewedArticles.push(articleHash);
+            }
+
+            Connext.Storage.SetViewedArticles(viewedArticles, conversationId);
         },
 
         GetRepeatablesInConv: function (actionId) {
@@ -10542,62 +6090,66 @@ var ConnextStorage = function ($) {
             $.jStorage.deleteKey(Connext.Common.StorageKeys.user.zipCodes);
             $.jStorage.deleteKey(Connext.Common.StorageKeys.customZip);
             $.jStorage.deleteKey(Connext.Common.StorageKeys.repeatablesInConv);
-            Cookies.remove(Connext.Common.StorageKeys.lastPublishDate);
-            Cookies.remove(Connext.Common.StorageKeys.userToken);
-            Cookies.remove(Connext.Common.StorageKeys.igmRegID);
-            Cookies.remove(Connext.Common.StorageKeys.IgmContent);
+
+            Connext.Storage.ClearAllCookies();
+        },
+        ClearAllCookies: function () {
+            var cookies = document.cookie.split(";");
+
+            cookies.forEach(function (cookie) {
+                document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
         },
         ClearUser: function () {
             //this clears all user related  cookies
             Cookies.remove(Connext.Common.StorageKeys.userToken);
             Cookies.remove(Connext.Common.StorageKeys.accessToken);
-            Cookies.remove('userToken');
-            Cookies.remove('userMasterId');
-            localStorage.removeItem('janrainCaptureProfileData');
-            localStorage.removeItem('janrainCaptureReturnExperienceData');
+            Cookies.remove("userToken");
+            Cookies.remove("userMasterId");
+            localStorage.removeItem("janrainCaptureProfileData");
+            localStorage.removeItem("janrainCaptureReturnExperienceData");
             $.jStorage.deleteKey(Connext.Common.StorageKeys.user.zipCodes);
-            Cookies.remove(Connext.Common.StorageKeys.igmRegID);
-            Cookies.remove(Connext.Common.StorageKeys.IgmContent);
+            removeCookie(Connext.Common.StorageKeys.igmRegID);
+            removeCookie(Connext.Common.StorageKeys.IgmContent);
         },
         SetAccessToken: function (token) {
             //TODO: Use some sort of encryption to encrypte access token and then use that to decode.
-            //LOGGER.debug(NAME, 'setAccessToken', Connext.Utils.EncryptAccessToken(token));
-            return setCookie('accessToken', token); //set AccessToken with an expiration of 1 day.
+            return setCookie("accessToken", token); //set AccessToken with an expiration of 1 day.
         },
         GetAccessToken: function () {
             //TODO: Use some sort of encryption to encrypte access token and then use that to decode.
-            logger.debug(name, 'GetAccessToken', Connext.Common.StorageKeys.accessToken);
-            return getCookie('accessToken');
+            logger.debug(name, "GetAccessToken", Connext.Common.StorageKeys.accessToken);
+            return getCookie("accessToken");
         },
         GetCurrentConverstaion: function () {
-            return $.jStorage.get('CurrentConversation');
+            return $.jStorage.get("CurrentConversation");
         },
         SetCurrentConverstaion: function (e) {
-            $.jStorage.set('CurrentConversation', e);
+            $.jStorage.set("CurrentConversation", e);
         },
         SetUserToken: function (token) {
-            return setCookie('userToken', token, 365); //set AccessToken with an expiration of 1 day.
+            return setCookie("userToken", token, 365); //set AccessToken with an expiration of 1 day.
         },
         GetUserToken: function () {
-            return getCookie('userToken');
+            return getCookie("userToken");
         },
         GetigmRegID: function () {
-            return Cookies.get('igmRegID');
+            return Cookies.get("igmRegID");
         },
         GetIgmContent: function () {
-            return getCookie('igmContent');
+            return getCookie("igmContent");
         },
         SetigmRegID: function (value) {
-            return setCookie('igmRegID', value);
+            return setCookie("igmRegID", value);
         },
         SetIgmContent: function (value) {
-            return setCookie('igmContent', value);
+            return setCookie("igmContent", value);
         },
         SetUserRegId: function (token) {
-            return setCookie('userMasterId', token, 365); //set AccessToken with an expiration of 1 day.
+            return setCookie("userMasterId", token, 365); //set AccessToken with an expiration of 1 day.
         },
         GetUserRegId: function () {
-            return getCookie('userMasterId');
+            return getCookie("userMasterId");
         },
         GetJanrainUser: function () {
             return localStorage.getItem(Connext.Common.StorageKeys.janrainUserProfile);
@@ -10623,37 +6175,6 @@ var ConnextStorage = function ($) {
         GetIsCustomConfiguration: function () {
             return $.jStorage.get(Connext.Common.StorageKeys.configurationIsCustom);
         }
-
-        //ClearUserData: function () {
-
-        //}
-        //ClearCampaignData: function () {
-        //    $.jStorage.deleteKey(Connext.Common.StorageKeys.conversations.current);
-        //    $.jStorage.deleteKey(Connext.Common.StorageKeys.conversations.previous);
-        //}
-        //GetLocalConfiguration: function () {
-        //    var fnName = 'GetLocalConfiguration';
-        //    try {
-        //        LOGGER.debug(NAME, fnName);
-        //        return $.jStorage.get(Connext.Common.StorageKeys.configuration);
-        //    } catch (e) {
-        //        LOGGER.exception(NAME, fnName, e);
-        //        //console.error(pName, fnName, 'EXCEPTION', e);
-        //    }
-        //},
-        //SetLocalConfiguration: function (configuration) {
-        //    var fnName = 'SetLocalConfiguration';
-        //    try {
-        //        LOGGER.debug(NAME, fnName);
-
-        //        //// FOR NOW NOT SETTING LOCAL SETTING.
-
-        //        //return $.jStorage.set(Connext.Common.StorageKeys.configuration, configuration);
-        //    } catch (e) {
-        //        LOGGER.exception(NAME, fnName, e);
-        //        //console.error(pName, fnName, 'EXCEPTION', e);
-        //    }
-        //}
     }
 };
 
@@ -10661,7 +6182,7 @@ var ConnextAPI = function ($) {
 
     //#region GLOBALS
 
-    var NAME = 'API';
+    var NAME = "API";
 
     //create local reference to Connext.LOGGER
     var LOGGER;
@@ -10669,15 +6190,16 @@ var ConnextAPI = function ($) {
     var OPTIONS; //global Options variable. This will be merge/extended between default options and passed in options.
 
     var API_URL;
-    var BASE_API_ROUTE = 'api/';
+    var BASE_API_ROUTE = "api/";
 
     
     var ROUTES = { //this holds the routes for the different api calls.  We use this in the universal 'Get' method and use the 'args' parameters to set the full api URL.
-        GetConfiguration: _.template('configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>'),
-        GetUserByEmailAndPassword: _.template('user/email/<%= email %>/password/<%= password %>'),
-        GetUserByMasterId: _.template('user/id/<%= id %>'),
-        GetUserByEncryptedMasterId: _.template('user/encryptedMasterId?encryptedMasterId=<%= encryptedMasterId %>'),
-        GetUserByToken: _.template('user/token/<%= token %>')
+        GetConfiguration: _.template("configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>"),
+        GetUserByEmailAndPassword: _.template("user/email/<%= email %>/password/<%= password %>"),
+        GetUserByMasterId: _.template("user/id/<%= id %>"),
+        GetUserByToken: _.template("user/token/<%= token %>"),
+        CheckAccess: _.template("checkAccess/<%= masterId %>"),
+        GetUserByEncryptedMasterId: _.template("user/encryptedMasterId?encryptedMasterId=<%= encryptedMasterId %>")
     };
     
 
@@ -10689,12 +6211,12 @@ var ConnextAPI = function ($) {
         /// <summary>Universal call to API. Handles parsing returned data and calling provided callbacks.</summary>
         /// <param name="" type=""></param>
         /// <returns>Deferred $.ajax</returns>
-        var fnName = 'Get';
+        var fnName = "Get";
         try {
 
             //creates url based on the passed method option from routes object and then calls this function with the payload passed in (the routes object is an underscore template so the passed in payload will be parsed to create the correct url
             var url = API_URL + ROUTES[args.method](args.options.payload);
-            LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
+            LOGGER.debug(NAME, fnName, "calling...", url, "OPTIONS", OPTIONS);
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
             //TODO: THIS IS VERY IMPORTANT....
@@ -10704,20 +6226,12 @@ var ConnextAPI = function ($) {
             return $.ajax({
                 //crossDomain: true,
                 //contentType: "application/json; charset=utf-8",
-                headers: { 'Site-Code': OPTIONS.siteCode, 'x-test': 'test', 'Access-Control-Allow-Origin': '*', 'Environment': Connext.GetOptions().environment, 'settingsKey': Connext.GetOptions().settingsKey, 'attr': Connext.GetOptions().attr },
+                headers: { 'Site-Code': OPTIONS.siteCode, 'x-test': "test", 'Access-Control-Allow-Origin': "*", 'Environment': Connext.GetOptions().environment, 'settingsKey': Connext.GetOptions().settingsKey, 'attr': Connext.GetOptions().attr },
                 url: url,
-                type: 'GET',
-                dataType: 'json',
-                //xhrFields: {
-                //    withCredentials: true
-                //},
-                //beforeSend: function (xhr) {
-                //    xhr.setRequestHeader('Site-Code', 'TNS');
-                //    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-                //    //xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://localhost:20002');
-                //},
+                type: "GET",
+                dataType: "json",
                 success: function (data, textStatus, xhr) {
-                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'textStatus', textStatus, 'data', data, 'xhr', xhr);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
                     try {
 
                         if (!data || xhr.status == 204) {
@@ -10731,8 +6245,6 @@ var ConnextAPI = function ($) {
                                 args.options.onSuccess(data);
                             }
                         }
-
-                        
                     } catch (e) {
                         LOGGER.exception(fnName, e);
                     };
@@ -10743,16 +6255,14 @@ var ConnextAPI = function ($) {
                         args.options.onError(err); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
                     }
                 },
-                complete: function (xhr, textStatus) {
-                    //this fires no matter what, if we have an 'onComplete' function fire it. (this is useful to handle any loading animations or processes that need to happen regardless of result.
-                    ///LOGGER.debug(NAME, fnName, '<< COMPLETE >>', 'textStatus', textStatus, 'xhr', xhr);
+                complete: function () {
                     if (_.isFunction(args.options.onComplete)) {
                         args.options.onComplete(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
                     }
                 }
             });
         } catch (e) {
-            console.log(NAME, fnName, 'EXCEPTION', e);
+            console.log(NAME, fnName, "EXCEPTION", e);
             if (_.isFunction(args.options.onError)) {
                 args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
             }
@@ -10770,35 +6280,38 @@ var ConnextAPI = function ($) {
             //ApiUrl = _Url + BaseRoute; //create full base api url based on base url from Core and BaseRoute.
         },
         GetConfiguration: function (opts) {
-            return Get({ method: 'GetConfiguration', options: opts });
+            return Get({ method: "GetConfiguration", options: opts });
         },
         GetUserByEmailAndPassword: function (opts) {
-            return Get({ method: 'GetUserByEmailAndPassword', options: opts });
+            return Get({ method: "GetUserByEmailAndPassword", options: opts });
+        },
+        CheckAccess: function (opts) {
+            return Get({ method: "CheckAccess", options: opts });
         },
         GetUserByToken: function (opts) {
-            return Get({ method: 'GetUserByToken', options: opts });
+            return Get({ method: "GetUserByToken", options: opts });
         },
         GetUserByMasterId: function (opts) {
-            return Get({ method: 'GetUserByMasterId', options: opts });
+            return Get({ method: "GetUserByMasterId", options: opts });
         },
         GetUserByEncryptedMasterId: function (opts) {
-            return Get({ method: 'GetUserByEncryptedMasterId', options: opts });
+            return Get({ method: "GetUserByEncryptedMasterId", options: opts });
         },
         GetLastPublishDateS3: function () {
-            var fnName = 'GetLastPublishDateS3';
+            var fnName = "GetLastPublishDateS3";
             try {
 
-                var jsonURL = Connext.Common.S3RootUrl[OPTIONS.environment] + 'data/last_publish/' + OPTIONS.siteCode + '.json';
-                LOGGER.debug(NAME, fnName, 'jsonURL', jsonURL);
+                var JsonUrl = Connext.Common.S3RootUrl[OPTIONS.environment] + "data/last_publish/" + OPTIONS.siteCode + ".json";
+                LOGGER.debug(NAME, fnName, "jsonURL", JsonUrl);
 
                 //return $.ajax since it is a deferred object and we use that in the calling Connext.Core function.
                 return $.ajax({
                     crossDomain: true,
                     contentType: "application/json; charset=utf-8",
                     async: true,
-                    url: jsonURL,
+                    url: JsonUrl,
                     success: function (data) {
-                        LOGGER.debug(NAME, fnName, 'success', data);
+                        LOGGER.debug(NAME, fnName, "success", data);
                         //console.log(pName, fnName, 'GetLastPublish.Sucess', $.parseJSON(data));
 
                         //var isConfigDataOld = isConfigDataOldByLastPublishDate($.parseJSON(data), _ConfigSettings);
@@ -10806,7 +6319,7 @@ var ConnextAPI = function ($) {
                         //deferred.resolve(isConfigDataOld);
                     },
                     error: function (a, b, c) {
-                        LOGGER.debug(NAME, fnName, 'error', 'a, b, c', a, b, c);
+                        LOGGER.debug(NAME, fnName, "error", "a, b, c", a, b, c);
                         //console.error(pName, fnName, 'Error Getting Last Publish Date', a);
                         //there was an error so we should return the saved ConfigSettings.
 
@@ -10819,7 +6332,7 @@ var ConnextAPI = function ($) {
                     }
                 });
             } catch (e) {
-                console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                console.error(NAME, fnName, "<<EXCEPTION>>", e);
                 //there was an error so we should return the saved ConfigSettings.
                 //deferred.reject(e);
             }
@@ -10841,7 +6354,7 @@ var ConnextUser = function ($) {
 
     //#region GLOBALS
 
-    var NAME = 'User';
+    var NAME = "User";
 
     //local reference to Connext.Logger
     var LOGGER;
@@ -10852,21 +6365,18 @@ var ConnextUser = function ($) {
     var IS_LOGGED_IN = false; //this is updated as user is logged in or out. It's public via User.IsLoggedIn (is used to determine which action to take when a user clicks a data-mg2-action=login element).
     var AUTH_TIMING = {};// this holds timeing tests for authentication. We set start/end times when we call 3rd party authentications to use in the 'Debug Details' panel.  This let's us show why/if we have long processing times (if they are caused by waiting on the authentication from a 3rd party).
     var FORM_SUBMIT_LOADER, FORM_ALERT; //references to the login loader and alert.
-    var JANRAIN_LOADED = false; //var that is checked/updated when janrain is loaded.
+    var JANRAIN_LOADED; //var that is checked/updated when janrain is loaded.
     var USER_STATES = {
-        NotLoggedIn: 'Logged Out',
-        LoggedIn: 'Logged In',
-        Subscribed: 'Subscribed'
+        NotLoggedIn: "Logged Out",
+        LoggedIn: "Logged In",
+        Subscribed: "Subscribed"
     };
+    var GUP_SETTINGS;
     var USER_STATE = USER_STATES.NotLoggedIn;
     var TIMEOUT;
 
-    //TODO: MOVE GUP SETTINGS TO ADMIN.
-    var GUP_SETTINGS = {
-        'UserServiceBasePath': '//user-stage.jconline.com/PLAI-GUP-MG2/',
-        'LoginServiceBasePath': '//login-stage.jconline.com/PLAI-GUP-MG2/'
-    };
-    var incorrectCreditsMessage = 'Please try again or click on the Forgot/Reset Password link to update your password';
+  
+    var incorrectCreditsMessage = "Please try again or click on the Forgot/Reset Password link to update your password";
 
     var NOTIFICATION = { //this handles hiding and showing notifications (green/red/blue alert boxes).
         show: function (notification) {
@@ -10888,7 +6398,7 @@ var ConnextUser = function ($) {
             try {
                 FORM_ALERT.info(notification);
                 TIMEOUT = setTimeout(function() {
-                        FORM_ALERT.find('.alert').remove();
+                        FORM_ALERT.find(".alert").remove();
                     },
                     delay);
             } catch (e) {
@@ -10898,14 +6408,17 @@ var ConnextUser = function ($) {
     };
 
     var UI = { //this holds UI related jquery selectors. We set them here and reference them throughout the site, if we need to change them its one change.
-        LoginButton: '[data-mg2-submit=login]:visible',
-        LoginAlert: '[data-mg2-alert=login]:visible',
-        InputUsername: '[data-mg2-input=Email]',
-        InputPassword: '[data-mg2-input=Password]',
-        ActionShowLogin: '[data-mg2-action=login]',
-        LogoutButton: '[data-mg2-action=logout]',
+        LoginButton: "[data-mg2-submit=login]:visible",
+        LoginAlert: "[data-mg2-alert=login]:visible",
+        JanrainLoginBtn :"[data-mg2-submit=janrainLogin]:visible",
+        InputUsername: "[data-mg2-alert=login] [data-mg2-input=Email]",
+        InputPassword: "[data-mg2-alert=login] [data-mg2-input=Password]",
+        ActionShowLogin: "[data-mg2-action=login]",
+        LogoutButton: "[data-mg2-action=logout]",
         SubscribeButton: '[data-mg2-action="submit"]',
-        LoginModal: '<div data-mg2-alert="login" data-template-id="23" data-display-type="modal" data-width="400" id="mg2-login-modal"  tabindex="-1" class="Mg2-connext modal fade in"><div class="modal-body picker-bg"><i class="fa fa-times closebtn" data-dismiss="modal" aria-label="Close" aria-hidden="true"></i><form><h1 class="x-editable-text text-center h3">LOGIN</h1><p class="x-editable-text text-center m-b-2" >to save access to articles or get newsletters, allerts or recomendations — all for free</p><label class="textColor4 x-editable-text" >E-mail</label><input type="email" data-mg2-input="Email" class="text" name="email" value=""   data-mg2-input="Email" /><label class="textColor4 x-editable-text">Password</label><input type="password" data-mg2-input="Password" class="text" name="password" value=""  data-mg2-input="Password" /><a href="" data-mg2-submit="login" class="input submit x-editable-text" title="Login">Login</a></form></div></div>'
+        SubmitZipCode: '[data-mg2-action="Zipcode"]',
+        LoginModal: '<div data-mg2-alert="login" data-template-id="23" data-display-type="modal" data-width="400" id="mg2-login-modal"  tabindex="-1" class="Mg2-connext modal fade in"><div class="modal-body picker-bg"><i class="fa fa-times closebtn" data-dismiss="modal" aria-label="Close" aria-hidden="true"></i><form><h1 class="x-editable-text text-center h3">LOGIN</h1><p class="x-editable-text text-center m-b-2" >to save access to articles or get newsletters, allerts or recomendations — all for free</p><label class="textColor4 x-editable-text" >E-mail</label><input type="email" data-mg2-input="Email" class="text" name="email" value=""   data-mg2-input="Email" /><label class="textColor4 x-editable-text">Password</label><input type="password" data-mg2-input="Password" class="text" name="password" value=""  data-mg2-input="Password" /><a href="" data-mg2-submit="login" class="input submit x-editable-text" title="Login">Login</a></form></div></div>',
+        CheckAccessPopup: '<div class="Mg2-connext modal fade in" id="CheckAccessPopup" data-display-type="modal" data-width="300" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-body">We noticed that your access status has changed. Page will be reloaded based on your new access permissions</div><div class="modal-footer text-center"><button type="button" id="ConnextRunBtn" class="btn btn-default" data-dismiss="modal">OK</button></div></div></div></div>'
     }
 
     //#endregion - Globals
@@ -10916,67 +6429,84 @@ var ConnextUser = function ($) {
         /// <summary>Instantite the plugin.</summary>
         /// <param>Nothing</param>
         /// <returns>Nothing</returns>
-        var fnName = 'Init';
+        var fnName = "Init";
         try {
-            LOGGER.debug(NAME, fnName, 'Initializing User...');
+            LOGGER.debug(NAME, fnName, "Initializing User...");
             UI.LoginModal = OPTIONS.LoginModal;
             setAuthType();
-            $('body').on('click', UI.LogoutButton, function (e) {
+            $("body").on("click", UI.LogoutButton, function (e) {
                 e.preventDefault();
-                var fnName = UI.LogoutButton + '.CLICK';
+                var fnName = UI.LogoutButton + ".CLICK";
                 LOGGER.debug(NAME, fnName);
                 logoutUser();
             });
-            $('body').on('click', '[data-dismiss="alert"]',function(e) {
-                FORM_ALERT.find('.alert').remove();
+            $("body").on("click", '[data-dismiss="alert"]', function () {
+                FORM_ALERT.find(".alert").remove();
                 clearTimeout(TIMEOUT);
             });
-
-            $('body').on('click', UI.SubscribeButton, function (e) {
+            $("body").on("click", UI.SubscribeButton, function (e) {
                 e.preventDefault();
-                var fnName = UI.SubscribeButton + '.CLICK';
+                var fnName = UI.SubscribeButton + ".CLICK";
                 LOGGER.debug(NAME, fnName);
                 try {
 
                     var $this = $(this),
-                        href = $this.attr('href'),
-                        email = $this.parents('.Mg2-connext').find('[data-mg2-input="Email"]').val();
+                        href = $this.attr("href"),
+                        email = $this.parents(".Mg2-connext").find('[data-mg2-input="Email"]').val();
 
-                    href = Connext.Utils.AddParameterToURL(href, 'email=' + email);
-                    $this.attr('href', href);
+                    href = Connext.Utils.AddParameterToURL(href, "email=" + email);
+                    $this.attr("href", href);
                     window.location.href = href;
                    
                 } catch (e) {
-                    console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
             });
-            $('body').on('click', '.Mg2-btn-forgot', function (e) {
+
+            $("body").on("click", UI.SubmitZipCode, function (e) {
                 e.preventDefault();
-                var fnName = 'Forgot password btn' + '.CLICK';
+                var fnName = UI.SubmitZipCode + ".CLICK";
                 LOGGER.debug(NAME, fnName);
                 try {
 
                     var $this = $(this),
-                        href = $this.attr('href'),
-                        email = $this.parents('.Mg2-connext').find('[data-mg2-input="Email"]').val();
-                    href = Connext.Utils.AddParameterToURL(href, 'returnUrl=' + window.location.href);
-                    href = Connext.Utils.AddParameterToURL(href, 'email=' + email);
-                    $this.attr('href', href);
-                    
-                    if ($this[0].hasAttribute('target')) {
-                        window.open(href, '_blank');
+                        href = $this.attr("href"),
+                        zip = $this.parents(".Mg2-connext").find('[data-mg2-input="Zipcode"]').val();
+
+                    href = Connext.Utils.AddParameterToURL(href, "zipcode=" + zip);
+                    $this.attr("href", href);
+                    window.location.href = href;
+                } catch (e) {
+                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                }
+            });
+
+            $("body").on("click", ".Mg2-btn-forgot", function (e) {
+                e.preventDefault();
+                var fnName = "Forgot password btn" + ".CLICK";
+                LOGGER.debug(NAME, fnName);
+                try {
+
+                    var $this = $(this),
+                        href = $this.attr("href"),
+                        email = $this.parents(".Mg2-connext").find('[data-mg2-input="Email"]').val();
+                    href = Connext.Utils.AddParameterToURL(href, "returnUrl=" + window.location.href);
+                    href = Connext.Utils.AddParameterToURL(href, "email=" + email);
+                    $this.attr("href", href);
+                    if ($this[0].hasAttribute("target")) {
+                        window.open(href,"_blank");
                     } else {
                         window.location.href = href;
                     }
                 } catch (e) {
-                    console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
             });
 
             //Any element with a data-mg2-submit= 'login' will fire this event.  This will attempt to submit the form this button belongs to.
-            $('body').on('click', UI.LoginButton, function (e) {
+            $("body").on("click dblclick", UI.LoginButton, function (e) {
                 e.preventDefault();
-                var fnName = UI.LoginButton + '.CLICK';
+                var fnName = UI.LoginButton + ".CLICK";
                 LOGGER.debug(NAME, fnName);
 
                 try {
@@ -10988,33 +6518,60 @@ var ConnextUser = function ($) {
                     FORM_SUBMIT_LOADER.on();
 
                     if (AUTH_TYPE.MG2) {
+                        var userName = $(UI.InputUsername + ":visible").val();
+                        var Password = $(UI.InputPassword + ":visible").val();
                         //we use ':visible' because we could have multiple inputs with the same data-mg2-input values (dedicated modals, multiple actions with login forms etc...).  So we want to only grab the value of the one that is visible.
-                        MG2Authenticate($(UI.InputUsername + ':visible').val(), $(UI.InputPassword + ':visible').val());
+                        Mg2Authenticate(userName, Password);
                     } else {
-                        JanrainAuthenticate($('[data-mg2-input=Username]:visible').val(), $('[data-mg2-input=Password]:visible').val());
+                        JanrainAuthenticate($("[data-mg2-input=Username]:visible").val(), $("[data-mg2-input=Password]:visible").val());
                     }
                 } catch (e) {
-                    console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
+
             });
 
 
-            //Any element with a data-mg2-action= 'login' will fire this event.  This allows the client to set this data attribute to any element on their page and the appropriate login html will show based on the OPTIONS.Site.RegistrationTypeId.
-            $('body').on('click', UI.ActionShowLogin, function (e) {
+            $("body").on("click", UI.JanrainLoginBtn, function (e) {
                 e.preventDefault();
-                var fnName = UI.ActionShowLogin + '.Click';
+                var fnName = UI.JanrainLoginBtn + ".CLICK";
+                LOGGER.debug(NAME, fnName);
+
+                try {
+                    if(window.janrain){
+                    var email = $("[data-mg2-input=Email]:visible").val(),
+                        password = $("[data-mg2-input=Password]:visible").val();
+
+                    janrain.capture.ui.modal.open();
+                    $('#capture_signIn_traditionalSignIn_emailAddress').val(email);
+                    $('#capture_signIn_traditionalSignIn_password').val(password);
+                    $('#capture_signIn_traditionalSignIn_signInButton').click();
+
+                    } else console.error("No janrain global object found...");
+
+
+                } catch (e) {
+                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                }
+
+            });
+
+            //Any element with a data-mg2-action= 'login' will fire this event.  This allows the client to set this data attribute to any element on their page and the appropriate login html will show based on the OPTIONS.Site.RegistrationTypeId.
+            $("body").on("click", UI.ActionShowLogin, function (e) {
+                e.preventDefault();
+                var fnName = UI.ActionShowLogin + ".Click";
                 try {
                     //LOGGER.debug(NAME, fnName);
 
-                    LOGGER.debug(NAME, fnName, 'IS_LOGGED_IN', IS_LOGGED_IN)
+                    LOGGER.debug(NAME, fnName, "IS_LOGGED_IN", IS_LOGGED_IN)
 
                     if (AUTH_TYPE.MG2) {
                         //this is MG2 Auth type, show MG2 Login Modal.
-                        $(UI.LoginModal).addClass('in');
-                        $(UI.LoginModal).attr('id', 'mg2-login-modal');
-                        $(UI.LoginModal).connextmodal({ backdrop: 'true' });
-                        $(UI.LoginModal).css('display', 'block');
-                        $('[data-display-type=modal]').resize();
+                        $(UI.LoginModal).addClass("in");
+                        $(UI.LoginModal).attr("id", "mg2-login-modal");
+                        $(UI.LoginModal).connextmodal({ backdrop: "true" });
+                        $(UI.LoginModal).css("display", "block");
+                        $("[data-display-type=modal]").resize();
 
 
                         ////FOR TESTING, auto add values.
@@ -11024,14 +6581,16 @@ var ConnextUser = function ($) {
                     } else if (AUTH_TYPE.GUP) {
                         //this is a GUP AuthType, so show GUP popup modal
                         executePopupLoginFlow(window);
+                    } else if (AUTH_TYPE.Janrain) {
+                        if (window.janrain) {
+                            janrain.capture.ui.modal.open();
+                        } else console.error("No janrain global object found...");
                     }
                 } catch (e) {
-                    console.error(NAME, fnName, 'Exception', e);
+                    console.error(NAME, fnName, "Exception", e);
                 }
             });
 
-
-            //#endregion EVENT LISTENERS
         } catch (e) {
             console.error(NAME, fnName, e);
         }
@@ -11042,25 +6601,25 @@ var ConnextUser = function ($) {
         /// <summary>Sets AUTH_TYPE object.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'setAuthType';
+        var fnName = "setAuthType";
         try {
-            LOGGER.debug(NAME, fnName, 'OPTIONS', OPTIONS);
+            LOGGER.debug(NAME, fnName, "OPTIONS", OPTIONS);
 
 
 
             if (OPTIONS.Site.RegistrationTypeId == 1) {
-                LOGGER.debug(NAME, fnName, 'IsMG2Auth');
-                AUTH_TYPE['MG2'] = true;
+                LOGGER.debug(NAME, fnName, "IsMG2Auth");
+                AUTH_TYPE["MG2"] = true;
             } else if (OPTIONS.Site.RegistrationTypeId == 2) {
-                LOGGER.debug(NAME, fnName, 'IsJanrainAuth');
-                AUTH_TYPE['Janrain'] = true;
+                LOGGER.debug(NAME, fnName, "IsJanrainAuth");
+                AUTH_TYPE["Janrain"] = true;
 
                 //////by default setting this here in case of janrain modal login. (the same function for Authentication is called regardless if user used connext form for janrain or native janrain form.
                 FORM_SUBMIT_LOADER = $(UI.LoginButton).loader();
                 FORM_ALERT = $(UI.LoginAlert).jalert();
 
             } else if (OPTIONS.Site.RegistrationTypeId == 3) {
-                AUTH_TYPE['GUP'] = true;
+                AUTH_TYPE["GUP"] = true;
 
             } else {
                 throw "Unknown Registration Type";
@@ -11068,7 +6627,7 @@ var ConnextUser = function ($) {
             registerEventlisteners();
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11081,7 +6640,7 @@ var ConnextUser = function ($) {
         /// <summary>This is a deferred function that is called in the main 'Connext' function.  So any return needs to be a 'resolve' for successful access or 'reject' for a failed access.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'checkAccess';
+        var fnName = "checkAccess";
 
         var deferred = $.Deferred();
         USER_STATE = Connext.Storage.GetUserState();
@@ -11098,42 +6657,69 @@ var ConnextUser = function ($) {
         if (USER_STATE != null && USER_STATE != undefined) {
 
             if (AUTH_TYPE.Janrain) {
-                if (!window.localStorage.getItem('janrainCaptureToken')) {
+                if (!window.localStorage.getItem("janrainCaptureToken")) {
                     USER_STATE = USER_STATES.NotLoggedIn;
                     Connext.Storage.SetUserState(USER_STATE);
                 }
             }
 
             if (USER_STATE == USER_STATES.NotLoggedIn) {
-                Connext.Event.fire('onNotAuthorized', USER_STATE);
+                Connext.Event.fire("onNotAuthorized", USER_STATE);
                 Connext.Storage.ClearUser();
-                deferred.reject('onNotAuthorized');
+                deferred.reject("onNotAuthorized");
 
             } else {
                 $(UI.ActionShowLogin).hide();
                 $(UI.LogoutButton).show();
                 if (USER_STATE == USER_STATES.LoggedIn) {
-                    Connext.Event.fire('onAuthorized', USER_STATE);
-                    deferred.reject('onAuthorized');
+                    Connext.Event.fire("onAuthorized", USER_STATE);
+                    deferred.reject("onAuthorized");
 
                 } else if (USER_STATE == USER_STATES.Subscribed) {
-                    Connext.Event.fire('onHasAccess', USER_STATE);
-                    deferred.reject('onHasAccess');
+                    Connext.Event.fire("onHasAccess", USER_STATE);
+                    deferred.reject("onHasAccess");
 
                 }
             }
+            var currentState = USER_STATE.toString();
+            if (currentState != USER_STATES.NotLoggedIn) {
+                Connext.API.CheckAccess({
+                    payload: { masterId: Connext.Storage.GetAccessToken() },
+                    onSuccess: function (data) {
+                        
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                        processSuccessfulLogin("MasterId", data);
+                        if (currentState != USER_STATE) {
+                                
+                            var popup = $(UI.CheckAccessPopup);
+                           
+                            popup.find("#ConnextRunBtn").on("click", function () {
+                            Connext.Run();
+                               
+                            });
+                            $("body").append(popup);
+                            
+                            popup.connextmodal({ backdrop: "static", keyboard: false });
+                            
+                            
+                        }
+                    }
+                });
+            }
             deferred.resolve(true);
             //return deferred.promise();
-        } else {
+        }
+
+        if (USER_STATE == null || USER_STATE == undefined || AUTH_TYPE.GUP) {
             try {
-                console.log(NAME, fnName, 'AUTH_TYPE', AUTH_TYPE);
+                console.log(NAME, fnName, "AUTH_TYPE", AUTH_TYPE);
                 //this is called on page load to check if the user has access. Depending the the AUTH_TYPE we will use different methods to determing if this user currently has access.
-                AUTH_TIMING.Start = moment(); //set start time for determining access (used for Debug Details Panel)
+                AUTH_TIMING.Start = new Date(); //set start time for determining access (used for Debug Details Panel)
                 USER_STATE = USER_STATES.NotLoggedIn;
                 Connext.Storage.SetUserState(USER_STATE);
                 getUserData()
                     .done(function (result) {
-                        LOGGER.debug(NAME, fnName, 'getUserData.done -- result', result);
+                        LOGGER.debug(NAME, fnName, "getUserData.done -- result", result);
                         if (!result) {
                             throw "No User Data Result";
                         }
@@ -11141,73 +6727,69 @@ var ConnextUser = function ($) {
                             Connext.API.GetUserByEncryptedMasterId({
                                 payload: { encryptedMasterId: result },
                                 onSuccess: function (data) {
-                                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
-                                    processSuccessfulLogin('MasterId', data);
-                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                                    processSuccessfulLogin("MasterId", data);
+                                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                     deferred.resolve(true);
                                     $(UI.ActionShowLogin).hide();
                                     $(UI.LogoutButton).show();
 
                                 },
                                 onNull: function () {
-                                    LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                    deferred.reject('GetUserByMasterId.onNull');
-                                    Connext.Event.fire('onNotAuthorized', USER_STATE);
+                                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
+                                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                    deferred.reject("GetUserByMasterId.onNull");
+                                    Connext.Event.fire("onNotAuthorized", USER_STATE);
                                 },
                                 onError: function (err) {
-                                    LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                    deferred.reject('GetUserMasterId.onError');
-                                    Connext.Event.fire('onNotAuthorized', USER_STATE);
+                                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                    deferred.reject("GetUserMasterId.onError");
+                                    Connext.Event.fire("onNotAuthorized", USER_STATE);
                                 }
                             });
                         } else if (AUTH_TYPE.Janrain) {
                             Connext.API.GetUserByMasterId({
                                 payload: { id: result },
                                 onSuccess: function (data) {
-                                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
-                                    processSuccessfulLogin('Token', data);
-                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                                    processSuccessfulLogin("Token", data);
+                                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                     deferred.resolve(true);
                                 },
                                 onNull: function () {
-                                    LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                    deferred.reject('GetUserByToken.onNull');
+                                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
+                                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                    deferred.reject("GetUserByToken.onNull");
                                 },
                                 onError: function (err) {
-                                    LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                                    AUTH_TIMING.Done = moment(); //set Done for performance testing.
-                                    deferred.reject('GetUserByToken.onError');
+                                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                    deferred.reject("GetUserByToken.onError");
                                 }
 
                             });
 
                         } else if (AUTH_TYPE.GUP) {
                             //GUP Auth
-                            var gupUserHasAccess = authenticateGUPUser(result);
-                            AUTH_TIMING.Done = moment();
-                            LOGGER.debug(NAME, fnName, 'getUserData.done -- gupUserHasAccess', gupUserHasAccess);
-                            if (gupUserHasAccess) {
-                                deferred.resolve();
-                            } else {
-                                deferred.reject();
-                            }
-                            LOGGER.debug(NAME, fnName, 'getUserData.done', 'Has GUP Data', result);
+                            var gupUserHasAccess = AuthenticateGupUser(result);
+                            AUTH_TIMING.Done = new Date();
+                            LOGGER.debug(NAME, fnName, "getUserData.done -- gupUserHasAccess", gupUserHasAccess);
+                            deferred.resolve(true);
+                            LOGGER.debug(NAME, fnName, "getUserData.done", "Has GUP Data", result);
                         } else {
-                            Connext.Event.fire('onCriticalError',
-                                { 'function': 'getUserData.done', 'error': 'Unknown Registration Type' });
+                            Connext.Event.fire("onCriticalError",
+                                { 'function': "getUserData.done", 'error': "Unknown Registration Type" });
                         }
                     })
                     .fail(function (err) {
-                        LOGGER.debug(NAME, fnName, 'getUserData.fail -- err', err);
-                        AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                        LOGGER.debug(NAME, fnName, "getUserData.fail -- err", err);
+                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                         deferred.reject(err);
                     });
             } catch (e) {
-                console.error(NAME, fnName, 'EXCEPTION', e);
-                AUTH_TIMING.Done = moment(); //set Done for performance testing.
+                console.error(NAME, fnName, "EXCEPTION", e);
+                AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                 deferred.reject();
             }
         }
@@ -11219,14 +6801,14 @@ var ConnextUser = function ($) {
         /// <param name="type" type="String">This is the type of authentication method was used (will either be 'Form' or 'Token'</param>
         /// <param name="data" type="Object">The data returned from whatever was used to determine authentication (we'll use AUTH_TYPE to handle this object in the appropriate way).</param>
         /// <returns>None</returns>
-        var fnName = 'processSuccessfulLogin';
+        var fnName = "processSuccessfulLogin";
         try {
             USER_STATE = USER_STATES.LoggedIn;
-            LOGGER.debug(NAME, fnName, 'type', type, 'data', data);
-            handleUILoggedInStatus(true);
+            LOGGER.debug(NAME, fnName, "type", type, "data", data);
+            HandleUiLoggedInStatus(true);
             if (!data.Subscriptions || data.Subscriptions == null) {
-                NOTIFICATION.show('NoSubscriptionData');
-                Connext.Event.fire('onNotAuthorized', USER_STATE);
+                NOTIFICATION.show("NoSubscriptionData");
+                Connext.Event.fire("onNotAuthorized", USER_STATE);
             } else {
                 //we have a data.Subscriptions that is not an object, so parse it.
                 if (!_.isObject(data.Subscriptions)) {
@@ -11234,10 +6816,10 @@ var ConnextUser = function ($) {
                 }
                 var zipCodes = _.map(data.Subscriptions, function (s) { return s.PostalCode });
                 Connext.Storage.SetUserZipCodes(zipCodes);
-                $('#ddZipCode').html(zipCodes.toString());
+                $("#ddZipCode").html(zipCodes.toString());
             }
             //we fire onUserTokenSuccess here because we need to parse the data.Subscriptions. This event is fired regardless if we have access, just that we got data back from GetSubscriptionsByUserToken.
-            if (type == 'Token') {
+            if (type == "Token") {
                 Connext.Event.fire("onUserTokenSuccess", USER_STATE);
             }
             //handle any AUTH_TYPE specific actions below.
@@ -11255,7 +6837,7 @@ var ConnextUser = function ($) {
                 //GUP Auth
             } else {
                 //unknown AUTH_TYPE, fire critical event and .reject();
-                Connext.Event.fire('onCriticalError', { 'function': 'processAuthentication', 'error': 'Unknown Registration Type' });
+                Connext.Event.fire("onCriticalError", { 'function': "processAuthentication", 'error': "Unknown Registration Type" });
             }
 
             //After AUTH_TYPE specific actions we handle any universal actions below.
@@ -11266,7 +6848,7 @@ var ConnextUser = function ($) {
             //TO DO: This will need updated when we allow logins without premium access, since this will only update html if you have access.
 
             if (hasAccess) {
-                LOGGER.debug(NAME, 'hasAccess');
+                LOGGER.debug(NAME, "hasAccess");
                 USER_STATE = USER_STATES.Subscribed;
                 Connext.Event.fire("onHasAccess", USER_STATE);
 
@@ -11278,25 +6860,24 @@ var ConnextUser = function ($) {
 
                 if (modalManager) {
                     var openModals = modalManager.getOpenModals();
-                    LOGGER.debug(NAME, fnName, 'openModals', openModals);
+                    LOGGER.debug(NAME, fnName, "openModals", openModals);
 
                     if (openModals.length > 0) {
                         if (openModals[0].isShown) {
                             //modal is shown, this is from one of our modals, show alert message and after slight delay, hide the modal and show content.
-                            NOTIFICATION.show('AuthSuccess');
+                            NOTIFICATION.show("AuthSuccess");
                             setTimeout(function () {
-                                openModals[0].$element.modal('hide');
+                                openModals[0].$element.modal("hide");
                             }, 1500);
                         }
                     }
                 }
-                Connext.Action.ShowContent(); //show content if it is hidden.
             } else {
-                Connext.Event.fire('onNotAuthorized', USER_STATE);
+                Connext.Event.fire("onNotAuthorized", USER_STATE);
             }
             Connext.Storage.SetUserState(USER_STATE);
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11305,11 +6886,11 @@ var ConnextUser = function ($) {
         /// <param name="authSrc" type="String">This is the source of authentication either 'Form' or 'Token'. This lets us know where the auth came from.</param>
         /// <param name="data" type="Object">This is the entire 'User' data object returned from account services. data.Subscriptions will be used to check assess but other properties are needed for Events.</param>
         /// <returns>None</returns>
-        var fnName = 'checkSubscriptionsForAccess';
+        var fnName = "checkSubscriptionsForAccess";
         try {
-            LOGGER.debug(NAME, fnName, 'OPTIONS', OPTIONS, 'data', data);
+            LOGGER.debug(NAME, fnName, "OPTIONS", OPTIONS, "data", data);
             if (data.Subscriptions.length == 0) {
-                LOGGER.debug(NAME, fnName, 'user has not subscriptions', null);
+                LOGGER.debug(NAME, fnName, "user has not subscriptions", null);
                 return false;
             }
 
@@ -11322,24 +6903,24 @@ var ConnextUser = function ($) {
             }
             var allowedAccts = _.where(data.Subscriptions, OPTIONS.AccessRules);
 
-            LOGGER.debug(NAME, fnName, 'allowedAccts', allowedAccts);
+            LOGGER.debug(NAME, fnName, "allowedAccts", allowedAccts);
 
             //create universal event object that will be used in the Event for either onAuthorized or onNotAuthorized.
             var eventObj = { type: authSrc, uid: data.MasterId, user: (data.User) ? data.User : null, subscriptions: data.Subscriptions, accessRules: OPTIONS.AccessRules };
 
             if (allowedAccts.length > 0) {
                 //add authorizeSubscriptions to eventObj
-                eventObj['authorizedSubscriptions'] = allowedAccts;
-                Connext.Event.fire('onAuthorized', eventObj);
+                eventObj["authorizedSubscriptions"] = allowedAccts;
+                Connext.Event.fire("onAuthorized", eventObj);
                 return true;
             } else {
-                Connext.Event.fire('onNotAuthorized', eventObj);
+                Connext.Event.fire("onNotAuthorized", eventObj);
                 return false;
             }
 
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -11352,7 +6933,7 @@ var ConnextUser = function ($) {
         /// <summary>This gets user data regardless of the AUTH_TYPE. This will use the appropraite method to getting UserData depending on AUTH_TYPE, since some AUTH_TYPES require ajax calls we use a deferred object for all responses.</summary>
         /// <param name="" type=""></param>
         /// <returns type="Object">Returns object with 2 props (type=AUTH_TYPE and value AUTH_TYPE related value.)</returns>
-        var fnName = 'getUserData';
+        var fnName = "getUserData";
         var deferred = $.Deferred();
         try {
 
@@ -11363,40 +6944,40 @@ var ConnextUser = function ($) {
                 if (encryptedMasterId) {
                     deferred.resolve(encryptedMasterId);
                 } else {
-                    deferred.reject('No MG2 UserToken');
+                    deferred.reject("No MG2 UserToken");
                 }
             } else if (AUTH_TYPE.Janrain) {
                 if (window.JANRAIN) {
-                    if (!window.localStorage.getItem('janrainCaptureToken')) {
+                    if (!window.localStorage.getItem("janrainCaptureToken")) {
                         USER_STATE = USER_STATES.NotLoggedIn;
                         Connext.Storage.SetUserState(USER_STATE);
-                        deferred.reject('Janrain Logged out User');
+                        deferred.reject("Janrain Logged out User");
                     } else {
-                        LOGGER.debug(NAME, fnName, 'Janrain Loaded');
+                        LOGGER.debug(NAME, fnName, "Janrain Loaded");
 
                         var janrainProfile = getJanrainProfileData();
-                        LOGGER.debug(NAME, fnName, 'janrainProfile', janrainProfile);
+                        LOGGER.debug(NAME, fnName, "janrainProfile", janrainProfile);
 
                         if (janrainProfile.uuid) {
                             USER_STATE = USER_STATES.LoggedIn;
                             deferred.resolve(janrainProfile.uuid);
                             //deferred.resolve({ type: 'janrain', value: janrainProfile.uuid });
                         } else {
-                            deferred.reject('No Janrain Profile Data');
+                            deferred.reject("No Janrain Profile Data");
                         }
                     }
                 }
                 else {
                     USER_STATE = USER_STATES.NotLoggedIn;
                     Connext.Storage.SetUserState(USER_STATE);
-                    deferred.reject('Janrain object is exist');
+                    deferred.reject("Janrain object is exist");
                 }
 
             } else if (AUTH_TYPE.GUP) {
                 //Call GUP to get user data.
 
-                getCurrentGUPUser().then(function (data) {
-                    LOGGER.debug(NAME, fnName, 'getCurrentGUPUser.then (data)', data);
+                GetCurrentGupUser().then(function (data) {
+                    LOGGER.debug(NAME, fnName, "getCurrentGUPUser.then (data)", data);
                     if (data) {
                         //we have a return from GUP, call .resolve and return this data.
                         deferred.resolve(data);
@@ -11404,7 +6985,7 @@ var ConnextUser = function ($) {
 
                 }).fail(function (error) {
                     //we failed to get GUP user data.
-                    LOGGER.debug(NAME, fnName, 'getCurrentGUPUser.fail (error)', error);
+                    LOGGER.debug(NAME, fnName, "getCurrentGUPUser.fail (error)", error);
                     deferred.reject();
 
                 });
@@ -11412,12 +6993,12 @@ var ConnextUser = function ($) {
 
             } else {
                 //unknown AUTH_TYPE, fire critical event and .reject();
-                Connext.Event.fire('onCriticalError', { 'function': 'getUserData', 'error': 'Unknown Registration Type' });
-                deferred.reject('Unknown Registration Type');
+                Connext.Event.fire("onCriticalError", { 'function': "getUserData", 'error': "Unknown Registration Type" });
+                deferred.reject("Unknown Registration Type");
             }
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
         return deferred.promise();
     };
@@ -11426,28 +7007,31 @@ var ConnextUser = function ($) {
         /// <summary>This logs out the user out whatever AUTH system we are using.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'logoutUser';
+        var fnName = "logoutUser";
         try {
             LOGGER.debug(NAME, fnName);
 
             if (AUTH_TYPE.MG2 || AUTH_TYPE.Janrain) {
-                handleUILoggedInStatus(false);
+                HandleUiLoggedInStatus(false);
             } else if (AUTH_TYPE.GUP) {
                 //this is gup.
                 //logoutGUPUser returns a deferred object ($.ajax call), so we need to wait for the result.
-                logoutGUPUser().then(function (data) {
+                LogoutGupUser().then(function (data) {
                     if (data) {
-                        LOGGER.debug(NAME, fnName, 'logoutGUPUser.then', data);
+                        LOGGER.debug(NAME, fnName, "logoutGUPUser.then", data);
+                        USER_STATE = USER_STATES.NotLoggedIn;
+                        Connext.Storage.SetUserState(USER_STATE);
+                        Connext.Event.fire("onNotAuthorized", USER_STATE);
                     }
                 }).fail(function (error) {
-                    console.error(NAME, fnName, 'Exception', error);
+                    console.error(NAME, fnName, "Exception", error);
                     //return response;
                 });
             }
             Connext.Storage.SetUserState(USER_STATES.NotLoggedIn);
             Connext.Run();
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11463,19 +7047,19 @@ var ConnextUser = function ($) {
         /// <summary>Gets Janrain profile from local storage (this is where janrain is stored).</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'getJanrainProfileData';
+        var fnName = "getJanrainProfileData";
         try {
             //console.log(pName, fnName);
-            var profileData = window.localStorage.getItem('janrainCaptureProfileData');
+            var profileData = window.localStorage.getItem("janrainCaptureProfileData");
             if (profileData == null)
-            { profileData = window.localStorage.getItem('janrainCaptureReturnExperienceData'); }
+            { profileData = window.localStorage.getItem("janrainCaptureReturnExperienceData"); }
             if (profileData) {
                 return $.parseJSON(profileData);
             } else {
                 return false;
             }
         } catch (e) {
-            console.log(NAME, fnName, 'EXCEPTION', e);
+            console.log(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -11484,7 +7068,7 @@ var ConnextUser = function ($) {
         /// <summary>This is the callback that is fired when a user is successfully logged into Janrain. This is not triggered when logging in via a form or modal and when logging in via SSO for the first time. (repeated SSO logins is handled in the 'getUserData' function above.</summary>
         /// <param name="result" type="Object">Result object returned from Janrain.</param>
         /// <returns>None</returns>
-        var fnName = 'janrainAuthenticationCallback';
+        var fnName = "janrainAuthenticationCallback";
         try {
             LOGGER.debug(NAME, fnName, result);
             if (!result.userData.uuid) {
@@ -11493,20 +7077,20 @@ var ConnextUser = function ($) {
             Connext.API.GetUserByMasterId({
                 payload: { id: result.userData.uuid },
                 onSuccess: function (data) {
-                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
-                    processSuccessfulLogin('Form', data);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                    processSuccessfulLogin("Form", data);
                 },
                 onNull: function () {
-                    LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
+                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                 },
                 onError: function (err) {
-                    LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
+                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
                 }
 
             });
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11514,40 +7098,43 @@ var ConnextUser = function ($) {
 
     //#region GUP Functions -- GUP only functions
 
-    var executePopupLoginFlow = function (windowHandler) {
+    var executePopupLoginFlow = function () {
 
         var popupWidth = 500,
             popupHeight = 600,
             popupPositionLeft = (screen.width / 2) - (popupWidth / 2),
-            popupPositionTop = (screen.height / 2) - (popupHeight / 2),
-            popupWindow = window.open(
-                '//login-stage.jconline.com/PLAI-GUP-MG2/authenticate/?window-mode=popup',
-                '_blank',
-                'toolbar=no, scrollbars=yes, resizable=no, ' +
-                'width=' + popupWidth + ', ' +
-                'height=' + popupHeight + ', ' +
-                'top=' + popupPositionTop + ', ' +
-                'left=' + popupPositionLeft
+            popupPositionTop = (screen.height / 2) - (popupHeight / 2);
+        var loginTab =  window.open(
+                GUP_SETTINGS.LoginServiceBasePath  + "authenticate/?window-mode=popup",
+                "_blank",
+                "toolbar=no, scrollbars=yes, resizable=no, " +
+                "width=" + popupWidth + ", " +
+                "height=" + popupHeight + ", " +
+                "top=" + popupPositionTop + ", " +
+                "left=" + popupPositionLeft
             );
+        loginTab.onunload = function(e) {
+            LOGGER.debug(NAME, "<< GUP >>", e);
+        }
         return;
     };
 
-    var getCurrentGUPUser = function () {
-        LOGGER.debug('User', 'getCurrentGUPUser');
+    var GetCurrentGupUser = function () {
+        LOGGER.debug("User", "getCurrentGUPUser");
         return $.ajax({
             type: "POST",
-            url: '//user-stage.jconline.com/PLAI-GUP-MG2/user/?callback=?', //need to update based on ADMIN settings.
+            url: GUP_SETTINGS.UserServiceBasePath+ "user/?callback=?", //need to update based on ADMIN settings.
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: true
         });
     };
 
-    var authenticateGUPUser = function (data) {
+    var AuthenticateGupUser = function (data) {
         /// <summary>Takes the data object returned from the 'getCurrentGUPUser' call and checks if it has access.  This is a simple check since GUP handles authentication, but we have this seperate function since it will be called behind the scenes on page load and when a user logs in through GUP (all we have is a callback when the login form closes, so we need to process all login form changes here). NOTE: this is the equivalent for 'checkSubscriptionsForAccess' for MG2 and Janrain Auths. </summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'authenticateGUPUser';
+        var fnName = "authenticateGUPUser";
         try {
             LOGGER.debug(NAME, fnName);
 
@@ -11556,12 +7143,17 @@ var ConnextUser = function ($) {
                 //just because they are logged in, does not mean they get access...check access property.
                 if (data.response.user.hasMarketAccess) {
                     //this user has marketAccess so fire deferred.resolve(true).
-                    LOGGER.debug(NAME, fnName, 'GUP User <<IS>> LOGGED IN, AND has market access');
-                    ////deferred.resolve(true);
+                    LOGGER.debug(NAME, fnName, "GUP User <<IS>> LOGGED IN, AND has market access");
+                    USER_STATE = USER_STATES.Subscribed;
+                    Connext.Storage.SetUserState(USER_STATE);
+                    Connext.Event.fire("onAuthorized", USER_STATE);
                     return true;
                 } else {
                     //even though this user is logged in, they don't have access, so fire deferred.reject().
-                    LOGGER.debug(NAME, fnName, 'GUP User <<IS>> LOGGED IN, but doesnt have marketAccess');
+                    LOGGER.debug(NAME, fnName, "GUP User <<IS>> LOGGED IN, but doesnt have marketAccess");
+                    USER_STATE = USER_STATES.LoggedIn;
+                    Connext.Storage.SetUserState(USER_STATE);
+                    Connext.Event.fire("onNotAuthorized", USER_STATE);
                     ////deferred.reject();
                     return false;
                 }
@@ -11569,14 +7161,18 @@ var ConnextUser = function ($) {
                 ////IS_LOGGED_IN = true;
             } else {
                 //user is not logged into GUP.
-                LOGGER.debug(NAME, fnName, 'GUP User <<NOT>> LOGGED IN');
+                LOGGER.debug(NAME, fnName, "GUP User <<NOT>> LOGGED IN");
+                USER_STATE = USER_STATES.NotLoggedIn;
+                Connext.Storage.SetUserState(USER_STATE);
+                Connext.Event.fire("onNotAuthorized", USER_STATE);
                 return false;
                 ////IS_LOGGED_IN = false;
                 ////deferred.reject();
             }
-
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
+            USER_STATE = USER_STATES.NotLoggedIn;
+            Connext.Storage.SetUserState(USER_STATE);
             return false;
         }
     };
@@ -11589,55 +7185,39 @@ var ConnextUser = function ($) {
         /// <summary>This registers any event listeners needed (for now just for GUP, but want to put it inside a function so we don't set an event listener for GUP on other AUTH_TYPES</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'registerEventlisteners';
+        var fnName = "registerEventlisteners";
         try {
             //LOGGER.debug(pName, fnName);
             if (AUTH_TYPE.GUP) {
                 //this is required for GUP, when the user closes the popup login modal (regardless of successful login, if they click 'cancel' or just close the popup modal.
                 window.jQuery(window)
-                    .on('focus.gup_login_popup',
+                    .on("focus.gup_login_popup",
                     function () {
-                        //GUP does not have a callback for successful login, because of this and what i mentioned above about not knowing why the modal was closed, we need to call the GetUserStatus call again, to see if they are now logged in. (This is not ideal, but this is actually according to the GUP documentation).
+                        //GUP does not have a callback for successful login, because of this and what i mentioned above about not knowing why the modal was closed, we need to call the GetUserStatus call again, 
+                        //to see if they are now logged in. (This is not ideal, but this is actually according to the GUP documentation).
                         //refresh();
-                        LOGGER.debug('focus.gup_login_popup');
+                        LOGGER.debug("focus.gup_login_popup");
                         //checkAccess();
                     });
             }
 
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
+
 
 
 
 
     //#region UI Functions
 
-    var setLoginModal = function (html) {
-        /// <summary>This appends a default Login modal to the DOM based on conditions from the OPTIONS object.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = 'setLoginModal';
-        try {
-            //LOGGER.debug(pName, fnName);
-
-            //this is MG2 type, so add to the DOM.
-            if (AUTH_TYPE.MG2) {
-                $('body').append(html);
-            }
-
-        } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
-        }
-    };
-
-    var handleUILoggedInStatus = function (isLoggedIn) {
+    var HandleUiLoggedInStatus = function (isLoggedIn) {
         /// <summary>This changes any UI related text based on the logged in status.  This called after we determine the LoggedInStatus on pageload or after a user has changed the login status (from logging in or logging out).</summary>
         /// <param name="isLoggedIn" type="Boolean">Logged in status.</param>
         /// <returns>None</returns>
-        var fnName = 'handleUILoggedInStatus';
+        var fnName = "handleUILoggedInStatus";
         try {
             //LOGGER.debug(pName, fnName);
 
@@ -11657,21 +7237,21 @@ var ConnextUser = function ($) {
                     $(UI.ActionShowLogin).hide();
                     //is logged in.
                     //sets the html to the data property for 'mg2-logged-in'. This lets the client to set this on their site and we will update accordingly (i.e Logout or Log Out or Sign Out etc..).
-                    $el.html($el.data('mg2-logged-in'));
-                    Connext.Event.fire('onAuthorized', null);
+                    $el.html($el.data("mg2-logged-in"));
+                    Connext.Event.fire("onAuthorized", null);
                 } else {
                     //not logged in.
-                    $el.html($el.data('mg2-logged-out'));
+                    $el.html($el.data("mg2-logged-out"));
                     Connext.Storage.ClearUser();
                     $(UI.LogoutButton).hide();
                     $(UI.ActionShowLogin).show();
-                    Connext.Event.fire('onNotAuthorized', null);
-                    $('#ddZipCode').html($.jStorage.get('CustomZip'));
+                    Connext.Event.fire("onNotAuthorized", null);
+                    $("#ddZipCode").html($.jStorage.get("CustomZip"));
                 }
             }
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11683,20 +7263,22 @@ var ConnextUser = function ($) {
 
     //#region API CALLS
 
-    var MG2Authenticate = function (email, password) {
+    var Mg2Authenticate = function (email, password) {
         /// <summary>Authenticates an MG2 user by email and password.  Calls GetUserByEmailAndPassword (calls api/authentication in account services)</summary>
         /// <param name="email" type="string"></param>
         /// <param name="password" type="string"></param>
         /// <returns>None</returns>
-        var fnName = 'MG2Authenticate';
+        var fnName = "MG2Authenticate";
         try {
             if (!email) {
-                NOTIFICATION.showAndHide('Please enter email', 10000);
+                FORM_ALERT.find(".alert").remove();
+                NOTIFICATION.showAndHide("Please enter email", 10000);
                 FORM_SUBMIT_LOADER.off();
                 return false;
             }
             if (!password) {
-                NOTIFICATION.showAndHide('Please enter password', 10000);
+                FORM_ALERT.find(".alert").remove();
+                NOTIFICATION.showAndHide("Please enter password", 10000);
                 FORM_SUBMIT_LOADER.off();
                 return false;
             }
@@ -11704,45 +7286,59 @@ var ConnextUser = function ($) {
             Connext.API.GetUserByEmailAndPassword({
                 payload: { email: email, password: password },
                 onSuccess: function (data) {
-                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
-                    processSuccessfulLogin('Form', data);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                    processSuccessfulLogin("Form", data);
                     $(UI.ActionShowLogin).hide();
                     $(UI.LogoutButton).show();
                     Connext.Run();
                 },
                 onNull: function () {
-                    LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                    NOTIFICATION.show('NotAuthenticated');
+                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
+                    NOTIFICATION.show("NotAuthenticated");
                 },
                 onError: function (err) {
-                    LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                    var errorMessage = 'GenericAuthFailed';
-                    if (err.responseJSON) {
+                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                    var errorMessage = "GenericAuthFailed";
+                    if (err.responseJSON || err.responseText) {
                         try {
-                            LOGGER.debug(NAME, fnName, 'try parse error response');
-                            errorMessage = err.responseJSON.Message;
-                            var json = JSON.parse(err.responseJSON.Message);
-                            if (json.Message) {
-                                errorMessage = json.Message;
-                                if (errorMessage == 'UserName or Password invalid.') {
-                                    errorMessage += ' ' + incorrectCreditsMessage;
+                            LOGGER.debug(NAME, fnName, "try parse error response");
+                            if (!err.responseJSON && err.responseText) {
+                                var respText = JSON.parse(err.responseText);
+                                if (respText.Message) {
+                                    var message = JSON.parse(respText.Message);
+                                    errorMessage = message.Message;
+                                    if (errorMessage == "UserName or Password invalid.") {
+                                        errorMessage += " " + incorrectCreditsMessage;
+                                    }
+                                }
+
+                            } else {
+                                errorMessage = err.responseJSON.Message;
+                                var json = JSON.parse(err.responseJSON.Message);
+                                if (json.Message) {
+                                    errorMessage = json.Message;
+                                    if (errorMessage == "UserName or Password invalid.") {
+                                        errorMessage += " " + incorrectCreditsMessage;
+                                    }
                                 }
                             }
                         }
                         catch (e) {
-                            LOGGER.debug(NAME, fnName, 'Error of parse response JSON');
+                            LOGGER.debug(NAME, fnName, "Error of parse response JSON");
                         }
                     }
+                    FORM_ALERT.find(".alert").remove();
                     NOTIFICATION.showAndHide(errorMessage, 10000);
                 },
                 onComplete: function () {
+                    
                     FORM_SUBMIT_LOADER.off();
                 }
             });
 
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11750,26 +7346,17 @@ var ConnextUser = function ($) {
 
     //#region AJAX CALLS
 
-    var logoutGUPUser = function () {
-        LOGGER.debug('User', 'logoutGUPUser');
+    var LogoutGupUser = function () {
+        LOGGER.debug("User", "logoutGUPUser");
         return $.ajax({
             type: "POST",
-            url: '//user-stage.jconline.com/PLAI-GUP-MG2/user/logout/?callback=?', //need to update based on ADMIN settings.
+            url: GUP_SETTINGS.UserServiceBasePath +
+                "user/logout/?callback=?", //need to update based on ADMIN settings.
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: true
         });
     };
-
-    //currentUserAPICall = function () {
-    //    return $.ajax({
-    //        type: "POST",
-    //        url: self.ServiceConfigurations.CurrentUserCommand,
-    //        contentType: "application/json; charset=utf-8",
-    //        dataType: "json",
-    //        async: true
-    //    });
-    //};
 
     //#endregion AJAX CALLS
 
@@ -11779,6 +7366,11 @@ var ConnextUser = function ($) {
             LOGGER = Connext.Logger;
             OPTIONS = (options) ? options : {}; //if not options set to blank object
             init();
+            //TODO: MOVE GUP SETTINGS TO ADMIN.
+            GUP_SETTINGS = {
+                'UserServiceBasePath': OPTIONS.Settings ? OPTIONS.Settings.GUPAccountService : "",
+                'LoginServiceBasePath': OPTIONS.Settings ? OPTIONS.Settings.GUPAccountLoginUrl : ""
+            };
             //return this;
         },
         CheckAccess: function () {
@@ -11789,19 +7381,19 @@ var ConnextUser = function ($) {
         },
         JanrainLoaded: function () {
             JANRAIN_LOADED = true;
-            LOGGER.debug(NAME, 'JanrainLoaded');
+            LOGGER.debug(NAME, "JanrainLoaded");
         },
         onLoginSuccess: function (result) {
             //this is only called when logging in via native janrain modal or from mg2 form calling janrain.capture.ui.postCaptureForm
             //we handle janrain SSO logins in the checkAccess -> getUserToken call. 
-            LOGGER.debug(NAME, 'onLoginSuccess', result);
+            LOGGER.debug(NAME, "onLoginSuccess", result);
             janrainAuthenticationCallback(result);
         },
         getUserState: function () {
             return Connext.Storage.GetUserState();
         },
         onLogout: function () {
-            LOGGER.debug(NAME, 'onLogout');
+            LOGGER.debug(NAME, "onLogout");
             IS_LOGGED_IN = false;
             Connext.Storage.ClearUser();
             //Cookies.remove(Options.storageKeys.userRegId);
@@ -11816,7 +7408,7 @@ var ConnextMeterCalculation = function ($) {
 
     //region GLOBALS
 
-    var NAME = 'MeterCalculation'; //base name for logging.
+    var NAME = "MeterCalculation"; //base name for logging.
 
     //create local reference to logger
     var LOGGER;
@@ -11828,9 +7420,10 @@ var ConnextMeterCalculation = function ($) {
         "Subdomain": evalSubdomain,
         "Geo": evalGeo,
         "Url": evalUrlParam,
-        "JSVar": evalJSVar,
+        "JSVar": evalJsVar,
         "Meta": evalMeta,
-        "UserState": evalUserState
+        "UserState": evalUserState,
+        "AdBlock": evalAdBlock
     }
 
     //this will hold the cached results when we are determing segment values.  Once a 'Segment Type' is determined we set it's value here, then on subsqeunt checks to this type we will return the cached value instead of determining this value again.
@@ -11848,13 +7441,13 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>Processes the Rules object and handles any business rules based on this data.</summary>
         /// <param name="rules" type="Array">Rules to process</param>
         /// <returns type="DeferredObject">Jquery deferred object</returns>
-        var fnName = 'calculateMeterLevel';
+        var fnName = "calculateMeterLevel";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
-            LOGGER.debug(NAME, fnName, 'calculating meter level....');
+            LOGGER.debug(NAME, fnName, "calculating meter level....");
             //LOGGER.debug(NAME, fnName, 'rules', rules);
 
             //holds variable if this rule is passed. We will set this in the 'rules.each'. We use this in the rules.each so we don't process any other rules when this is set to true (we can't exit out of a $.each, so we need to just skip processing)
@@ -11862,7 +7455,7 @@ var ConnextMeterCalculation = function ($) {
 
             $.each(rules, function (key, rule) {
                 //loop through rules. (val is a rule object)
-                LOGGER.debug(NAME, fnName, 'rules.each', key, rule);
+                LOGGER.debug(NAME, fnName, "rules.each", key, rule);
 
                 if (!rulePassed) { //we only loop through this rules segments if we have not already determined a rule to use.
 
@@ -11871,30 +7464,30 @@ var ConnextMeterCalculation = function ($) {
 
                     $.each(rule.Segments, function (key, segment) {
                         //loop through segments for this rule
-                        LOGGER.debug(NAME, fnName, 'segments.each', key, segment);
+                        LOGGER.debug(NAME, fnName, "segments.each", key, segment);
 
                         if (allSegmentsPass) {
                             //previous segment (or this is first segment) has not failed, so we should test this.
 
                             SEGMENT_TEST_FUNCTIONS[segment.SegmentType](segment)
-                                .done(function () {
+                                .done(function() {
                                     //.done means this segment passed, we really don't need to do anything here, since we only care if a segment fails.
-                                    LOGGER.debug(NAME, fnName, 'Segment[' + segment.id + '] --- PASSED');
+                                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- PASSED");
                                 })
-                                .fail(function () {
+                                .fail(function() {
                                     //.fail means this segment failed, so set allSegmentsPass to false.
                                     allSegmentsPass = false;
-                                    LOGGER.debug(NAME, fnName, 'Segment[' + segment.id + '] --- FAILED');
-                                })
+                                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- FAILED");
+                                });
                         } else {
                             //previous segment in this rule failed, so skip checking this segment.
-                            LOGGER.debug(NAME, fnName, 'Previous Segment Failed, Not processing rest of segments.');
+                            LOGGER.debug(NAME, fnName, "Previous Segment Failed, Not processing rest of segments.");
                         }
                     }); // each rule.Segment loop.
 
                     //we've finished looping through this rules 'Segment' array. Check if all allSegmentsPass is true, if it is then we know this rule passed and is the one we should use.
                     if (allSegmentsPass) {
-                        LOGGER.debug(NAME, fnName, 'All Segments Passed, Using [' + rule.Name + '] Rule ');
+                        LOGGER.debug(NAME, fnName, "All Segments Passed, Using [" + rule.Name + "] Rule ");
 
                         //we set rulePassed to true, so we skip checking any other rules.
                         rulePassed = true;
@@ -11906,7 +7499,7 @@ var ConnextMeterCalculation = function ($) {
 
                 } else {
                     //rulePassed is true, so we already determined a rule to use, so not testing any other rules (can't exit out of this $.each so just don't process it's segments 
-                    LOGGER.debug(NAME, fnName, 'Rule Already Set...Skipping this rule.');
+                    LOGGER.debug(NAME, fnName, "Rule Already Set...Skipping this rule.");
                 }// !rulePassed
 
 
@@ -11918,7 +7511,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             deferred.reject(e);
         }
 
@@ -11933,26 +7526,26 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks article age based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalArticleAge';
+        var fnName = "evalArticleAge";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
 
-            LOGGER.debug(NAME, fnName, '-- Testing ---');
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
 
             var articleAge = getArticleAge(segment.Options);
 
             //fixes qualifier so if it is an equal sign we set qualifier as ==
-            var qualifier = (segment.Options.Qualifier == '=') ? '==' : segment.Options.Qualifier;
+            var qualifier = (segment.Options.Qualifier == "=") ? "==" : segment.Options.Qualifier;
 
 
             if (eval(articleAge + qualifier + segment.Options.Val)) {
-                console.log('PASSES');
+                console.log("PASSES");
                 deferred.resolve();
             } else {
-                console.log('NOT PASSED');
+                console.log("NOT PASSED");
                 deferred.reject();
             }
 
@@ -11970,13 +7563,13 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks based on a Url parameter.</summary>
         /// <param type="Array" name="_SegmentOptions">Holds array of segment options</param>
         /// <returns type="Boolean">Boolean if segment passed.</returns>
-        var fnName = 'evalUrlParam';
+        var fnName = "evalUrlParam";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
-            LOGGER.debug(NAME, fnName, '-- Testing ---');
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
 
             //gets the value of the url param. (this will be null if this url param does not exist
             var paramValue = Connext.Utils.GetUrlParam(segment.Options.ParamName);
@@ -11985,15 +7578,15 @@ var ConnextMeterCalculation = function ($) {
 
 
                 if (eval("'" + paramValue.toUpperCase() + "'" + qualifier + "'" + segment.Options.Val.toUpperCase() + "'")) {
-                    LOGGER.debug(NAME, fnName, 'Segment[' + segment.id + '] --- Passed');
+                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- Passed");
                     deferred.resolve();
                 } else {
-                    LOGGER.debug(NAME, fnName, 'Segment[' + segment.id + '] --- FAILED');
+                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- FAILED");
                     deferred.reject();
                 }
 
             } else {
-                if (qualifier == '==') {
+                if (qualifier == "==") {
                     deferred.reject();
                 } else {
                     deferred.resolve();
@@ -12012,14 +7605,14 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks hidden field value based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalHiddenField';
+        var fnName = "evalHiddenField";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
 
-            LOGGER.debug(NAME, fnName, '-- Testing ---');
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
 
             var isPassed = false;
             var $hiddenField = segment.Options.Selector.trim() ? $(segment.Options.Selector + "[type='hidden']") : null;
@@ -12033,10 +7626,10 @@ var ConnextMeterCalculation = function ($) {
             }
 
             if (isPassed) {
-                console.log('PASSES');
+                console.log("PASSES");
                 deferred.resolve();
             } else {
-                console.log('NOT PASSED');
+                console.log("NOT PASSED");
                 deferred.reject();
             }
 
@@ -12053,24 +7646,24 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks subdomain in domain based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalSubdomain';
+        var fnName = "evalSubdomain";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
 
-            LOGGER.debug(NAME, fnName, '-- Testing ---');
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
 
-            var searchingVal = "." + segment.Options.Val.toUpperCase() + ".";
-            var sourceVal = "." + window.location.hostname.toUpperCase(); // root domain won't be included
+            var searchingVal = segment.Options.Val.toUpperCase();
+            var sourceVal = window.location.hostname.toUpperCase(); // root domain won't be included
             var qualifier = segment.Options.Qualifier.toUpperCase();
 
-            if (!(qualifier == "IN" ^ sourceVal.includes(searchingVal))) {
-                console.log('PASSES');
+            if (!((qualifier == "IN") ^ (sourceVal.split('.').reverse().indexOf(searchingVal) > 1))) {
+                console.log("PASSES");
                 deferred.resolve();
             } else {
-                console.log('NOT PASSED');
+                console.log("NOT PASSED");
                 deferred.reject();
             }
 
@@ -12087,7 +7680,6 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks the current user zip code</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalGeo';
         var isPassed = false;
         //create deferred object
         var deferred = $.Deferred();
@@ -12097,44 +7689,44 @@ var ConnextMeterCalculation = function ($) {
                 $.each(Connext.Storage.GetUserZipCodes(),
                     function (key, code) {
                         if (segment.Options.Zipcodes.indexOf(code) >= 0) {
-                            isPassed = segment.Options.GeoQalifier.toUpperCase() == 'IN';
+                            isPassed = segment.Options.GeoQalifier.toUpperCase() == "IN";
                             return false;
                         } else {
-                            isPassed = segment.Options.GeoQalifier.toUpperCase() != 'IN';
+                            isPassed = segment.Options.GeoQalifier.toUpperCase() != "IN";
                         }
                     });
             } else {
                 if (segment.Options.Zipcodes.indexOf(Connext.Utils.GetUserZipcode()) >= 0) {
-                    isPassed = segment.Options.GeoQalifier.toUpperCase() == 'IN';
+                    isPassed = segment.Options.GeoQalifier.toUpperCase() == "IN";
                 } else {
-                    isPassed = segment.Options.GeoQalifier.toUpperCase() != 'IN';
+                    isPassed = segment.Options.GeoQalifier.toUpperCase() != "IN";
                 }
             }
         } catch (e) {
             isPassed = false;
         }
         if (isPassed) {
-            console.log('PASSES');
+            console.log("PASSES");
             deferred.resolve();
         } else {
-            console.log('NOT PASSED');
+            console.log("NOT PASSED");
             deferred.reject();
         }
         return deferred.promise();
     }
 
-    function evalJSVar(segment) {
+    function evalJsVar(segment) {
         /// <summary>This checks JS variable value based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalJSVar';
+        var fnName = "evalJSVar";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
 
-            LOGGER.debug(NAME, fnName, '-- Testing ---');
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
 
             var isPassed = true;
             var varValue = segment.Options.VarName;
@@ -12144,29 +7736,29 @@ var ConnextMeterCalculation = function ($) {
                 jsValue = jsValue.map(function (item) {
                     return item.trim().toLowerCase();
                 });
-                if (segment.Options.Qualifier == 'Contains' ||
-                    segment.Options.Qualifier == 'Doesn\'t contain') {
+                if (segment.Options.Qualifier == "Contains" ||
+                    segment.Options.Qualifier == "Doesn't contain") {
                     if (jsValue.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
-                        isPassed = segment.Options.Qualifier == 'Contains';
+                        isPassed = segment.Options.Qualifier == "Contains";
                     } else {
-                        isPassed = segment.Options.Qualifier == 'Doesn\'t contain';
+                        isPassed = segment.Options.Qualifier == "Doesn't contain";
                     }
                 } else {
-                    isPassed = segment.Options.Qualifier == 'Equals';
+                    isPassed = segment.Options.Qualifier == "Equals";
                 }
             } else {
                 jsValue = jsValue.toString().toLowerCase();
 
-                if (segment.Options.Qualifier == 'Contains' ||
-                    segment.Options.Qualifier == 'Doesn\'t contain') {
+                if (segment.Options.Qualifier == "Contains" ||
+                    segment.Options.Qualifier == "Doesn't contain") {
                     if (jsValue == undefined) {
-                        isPassed = segment.Options.Qualifier == 'Doesn\'t contain';
+                        isPassed = segment.Options.Qualifier == "Doesn't contain";
                     } else {
                         var array = jsValue.split(/[,;]/g);
                         if (array.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
-                            isPassed = segment.Options.Qualifier == 'Contains';
+                            isPassed = segment.Options.Qualifier == "Contains";
                         } else {
-                            isPassed = segment.Options.Qualifier == 'Doesn\'t contain';
+                            isPassed = segment.Options.Qualifier == "Doesn't contain";
                         }
                     }
                 } else {
@@ -12174,7 +7766,7 @@ var ConnextMeterCalculation = function ($) {
                         .JSEvaluate(jsValue,
                             segment.Options.Qualifier,
                             segment.Options.Val.toLowerCase(),
-                            'JavascriptCriteria')) {
+                            "JavascriptCriteria")) {
                         //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
                     } else {
                         //this failed, so set actionPassed to false;
@@ -12183,10 +7775,10 @@ var ConnextMeterCalculation = function ($) {
                 }
             }
             if (isPassed) {
-                console.log('PASSES');
+                console.log("PASSES");
                 deferred.resolve();
             } else {
-                console.log('NOT PASSED');
+                console.log("NOT PASSED");
                 deferred.reject();
             }
 
@@ -12205,22 +7797,21 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks evalUserState presence based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalUserState';
+        var fnName = "evalUserState";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
-            var isPassed = false;
             var userState = Connext.User.getUserState();
             if (userState == null)
-                userState = 'Logged Out';
-            isPassed = userState == segment.Options['User State'];
+                userState = "Logged Out";
+            var isPassed = userState == segment.Options["User State"];
             if (isPassed) {
-                console.log('PASSES');
+                console.log("PASSES");
                 deferred.resolve();
             } else {
-                console.log('NOT PASSED');
+                console.log("NOT PASSED");
                 deferred.reject();
             }
 
@@ -12234,47 +7825,73 @@ var ConnextMeterCalculation = function ($) {
         return deferred.promise();
     }
 
+    function evalAdBlock(segment) {
+        /// <summary>This checks evalAdBlock presence based on qualifier and value of a segment.</summary>
+        /// <param type="Object" name="segment">Segment object to test against.</param>
+        /// <returns type="DeferredPromise"></returns>
+        var fnName = "evalAdBlock";
+
+        var deferred = $.Deferred();
+        try {
+            var adBlockDetected = Connext.Utils.detectAdBlock();
+            var qualifier = segment.Options["Ad Block"].toUpperCase();
+            if (!((qualifier == "DETECTED") ^ adBlockDetected)) {
+                console.log("PASSES");
+                deferred.resolve();
+            } else {
+                console.log("NOT PASSED");
+                deferred.reject(false);
+            }
+        } catch (e) {
+            console.error(NAME, fnName, e);
+            deferred.reject(false);
+        }
+
+
+        return deferred.promise();
+    }
+
     function evalMeta(segment) {
 
 
         /// <summary>This checks Meta keyword presence based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="segment">Segment object to test against.</param>
         /// <returns type="DeferredPromise"></returns>
-        var fnName = 'evalMeta';
+        var fnName = "evalMeta";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
 
-            LOGGER.debug(NAME, fnName, '-- Testing ---');
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
 
             var isPassed = false,
                 metaArray = Connext.Utils.getMetaTagsWithKeywords(),
-                regExpStr = '\\b' + segment.Options.Val + '\\b',
+                regExpStr = "\\b" + segment.Options.Val + "\\b",
                 regExp = new RegExp(regExpStr);
 
             for (var i = 0; i < metaArray.length; i++) {
                 if (regExp.test(metaArray[i].content)) {
-                    LOGGER.debug(NAME, fnName, 'Found keyword', segment.Options.Val);
+                    LOGGER.debug(NAME, fnName, "Found keyword", segment.Options.Val);
                     isPassed = true;
                     break;
                 }
             }
 
-            if (isPassed && segment.Options.Qualifier == 'Not Equal') {
+            if (isPassed && segment.Options.Qualifier == "Not Equal") {
                 isPassed = false;
             }
 
-            if (!isPassed && segment.Options.Qualifier == 'Not Equal') {
+            if (!isPassed && segment.Options.Qualifier == "Not Equal") {
                 isPassed = true;
             }
 
             if (isPassed) {
-                console.log('PASSES');
+                console.log("PASSES");
                 deferred.resolve();
             } else {
-                console.log('NOT PASSED');
+                console.log("NOT PASSED");
                 deferred.reject();
             }
 
@@ -12303,40 +7920,37 @@ var ConnextMeterCalculation = function ($) {
         /// <summary>This checks article age based on qualifier and value of a segment.</summary>
         /// <param type="Object" name="options">Segment object to test against.</param>
         /// <returns type="Int|Null">Returns the age of the article. If it can't be determined we return null.</returns>
-        var fnName = 'getArticleAge';
+        var fnName = "getArticleAge";
 
         try {
             LOGGER.debug(NAME, fnName, options);
 
             if (_.isNumber(CACHED_RESULTS.articleAge) && !isNaN(CACHED_RESULTS.articleAge)) {
                 //we have a cached age from previous segment check, so return this so we don't process the article age again.
-                LOGGER.debug(NAME, fnName, 'Article Age Already Deterimed...using Cached value');
+                LOGGER.debug(NAME, fnName, "Article Age Already Deterimed...using Cached value");
                 return CACHED_RESULTS.articleAge;
             } else {
 
                 //set format for article check to DB value or if it does not exist or is set to empty string then use default value in Connext.Common.
                 var format = (_.isNothing(options.Format) ? Connext.Common.DefaultArticleFormat : options.Format);
-                LOGGER.info(NAME, fnName, 'Using Format: ', format);
-                var articleDateData = null;
+                LOGGER.info(NAME, fnName, "Using Format: ", format);
+                var articleDateData;
                 //get the article text based on the selector
-                if (options.Selector.indexOf('$') > -1) {
+                if (options.Selector.indexOf("$") > -1) {
                     articleDateData = eval(options.Selector);
                 } else {
                     articleDateData = $(options.Selector).text();
                 }
 
+                LOGGER.info(NAME, fnName, "articleDateData", articleDateData);
 
-                LOGGER.info(NAME, fnName, 'articleDateData', articleDateData);
+                var articleDate = Connext.Utils.ParseCustomDates(articleDateData, format);
 
-                var articleDate = moment(articleDateData, format);
-                if (articleDate._d == 'Invalid Date') {
-                    articleDate = new Date(articleDate._i);
-                }
                 var now = Connext.Utils.Now();
 
-                var articleAgeInDays = now.diff(articleDate, 'days');
+                var articleAgeInDays = Connext.Utils.Diff(now, articleDate);
 
-                LOGGER.debug(NAME, fnName, 'Date Used for Compare: ' + articleDateData, 'Article Age In Days:: (' + articleAgeInDays + ')');
+                LOGGER.debug(NAME, fnName, "Date Used for Compare: " + articleDateData, "Article Age In Days:: (" + articleAgeInDays + ")");
 
                 //set cached value so we don't process this again for other checks.
                 CACHED_RESULTS.articleAge = articleAgeInDays;
@@ -12361,7 +7975,7 @@ var ConnextMeterCalculation = function ($) {
     return {
         init: function () {
             LOGGER = Connext.Logger;
-            LOGGER.debug(NAME, 'MeterCalculation.Init');
+            LOGGER.debug(NAME, "MeterCalculation.Init");
         },
         CalculateMeterLevel: function (rules) {
             return calculateMeterLevel(rules);
@@ -12374,8 +7988,8 @@ var ConnextCampaign = function ($) {
 
     //#region GLOBALS
 
-    var NAME = 'Campaign'; //base name for logging.
-    var ArticleLeftString = '{{ArticleLeft}}';
+    var NAME = "Campaign"; //base name for logging.
+    var ArticleLeftString = "{{ArticleLeft}}";
     //create local reference to logger
     var LOGGER;
 
@@ -12393,7 +8007,7 @@ var ConnextCampaign = function ($) {
         /// <param name="meterLevel" type="Int">This is the meter level for this article and it used to determine which conversation we should process</param>
         /// <param name="campaign" type="Object">Campaign object which holds all conversations and actions, regardless of meterlevel.</param>
         /// <returns>None</returns>
-        var fnName = 'processCampaign';
+        var fnName = "processCampaign";
         try {
             LOGGER.debug(NAME, fnName, meterLevel);
 
@@ -12417,16 +8031,15 @@ var ConnextCampaign = function ($) {
                 throw Connext.Common.ERROR.NO_CONVO_FOUND;
 
             } else {
-                LOGGER.debug(NAME, fnName, 'Conversation To Process', CURRENT_CONVERSATION);
-                //we have a current conversation (either stored or a new conversation). Fire onConversationDetermined event and Proccess it.
-                Connext.Storage.SetCurrentConverstaion(CURRENT_CONVERSATION);
+                LOGGER.debug(NAME, fnName, "Conversation To Process", CURRENT_CONVERSATION);
+
                 processConversation();
 
             }
 
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             Connext.Event.fire("onCriticalError", e);
         }
 
@@ -12440,12 +8053,15 @@ var ConnextCampaign = function ($) {
         /// <summary>We have done all our checks and have a valid conversation, so process it.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'processConversation';
+        var fnName = "processConversation";
         try {
             LOGGER.debug(NAME, fnName);
 
             //before we determine conversation actions we need to update the article view count (since new conversations have this set to 0 and under certain options we won't duplicate this count).
             handleArticleView();
+
+            //we have a current conversation (either stored or a new conversation). Fire onConversationDetermined event and Proccess it.
+            Connext.Storage.SetCurrentConverstaion(CURRENT_CONVERSATION);
 
             //we fire onConversationDetermined after the handleArticleView function because this even will update our Demo Debug details 'view' html.
             Connext.Event.fire("onConversationDetermined", CURRENT_CONVERSATION);
@@ -12454,9 +8070,10 @@ var ConnextCampaign = function ($) {
             //calculateArticleLeft();
             var actions = determineConversationActions(),
                 validActions = determineConversationActions(true);
+
             if (actions.length > 0) {
                 //we have at least one action to execute.
-                LOGGER.debug(NAME, fnName, 'ACTIONS DETERMINGED ---> ', actions);
+                LOGGER.debug(NAME, fnName, "ACTIONS DETERMINGED ---> ", actions);
 
                 calculateArticleLeft(validActions);
 
@@ -12465,29 +8082,30 @@ var ConnextCampaign = function ($) {
             } else {
                 LOGGER.warn(NAME, fnName, "No 'Actions' to execute.");
             }
-            $('.dev_article_left').html(CURRENT_CONVERSATION.Props.ArticleLeft);
+
+            $(".dev_article_left").html(CURRENT_CONVERSATION.Props.ArticleLeft);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var calculateArticleLeft = function (validActions) {
         var lastArticleNumber = 99999;
-        var fnName = 'getCurrentConversation';
-        LOGGER.debug(NAME, fnName, 'Try to find paywalls');
+        var fnName = "getCurrentConversation";
+        LOGGER.debug(NAME, fnName, "Try to find paywalls");
         var paywalls = _.where(validActions, { ActionTypeId: 3 });
         if (paywalls.length > 0) {
-            LOGGER.debug(NAME, 'paywalls found', paywalls);
+            LOGGER.debug(NAME, "paywalls found", paywalls);
             $.each(paywalls,
                 function (key, paywall) {
                     var paywallView = -1;
                     if (paywall.Who.Views) {
                         $.each(paywall.Who.Views,
                             function (key, view) {
-                                if (view.Qualifier == '==' || view.Qualifier == '>=') {
+                                if (view.Qualifier == "==" || view.Qualifier == ">=") {
                                     paywallView = view.Val > paywallView ? view.Val : paywallView;
-                                } else if (view.Qualifier == '>') {
+                                } else if (view.Qualifier == ">") {
                                     paywallView = parseInt(view.Val) + 1 > paywallView ? parseInt(view.Val) + 1 : paywallView;
                                 }
                             });
@@ -12498,7 +8116,7 @@ var ConnextCampaign = function ($) {
                 });
             if (lastArticleNumber == -1) lastArticleNumber = 99999;
             CURRENT_CONVERSATION.Props.ArticleLeft = lastArticleNumber == 99999
-                ? 'unlimited'
+                ? "unlimited"
                 : lastArticleNumber - getCurrentConversationViewCount();
             if (CURRENT_CONVERSATION.Props.ArticleLeft < 0)
                 CURRENT_CONVERSATION.Props.ArticleLeft = 0;
@@ -12511,9 +8129,9 @@ var ConnextCampaign = function ($) {
                 });
 
         } else {
-            CURRENT_CONVERSATION.Props.ArticleLeft = 'unlimited';
+            CURRENT_CONVERSATION.Props.ArticleLeft = "unlimited";
         }
-        $('#ddCurrentConversationArticleLeft').html(CURRENT_CONVERSATION.Props.ArticleLeft);
+        $("#ddCurrentConversationArticleLeft").html(CURRENT_CONVERSATION.Props.ArticleLeft);
 
     }
 
@@ -12522,7 +8140,7 @@ var ConnextCampaign = function ($) {
         /// <summary>This will get the conversation that we should use. This handles checking for stored conversations, validating them and handling any conversation expirations</summary>
         /// <param name="" type=""></param>
         /// <returns type="Object">Conversation object to process.</returns>
-        var fnName = 'getCurrentConversation';
+        var fnName = "getCurrentConversation";
         try {
             //console.log(pName, fnName);
 
@@ -12530,26 +8148,27 @@ var ConnextCampaign = function ($) {
             var storedConversation = getStoredConversationByMeterLevel(METER_LEVEL);
 
             if (storedConversation) {
-                LOGGER.debug(NAME, fnName, 'Found Stored Conversation', storedConversation);
+                LOGGER.debug(NAME, fnName, "Found Stored Conversation", storedConversation);
 
                 //we have a stored conversation, so set global object.
                 CURRENT_CONVERSATION = storedConversation;
                 //since this is a stored conversation so we need to make sure it is still valid.
                 if (isConversationValid()) {
                     //current conversation is valid, so use it.
-                    LOGGER.debug(NAME, fnName, 'Found Stored Conversation --- IS VALID');
+                    LOGGER.debug(NAME, fnName, "Found Stored Conversation --- IS VALID");
 
                     //since it is valid, return the current conversation.
                     return CURRENT_CONVERSATION;
 
                 } else {
                     //current conversation is not valid, so try and get the next conversation.
-                    LOGGER.debug(NAME, fnName, 'Found Stored Conversation --- NOT VALID');
+                    LOGGER.debug(NAME, fnName, "Found Stored Conversation --- NOT VALID");
 
                     CURRENT_CONVERSATION = getNextConversation();
                     if (CURRENT_CONVERSATION) {
                         setDefaultConversationProps();
                         CURRENT_CONVERSATION.Props.views = 0;
+                        Connext.Storage.SetViewedArticles([], CURRENT_CONVERSATION.id);
                         return CURRENT_CONVERSATION;
                     }
 
@@ -12567,7 +8186,8 @@ var ConnextCampaign = function ($) {
                     //set global conversation object to this conversation.
                     CURRENT_CONVERSATION = allConversations[0];
                     setDefaultConversationProps();
-                    LOGGER.debug(NAME, fnName, 'No Current Conversation Stored....Using first conversation in campaign', CURRENT_CONVERSATION);
+
+                    LOGGER.debug(NAME, fnName, "No Current Conversation Stored....Using first conversation in campaign", CURRENT_CONVERSATION);
                     if (isConversationValid()) {
                         //current conversation is valid, so use it.
 
@@ -12576,11 +8196,12 @@ var ConnextCampaign = function ($) {
 
                     } else {
                         //current conversation is not valid, so try and get the next conversation.
-                        LOGGER.debug(NAME, fnName, 'Found Stored Conversation --- NOT VALID');
+                        LOGGER.debug(NAME, fnName, "Found Stored Conversation --- NOT VALID");
                     
                         CURRENT_CONVERSATION = getNextConversation();
                         if (CURRENT_CONVERSATION) {
                             CURRENT_CONVERSATION.Props.views = 0;
+                            Connext.Storage.SetViewedArticles([], CURRENT_CONVERSATION.id);
                             return CURRENT_CONVERSATION;
                         }
                     }
@@ -12589,7 +8210,7 @@ var ConnextCampaign = function ($) {
                     return CURRENT_CONVERSATION;
 
                 } else {
-                    LOGGER.debug(NAME, fnName, 'No Conversation for this meter level');
+                    LOGGER.debug(NAME, fnName, "No Conversation for this meter level");
                 }
                 /////
 
@@ -12599,10 +8220,10 @@ var ConnextCampaign = function ($) {
 
 
             //in case other returns weren't called with a valid convo we just return false here as a catch all.
-            LOGGER.debug(NAME, fnName, 'NO RETURN FIRED, USING CATCH ALL');
+            LOGGER.debug(NAME, fnName, "NO RETURN FIRED, USING CATCH ALL");
             return false;
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -12611,13 +8232,13 @@ var ConnextCampaign = function ($) {
         /// <summary>Validates the current conversation.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'isConversationValid';
+        var fnName = "isConversationValid";
         try {
             //LOGGER.debug(pName, fnName);
             //first we check we this was flagged for expiration from an USER_ACTION on a previous page load
             if (CURRENT_CONVERSATION.Props.isExpired) {
                 //this was previously flagged to expire.
-                LOGGER.debug(NAME, fnName, 'Current conversation was previously set to expired.');
+                LOGGER.debug(NAME, fnName, "Current conversation was previously set to expired.");
                 return false;
             } else {
                 //this was not flagged to expire, but we need to check that it is still valid based on the expiration date.
@@ -12625,12 +8246,12 @@ var ConnextCampaign = function ($) {
                     //we have a 'Time' expiration type, so check against it.
                     var now = Connext.Utils.Now();
 
-                    var momentConvEndDate = moment(CURRENT_CONVERSATION.Props.Date.expiration); //gets momentized object of expiration date.
+                    var momentConvEndDate = new Date(Date.parse(CURRENT_CONVERSATION.Props.Date.expiration)); //gets momentized object of expiration date.
 
-                    var isExpired = now.isAfter(momentConvEndDate); //if now is after the expiration date this conversation has expired.
+                    var isExpired = now >= momentConvEndDate; //if now is after the expiration date this conversation has expired.
 
                     if (isExpired) {
-                        LOGGER.debug(NAME, fnName, 'Current conversation has expired base on date...');
+                        LOGGER.debug(NAME, fnName, "Current conversation has expired base on date...");
                         //this is expired based on date, so we will set isExpired and expirationReason. (we set them because this function is just returning true/false. If it is false we will determine the next conversation based on expirationReason in the calling function.
                         CURRENT_CONVERSATION.Props.isExpired = true;
                         CURRENT_CONVERSATION.Props.expiredReason = "Time";
@@ -12640,15 +8261,15 @@ var ConnextCampaign = function ($) {
 
 
                 } else {
-                    LOGGER.debug(NAME, fnName, 'No expiration time set for this conversation.');
+                    LOGGER.debug(NAME, fnName, "No expiration time set for this conversation.");
                 }
                 if (CURRENT_CONVERSATION.Options.Expirations.UserState) {
                     var stateExpiration = CURRENT_CONVERSATION.Options.Expirations.UserState;
-                    if (stateExpiration['User State'] == Connext.User.getUserState()) {
+                    if (stateExpiration["User State"] == Connext.User.getUserState()) {
                         CURRENT_CONVERSATION.Props.expiredReason = "UserState";
                         return false;
                     }
-                    if (stateExpiration['User State'] == 'Logged In' && Connext.User.getUserState() == 'Subscribed') {
+                    if (stateExpiration["User State"] == "Logged In" && Connext.User.getUserState() == "Subscribed") {
                         CURRENT_CONVERSATION.Props.expiredReason = "UserState";
                         return false;
                     }
@@ -12657,7 +8278,7 @@ var ConnextCampaign = function ($) {
             //just as a catch all return true so we process this conversation (any reasons for expiration will call return false, so this will only be called if it is valid).
             return true;
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return true;
         }
     };
@@ -12666,18 +8287,18 @@ var ConnextCampaign = function ($) {
         /// <summary>This is called when the current Conversation is expired. We use the 'expiredReason' to try and determine the next conversation.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'getNextConversation';
+        var fnName = "getNextConversation";
         try {
             //LOGGER.debug(pName, fnName);
             var expiredReason = CURRENT_CONVERSATION.Props.expiredReason;
             var nextConvoId = CURRENT_CONVERSATION.Options.Expirations[expiredReason].nextConversation;
-            LOGGER.debug(NAME, fnName, 'ExpirationReason', expiredReason, nextConvoId, getAllConversationsByMeterLevel(METER_LEVEL));
+            LOGGER.debug(NAME, fnName, "ExpirationReason", expiredReason, nextConvoId, getAllConversationsByMeterLevel(METER_LEVEL));
             CURRENT_CONVERSATION = _.findByKey(getAllConversationsByMeterLevel(METER_LEVEL), { id: nextConvoId });
 
             //for now return false.
             return CURRENT_CONVERSATION;
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -12689,7 +8310,8 @@ var ConnextCampaign = function ($) {
         /// <summary>Takes current conversation and loops through each action to determine if it should be executed. This creates an array of action objects that are passed to the 'Action' function, which handles execution.</summary>
         /// <param name="" type=""></param>
         /// <returns type="Array">Array of Action objects to be executed.</returns>
-        var fnName = 'determineConversationActions';
+        var fnName = "determineConversationActions";
+
         try {
             LOGGER.debug(NAME, fnName, CURRENT_CONVERSATION.Actions);
 
@@ -12700,296 +8322,304 @@ var ConnextCampaign = function ($) {
             var viewCount = getCurrentConversationViewCount();
 
             //loop through conversation actions
-            $.each(CURRENT_CONVERSATION.Actions,
-                function (key, val) {
+            $.each(CURRENT_CONVERSATION.Actions, function (key, val) {
 
+                LOGGER.debug(NAME, fnName, "Actions.EACH", val);
 
-                    LOGGER.debug(NAME, fnName, 'Actions.EACH', val);
+                if (val.ActionTypeId == 3 && !CURRENT_CONVERSATION.Props.paywallLimit) {
+                    //this is a 'Paywall' action type and this conversation does not have a paywallLimit set yet. We don't care if this passes it's criteria yet, we st the paywallLimit to this value.
+                    CURRENT_CONVERSATION.Props.paywallLimit = val.Who.Views[0].Val;
+                    saveCurrentConversation();
+                }
 
-                    if (val.ActionTypeId == 3 && !CURRENT_CONVERSATION.Props.paywallLimit) {
-                        //this is a 'Paywall' action type and this conversation does not have a paywallLimit set yet. We don't care if this passes it's criteria yet, we st the paywallLimit to this value.
-                        CURRENT_CONVERSATION.Props.paywallLimit = val.Who.Views[0].Val;
-                        saveCurrentConversation();
-                    }
+                if (val.ActionTypeId == 3 && paywallActionFound) {
+                    //This action is a 'Paywall' and we have already added a 'Paywall' type to the 'actions' array, so do nothing.
+                } else {
+                    var actionPassed = true;
 
-                    if (val.ActionTypeId == 3 && paywallActionFound) {
-                        //This action is a 'Paywall' and we have already added a 'Paywall' type to the 'actions' array, so do nothing.
-                    } else {
-                        var actionPassed = true;
+                    try {
+                        // we set this to true for each 'Action' we check against.  As soon as an 'Action' criteria fails we set this to false, so we don't process other criteria within this action (this way if an action has 3 different criteria and the first one fails, we don't bother checking the other 2 since all criteria must pass for this action to be used).
+                        var who = val.Who; //set var to the Who object
 
-                        try {
-                            // we set this to true for each 'Action' we check against.  As soon as an 'Action' criteria fails we set this to false, so we don't process other criteria within this action (this way if an action has 3 different criteria and the first one fails, we don't bother checking the other 2 since all criteria must pass for this action to be used).
-                            var who = val.Who; //set var to the Who object
+                        if (who.Views && !ignoreViewsFlag) {
+                            //even though 'Views' option is not optional, we still make sure this is set.
 
-                            if (who.Views && !ignoreViewsFlag) {
-                                //even though 'Views' option is not optional, we still make sure this is set.
+                            //who.Views is an array since we could have 2 criteria to check against.
+                            $.each(who.Views, function (key, val) {
+                                LOGGER.debug(NAME,
+                                    fnName,
+                                    "Who.Views.EACH",
+                                    'ViewCriteria:: viewCount="' +
+                                    viewCount +
+                                    '" -- Qualifier="' +
+                                    val.Qualifier +
+                                    '" -- Value="' +
+                                    val.Val +
+                                    '"');
 
-                                //who.Views is an array since we could have 2 criteria to check against.
-                                $.each(who.Views,
-                                    function (key, val) {
-                                        LOGGER.debug(NAME,
-                                            fnName,
-                                            'Who.Views.EACH',
-                                            'ViewCriteria:: viewCount="' +
-                                            viewCount +
-                                            '" -- Qualifier="' +
-                                            val.Qualifier +
-                                            '" -- Value="' +
-                                            val.Val +
-                                            '"');
+                                if (Connext.Utils.JSEvaluate(parseInt(viewCount),
+                                        val.Qualifier,
+                                        parseInt(val.Val),
+                                        "ArticleView",
+                                        "integer")) {
+                                    //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                                    LOGGER.debug(NAME,
+                                        fnName,
+                                        "Who.Views.EACH",
+                                        "ViewCriteria:: " +
+                                        val.Qualifier +
+                                        " " +
+                                        parseInt(val.Val) +
+                                        " ---------------------- View Criteria PASSED");
+                                } else {
+                                    //this failed, so set actionPassed to false;
+                                    actionPassed = false;
 
+                                    LOGGER.debug(NAME,
+                                        fnName,
+                                        "Who.Views.EACH",
+                                        "ViewCriteria:: " +
+                                        val.Qualifier +
+                                        " " +
+                                        parseInt(val.Val) +
+                                        " ---------------------- View Criteria FAILED");
+                                }
+                            });
+
+                        } else if (who.Views && ignoreViewsFlag) {
+                            actionPassed = true;
+                        }
+
+                        if (who.HiddenFieldCriteria && actionPassed == true) {
+                            //We have a 'HiddenField' criteria and 'actionPassed' is still true so we need to check this.
+                            LOGGER.debug(NAME, fnName, "Checking Hidden Field", who.HiddenFieldCriteria);
+
+                            if (Connext.Utils
+                                .JSEvaluate(Connext.Utils.GetHiddenFormFieldValue(who.HiddenFieldCriteria.Id),
+                                    who.HiddenFieldCriteria.Qualifier,
+                                    who.HiddenFieldCriteria.Val,
+                                    "HiddenFormField")) {
+                                //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                            } else {
+                                //this failed, so set actionPassed to false;
+                                actionPassed = false;
+                            }
+                        }
+                        var e;
+                        if (who.GeoCriteria && actionPassed == true) {
+                            try {
+                                //We have a 'HiddenField' criteria and 'actionPassed' is still true so we need to check this.
+                                LOGGER.debug(NAME, fnName, "Checking GeoCriteria Field", who.GeoCriteria);
+
+                                if (Connext.Storage.GetUserZipCodes()) {
+                                    _.each(Connext.Storage.GetUserZipCodes(), function (code) {
+                                        if (who.GeoCriteria.Zip.indexOf(code) >= 0) {
+                                            actionPassed = who.GeoCriteria.Type == "In";
+                                        } else {
+                                            actionPassed = who.GeoCriteria.Type != "In";
+                                        }
+                                    });
+                                } else {
+                                    if (who.GeoCriteria.Zip.indexOf(Connext.Utils.GetUserZipcode()) >= 0) {
+                                        actionPassed = who.GeoCriteria.Type == "In";
+                                    } else {
+                                        actionPassed = who.GeoCriteria.Type != "In";
+                                    }
+
+                                    if (who.GeoCriteria.Type == undefined) {
+                                        actionPassed = true;
+                                    }
+                                }
+                            } catch (e) {
+                                actionPassed = false;
+                            }
+                        }
+
+                        if (who.JavascriptCriteria && actionPassed == true) {
+                            //We have a 'Javascript' criteria and 'actionPassed' is still true so we need to check this.
+                            LOGGER.debug(NAME, fnName, "Checking Javscript");
+                            try {
+                                var varValue = who.JavascriptCriteria.Eval;
+                                var jsValue = eval(varValue);
+                                if (Object.prototype.toString.call(jsValue) == "[object Array]") {
+                                    jsValue = jsValue.map(function (item) {
+                                        return item.trim().toLowerCase();
+                                    });
+                                    if (who.JavascriptCriteria.Qualifier == "In" ||
+                                        who.JavascriptCriteria.Qualifier == "NotIn") {
+                                        if (jsValue.indexOf(who.JavascriptCriteria.Val.toLowerCase()) >= 0) {
+                                            actionPassed = who.JavascriptCriteria.Qualifier == "In";
+                                        } else {
+                                            actionPassed = who.JavascriptCriteria.Qualifier == "NotIn";
+                                        }
+                                    } else {
+                                        actionPassed = who.JavascriptCriteria.Qualifier == "==";
+                                    }
+                                } else {
+                                    if (jsValue != undefined && jsValue != "") {
+                                        jsValue = jsValue.toString().toLowerCase();
+                                    }
+
+                                    if (who.JavascriptCriteria.Qualifier == "In" ||
+                                        who.JavascriptCriteria.Qualifier == "NotIn") {
+                                        if (jsValue == undefined) {
+                                            actionPassed = who.JavascriptCriteria.Qualifier == "NotIn";
+                                        } else {
+                                            var array = jsValue.split(/[,;]/g);
+                                            if (array.indexOf(who.JavascriptCriteria.Val.toLowerCase()) >= 0) {
+                                                actionPassed = who.JavascriptCriteria.Qualifier == "In";
+                                            } else {
+                                                actionPassed = who.JavascriptCriteria.Qualifier == "NotIn";
+                                            }
+                                        }
+                                    } else {
                                         if (Connext.Utils
-                                            .JSEvaluate(parseInt(viewCount),
-                                                val.Qualifier,
-                                                parseInt(val.Val),
-                                                'ArticleView',
-                                                'integer')) {
+                                            .JSEvaluate(jsValue,
+                                                who.JavascriptCriteria.Qualifier,
+                                                who.JavascriptCriteria.Val.toLowerCase(),
+                                                "JavascriptCriteria")) {
                                             //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
-                                            LOGGER.debug(NAME,
-                                                fnName,
-                                                'Who.Views.EACH',
-                                                'ViewCriteria:: ' +
-                                                val.Qualifier +
-                                                ' ' +
-                                                parseInt(val.Val) +
-                                                ' ---------------------- View Criteria PASSED');
                                         } else {
                                             //this failed, so set actionPassed to false;
                                             actionPassed = false;
-                                            LOGGER.debug(NAME,
-                                                fnName,
-                                                'Who.Views.EACH',
-                                                'ViewCriteria:: ' +
-                                                val.Qualifier +
-                                                ' ' +
-                                                parseInt(val.Val) +
-                                                ' ---------------------- View Criteria FAILED');
-                                        }
-
-                                    });
-                            } else if (who.Views && ignoreViewsFlag) {
-                                actionPassed = true;
-                            }
-
-                            //HiddenField criteria
-                            if (who.HiddenFieldCriteria && actionPassed == true) {
-                                //We have a 'HiddenField' criteria and 'actionPassed' is still true so we need to check this.
-                                LOGGER.debug(NAME, fnName, 'Checking Hidden Field', who.HiddenFieldCriteria);
-
-                                if (Connext.Utils
-                                    .JSEvaluate(Connext.Utils.GetHiddenFormFieldValue(who.HiddenFieldCriteria.Id),
-                                        who.HiddenFieldCriteria.Qualifier,
-                                        who.HiddenFieldCriteria.Val,
-                                        'HiddenFormField')) {
-                                    //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
-                                } else {
-                                    //this failed, so set actionPassed to false;
-                                    actionPassed = false;
-                                }
-                            }
-                            if (who.GeoCriteria && actionPassed == true) {
-                                try {
-                                    //We have a 'HiddenField' criteria and 'actionPassed' is still true so we need to check this.
-                                    LOGGER.debug(NAME, fnName, 'Checking GeoCriteria Field', who.GeoCriteria);
-                                    if (Connext.Storage.GetUserZipCodes()) {
-                                        _.each(Connext.Storage.GetUserZipCodes(),
-                                            function (code) {
-                                                if (who.GeoCriteria.Zip.indexOf(code) >= 0) {
-                                                    actionPassed = who.GeoCriteria.Type == 'In';
-                                                    return;
-                                                } else {
-                                                    actionPassed = who.GeoCriteria.Type != 'In';
-                                                }
-                                            });
-                                    } else {
-                                        if (who.GeoCriteria.Zip.indexOf(Connext.Utils.GetUserZipcode()) >= 0) {
-                                            actionPassed = who.GeoCriteria.Type == 'In';
-                                        } else {
-                                            actionPassed = who.GeoCriteria.Type != 'In';
-                                        }
-                                        if (who.GeoCriteria.Type == undefined)
-                                            actionPassed = true;
-                                    }
-                                } catch (e) {
-                                    actionPassed = false;
-                                }
-                            }
-
-                            //Javascript criteria
-                            if (who.JavascriptCriteria && actionPassed == true) {
-                                //We have a 'Javascript' criteria and 'actionPassed' is still true so we need to check this.
-                                LOGGER.debug(NAME, fnName, 'Checking Javscript');
-                                try {
-                                    var varValue = who.JavascriptCriteria.Eval;
-                                    var jsValue = eval(varValue);
-                                    if (Object.prototype.toString.call(jsValue) == "[object Array]") {
-                                        jsValue = jsValue.map(function (item) {
-                                            return item.trim().toLowerCase();
-                                        });
-                                        if (who.JavascriptCriteria.Qualifier == 'In' ||
-                                            who.JavascriptCriteria.Qualifier == 'NotIn') {
-                                            if (jsValue.indexOf(who.JavascriptCriteria.Val.toLowerCase()) >= 0) {
-                                                actionPassed = who.JavascriptCriteria.Qualifier == 'In';
-                                            } else {
-                                                actionPassed = who.JavascriptCriteria.Qualifier == 'NotIn';
-                                            }
-                                        } else {
-                                            actionPassed = who.JavascriptCriteria.Qualifier == '==';
-                                        }
-                                    } else {
-                                        if (jsValue != undefined && jsValue != '') {
-                                            jsValue = jsValue.toString().toLowerCase();
-                                        }
-
-                                        if (who.JavascriptCriteria.Qualifier == 'In' ||
-                                            who.JavascriptCriteria.Qualifier == 'NotIn') {
-                                            if (jsValue == undefined) {
-                                                actionPassed = who.JavascriptCriteria.Qualifier == 'NotIn';
-                                            } else {
-                                                var array = jsValue.split(/[,;]/g);
-                                                if (array.indexOf(who.JavascriptCriteria.Val.toLowerCase()) >= 0) {
-                                                    actionPassed = who.JavascriptCriteria.Qualifier == 'In';
-                                                } else {
-                                                    actionPassed = who.JavascriptCriteria.Qualifier == 'NotIn';
-                                                }
-                                            }
-                                        } else {
-                                            if (Connext.Utils
-                                                .JSEvaluate(jsValue,
-                                                    who.JavascriptCriteria.Qualifier,
-                                                    who.JavascriptCriteria.Val.toLowerCase(),
-                                                    'JavascriptCriteria')) {
-                                                //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
-                                            } else {
-                                                //this failed, so set actionPassed to false;
-                                                actionPassed = false;
-                                            }
                                         }
                                     }
+                                }
+                            } catch (e) {
+                                LOGGER.debug(NAME, fnName, "Error evaluating javascript criteria.");
+                                actionPassed = false; //the eval through an exception so this action doesn't pass.
+                            }
+                        }
 
-                                } catch (e) {
-                                    LOGGER.debug(NAME, fnName, 'Error evaluating javascript criteria.');
-                                    actionPassed = false; //the eval through an exception so this action doesn't pass.
+                        if (who.ScreenSizeCriteria && actionPassed == true) {
+                            //We have a 'ScreenSize' criteria and 'actionPassed' is still true so we need to check this.
+                            LOGGER.debug(NAME, fnName, "Checking Screen Size", who.ScreenSizeCriteria);
+
+                            if (Connext.Utils.JSEvaluate(Connext.Utils.getDeviceType(),
+                                    who.ScreenSizeCriteria.Qualifier,
+                                    who.ScreenSizeCriteria.Value,
+                                    "ScreenSizeCriteria",
+                                    "string")) {
+                                //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                            } else {
+                                //this failed, so set actionPassed to false;
+                                actionPassed = false;
+                            }
+                        }
+
+                        if (who.UrlCriteria && actionPassed == true) {
+                            LOGGER.debug(NAME, fnName, "Checking Url params", who.UrlCriteria);
+
+                            if (Connext.Utils.JSEvaluate(Connext.Utils.getUrlParam(who.UrlCriteria.Eval),
+                                    who.UrlCriteria.Qualifier,
+                                    who.UrlCriteria.Value,
+                                    "UrlCriteria")) {
+                                //keep actionPassed in true state
+                            } else {
+                                //this failed, so set actionPassed to false;
+                                actionPassed = false;
+                            }
+                        }
+
+                        if (who.SubDomainCriteria && actionPassed == true) {
+                            LOGGER.debug(NAME, fnName, "Checking Sub-domain", who.SubDomainCriteria);
+
+                            var searchingVal = who.SubDomainCriteria.Value.toUpperCase();
+                            var sourceVal = window.location.hostname.toUpperCase();
+                            // root domain won't be included
+                            var qualifier = who.SubDomainCriteria.Qualifier.toUpperCase();
+                            if ((qualifier == "==") ^ (sourceVal.split('.').reverse().indexOf(searchingVal) > 1)) {
+                                actionPassed = false;
+                            }
+                        }
+
+                        if (who.MetaKeywordCriteria && actionPassed == true) {
+                            LOGGER.debug(NAME, fnName, "Checking meta keyword", who.MetaKeywordCriteria);
+
+                            var metaArray = Connext.Utils.getMetaTagsWithKeywords();
+                            var evalResult = false;
+                            var regExpStr = "\\b" + who.MetaKeywordCriteria.Value + "\\b";
+                            var regExp = new RegExp(regExpStr);
+
+                            for (var i = 0; i < metaArray.length; i++) {
+                                if (regExp.test(metaArray[i].content)) {
+                                    LOGGER.debug(NAME, fnName, "Found keyword", who.MetaKeywordCriteria.Value);
+                                    evalResult = true;
+                                    break;
                                 }
                             }
 
-                            //Screen size criteria
-                            if (who.ScreenSizeCriteria && actionPassed == true) {
-                                //We have a 'ScreenSize' criteria and 'actionPassed' is still true so we need to check this.
-                                LOGGER.debug(NAME, fnName, 'Checking Screen Size', who.ScreenSizeCriteria);
+                            if (evalResult && who.MetaKeywordCriteria.Qualifier == "!=") {
+                                actionPassed = false;
+                            }
 
-                                if (Connext.Utils
-                                    .JSEvaluate(Connext.Utils.getDeviceType(),
-                                         who.ScreenSizeCriteria.Qualifier,
-                                        who.ScreenSizeCriteria.Value,
-                                        'ScreenSizeCriteria',
-                                        'string')) {
-                                    //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                            if (!evalResult) {
+                                actionPassed = who.MetaKeywordCriteria.Qualifier == "!=" ? true : false;
+                            }
+                        }
+
+                        if (who.UserStateCriteria && actionPassed == true) {
+                            LOGGER.debug(NAME, fnName, "Checking user state", who.UserStateCriteria);
+
+                            var userState = Connext.User.getUserState();
+                            if (!userState) {
+                                userState = "Logged Out";
+                            }
+                            if (!Connext.Utils.JSEvaluate(userState, "==", who.UserStateCriteria.Value)) {
+                                actionPassed = false;
+                            }
+                        }
+                            if (who.AdBlockCriteria && actionPassed == true) {
+                                LOGGER.debug(NAME, fnName, "Checking ad block state", who.AdBlockCriteria);
+                                console.log("AdBlockCriteria", who.AdBlockCriteria)
+
+                                var hasAdBlock = Connext.Utils.detectAdBlock();
+
+                                if (hasAdBlock && who.AdBlockCriteria.Value == "Detected") {
+                                    actionPassed = true;
+                                } else if (!hasAdBlock && who.AdBlockCriteria.Value == "Not Detected") {
+                                    actionPassed = true;
                                 } else {
-                                    //this failed, so set actionPassed to false;
                                     actionPassed = false;
                                 }
                             }
+                        
 
-                            //url params criteria
-                            if (who.UrlCriteria && actionPassed == true) {
-                                LOGGER.debug(NAME, fnName, 'Checking Url params', who.UrlCriteria);
-
-                                if (Connext.Utils
-                                    .JSEvaluate(Connext.Utils.getUrlParam(who.UrlCriteria.Eval),
-                                        who.UrlCriteria.Qualifier,
-                                        who.UrlCriteria.Value,
-                                        'UrlCriteria')) {
-                                    //keep actionPassed in true state
-                                } else {
-                                    //this failed, so set actionPassed to false;
-                                    actionPassed = false;
-                                }
-                            }
-
-                            if (who.SubDomainCriteria && actionPassed == true) {
-                                LOGGER.debug(NAME, fnName, 'Checking Sub-domain', who.SubDomainCriteria);
-
-                                var searchingVal = "." + who.SubDomainCriteria.Value.toUpperCase() + ".";
-                                var sourceVal = "." + window.location.hostname.toUpperCase();
-                                // root domain won't be included
-                                var qualifier = who.SubDomainCriteria.Qualifier.toUpperCase();
-
-                                if (qualifier == "==" ^ sourceVal.includes(searchingVal)) {
-                                    actionPassed = false;
-                                }
-                            }
-
-                            if (who.MetaKeywordCriteria && actionPassed == true) {
-                                LOGGER.debug(NAME, fnName, 'Checking meta keyword', who.MetaKeywordCriteria);
-
-                                var metaArray = Connext.Utils.getMetaTagsWithKeywords();
-                                var evalResult = false;
-                                var regExpStr = '\\b' + who.MetaKeywordCriteria.Value + '\\b';
-                                var regExp = new RegExp(regExpStr);
-                                for (var i = 0; i < metaArray.length; i++) {
-                                    if (regExp.test(metaArray[i].content)) {
-                                        LOGGER.debug(NAME, fnName, 'Found keyword', who.MetaKeywordCriteria.Value);
-                                        evalResult = true;
-                                        break;
-                                    }
-                                }
-
-                                if (evalResult && who.MetaKeywordCriteria.Qualifier == '!=') {
-                                    actionPassed = false;
-                                }
-                                if (!evalResult) {
-                                    actionPassed = who.MetaKeywordCriteria.Qualifier == '!=' ? true : false;
-                                }
-                            }
-
-                            if (who.UserStateCriteria && actionPassed == true) {
-                                LOGGER.debug(NAME, fnName, 'Checking user state', who.UserStateCriteria);
-
-                                var userState = Connext.User.getUserState();
-                                if (!userState) {
-                                    userState = 'Logged Out';
-                                }
-                                if (!Connext.Utils.JSEvaluate(userState, '==', who.UserStateCriteria.Value)) {
-                                    actionPassed = false;
-                                }
-                            }
-                        }
-                        catch (ex) {
-                            actionPassed = false;
-                            console.error(NAME, fnName, 'EXCEPTION', ex);
-                        }
-
-                        //we are done with this action check
-                        if (actionPassed) {
-                            //if 'actionPassed' is still true, then we should execute this action.
-                            LOGGER.debug(NAME, fnName, '===== ACTION PASSED =====', val);
-
-                            if (val.ActionTypeId == 3) {
-                                //this is a paywall action, so set 'paywallActionFound' to true, so future action checks will skip paywalls.
-                                paywallActionFound = true;
-                            }
-                            actions
-                                .push(val); //this action has passed all criteria, so add it to the actions array.
-
-                        } else {
-                            LOGGER.debug(NAME, fnName, '%%%%% ACTION FAILED %%%%%', val);
-                        }
-
-                        //This sets the paywall limit for this conversation. We don't care if this action actually passed all criteria, we only care if this conversation does not have a paywallLimit set yet.
-
+                    } catch (ex) {
+                        actionPassed = false;
+                        console.error(NAME, fnName, "EXCEPTION", ex);
                     }
 
+                    //we are done with this action check
+                    if (actionPassed) {
+                        //if 'actionPassed' is still true, then we should execute this action.
+                        LOGGER.debug(NAME, fnName, "===== ACTION PASSED =====", val);
 
-                });
+                        if (val.ActionTypeId == 3) {
+                            //this is a paywall action, so set 'paywallActionFound' to true, so future action checks will skip paywalls.
+                            paywallActionFound = true;
+                        }
+
+                        actions.push(val); //this action has passed all criteria, so add it to the actions array.
+
+                    } else {
+                        LOGGER.debug(NAME, fnName, "%%%%% ACTION FAILED %%%%%", val);
+                    }
+                }
+  
+                
+                    //This sets the paywall limit for this conversation. We don't care if this action actually passed all criteria, we only care if this conversation does not have a paywallLimit set yet.
+            
+            });
+                
 
             return actions;
+            
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
-
     //#endregion ACTION FUNCTIONS
 
     //#region STORAGE FUNCTIONS
@@ -12998,14 +8628,14 @@ var ConnextCampaign = function ($) {
         /// <summary>Checks if we have a stored conversation based on this meter level.</summary>
         /// <param name="meterlevel" type="Int">MeterLevel</param>
         /// <returns type="Object|Null">Conversation Object or Null if no convo is found</returns>
-        var fnName = 'getStoredConversationByMeterLevel';
+        var fnName = "getStoredConversationByMeterLevel";
         try {
-            LOGGER.debug(NAME, fnName, 'meterLevel', meterlevel);
+            LOGGER.debug(NAME, fnName, "meterLevel", meterlevel);
 
             var foundConvo = null; //set default to null, since we return this variable regardless of the checks below.
 
             var currentConversations = Connext.Storage.GetCurrentConversations();
-            LOGGER.debug(NAME, fnName, 'currentConversations', currentConversations);
+            LOGGER.debug(NAME, fnName, "currentConversations", currentConversations);
 
 
             if (currentConversations) {
@@ -13021,7 +8651,7 @@ var ConnextCampaign = function ($) {
             //LOGGER.debug(NAME, fnName, 'allConversations', allConversations);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -13030,12 +8660,12 @@ var ConnextCampaign = function ($) {
         /// <summary>This returns all conversations by MeterLevel stored in the configuration setting (this is different than any stored current conversations).</summary>
         /// <param name="meterlevel" type="Int">MeterLevel</param>
         /// <returns type="Object|Null">Conversation Object or Null if no convo is found</returns>
-        var fnName = 'getAllConversationsMeterLevel';
+        var fnName = "getAllConversationsMeterLevel";
         try {
-            LOGGER.debug(NAME, fnName, 'meterLevel', meterlevel);
+            LOGGER.debug(NAME, fnName, "meterLevel", meterlevel);
             return Connext.Storage.GetCampaignData().Conversations[meterlevel];
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -13044,7 +8674,7 @@ var ConnextCampaign = function ($) {
         /// <summary>This uses the global variables to save this current conversation into the correct local storage object. This should get called anytime we change the CURRENT_CONVERSATION so on next page load we have this new data.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'saveCurrentConversation';
+        var fnName = "saveCurrentConversation";
         try {
             //LOGGER.debug(pName, fnName);
             //get all current conversations
@@ -13053,9 +8683,9 @@ var ConnextCampaign = function ($) {
             allcurrentConversations[METER_LEVEL] = CURRENT_CONVERSATION;
             //re-set the entire conversations.current object back to local storage.
             $.jStorage.set(Connext.Common.StorageKeys.conversations.current, allcurrentConversations);
-            Connext.Storage.GetCurrentConversations()[METER_LEVEL];
+            //Connext.Storage.GetCurrentConversations()[METER_LEVEL];
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13067,25 +8697,31 @@ var ConnextCampaign = function ($) {
         /// <summary>This sets default props for a new conversation</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'setDefaultConversationProps';
+        var fnName = "setDefaultConversationProps";
         try {
             //LOGGER.debug(pName, fnName);
             var now = Connext.Utils.Now(); //this sets current date/time (based on if we are debugging/manually setting time or using the real time.
 
             //set the date started.
-            CURRENT_CONVERSATION.Props.Date.started = now.format();
+            CURRENT_CONVERSATION.Props.Date.started = now;
 
             if (CURRENT_CONVERSATION.Options.Expirations.Time) {
-                //we have a 'Time' expiration type, so set this conversations expiration date. We use this date on future article views to check if it is still valid.
-                CURRENT_CONVERSATION.Props.Date.expiration = now.add(CURRENT_CONVERSATION.Options.Expirations.Time.val, CURRENT_CONVERSATION.Options.Expirations.Time.key).format();
+                switch (CURRENT_CONVERSATION.Options.Expirations.Time.key) {
+                    case "m": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setMinutes(now.getMinutes() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
+                    case "h": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setHours(now.getHours() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
+                    case "d": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setDate(now.getDate() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
+                    case "w": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setDate(now.getDate() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val)*7)); break;
+                    case "M": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setMonth(now.getMonth() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
+                    case "y": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setFullYear(now.getFullYear() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
+                }
             } else {
-                LOGGER.debug(fnName, 'No expiration time set for this conversation.');
+                LOGGER.debug(fnName, "No expiration time set for this conversation.");
             }
 
             //we've updated necessary properties, save this conversation
             saveCurrentConversation();
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13093,21 +8729,22 @@ var ConnextCampaign = function ($) {
         /// <summary>This is called before we determine conversation actions. It's main function is to update the 'view' count for this conversation as well as add this article to the array of viewed articles.</summary>
         /// <param name="" type=""></param>
         /// <returns>Nothing, this is just updating info in the CURRENT_CONVERSATION object.</returns>
-        var fnName = 'handleArticleView';
+        var fnName = "handleArticleView";
         try {
             LOGGER.debug(NAME, fnName);
 
-            if ($.jStorage.get('uniqueArticles') || !Connext.GetOptions().debug) {
+            if ($.jStorage.get("uniqueArticles") || !Connext.GetOptions().debug) {
                 //we are enforcing unique articles. So we need to check if this article has already been viewed for this user.
 
                 //this function will check if this article has been viewed. If it has not it will handle adding this article to the viewed article array as well as updating this conversations view count.
                 hasArticleBeenViewed();
             } else {
                 //we are not enforicing unique article counts, so we just add to the view count, no need to add this article to the viewed article array.
+                Connext.Storage.UpdateViewedArticles(CURRENT_CONVERSATION.id);
                 updateArticleViewCount();
             }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13115,17 +8752,17 @@ var ConnextCampaign = function ($) {
         /// <summary>This checks if this article has already been viewed by this user.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'hasArticleBeenViewed';
+        var fnName = "hasArticleBeenViewed";
         try {
             //LOGGER.debug(pName, fnName);
 
             //Get all the stored viewed articles 
             if (_.contains(Connext.Storage.GetViewedArticles(CURRENT_CONVERSATION.id), Connext.Utils.GetUrl())) {
                 //we have already viewed this article.
-                LOGGER.debug(NAME, fnName, 'Article already viewed');
+                LOGGER.debug(NAME, fnName, "Article already viewed");
             } else {
                 //article has not been viewed.
-                LOGGER.debug(NAME, fnName, 'Article HAS NOT been viewed');
+                LOGGER.debug(NAME, fnName, "Article HAS NOT been viewed");
 
                 //update viewed article array with this url.
                 Connext.Storage.UpdateViewedArticles(CURRENT_CONVERSATION.id);
@@ -13133,7 +8770,7 @@ var ConnextCampaign = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13141,7 +8778,8 @@ var ConnextCampaign = function ($) {
         /// <summary>This will update the current conversations viewed count.</summary>
         /// <param name="count" type="Integer">Optional: If this is set we set the number of views to this, if not we just increment current value</param>
         /// <returns>None</returns>
-        var fnName = 'updateArticleViewCount';
+        var fnName = "updateArticleViewCount";
+
         try {
             LOGGER.debug(NAME, fnName);
             if (_.isNumber(arguments[0])) {
@@ -13150,43 +8788,27 @@ var ConnextCampaign = function ($) {
 
             } else {
                 //else we should increment view by 1
-                CURRENT_CONVERSATION.Props.views = CURRENT_CONVERSATION.Props.views + 1;
+
+                CURRENT_CONVERSATION.Props.views = getCurrentConversationViewCount();
             }
             //save changes.
             saveCurrentConversation();
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var getCurrentConversationViewCount = function () {
-        var fnName = 'getCurrentConversationViewCount';
+        var fnName = "getCurrentConversationViewCount";
         try {
-            if ($.jStorage.get('uniqueArticles') || !Connext.GetOptions().debug) {
+            if ($.jStorage.get("uniqueArticles") || !Connext.GetOptions().debug) {
+                var uniqueArticles = _.uniq(Connext.Storage.GetViewedArticles(CURRENT_CONVERSATION.id));
+                return uniqueArticles.length;
+            } else {
                 return Connext.Storage.GetViewedArticles(CURRENT_CONVERSATION.id).length;
             }
-            else {
-                return CURRENT_CONVERSATION.Props.views;
-            }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
-        }
-    };
-
-    var eventCompleted = function (event) {
-        /// <summary>This is called when an event is completed and fired from the client. This will expire the current conversation and set the expiration type so on next page load we know which conversation to move into.</summary>
-        /// <param name="event" type="String">Custom event name to fire.</param>
-        /// <returns>None</returns>
-        var fnName = 'eventCompleted';
-        try {
-            LOGGER.debug(NAME, fnName);
-            //set current conversation to expired and set the reason to the name of the event. (on next page load we'll use expiredReason to determine the next conversation.
-            CURRENT_CONVERSATION.Props.isExpired = true;
-            CURRENT_CONVERSATION.Props.expiredReason = event;
-            //save current conversation
-            saveCurrentConversation();
-        } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13196,7 +8818,7 @@ var ConnextCampaign = function ($) {
         init: function (configSettings) {
             LOGGER = Connext.Logger;
             CONFIG_SETTINGS = configSettings;
-            LOGGER.debug(NAME, 'Campaign.Init');
+            LOGGER.debug(NAME, "Campaign.Init");
         },
         ProcessCampaign: function (meterLevel, campaign) {
             return processCampaign(meterLevel, campaign);
@@ -13205,7 +8827,7 @@ var ConnextCampaign = function ($) {
             try {
                 return CURRENT_CONVERSATION.Props;
             } catch (e) {
-                console.error(NAME, 'GetCurrentConversationProps.Exception', e);
+                console.error(NAME, "GetCurrentConversationProps.Exception", e);
                 return null;
             }
             //return getCurrentConversationViewCount();
@@ -13216,13 +8838,13 @@ var ConnextCampaign = function ($) {
         GetCurrentConversationViewCount: function () {
             return getCurrentConversationViewCount();
         },
-        EventCompleted: function (event) {
-            var fnName = 'EventCompleted';
+        EventCompleted: function () {
+            var fnName = "EventCompleted";
             try {
                 //LOGGER.debug(NAME, fnName, 'event', event);
 
             } catch (e) {
-                console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                console.error(NAME, fnName, "<<EXCEPTION>>", e);
             }
 
         }
@@ -13239,53 +8861,39 @@ var ConnextAction = function ($) {
 
     //region GLOBALS
 
-    var NAME = 'Action'; //base name for logging.
+    var NAME = "Action"; //base name for logging.
     //create local reference to logger
     var LOGGER;
-    var DEFAULT_ACTION_ID = 'ConneXt_Action_Id-';
+    var DEFAULT_ACTION_ID = "ConneXt_Action_Id-";
     var CONTENT_SELECTOR; //holds reference to the selector used to hide the content (when it is hidden because of the paywall, so this is not set until we hide the content).  This is so we can call our public method 'ShowContent', allowing the client to show the content.
     var MASKING_METHOD; //holds refernce to the method we used to hide the content. This is so the public 'ShowContent' method can reveal the content the same way it was hidden.
-    var CONTENT_HTML = false; //holds reference to the html of the content before we remove it (only needed when MASKING_METHOD is 'trim').  We use this so when we show content we can put the html back into the page. We set this to false by default, so when 'ShowContent' is called we can do a simple check that this has been set to html.
     var CLOSE_CASES = {
-        CloseButton: 'closeButton',
-        CloseSpan: 'closeSpan',
-        ClickOutside: 'clickOutside',
-        EscButton: 'escButton'
-    }
-    var FlittzButton = '[data-fz-btn=smartAuth]';
-    var hiddenContent = null;
-    var actionStartTime;    //holds time when action is visible
-    var actionEndTime;      //holds time when user closed action
-    //var DYNAMIC_TEMPLATES = {
-    //    "{{FreeViewsLeft}}" : 
-    //};
-
+        CloseButton: "closeButton",
+        CloseSpan: "closeSpan",
+        ClickOutside: "clickOutside",
+        EscButton: "escButton"
+    };
+    var FlittzButton = "[data-fz-btn=smartAuth]";
+    var ORIGINAL_CONTENT;
     //endregion GLOBALS
 
     //#region FUNCTIONS
 
     var processActions = function (actions) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = 'processActions';
+        var fnName = "processActions";
         try {
             LOGGER.debug(NAME, fnName, actions);
-
-            //loop through the 'actions' we should execute.
-
             $.each(actions, function (key, action) {
-                LOGGER.debug(NAME, fnName, 'Actions.EACH', key, action);
+                LOGGER.debug(NAME, fnName, "Actions.EACH", key, action);
                 if (action.What.Html) {
-                    //we have HTML, setup the action
                     setupAction(action);
                 } else {
-                    LOGGER.debug(NAME, fnName, 'ACTION has no html');
+                    LOGGER.debug(NAME, fnName, "ACTION has no html");
                 }
             });
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13294,26 +8902,21 @@ var ConnextAction = function ($) {
         /// <summary>handles setting up the action based on type (adds to DOM, configures etc....)</summary>
         /// <param name="_Action" type="Object">action object which holds all info needed to either show or execute this action.</param>
         /// <returns>None</returns>
-        var fnName = 'handleAction';
+        var fnName = "handleAction";
         try {
-            LOGGER.debug(NAME, fnName, 'action', action);
+            LOGGER.debug(NAME, fnName, "action", action);
 
             var actionHtml = action.What.Html.trim(); //set html from action.What.Html prop.
-
-            ///////HANDLE DYNAMIC HTML HERE (RIGHT NOW JUST RETURNING THIS)
             actionHtml = handleDynamicHtml(actionHtml);
-
-            actionHtml = $(actionHtml).prop('id', DEFAULT_ACTION_ID + action.id);
-
-            console.info('ACTION HTML', actionHtml);
-            $(actionHtml).addClass('hide');
-            //probably need checks here on how to add html...for now just append to body.
-            $('body').append(actionHtml);
+            actionHtml = $(actionHtml).prop("id", DEFAULT_ACTION_ID + action.id);
+            console.info("ACTION HTML", actionHtml);
+            $(actionHtml).addClass("hide");
+            $("body").append(actionHtml);
 
             registerActionEvents(action);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13321,72 +8924,73 @@ var ConnextAction = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'executeAction';
+        var fnName = "executeAction";
+        var e;
         try {
             LOGGER.debug(NAME, fnName, action);
-            var $action = $('#' + DEFAULT_ACTION_ID + action.id);
-            $action.removeClass('hide');
+            var $action = $("#" + DEFAULT_ACTION_ID + action.id);
+            $action.removeClass("hide");
             //gets the jqueried html for this action (the action, regardless of type was already added to the DOM in the 'setupAction' function, so we are grabbing the html for this action since we need to 'execute' it (show it).
 
-            if (action.What.Type == '1') {
+            if (action.What.Type == "1") {
                 //var $banner = $('#' + DEFAULT_ACTION_ID + action.id);
 
                 //set bannerLocation to stored value if it exists, if not set it to top (we do this in case there are template not stored correctly...really just needed since templates were created before option to place them was introduced in Admin).
-                var bannerLocation = (action.What.Location) ? action.What.Location : 'top';
-                var isAffix = false;
+                var bannerLocation = (action.What.Location) ? action.What.Location : "top";
 
                 //add .affix class just in case it is not stored in template and then add appropriate class for location
-                if (action.What.Stickyness === 'sticky') {
-                    $action.addClass('affix sticky-' + bannerLocation + ' banner-sticky');
+                if (action.What.Stickyness === "sticky") {
+                    $action.addClass("affix sticky-" + bannerLocation + " banner-sticky");
                 } else {
-                    $action.addClass('affix sticky-' + bannerLocation).affix({
+                    $action.addClass("affix sticky-" + bannerLocation).affix({
                         offset: 15
                     });
                 }
 
                 var animation = {};
-                animation[bannerLocation] = '0px';
+                animation[bannerLocation] = "0px";
 
                 //we need to set the intial location to a big negative and then remove the hide class.  
                 //this will allow us to determine the actual height of the banner (calling height() or outerHeight() will return 0 if element is hidden).
-                $action.css(bannerLocation, '-2500px').removeClass('hide');
+                $action.css(bannerLocation, "-2500px").removeClass("hide");
 
                 var height = $action.outerHeight();
 
                 //we can now animate the banner in (notice we set the location to a negative of the height we just figured out. This will allow for a smooth animation for all banner heights.
-                $action.css(bannerLocation, '-' + height + 'px').animate(animation, function () {
+                $action.css(bannerLocation, "-" + height + "px").animate(animation, function () {
                     //console.log('animation finished');
                 });
             }
 
-            if (action.What.Type == '2') {
-                $action.addClass('in');
-                $action.connextmodal({ backdrop: 'true', });
+            if (action.What.Type === "2") {
+                $action.addClass("in");
+                $action.connextmodal({ backdrop: "true" });
                 $action.resize();
-                $action.css('display', 'block');
-                if (action.What['Transparent backdrop'] == 'True' || action.What['Transparent backdrop'] == 'true') {
-                    $('.modal-backdrop.fade.in').addClass('transparent');
+                $action.css("display", "block");
+                if (action.What["Transparent backdrop"] == "True" || action.What["Transparent backdrop"] == "true") {
+                    $(".modal-backdrop.fade.in").addClass("transparent");
                 } else {
-                    $('.modal-backdrop.fade.in').removeClass('transparent');
+                    $(".modal-backdrop.fade.in").removeClass("transparent");
                 }
                 $($action)
-                    .on('hidden',
-                        function (e) {
-                            if (action.closeEvent == null || action.closeEvent == undefined) {
-                                action.closeEvent = CLOSE_CASES.EscButton;
-                                action.actionDom = $action;
-                                Connext.Event.fire('onActionClosed', action);
-                            }
-                        });
+                    .on("hidden",
+                    function () {
+                        if (action.closeEvent === null || action.closeEvent === undefined) {
+                            action.closeEvent = CLOSE_CASES.EscButton;
+                            action.actionDom = $action;
+                            window.Connext.Event.fire("onActionClosed", action);
+                        }
+                    });
                 //$(actionHtml).prop('id', DEFAULT_ACTION_ID + action.id);
             }
-
-            if (action.What.Type == '3') { //this is a 'Paywall'
+            var parentWidth;
+            var selectorFragment;
+            if (action.What.Type === "3") { //this is a 'Paywall'
                 //a paywall can be either a 'modal' or 'inline', check the data-display-type property.
-                var displayType = $action.data('display-type');
-                LOGGER.debug(NAME, fnName, 'displayType', displayType);
+                var displayType = $action.data("display-type");
+                LOGGER.debug(NAME, fnName, "displayType", displayType);
 
-                if (displayType == 'inline') { //this is an inline paywall.
+                if (displayType == "inline") { //this is an inline paywall.
                     //we first hide the content (since hideContent will handle storing full HTML and trims content (preview text).
                     hideContent(action);
 
@@ -13396,10 +9000,9 @@ var ConnextAction = function ($) {
 
                     //we now need to remove the original $action html from the DOM since it was added to the end of the body and a 'copy' of it has been placed in the appropriate location.
                     $action.remove();
-
-                    var parentWidth = $(CONTENT_SELECTOR).width(),
-                        selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + '00' : String(parentWidth)[0] + String(parentWidth)[1] + '00'; // take just first digit of width value and add '00' to get 600 from 654px for example 
-                    $action.addClass('Mg2-inline-scale-' + selectorFragment); // now we add class depending on parent width, for example Mg2-inline-600 if parent width is between 600 and 700px
+                    parentWidth = $(CONTENT_SELECTOR).width();
+                    selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + "00" : String(parentWidth)[0] + String(parentWidth)[1] + "00"; // take just first digit of width value and add '00' to get 600 from 654px for example 
+                    $action.addClass("Mg2-inline-scale-" + selectorFragment); // now we add class depending on parent width, for example Mg2-inline-600 if parent width is between 600 and 700px
 
 
                     //we append the inline html to the 'CONTENT_SELECTOR'. Since 'hideContent' handles any preview text and we use 'append' our inline paywall will appear after any 'preview' settings in the admin.
@@ -13411,112 +9014,144 @@ var ConnextAction = function ($) {
                     $(window, CONTENT_SELECTOR).resize(function () {
 
                         var parentWidth = $(CONTENT_SELECTOR).width(),
-                            selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + '00' : String(parentWidth)[0] + String(parentWidth)[1] + '00',
-                            classList = $action.attr('class').replace(/\b\sMg2-inline-scale-\d+\b/g, '');
-                        $action.attr('class', classList);
-                        $action.addClass('Mg2-inline-scale-' + selectorFragment);
+                            selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + "00" : String(parentWidth)[0] + String(parentWidth)[1] + "00",
+                            classList = $action.attr("class").replace(/\b\sMg2-inline-scale-\d+\b/g, "");
+                        $action.attr("class", classList);
+                        $action.addClass("Mg2-inline-scale-" + selectorFragment);
 
                     });
 
 
-                } else if (displayType == 'modal') {
+                } else if (displayType == "modal") {
                     //this is a modal, show it and hide the content.
-                    $action.addClass('in');
-                    $action.connextmodal({ backdrop: 'true', });
-                    $action.resize();
-                    $action.css('display', 'block');
-                    hideContent(action);
-                    if (action.What['Transparent_backdrop_paywall'] == 'True' || action.What['Transparent_backdrop_paywall'] == 'true') {
-                        $('.modal-backdrop.fade.in').addClass('transparent');
+                    //$action.addClass("in");
+                    var isNotClosable = $action.hasClass('not-closable');
+                    if (isNotClosable) {
+                        $action.find('i.closebtn').remove();
+                        $action.connextmodal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
                     } else {
-                        $('.modal-backdrop.fade.in').removeClass('transparent');
+                        $action.connextmodal({ backdrop: "true" });
+                    }
+
+                    $action.resize();
+                    $action.css("display", "block");
+                    hideContent(action);
+                    if (action.What["Transparent_backdrop_paywall"] == "True" || action.What["Transparent_backdrop_paywall"] == "true") {
+                        $(".modal-backdrop.fade.in").addClass("transparent");
+                    } else {
+                        $(".modal-backdrop.fade.in").removeClass("transparent");
                     }
                     $($action)
-                      .on('hidden',
-                          function (e) {
-                              if (action.closeEvent == null || action.closeEvent == undefined) {
-                                  action.closeEvent = CLOSE_CASES.EscButton;
-                                  action.actionDom = $action;
-                                  Connext.Event.fire('onActionClosed', action);
-                              }
-                          });
+                        .on("hidden",
+                        function () {
+                            if (action.closeEvent == null || action.closeEvent == undefined) {
+                                action.closeEvent = CLOSE_CASES.EscButton;
+                                action.actionDom = $action;
+                                window.Connext.Event.fire("onActionClosed", action);
+                            }
+                        });
+                } else if (displayType == "banner") {
+                    //this is a banner, show it and hide the content.
+                    hideContent(action);
+                    //var $banner = $('#' + DEFAULT_ACTION_ID + action.id);
+
+                    //set bannerLocation to stored value if it exists, if not set it to top (we do this in case there are template not stored correctly...really just needed since templates were created before option to place them was introduced in Admin).
+                    var bannerLocation = "bottom";
+
+                    var animation = {};
+                    animation[bannerLocation] = "0px";
+
+                    //we need to set the intial location to a big negative and then remove the hide class.  
+                    //this will allow us to determine the actual height of the banner (calling height() or outerHeight() will return 0 if element is hidden).
+                    $action.css(bannerLocation, "-2500px").removeClass("hide");
+
+                    var height = $action.outerHeight();
+
+                    //we can now animate the banner in (notice we set the location to a negative of the height we just figured out. This will allow for a smooth animation for all banner heights.
+                    $action.css(bannerLocation, "-" + height + "px").animate(animation, function () {
+                        //console.log('animation finished');
+                    });
+
+                    
+                   
                 } else {
                     //the action html didn't have the data-display-type property, so do nothing, just Log it.
                     LOGGER.warn(NAME, fnName, "Can't determine display type.");
                 }
-                $('#ConneXt_Action_Id-' + action.id)
+                $("#ConneXt_Action_Id-" + action.id)
                     .find(FlittzButton)
                     .click(function (e) {
-                        action.Conversation = Connext.Campaign.GetCurrentConversation();
-                        action.Conversation.Campaign = Connext.Storage.GetCampaignData();
+                        action.Conversation = window.Connext.Campaign.GetCurrentConversation();
+                        action.Conversation.Campaign = window.Connext.Storage.GetCampaignData();
                         action.ButtonArgs = e;
                         action.ActionDom = $action;
-                        Connext.Event.fire('onFlittzButtonClick', action);
+                        window.Connext.Event.fire("onFlittzButtonClick", action);
                     });
-
-
             }
 
-            if (action.What.Type == '4') {
+            if (action.What.Type == "4") {
                 CONTENT_SELECTOR = action.What.Selector;
                 //now that the content is hidden, we can append the inline html.
-                var parentWidth = $(CONTENT_SELECTOR).width(),
-                    selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + '00' : String(parentWidth)[0] + String(parentWidth)[1] + '00'; // take just first digit of width value and add '00' to get 600 from 654px for example 
-                $action.addClass('Mg2-inline-scale-' + selectorFragment); // now we add class depending on parent width, for example Mg2-inline-600 if parent width is between 600 and 700px
+                parentWidth = $(CONTENT_SELECTOR).width();
+                selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + "00" : String(parentWidth)[0] + String(parentWidth)[1] + "00"; // take just first digit of width value and add '00' to get 600 from 654px for example 
+                $action.addClass("Mg2-inline-scale-" + selectorFragment); // now we add class depending on parent width, for example Mg2-inline-600 if parent width is between 600 and 700px
 
                 //we append the inline html to the 'CONTENT_SELECTOR'. Since 'hideContent' handles any preview text and we use 'append' our inline paywall will appear after any 'preview' settings in the admin.
                 $(CONTENT_SELECTOR).append($action);
 
                 $(window, CONTENT_SELECTOR).resize(function () {
                     var parentWidth = $(CONTENT_SELECTOR).width(),
-                        selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + '00' : String(parentWidth)[0] + String(parentWidth)[1] + '00',
-                        classList = $action.attr('class').replace(/\b\sMg2-inline-scale-\d+\b/g, '');
-                    $action.attr('class', classList);
-                    $action.addClass('Mg2-inline-scale-' + selectorFragment);
+                        selectorFragment = (String(parentWidth).length < 4) ? String(parentWidth)[0] + "00" : String(parentWidth)[0] + String(parentWidth)[1] + "00",
+                        classList = $action.attr("class").replace(/\b\sMg2-inline-scale-\d+\b/g, "");
+                    $action.attr("class", classList);
+                    $action.addClass("Mg2-inline-scale-" + selectorFragment);
 
                 });
             }
 
-            if (action.What.Type == '6') {//this is a 'Small Info Box'
+            if (action.What.Type == "6") {//this is a 'Small Info Box'
                 //a Small Info Box can be either a 'rounded' or 'squared'
-                $action.removeClass('hide');
+                $action.removeClass("hide");
                 //$action.modal({ 'backdrop': false });
                 //$('.modal-scrollable').removeClass('modal-scrollable');
                 //$('body').removeClass('modal-open');
             }
-            if (action.What.Type == '7') {//this is a 'JS call'
-                $('#ConneXt_Action_Id-' + action.id).remove();
+            if (action.What.Type == "7") {//this is a 'JS call'
+                $("#ConneXt_Action_Id-" + action.id).remove();
                 try {
                     if (action.What.Javascript != undefined) {
                         eval(action.What.Javascript);
                     }
                 }
                 catch (e) {
-                    console.error(NAME, fnName, 'Custom JS Call exception', e);
+                    console.error(NAME, fnName, "Custom JS Call exception", e);
                 }
             }
-            var id = $action.attr('id');
-            $('#' + id + ' [data-dismiss=info-box], #' + id + ' [data-dismiss=inline], #' + id + '  [data-dismiss=modal]').on('click', function (e) {
-                console.log('mg2-connext-info-box.CLICK');
-                $btn = $(this);
+            var id = $action.attr("id");
+            $("#" + id + " [data-dismiss=info-box], #" + id + " [data-dismiss=inline], #" + id + "  [data-dismiss=modal]").on("click", function () {
+                console.log("mg2-connext-info-box.CLICK");
+                var $btn = $(this);
 
-                if ($btn.hasClass('closebtn')) {
+                if ($btn.hasClass("closebtn")) {
                     action.closeEvent = CLOSE_CASES.CloseButton;
                 }
-                else if ($btn.hasClass('closeSpan')) {
+                else if ($btn.hasClass("closeSpan")) {
                     action.closeEvent = CLOSE_CASES.CloseSpan;
                 }
 
-                $btn.closest('.Mg2-connext').addClass('hide');
+                $btn.closest(".Mg2-connext").addClass("hide");
                 //fire close event & calculate total show time
                 action.actionDom = $action;
-                Connext.Event.fire('onActionClosed', action);
+                window.Connext.Event.fire("onActionClosed", action);
             });
 
             var parent = $action[0].parentNode;
             var result = false;
             for (var i = 0; i < parent.classList.length; i++) {
-                if (parent.classList[i] == 'modal-scrollable') {
+                if (parent.classList[i] == "modal-scrollable") {
                     result = true;
                     break;
                 }
@@ -13524,16 +9159,16 @@ var ConnextAction = function ($) {
             action.actionDom = $action;
             //found modal window
             if (result) {
-                $(parent).on('click.modal', targetIsSelf(function (e) {
-                    $action.addClass('hide');
+                $(parent).on("click.modal", targetIsSelf(function () {
+                    //$action.addClass("hide");
                     action.closeEvent = CLOSE_CASES.ClickOutside;
-                    Connext.Event.fire('onActionClosed', action);
+                    window.Connext.Event.fire("onActionClosed", action);
                 }));
             }
             //fire show event & save start time
-            Connext.Event.fire('onActionShown', action);
+            window.Connext.Event.fire("onActionShown", action);
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13542,7 +9177,8 @@ var ConnextAction = function ($) {
             if (e && this === e.target) {
                 return callback.apply(this, arguments);
             }
-        }
+            return callback.apply(this, arguments);
+        };
     };
     //#endregion FUNCTIONS
 
@@ -13554,9 +9190,9 @@ var ConnextAction = function ($) {
         /// <summary>This takes an action object and registers any user event listeners based on this action options.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'registerActionEvents';
+        var fnName = "registerActionEvents";
         try {
-            LOGGER.debug(NAME, fnName, 'action', action);
+            LOGGER.debug(NAME, fnName, "action", action);
 
             if (!action.When) {
                 action.When = {
@@ -13571,13 +9207,13 @@ var ConnextAction = function ($) {
             } else if (action.When && action.When.Hover) {
                 setHoverEvent(action);
             } else if (action.When && action.When.EOS) {
-                setEOSEvent(action);
+                SetEosEvent(action);
             } else {
-                console.log(NAME, fnName, 'NO ACTION TO REGISTER', action);
+                console.log(NAME, fnName, "NO ACTION TO REGISTER", action);
             }
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13585,27 +9221,27 @@ var ConnextAction = function ($) {
         /// <summary>Sets action based on a time delay.</summary>
         /// <param name="action" type="Object">Action object.</param>
         /// <returns>None</returns>
-        var fnName = 'setTimedAction';
+        var fnName = "setTimedAction";
         try {
             //LOGGER.debug(pName, fnName);
             setTimeout(function () { //set execute action function with this action delay.
                 executeAction(action);
             }, action.When.Time.Delay);
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
-    var setEOSEvent = function (action) {
+    var SetEosEvent = function (action) {
         /// <summary>Sets action based on an element on the screen.</summary>
         /// <param name="action" type="Object">Action object.</param>
         /// <returns>None</returns>
-        var fnName = 'setTimedAction';
+        var fnName = "setTimedAction";
         try {
 
             action.count = 0;
 
-            actionElem = '#ConneXt_Action_Id-' + action.id;
+            var actionElem = "#ConneXt_Action_Id-" + action.id;
             //LOGGER.debug(NAME, fnName);
             setTimeout(function () { //set timeout before we register listening for an element on the screen based on the .Time.Delay property.
                 //LOGGER.debug(NAME, fnName, 'EOS Delay Expired, listening for trigger.');
@@ -13613,28 +9249,28 @@ var ConnextAction = function ($) {
                 $(action.When.EOS.Selector).viewportChecker({
                     // The offset of the elements (let them appear earlier or later)
                     offset: 10,
-                    classToAdd: 'visible-' + action.id,
+                    classToAdd: "visible-" + action.id,
 
                     callbackFunctionBeforeAddClass: function (elem) {
-                        if (elem.hasClass('visible-' + action.id)) {
-                            return
+                        if (elem.hasClass("visible-" + action.id)) {
+                            return;
                         }
-                        var repeatable = Connext.Storage.GetRepeatablesInConv(action.id);
-                        if ($(actionElem).hasClass('hide')) {
+                        var repeatable = window.Connext.Storage.GetRepeatablesInConv(action.id);
+                        if ($(actionElem).hasClass("hide")) {
                             if (action.When.EOS.Repeatable > action.count && action.When.EOS.RepeatableConv > repeatable) {
                                 if (!action.inProggress) {
                                     action.inProggress = true;
                                     executeAction(action);
                                     action.count++;
                                     action.inProggress = false;
-                                    Connext.Storage.UpdateRepeatablesInConv(action.id);
+                                    window.Connext.Storage.UpdateRepeatablesInConv(action.id);
 
                                 }
                             }
                         }
                     },
                     callbackFunction: function (elem) {
-                        $(elem).removeClass('visible' + action.id);
+                        $(elem).removeClass("visible" + action.id);
                     },
                     repeat: true,
                     // Set to true if your website scrolls horizontal instead of vertical.
@@ -13642,7 +9278,7 @@ var ConnextAction = function ($) {
                 });
             }, action.When.EOS.Delay);
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -13652,7 +9288,7 @@ var ConnextAction = function ($) {
         /// <summary>Sets action based on a hover.</summary>
         /// <param name="action" type="Object">Action object.</param>
         /// <returns>None</returns>
-        var fnName = 'setTimedAction';
+        var fnName = "setTimedAction";
         try {
             //LOGGER.debug(pName, fnName);
 
@@ -13661,9 +9297,9 @@ var ConnextAction = function ($) {
             setTimeout(function () { //set execute action function with this action delay.
 
                 var numShown = 0,
-				    actionElem = '#ConneXt_Action_Id-' + action.id;
+                    actionElem = "#ConneXt_Action_Id-" + action.id;
 
-                $(action.When.Hover.Selector).on('mouseenter', function (e) {
+                $(action.When.Hover.Selector).on("mouseenter", function (e) {
                     e.stopPropagation();
                     //LOGGER.info(NAME, fnName, 'onMouseOver', e, $(this));
 
@@ -13671,22 +9307,18 @@ var ConnextAction = function ($) {
                     //LOGGER.debug(fnName, 'Mouse Event', valid, action.When.Hover.Repeatable);
                     //since this is valid and the default is true, we check if the next run should be valid. this way we don't keep checking 
                     if (_.isNumber(parseInt(action.When.Hover.Repeatable)) && _.isNumber(parseInt(action.When.Hover.RepeatableConv))) {
-                        //this is an integer so check how many times it has been shown.
                         var repeatable = Connext.Storage.GetRepeatablesInConv(action.id);
-                        if ($(actionElem).hasClass('hide')) {
+                        if ($(actionElem).hasClass("hide")) {
                             if (numShown < action.When.Hover.Repeatable && action.When.Hover.RepeatableConv > repeatable) {
                                 executeAction(action);
                                 numShown++;
-                                Connext.Storage.UpdateRepeatablesInConv(action.id);
+                                window.Connext.Storage.UpdateRepeatablesInConv(action.id);
                             }
                         } else {
                             return false;
                         }
-
                     }
-
-
-
+                    return false;
                 }).children().mouseover(function () {
                     //we capturing any child hover events here. 
                     //If the hover event was from a child it will call this code first, before the parent code above.
@@ -13694,14 +9326,14 @@ var ConnextAction = function ($) {
                     if (action.When.Hover.IncludeChildren == "False") {
                         return false;
                     }
-
+                    return false;
                 });
 
 
             }, delay);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
     //#endregion ACTION TRIGGER FUNCTIONS
@@ -13715,67 +9347,71 @@ var ConnextAction = function ($) {
         /// <summary>Hides the content because we've hit the paywall. </summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'hideContent';
+        var fnName = "hideContent";
         try {
             //LOGGER.debug(NAME, fnName);
 
             MASKING_METHOD = action.What.Effect; //set the masking method.
             CONTENT_SELECTOR = action.What.Selector; //set the content we are hiding.
-            TERMINATOR = action.What.Terminator; //set the terminate string
+            var TERMINATOR = action.What.Terminator; //set the terminate string
 
             var allowedCharactersCount = action.What.PrevChars;
             var currentCharacterPosition = 0;
             var parent = $(CONTENT_SELECTOR)[0];
             var childs = parent.childNodes;
-
+            ORIGINAL_CONTENT = parent.innerHTML;
             if (MASKING_METHOD) {
                 calculateTagText(parent, childs);
             }
             //for flittz
-            $('.flittz').removeClass('blurry-text');
-            $('.flittz').removeClass('trimmed-text');
+            $(".flittz").removeClass("blurry-text");
+            $(".flittz").removeClass("trimmed-text");
+            $(".trimmed-text").remove();
+
             function calculateTagText(parent, childs) {
 
                 var regExp = new RegExp(/script|style|meta/i);
 
                 for (var i = 0; i < childs.length; i++) {
-                    var child = childs[i]; 
+                    var child = childs[i];
 
                     if (currentCharacterPosition > allowedCharactersCount) {
+                        var span;
                         if (MASKING_METHOD == "blur") {
                             //text element didn't have classes
                             if (!child.classList) {
-                                var span = document.createElement('span');
+                                span = document.createElement("span");
                                 span.innerHTML = child.textContent;
-                                span.classList.add('blurry-text');
+                                span.classList.add("blurry-text");
+                                mixContent(span);
 
                                 child.parentNode.insertBefore(span, child);
                                 parent.removeChild(child);
                             }
                             else {
-                                child.classList.add('blurry-text');
+                                child.classList.add("blurry-text");
+                                mixContent(child);
                             }
                         }
                         else {
                             if (!child.classList) {
-                                var span = document.createElement('span');
+                                span = document.createElement("span");
                                 span.innerHTML = child.textContent;
-                                span.classList.add('trimmed-text');
+                                span.classList.add("trimmed-text");
 
-                                child.parentNode.insertBefore(span, child)
+                                child.parentNode.insertBefore(span, child);
                                 parent.removeChild(child);
                             }
                             else {
-                                child.classList.add('trimmed-text');
+                                child.classList.add("trimmed-text");
                             }
                         }
-                    }
-                    else {
+                    } else {
 
                         if (child.tagName) {
 
                             if (!regExp.test(child.tagName)) {
-                                calculateTagText(child, child.childNodes)
+                                calculateTagText(child, child.childNodes);
                             }
                             //else just go to another child tag
                         }
@@ -13786,18 +9422,20 @@ var ConnextAction = function ($) {
                                 var excess = currentCharacterPosition - allowedCharactersCount;
                                 var trimmedText = child.textContent.substr(0, child.textContent.length - excess);
                                 var cutPosition = Math.min(trimmedText.length, trimmedText.lastIndexOf(" "));
+                                var excludedText;
                                 if (cutPosition != -1) {
                                     trimmedText = trimmedText.substr(0, cutPosition) + TERMINATOR;
-                                    var excludedText = child.textContent.substr(cutPosition);
+                                    excludedText = child.textContent.substr(cutPosition);
                                 }
                                 else {
-                                    var excludedText = child.textContent.substr(trimmedText.length);
+                                    excludedText = child.textContent.substr(trimmedText.length);
                                     trimmedText += TERMINATOR;
                                 }
                                 child.textContent = trimmedText;
-                                var spanWithBlurredText = document.createElement('span');
+                                var spanWithBlurredText = document.createElement("span");
                                 spanWithBlurredText.innerHTML = excludedText;
-                                spanWithBlurredText.classList.add(MASKING_METHOD == "blur" ? 'blurry-text' : 'trimmed-text');
+                                spanWithBlurredText.classList.add(MASKING_METHOD == "blur" ? "blurry-text" : "trimmed-text");
+                                mixContent(spanWithBlurredText);
                                 parent.insertBefore(spanWithBlurredText, childs[i + 1]);
 
                                 for (var j = i + 1; j < childs.length; j++) {
@@ -13805,7 +9443,8 @@ var ConnextAction = function ($) {
                                     if (child.classList) {
                                         if (!regExp.test(child.tagName)) {
                                             child.classList
-                                                .add(MASKING_METHOD == "blur" ? 'blurry-text' : 'trimmed-text');
+                                                .add(MASKING_METHOD == "blur" ? "blurry-text" : "trimmed-text");
+                                            mixContent(child);
                                         }
                                     }
                                 }
@@ -13817,40 +9456,54 @@ var ConnextAction = function ($) {
 
         }
         catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
-    var showContent = function () {
+    var mixContent = function (item) {
+        if ($(item).children().length == 0) {
+            var txt = $(item).text();
+            if (txt) {
+                for (var i = 0; i < txt.length; i++) {
+                    txt = txt.replaceAt(i, window.Connext.Utils.GetNextLetter(txt[i]));
+                }
+            }
+            $(item).text(txt);
+        } else {
+            $.each($(item).children(),
+                function (key, val) {
+                    mixContent(val);
+                });
+        }
+    };
+    var integrateProduct = function () {
         /// <summary>Shows the previously hidden content.</summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'showContent';
+        var fnName = "showContent";
         try {
             LOGGER.debug(NAME, fnName);
-
-            if (MASKING_METHOD) {
-                //we have a masking method set.
-                if (MASKING_METHOD == 'blur') {
-                    $(CONTENT_SELECTOR).removeClass('blurry-text');
-                } else if (MASKING_METHOD == 'trim' && CONTENT_HTML) { //our masking method was 'trim' and CONTENT_HTML is not set to 'false' (which is the default value for this var).
-                    $(CONTENT_SELECTOR).html(CONTENT_HTML);
-                }
-            } else {
-                //no MASKING_METHOD was set, just log this.
-                LOGGER.warn(NAME, fnName, 'No Masking Method Set.');
-            }
+            $(CONTENT_SELECTOR).html(ORIGINAL_CONTENT);
 
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
+    var getDaysToExpire = function (currentConv) {
+        var now = Connext.Utils.Now(),
+            daysToExpire = currentConv.Props.Date.expiration,
+            diff;
+        if (currentConv.Options.Expirations.Time.key == "d" || currentConv.Options.Expirations.Time.key == "w" || currentConv.Options.Expirations.Time.key == "m" || currentConv.Options.Expirations.Time.key == "y") {
+            diff = parseInt((daysToExpire - now) / 86400000) + 1; //get diff in days by dividing on milliseconds
+        } else diff = parseInt((daysToExpire - now) / 86400000);
 
+        return (diff <= 0) ? 'less than 1' : diff;
+    };
     var handleDynamicHtml = function (html) {
         /// <summary>Takes html and replaces any dynamic {{ }} templating with appropriate values. </summary>
         /// <param name="html" type="String">html string to process templating against.</param>
         /// <returns type="String">Html string regardless if it has been processed for dynamic content.</returns>
-        var fnName = 'handleDynamicHtml';
+        var fnName = "handleDynamicHtml";
         try {
             //LOGGER.debug(pName, fnName);
 
@@ -13858,35 +9511,37 @@ var ConnextAction = function ($) {
             var regEx = /{{(.*?)}}/g;
 
             //this gets the current conversation props. We'll need some of these values to determine dynamic values below. Better to make one call here then multiple calls withing the .replace call below.
-            var currentConversationProps = Connext.Campaign.GetCurrentConversationProps();
+            var currentConversationProps = window.Connext.Campaign.GetCurrentConversationProps(),
+                currentConversation = window.Connext.Campaign.GetCurrentConversation();
 
-            var fixed_html = html.replace(regEx, function (match) {
+            var FixedHtml = html.replace(regEx, function (match) {
                 //Right now we are only handling the FreeViewsLeft template, need to add additional template types (PaywallLimitTerm - (Day, Week, Month etc...)...)
                 switch (match) {
-                    case '{{FreeViewsLeft}}':
+                    case "{{FreeViewsLeft}}":
                         var viewsLeft = eval(currentConversationProps.paywallLimit - currentConversationProps.views);
                         if (parseInt(viewsLeft) < 0) { //if we are negative (passed our limit) set this to 0, instead of the - number
                             viewsLeft = 0;
                         }
                         return viewsLeft;
-                        break;
-                    case '{{CurrentViewCount}}':
+                    case "{{CurrentViewCount}}":
                         return currentConversationProps.views;
+                    case "{{ExpireTimeLeft}}":
+                        return getDaysToExpire(currentConversation);
                 }
             });
-            var $html = $(fixed_html);
-            var hrefs = $html.find('[href]');
+            var $html = $(FixedHtml);
+            var hrefs = $html.find("[href]");
             $.each(hrefs,
                 function (key, value) {
-                    var href = $(value).attr('href');
-                    if (href.indexOf('returnUrl=') == -1) {
-                        href = Connext.Utils.AddParameterToURL(href, 'returnUrl=' + window.location.href);
-                        $(value).attr('href', href);
+                    var href = $(value).attr("href");
+                    if (href.indexOf("returnUrl=") == -1) {
+                        href = window.Connext.Utils.AddParameterToURL(href, "returnUrl=" + window.location.href);
+                        $(value).attr("href", href);
                     }
                 });
             return $html[0].outerHTML; // returning html regardless.
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             return html; // returning html regardless.
         }
     };
@@ -13894,12 +9549,12 @@ var ConnextAction = function ($) {
 
     var initListeners = function () {
 
-        $('body')
-            .on('click',
-                '[data-mg2-action=click],[data-mg2-action=login],[data-mg2-action=submit]',
-                function (e) {
-                    Connext.Event.fire('onButtonClick', e);
-                });
+        $("body")
+            .on("click",
+            "[data-mg2-action=click],[data-mg2-action=login],[data-mg2-action=submit], [data-mg2-action=Zipcode]",
+            function (e) {
+                window.Connext.Event.fire("onButtonClick", e);
+            });
 
     };
 
@@ -13907,28 +9562,23 @@ var ConnextAction = function ($) {
 
     return {
         init: function () {
-            LOGGER = Connext.Logger;
-            LOGGER.debug(NAME, 'Action.Init');
+            LOGGER = window.Connext.Logger;
+            LOGGER.debug(NAME, "Action.Init");
             initListeners();
         },
         ProcessActions: function (actions) {
             return processActions(actions);
         },
-        ShowContent: function () {
-            showContent(); //public method for showing content.
-        },
-        GetPaywallView: function () {
-            return lastArticleNumber;
+        IntegrateProduct: function () {
+            integrateProduct();
         }
     };
 
 };
 
-
-
 var Connext = function ($) {
     var CONFIGURATION = null;
-    var NAME = 'Core';
+    var NAME = "Core";
     var LOGGER; //local reference to Connext.LOGGER
     var PROCESSTIME = {}; //holds properties for testing application speed.
     var isProcessed = false;
@@ -13936,14 +9586,15 @@ var Connext = function ($) {
     var DEFAULT_OPTIONS = {
         debug: true,
         silentmode: false,
+        integrateFlittz: false,
         environment: null, //this is used for the base s3 bucket, defaults to production, which means we need to set in all text/dev environments.
         settingsKey: null, //we'll get system settigs from db by this key in API project. For example: different accout URLs for Bang and Lang
         paperCode: null, //we'll get system settigs from db by this key in API project. For example: different accout URLs for Bang and Lang
         configSettings: { //these are config level settings which should be merged with config settings from DB, used as backup.
-            AccessRules: { SubscriberStatus: 'L' },
+            AccessRules: { SubscriberStatus: "L" },
             EnforceUniqueArticles: false ///THIS IS NOT A DB Setting, but putting it here so it will get merged with the Configuration object and saved. This way i can look for this instead of a cookie setting. It also provides the option to put this in the Admin as an option in the future without updating the code.
         },
-        loadType: 'ajax' //this is how a new article is loaded. If this is set to 'ajax' then we need to remove all html that this plugin added to the dom so there isn't duplicates.       
+        loadType: "ajax" //this is how a new article is loaded. If this is set to 'ajax' then we need to remove all html that this plugin added to the dom so there isn't duplicates.       
     };
 
     var init = function () {
@@ -13951,34 +9602,45 @@ var Connext = function ($) {
         /// <param>Nothing</param>
         /// <returns>Nothing</returns>
         try {
-            var fnName = 'init';
-            PROCESSTIME.PluginStartTime = moment();
+            var fnName = "init";
+            PROCESSTIME.PluginStartTime = new Date();
             LOGGER = Connext.Logger;
-            LOGGER.debug(fnName, 'Initializing Connext...');
+            LOGGER.debug(fnName, "Initializing Connext...");
+            initAdBlockElement();
             getZipCode(checkRequirements);
         } catch (e) {
-            console.log('Core.Init <<EXCEPTION>>', e);
+            console.log("Core.Init <<EXCEPTION>>", e);
         }
 
     };
 
+    function initAdBlockElement() {
+        var testAd = document.createElement("div");
+        testAd.innerHTML = "&nbsp;";
+        testAd.className = "adsbox";
+        testAd.id = "TestAdBlock";
+        testAd.style.position = "absolute";
+        testAd.style.bottom = "-100px";
+        testAd.style.zIndex = "-1";
+        document.body.appendChild(testAd);
+    }
+
     var closeAllTemplates = function (callback) {
-        var fnName = 'closeAllTemplates';
-        LOGGER.debug(fnName, 'Close all Connext Templates');
-        $('.Mg2-connext[data-display-type=inline]').addClass('hide');  //close inlines
-        $('.Mg2-connext[data-display-type=info-box]').addClass('hide');    //close inlines
-        $('.Mg2-connext[data-display-type=banner]').addClass('hide');  //close inlines
+        var fnName = "closeAllTemplates";
+        LOGGER.debug(fnName, "Close all Connext Templates");
+        $(".Mg2-connext[data-display-type=inline]").addClass("hide");  //close inlines
+        $(".Mg2-connext[data-display-type=info-box]").addClass("hide");    //close inlines
+        $(".Mg2-connext[data-display-type=banner]").addClass("hide");  //close inlines
 
-        var modals = $('.Mg2-connext.modal:visible');
+        var modals = $(".Mg2-connext.modal:visible");
         var listeners = modals.length;
-        console.log('numbers of the modals', modals.length);
-
+        console.log("numbers of the modals", modals.length);
 
         if (modals.length > 0) {
 
             modals.each(function (index, element) {
-                $(element).on('hidden.bs.modal', function () {
-                    $(this).off('hidden.bs.modal');
+                $(element).on("hidden.bs.modal", function () {
+                    $(this).off("hidden.bs.modal");
 
                     listeners--;
 
@@ -13987,7 +9649,7 @@ var Connext = function ($) {
                     }
                 });
 
-                $(element).connextmodal('hide');
+                $(element).connextmodal("hide");
             });
 
         } else {
@@ -13997,38 +9659,39 @@ var Connext = function ($) {
         }
     };
 
-    var showTrimmedContent = function () {
-        var fnName = 'showTrimmedContent';
-        LOGGER.debug(fnName, 'Show article content');
-        $('.blurry-text').removeClass('blurry-text');  //delete blur class
-        $('.trimmed-text').removeClass('trimmed-text');     //show trimmed text
+    var IntegrateProduct = function () {
+        var fnName = "IntegrateProduct";
+        LOGGER.debug(fnName, "Show article content");
+        $(".blurry-text").removeClass("blurry-text");  //delete blur class
+        $(".trimmed-text").removeClass("trimmed-text");     //show trimmed text
+        Connext.Action.IntegrateProduct();
     };
 
     var getZipCode = function (callback) {
-        var fnName = 'getZipCode';
+        var fnName = "getZipCode";
         function setZipCode(zipCode) {
-            $.jStorage.set('CustomZip', zipCode);
+            $.jStorage.set("CustomZip", zipCode);
         }
         try {
             LOGGER.debug(NAME, fnName);
-            if ($.jStorage.get('CustomZip')) {
+            if ($.jStorage.get("CustomZip")) {
                 if (callback) callback();
             } else {
                 $.ajax({
                     url: Connext.Common.IPInfo,
-                    type: 'GET',
+                    type: "GET",
                     success: function (data) {
 
                         if (data.zip_code) {
                             setZipCode(data.zip_code);
                         } else {
-                            setZipCode('00000');
+                            setZipCode("00000");
                         }
                         if (callback) callback();
                     },
                     error: function () {
-                        console.log('ZIPERROR, SETTING DEFAULT ZIP');
-                        setZipCode('00000');
+                        console.log("ZIPERROR, SETTING DEFAULT ZIP");
+                        setZipCode("00000");
                         if (callback) callback();
                     }
                 });
@@ -14041,7 +9704,7 @@ var Connext = function ($) {
         /// <summary>Checks for required user init settings as well as any required libraries.</summary>
         /// <param>None</param>
         /// <returns>None</returns>
-        var fnName = 'checkRequirements';
+        var fnName = "checkRequirements";
         try {
             LOGGER.debug(NAME, fnName);
 
@@ -14059,9 +9722,9 @@ var Connext = function ($) {
             //init Utils
             Connext.Utils.init();
 
-            if (OPTIONS.loadType == 'ajax') {
-                $('body').find('.mg2-Connext').remove();
-                $('body').find('.debug_details').remove();
+            if (OPTIONS.loadType == "ajax") {
+                $("body").find(".mg2-Connext").remove();
+                $("body").find(".debug_details").remove();
             }
 
             //if we are debugging then create debug panel, we do this here before checking other requirements because we can use the 'onCriticalError' event to populate the note section of this panel so the user knows of any errors.
@@ -14073,9 +9736,9 @@ var Connext = function ($) {
                 var siteCode = Connext.Storage.GetSiteCode();
                 var configCode = Connext.Storage.GetConfigCode();
                 var isCustomConfiguration = Connext.Storage.GetIsCustomConfiguration();
-                $('#ConnextSiteCode').val(siteCode);
-                $('#ConnextConfigCode').val(configCode);
-                $('#ConnextCustomConfiguration').prop('checked', isCustomConfiguration);
+                $("#ConnextSiteCode").val(siteCode);
+                $("#ConnextConfigCode").val(configCode);
+                $("#ConnextCustomConfiguration").prop("checked", isCustomConfiguration);
 
                 if (isCustomConfiguration) {
                     //use values from localStorage
@@ -14105,7 +9768,7 @@ var Connext = function ($) {
 
     var reInit = function () {
         Connext.CloseTemplates(function () {
-            Connext.ShowTrimmedContent();
+            Connext.IntegrateProduct();
             if (isProcessed) {
                 processConfiguration(Connext.Storage.GetLocalConfiguration());
             } else {
@@ -14114,12 +9777,11 @@ var Connext = function ($) {
         });
 
     };
-
     var setDefaults = function () {
         /// <summary>Set default options based on specific attributes/properties.</summary>
         /// <param>None</param>
         /// <returns>None</returns>
-        var fnName = 'setDefaults';
+        var fnName = "setDefaults";
         try {
             LOGGER.debug(NAME, fnName);
             if (OPTIONS.environment == null) {
@@ -14132,7 +9794,7 @@ var Connext = function ($) {
                 }
             }
             if (OPTIONS.environment == null) {
-                OPTIONS.environment = 'prod';
+                OPTIONS.environment = "prod";
             }
 
             //set API server options based on Common.APIUrl object.
@@ -14151,17 +9813,17 @@ var Connext = function ($) {
             //init MeterCalculation
             Connext.MeterCalculation.init();
 
-            LOGGER.debug('OPTIONS.API', OPTIONS.api);
+            LOGGER.debug("OPTIONS.API", OPTIONS.api);
 
             //getConfigSettings (will check for local settings first and if none exist will attempt to get settings from database).
             //we use deferred object since we might be making an async ajax call to get data and we need to wait for that to finish.
             getConfiguration()
             .done(function (configuration) {
                 //this returns ConfigSettings regardless if it is from server or from local settings.
-                var fnName = 'setDefaults.getConfiguration() <<DONE>>';
-                LOGGER.debug(NAME, fnName, 'configuration', configuration);
+                var fnName = "setDefaults.getConfiguration() <<DONE>>";
+                LOGGER.debug(NAME, fnName, "configuration", configuration);
                 if (configuration) {
-                    LOGGER.debug(NAME, fnName, 'CONFIGURATION FOUND', configuration);
+                    LOGGER.debug(NAME, fnName, "CONFIGURATION FOUND", configuration);
                     //merge configuration settings with default settings (in case any required options are for some reason not set in DB)
                     configuration.Settings = $.extend(true, OPTIONS.configSettings, configuration.Settings);
                     //add the configuration.Site object to a Settings.Site object. (Site object will have things like 'RegistrationTypeId', CSSTheme (not used now, but could be used to dynamically load CSS file based on theme).
@@ -14194,7 +9856,7 @@ var Connext = function ($) {
         /// <summary>Gets the current configuration. This handles checking for locally stored settings and/or getting settings from API. Either way if config settings are avaiable they will be returned. </summary>
         /// <param>None</param>
         /// <returns>deferred object based on response.</returns>
-        var fnName = 'getConfiguration';
+        var fnName = "getConfiguration";
 
         //create deferred object
         var deferred = $.Deferred();
@@ -14207,14 +9869,14 @@ var Connext = function ($) {
             var expired = new Date();
             expired.setDate(expired.getDate() + 1);
             expired = new Date(expired);
-            LOGGER.debug(NAME, fnName, 'localConfiguration', configuration);
+            LOGGER.debug(NAME, fnName, "localConfiguration", configuration);
 
             if (configuration) {
                 //we have a locally stored configuration object
-                LOGGER.debug(NAME, fnName, 'Found Local Configuration', configuration);
+                LOGGER.debug(NAME, fnName, "Found Local Configuration", configuration);
 
                 //we need to check if we have a 'LastPublishDate' cookie.
-                var storedLastPublishDate = Connext.Storage.GetLastPublishDate(), customTime = Connext.Utils.ParseCustomDate($.jStorage.get('CustomTime')), normalizedLastPubDate = new Date(storedLastPublishDate);
+                var storedLastPublishDate = Connext.Storage.GetLastPublishDate(), customTime = Connext.Utils.ParseCustomDate($.jStorage.get("CustomTime")), normalizedLastPubDate = new Date(storedLastPublishDate);
 
                 if (customTime) {
                     //if we set Custom Time date in Debug Panel, we need to check date of lastPublishDate and compare it with our configuration.Settings.LastPublishDate
@@ -14224,13 +9886,13 @@ var Connext = function ($) {
 
                     Connext.API.GetLastPublishDateS3()
                         .done(function (data) {
-                            LOGGER.debug(NAME, fnName, 'Connext.API.GetLastPublishDateS3.Done', data);
+                            LOGGER.debug(NAME, fnName, "Connext.API.GetLastPublishDateS3.Done", data);
                             //we got data back from S3. This data will be a json string with key/vals of ConfigCode: 'LastPublishDate'.
                             //we must first parse this into a json object (the 'data' arg is really just a json string).
 
                             try {
                                 var s3data = $.parseJSON(data);
-
+                                var s3DataConfigLastPublishDate = s3data[OPTIONS.configCode];
 
                                 var isConfigOld = isConfigurationOld(s3data, configuration.Settings.LastPublishDate);
 
@@ -14238,27 +9900,28 @@ var Connext = function ($) {
                                     //config data is old, so we need to get new data from the DB
 
                                     //fire note for debug panel
-                                    Connext.Event.fire('onDebugNote', 'Current config is old.');
+                                    Connext.Event.fire("onDebugNote", "Current config is old.");
 
                                     //TODO: this is bad because we call this function here and below when we don't have a localStorage config. There are small differences, but we should create one function that handles both scenarios.
                                     getConfigurationFromServer()
                                         .done(function (newConfiguration) {
-                                            LOGGER.debug(NAME, fnName, 'getConfigurationFromServer', '<<DONE>>', newConfiguration)
+                                            LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", newConfiguration)
 
                                             //we now have a new (processed) configuration object.  We need to merge the current locally stored configuration with the one from the server.
                                             //this will take the newConfiguration and save it locally and merge any existing saved conversations with new data from the newConfiguration Object, while preserving appropriate data.
                                             Connext.Utils.MergeConfiguration(newConfiguration);
-
                                             ////this is handled in 'MergeConfiguration', might want to move it out of there and do it here
-                                            ////Connext.Storage.SetLocalConfiguration(newConfiguration);
-
                                             Connext.Storage.SetLastPublishDate(newConfiguration.Settings.LastPublishDate, expired);
-
+                                            if (_.isObject(s3DataConfigLastPublishDate)) {
+                                                if (s3DataConfigLastPublishDate.Reset) {
+                                                    Connext.Storage.ClearAllCookies();
+                                                }
+                                            }
                                             //resolve with configuration object.
                                             deferred.resolve(newConfiguration);
 
                                         }).fail(function (err) {
-                                            console.error(NAME, fnName, 'getConfigurationFromServer', '<<FAILS>>', err);
+                                            console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
 
                                             //reject with err object.
                                             deferred.reject(err);
@@ -14271,9 +9934,9 @@ var Connext = function ($) {
                                     deferred.resolve(configuration);
                                 }
 
-                                LOGGER.debug(NAME, fnName, 'isConfigOld', isConfigOld);
+                                LOGGER.debug(NAME, fnName, "isConfigOld", isConfigOld);
                             } catch (e) {
-                                console.error(NAME, fnName, 'Connext.API.GetLastPublishDateS3.Done => parseJSON <<EXCEPTION>>', e);
+                                console.error(NAME, fnName, "Connext.API.GetLastPublishDateS3.Done => parseJSON <<EXCEPTION>>", e);
                                 //we had a problem parsing the returned data from S3, but we should still set a lastPublishDate session cookie (so we don't keep calling S3, since we know there is a problem with the {siteCode}.json file. We'll check again next session in case it was just a timeout or data problem);
                                 Connext.Storage.SetLastPublishDate(configuration.Settings.LastPublishDate, expired); //we're just setting this to the LastPublishDate from the configuration, since we don't know the real LastPublishDate from S3.
                                 //resolve deferred object with the locally stored configuration (even though we don't know if it is old or not) so we will at least still process ConneXt with the current locally stored data.
@@ -14284,14 +9947,16 @@ var Connext = function ($) {
 
                         })
                         .fail(function (data) {
-                            LOGGER.debug(NAME, fnName, 'Connext.API.GetLastPublishDateS3.Fail', data);
+                            LOGGER.debug(NAME, fnName, "Connext.API.GetLastPublishDateS3.Fail", data);
                             //Its failed but we need to get config anyway to prevent plugin crashing. So we go to DB.  TEMPORARY DO IT HERE!
-
+                            var configuration = Connext.Storage.GetLocalConfiguration();
+                            if (configuration) {
+                                deferred.resolve(configuration);
+                            }
                             $.jStorage.deleteKey(Connext.Common.StorageKeys.conversations.current);
-                            //TODO: this is bad because we call this function here and above when we have a localStorage config, but it is old. There are small differences, but we should create one function that handles both scenarios.
                             getConfigurationFromServer()
                                 .done(function (configuration) {
-                                    LOGGER.debug(NAME, fnName, 'getConfigurationFromServer', '<<DONE>>', configuration)
+                                    LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", configuration)
 
                                     //since we just got a new configuration from the server (and it has already been processed in the getConfigurationFromServer function, we need to store this configuration locally.
                                     Connext.Storage.SetLocalConfiguration(configuration);
@@ -14305,7 +9970,7 @@ var Connext = function ($) {
                                     deferred.resolve(configuration);
 
                                 }).fail(function (err) {
-                                    console.error(NAME, fnName, 'getConfigurationFromServer', '<<FAILS>>', err);
+                                    console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
 
                                     //reject with err object.
                                     deferred.reject(err);
@@ -14317,7 +9982,7 @@ var Connext = function ($) {
                     //TODO: this is bad because we call this function here and above when we have a localStorage config, but it is old. There are small differences, but we should create one function that handles both scenarios.
                     getConfigurationFromServer()
                         .done(function (configuration) {
-                            LOGGER.debug(NAME, fnName, 'getConfigurationFromServer', '<<DONE>>', configuration);
+                            LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", configuration);
 
                             //we clear it to process conversations again 
                             $.jStorage.deleteKey(Connext.Common.StorageKeys.conversations.current);
@@ -14333,7 +9998,7 @@ var Connext = function ($) {
                             deferred.resolve(configuration);
 
                         }).fail(function (err) {
-                            console.error(NAME, fnName, 'getConfigurationFromServer', '<<FAILS>>', err);
+                            console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
 
                             //reject with err object.
                             deferred.reject(err);
@@ -14343,7 +10008,7 @@ var Connext = function ($) {
             else {
                 getConfigurationFromServer()
                   .done(function (configuration) {
-                      LOGGER.debug(NAME, fnName, 'getConfigurationFromServer', '<<DONE>>', configuration);
+                      LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", configuration);
 
                       //we clear it to process conversations again 
                       $.jStorage.deleteKey(Connext.Common.StorageKeys.conversations.current);
@@ -14359,7 +10024,7 @@ var Connext = function ($) {
                       deferred.resolve(configuration);
 
                   }).fail(function (err) {
-                      console.error(NAME, fnName, 'getConfigurationFromServer', '<<FAILS>>', err);
+                      console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
 
                       //reject with err object.
                       deferred.reject(err);
@@ -14368,7 +10033,7 @@ var Connext = function ($) {
 
         } catch (e) {
             //LOGGER.exception(NAME, fnName, e);
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             deferred.reject(e);
         }
         //return promise;
@@ -14384,70 +10049,70 @@ var Connext = function ($) {
         /// <returns>Nothing</returns>
         try {
             isProcessed = true;
-            var fnName = 'processConfiguration';
+            var fnName = "processConfiguration";
             LOGGER.debug(NAME, fnName);
             if (!configuration) {
                 configuration = CONFIGURATION;
             }
-            PROCESSTIME.StartProcessingTime = moment(); //sets start time for processing info (not dependent on getting data from API).
+            PROCESSTIME.StartProcessingTime = new Date(); //sets start time for processing info (not dependent on getting data from API).
             //PROCESSTIME.PluginStartTime
 
-            if (configuration.Site.SiteTheme.ThemeUrl && (configuration.Site.SiteTheme.ThemeUrl !== 'default')) {
+            if (configuration.Site.SiteTheme.ThemeUrl && (configuration.Site.SiteTheme.ThemeUrl !== "default")) {
                 var env = Connext.Common.CSSPluginUrl[OPTIONS.environment];
                 if ($("#themeLink").length == 0) {
 
 
                     if ($("body link").length == 0)
-                        $('body').append('<link href="" id ="themeLink" rel="stylesheet">');
+                        $("body").append('<link href="" id ="themeLink" rel="stylesheet">');
                     else {
                         $('<link href="" id ="themeLink" rel="stylesheet">').insertAfter($("body link").last());
                     }
                 }
                 $("#themeLink").attr("href", env + configuration.Site.SiteTheme.ThemeUrl);
-            } else if (configuration.Site.SiteTheme.ThemeUrl && configuration.Site.SiteTheme.ThemeUrl == 'default') {
+            } else if (configuration.Site.SiteTheme.ThemeUrl && configuration.Site.SiteTheme.ThemeUrl == "default") {
                 $("#themeLink").remove();
             }
-
+            Connext.Event.fire("onDynamicMeterFound", configuration.DynamicMeter.Name);
             //fireEvent that Campaign was found.
-            Connext.Event.fire('onCampaignFound', configuration.Campaign);
+            Connext.Event.fire("onCampaignFound", configuration.Campaign);
 
             var meterLevel; //this is set in done or fail call below, so we can use it in the 'always' call.
 
 
             Connext.User.CheckAccess()
                        .done(function (data) {
-                           LOGGER.debug(NAME, fnName, 'User.CheckAccess.Done', data);
+                           LOGGER.debug(NAME, fnName, "User.CheckAccess.Done", data);
                        })
                        .fail(function () {
-                           LOGGER.debug(NAME, fnName, 'User.CheckAccess.Fail');
+                           LOGGER.debug(NAME, fnName, "User.CheckAccess.Fail");
                        }).always(function () { //this is always fired, regardless if the user was authenticated. For now we only use this for the 'UserAuthTiming', but could use this for other things.
                            Connext.MeterCalculation.CalculateMeterLevel(configuration.DynamicMeter.Rules)
                                 .done(function (rule) {
-                                    LOGGER.debug(NAME, fnName, 'Determined meter level', rule);
+                                    LOGGER.debug(NAME, fnName, "Determined meter level", rule);
                                     meterLevel = rule.MeterLevelId;
-                                    Connext.Event.fire("onMeterLevelSet", { method: 'Dynamic', level: meterLevel, rule: rule });
+                                    Connext.Event.fire("onMeterLevelSet", { method: "Dynamic", level: meterLevel, rule: rule });
                                 })
                                 .fail(function () {
-                                    LOGGER.warn(NAME, fnName, 'Failed to determined Meter Level...using default');
+                                    LOGGER.warn(NAME, fnName, "Failed to determined Meter Level...using default");
                                     meterLevel = configuration.Settings.DefaultMeterLevel;
-                                    Connext.Event.fire("onMeterLevelSet", { method: 'Default', level: meterLevel });
+                                    Connext.Event.fire("onMeterLevelSet", { method: "Default", level: meterLevel });
                                 }).always(function () { //this will always be called, so this is where we check if a User has access and if we should process a campaign (we only process a campaign if a user does not have access...this will change in v1.1)
-                                    LOGGER.info(NAME, fnName, 'METER CALCULATION --- ALWAYS CALLED', meterLevel);
+                                    LOGGER.info(NAME, fnName, "METER CALCULATION --- ALWAYS CALLED", meterLevel);
                                     Connext.Campaign.ProcessCampaign(Connext.Common.MeterLevels[meterLevel], configuration.Campaign);
                                 });
                            var UserAuthTime = Connext.User.GetAuthTiming();
-                           LOGGER.debug(NAME, fnName, 'User.CheckAccess.Always', 'UserAuthTime', UserAuthTime);
-                           var EndTime = moment();
-                           var ProcessingTime = EndTime.diff(PROCESSTIME.StartProcessingTime);
-                           var TotalTime = EndTime.diff(PROCESSTIME.PluginStartTime);
-                           $('#ddProcessingTime').html(ProcessingTime + 'ms');
-                           $('#ddTotalProcessingTime').html(TotalTime + 'ms');
-                           Connext.Event.fire("onInit", null);
+                           LOGGER.debug(NAME, fnName, "User.CheckAccess.Always", "UserAuthTime", UserAuthTime);
 
+                           var EndTime = new Date().getMilliseconds();
+                           var ProcessingTime = EndTime - PROCESSTIME.StartProcessingTime.getMilliseconds();
+                           var TotalTime = EndTime - PROCESSTIME.PluginStartTime.getMilliseconds();
+                           $("#ddProcessingTime").html(ProcessingTime + "ms");
+                           $("#ddTotalProcessingTime").html(TotalTime + "ms");
+                           Connext.Event.fire("onInit", null);
                        });
 
         } catch (e) {
-            console.log('Core.Init <<EXCEPTION>>', e);
+            console.log("Core.Init <<EXCEPTION>>", e);
         }
 
 
@@ -14466,7 +10131,7 @@ var Connext = function ($) {
         /// <summary></summary>
         /// <param name="" type=""></param>
         /// <returns>None</returns>
-        var fnName = 'getConfigurationFromServer';
+        var fnName = "getConfigurationFromServer";
 
         //create deferred object
         var deferred = $.Deferred();
@@ -14477,24 +10142,24 @@ var Connext = function ($) {
             Connext.API.GetConfiguration({
                 payload: { siteCode: OPTIONS.siteCode, configCode: OPTIONS.configCode },
                 onSuccess: function (data) {
-                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'data', data);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                     //we got results from the server, we need to process them to create a friendlier json object.
                     var processedConfiguration = Connext.Utils.ProcessConfiguration(data);
-                    LOGGER.debug(NAME, fnName, '<< SUCCESS >>', 'processedConfiguration', processedConfiguration);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "processedConfiguration", processedConfiguration);
                     deferred.resolve(processedConfiguration);
                 },
                 onNull: function () {
-                    LOGGER.debug(NAME, fnName, '<< NO RESULTS >>');
-                    deferred.reject('Configuration Not Found');
+                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
+                    deferred.reject("Configuration Not Found");
                 },
                 onError: function (err) {
-                    LOGGER.debug(NAME, fnName, '<< ERROR >>', 'err', err);
-                    deferred.reject('Error Getting Configuration Data');
+                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                    deferred.reject("Error Getting Configuration Data");
                 }
             });
 
         } catch (e) {
-            console.error(NAME, fnName, '<<EXCEPTION>>', e);
+            console.error(NAME, fnName, "<<EXCEPTION>>", e);
         }
         return deferred.promise();
     };
@@ -14508,7 +10173,7 @@ var Connext = function ($) {
         /// <param name="s3Data" type="Object">Object from S3 that has key/val of ConfigCode:LastPublishDate.</param>
         /// <param name="configurationSettings" type="String">LastPublishDate string from configuration</param>
         /// <returns type="Boolean">Returns bool depending if LastPublishDate from configuration is older or newer than the s3Data date with the current ConfigCode.</returns>
-        var fnName = 'isConfigurationOld';
+        var fnName = "isConfigurationOld";
         try {
             //LOGGER.debug(pName, fnName);
 
@@ -14516,30 +10181,57 @@ var Connext = function ($) {
             if (_.isObject(s3Data)) {
                 //is an object, check if we have a property in this Object for the current 'configCode'
 
-                LOGGER.debug(NAME, fnName, 's3Data', s3Data, 'OPTIONS.configCode', OPTIONS.configCode);
+                LOGGER.debug(NAME, fnName, "s3Data", s3Data, "OPTIONS.configCode", OPTIONS.configCode);
 
                 //gets the last publish date from s3Data based on the current OPTIONS.configCode (we'll check if this actually exists below).
                 var s3DataConfigLastPublishDate = s3Data[OPTIONS.configCode];
 
                 if (s3DataConfigLastPublishDate) {
-                    LOGGER.log(NAME, fnName, '.json file has a property same as this configCode', s3DataConfigLastPublishDate);
-                    //we have a property from s3Data based on the currentConfigCode, so we need to test it against the current configurationLastPublishDate.
+                    var serverLastPublishDate,
+                        localLastPublishDate;
+                    if (_.isObject(s3DataConfigLastPublishDate)) {
+                        LOGGER.log(NAME, fnName, '.json file has a configCode property and its an object', s3DataConfigLastPublishDate);
+                        //we have a property from s3Data based on the currentConfigCode, so we need to handle Reset property to reset Article views.
 
-                    //set 'moment' object so we can compare with moment
-                    var serverLastPublishDate = moment(s3DataConfigLastPublishDate);
+                        //set 'moment' object so we can compare with moment
+                        serverLastPublishDate = new Date(Date.parse(s3DataConfigLastPublishDate.Date));
+                        serverLastPublishDate.setSeconds(serverLastPublishDate.getSeconds() - 10);
+                        //set 'moment' object so we can compare with moment
+                        localLastPublishDate = new Date(Date.parse(configurationLastPublishDate));
 
-                    //set 'moment' object so we can compare with moment
-                    var localLastPublishDate = moment(configurationLastPublishDate);
-                    localLastPublishDate = localLastPublishDate.add(10, 's');
-                    //we use moment 'isAfter' function to check if serverLastPublishDate is after the local date.
-                    if (serverLastPublishDate.isAfter(localLastPublishDate)) {
-                        LOGGER.debug(NAME, fnName, 'Server date is << AFTER >>');
-                        return true;
+                        //we use moment 'isAfter' function to check if serverLastPublishDate is after the local date.
+                        if (serverLastPublishDate > localLastPublishDate) {
+                            LOGGER.debug(NAME, fnName, 'Server date is << AFTER >>');
+                            return true;
+                        } else {
+                            LOGGER.debug(NAME, fnName, 'Server date is << NOT AFTER >>');
+                            //server date is not after, which means this configuration is not old, so return false (since this function is asking if 'isConfigurationOld').
+                            return false;
+                        }
                     } else {
+                        LOGGER.log(NAME, fnName, '.json file has a property same as this configCode', s3DataConfigLastPublishDate);
+                        //we have a property from s3Data based on the currentConfigCode, so we need to test it against the current configurationLastPublishDate.
+
+                        //set 'moment' object so we can compare with moment
+                        serverLastPublishDate = new Date(Date.parse(s3DataConfigLastPublishDate));
+                        serverLastPublishDate.setSeconds(serverLastPublishDate.getSeconds() - 10);
+                        //set 'moment' object so we can compare with moment
+                        localLastPublishDate = new Date(Date.parse(configurationLastPublishDate));
+
+                        //we use moment 'isAfter' function to check if serverLastPublishDate is after the local date.
+                        if (serverLastPublishDate > localLastPublishDate) {
+                            LOGGER.debug(NAME, fnName, 'Server date is << AFTER >>');
+                            return true;
+                        } else {
+                            LOGGER.debug(NAME, fnName, 'Server date is << NOT AFTER >>');
+                            //server date is not after, which means this configuration is not old, so return false (since this function is asking if 'isConfigurationOld').
+                            return false;
+                        }
                         LOGGER.debug(NAME, fnName, 'Server date is << NOT AFTER >>');
                         //server date is not after, which means this configuration is not old, so return false (since this function is asking if 'isConfigurationOld').
                         return false;
                     }
+                    
 
                 } else {
                     throw "s3Data does not have the current configCode as a key";
@@ -14549,7 +10241,7 @@ var Connext = function ($) {
                 throw "s3Data is not an object";
             }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             //for all error we return true, which means the current data is old. This will force us getting new data from the server (we will still do a merge of this data, but it's safer to get new data and merge it when we have an error. Otherwise if this is because of a bug, we might never get new configuration data from the DB).
             return true;
         }
@@ -14561,7 +10253,7 @@ var Connext = function ($) {
         /// <param name="customTime" type="String">CustomTime date</param>
         /// <param name="configurationSettings" type="String">LastPublishDate string from configuration</param>
         /// <returns type="Boolean">Returns bool depending if LastPublishDate from configuration is older or newer than CustomTime.</returns>
-        var fnName = 'isConfigurationOld';
+        var fnName = "isConfigurationOld";
         try {
             //LOGGER.debug(pName, fnName);
 
@@ -14569,23 +10261,23 @@ var Connext = function ($) {
             if (customTime) {
 
                 //set 'moment' object so we can compare with configurationLastPublishDate
-                var customPublishDate = moment(customTime);
+                var customPublishDate = new Date(Date.parse(customTime));
 
                 //set 'moment' object so we can compare with customTime
-                var localLastPublishDate = moment(configurationLastPublishDate);
+                var localLastPublishDate = new Date(Date.parse(configurationLastPublishDate));
 
                 //we use moment 'isAfter' function to check if serverLastPublishDate is after the local config date.
-                if (customPublishDate.isAfter(localLastPublishDate)) {
-                    LOGGER.debug(NAME, fnName, 'Server date is << AFTER >>');
+                if (customPublishDate > localLastPublishDate) {
+                    LOGGER.debug(NAME, fnName, "Server date is << AFTER >>");
                     return true;
                 } else {
-                    LOGGER.debug(NAME, fnName, 'Server date is << NOT AFTER >>');
+                    LOGGER.debug(NAME, fnName, "Server date is << NOT AFTER >>");
                     //server date is not after, which means this configuration is not old, so return false (since this function is asking if 'isConfigurationOld').
                     return false;
                 }
             }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            console.error(NAME, fnName, "EXCEPTION", e);
             //for all error we return true, which means the current data is old. This will force us getting new data from the server (we will still do a merge of this data, but it's safer to get new data and merge it when we have an error. Otherwise if this is because of a bug, we might never get new configuration data from the DB).
             return true;
         }
@@ -14615,7 +10307,7 @@ var Connext = function ($) {
         Storage: ConnextStorage($),
         User: ConnextUser($),
         CloseTemplates: closeAllTemplates,
-        ShowTrimmedContent: showTrimmedContent,
+        IntegrateProduct: IntegrateProduct,
         Run: reInit,
         ReInit: reInit,
         GetOptions: function () { return OPTIONS; },
@@ -14626,7 +10318,7 @@ var Connext = function ($) {
             Connext.Action.ShowContent();
         },
         fire: function (evt, data) {
-            console.log('Connext.fire', evt, data);
+            console.log("Connext.fire", evt, data);
             //this is the main public method the client will use to fire events inside of ConneXt.  
             //the 'evt' param will route to an appropriate method inside of ConneXt and pass in the 'data' param.
             //for example, a client would call mg2Connext.fire('onLogin', {uuid: 1234, fname: 'aaa', lname: 'bbb'}); And we would process the logging in of a user with the passed in data object.
