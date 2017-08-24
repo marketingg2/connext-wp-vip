@@ -9,6 +9,7 @@
         debug: (WP_CXT.debug === 'false') ? false : true,
         settingsKey: WP_CXT.settingsKey,
         environment: WP_CXT.environment,
+        attr: WP_CXT.attr,
       });
     }
 
