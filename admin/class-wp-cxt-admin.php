@@ -47,7 +47,7 @@ class Wp_Cxt_Admin {
 
 		$screen = get_current_screen();
 		// only enqueue the chosen css on the specific WP Connext settings page
-		if ( ! empty( $screen->id ) && 'toplevel_page_mg2-top-menu' === $screen->id ) {
+		if ( ! empty( $screen->id ) && ( 'toplevel_page_mg2-top-menu' === $screen->id || 'mg2_page_wp-cxt' === $screen->id ) ) {
 			wp_enqueue_style( 'chosen', WP_CXT_URL . 'admin/css/chosen/chosen.min.css', array(), '1.7.0', 'all' );
 		}
 
@@ -62,7 +62,7 @@ class Wp_Cxt_Admin {
 
 		$screen = get_current_screen();
 		// only enqueue the chosen js and custom functionality on the specific WP Connext settings page
-		if ( ! empty( $screen->id ) && 'toplevel_page_mg2-top-menu' === $screen->id ) {
+		if ( ! empty( $screen->id ) && ( 'toplevel_page_mg2-top-menu' === $screen->id || 'mg2_page_wp-cxt' === $screen->id ) ) {
 			wp_enqueue_script( 'chosen', WP_CXT_URL . 'admin/js/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.7.0', true );
 			wp_enqueue_script( 'wp-cxt-admin', WP_CXT_URL . 'admin/js/wp-cxt-admin.js', array( 'chosen' ), WP_CXT_VERSION, true );
 		}
