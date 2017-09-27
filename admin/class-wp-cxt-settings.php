@@ -46,13 +46,14 @@ class Wp_Cxt_Settings {
 	public function initialize_settings_page() {
 
 		$settings_page = new Wp_Cxt_Settings_Page( $this->plugin_name );
+		$is_first_submenu = $this->is_first_submenu();
 
 		add_submenu_page(
-			'options-general.php',
+			'mg2-top-menu',
 			__( 'Connext Settings', 'wp-cxt' ),
 			__( 'Connext Settings', 'wp-cxt' ),
 			'manage_options',
-			$this->plugin_name,
+			$is_first_submenu ? 'mg2-top-menu' : $this->plugin_name,
 			array( $settings_page, 'render_page' )
 		);
 	}
@@ -438,6 +439,38 @@ class Wp_Cxt_Settings {
 			$term_options[ $term->term_id ] = $term->name;
 		}
 		return $term_options;
+	}
+
+	/**
+	 * Determines whether or not this is the first MG2
+	 * submenu to be registered under the parent MG2 page.
+	 *
+	 * @return bool
+	 */
+	private function is_first_submenu() {
+		global $admin_page_hooks;
+		if ( empty( $admin_page_hooks['mg2-top-menu'] ) ) {
+			$this->create_top_menu();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Creates an initial top level menu for any
+	 * MG2 plugins that may be installed.
+	 *
+	 * @return void
+	 */
+	private function create_top_menu() {
+		add_menu_page(
+			__( 'MG2', 'wp-cxt' ),
+			__( 'MG2', 'wp-cxt' ),
+			'manage_options',
+			'mg2-top-menu',
+			'__return_null',
+			'dashicons-admin-generic'
+		);
 	}
 
 }

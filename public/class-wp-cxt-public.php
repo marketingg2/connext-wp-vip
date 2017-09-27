@@ -115,9 +115,9 @@ class Wp_Cxt_Public {
 	 */
 	private function connext_enabled() {
 		// First determine if the home page or front page are enabled
-		if ( is_home() && ! empty( $this->current_settings['display_home'] && 'yes' === $this->current_settings['display_home'] ) ) {
+		if ( is_home() && ! empty( $this->current_settings['display_home'] ) && 'yes' === $this->current_settings['display_home'] ) {
 			return true;
-		} elseif ( is_front_page() && ! empty( $this->current_settings['display_front'] && 'yes' === $this->current_settings['display_front'] ) ) {
+		} elseif ( is_front_page() && ! empty( $this->current_settings['display_front'] ) && 'yes' === $this->current_settings['display_front'] ) {
 			return true;
 		} elseif ( is_category() || is_tag() || is_tax() ) {
 			$term = get_queried_object();
