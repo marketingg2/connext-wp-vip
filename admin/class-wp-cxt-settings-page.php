@@ -42,6 +42,7 @@ class Wp_Cxt_Settings_Page {
 
 		<div class="wrap <?php echo esc_attr( $this->plugin_name ); ?>">
 			<h2><?php echo esc_html__( 'Connext Settings', 'wp-cxt' ); ?></h2>
+			<?php settings_errors(); ?>
 			<form action="options.php" method="post">
 
 				<?php settings_fields( $this->plugin_name ); ?>
