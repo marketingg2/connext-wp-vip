@@ -4266,8 +4266,6 @@ var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) }
 
     $.fn.loader = function (options) {
 
-
-
         var el = this;
 
         // setup options
@@ -4285,44 +4283,43 @@ var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) }
         var $this;
         this.on = function () {
             try {
-
                 if (el.children('span').length) {
                     $this = el.children('span');
                 } else {
                     $this = el;
                 }
-                text = $this.html();
-                $this.attr('data-mg2-submit', '');
-                if (settings.location == 'in') {
-                    //el.append(img);
-                    $this.html(img);
 
+                text = $this.html();
+
+                if ($this[0].hasAttribute('data-mg2-submit')) {
+                    $this.attr('data-mg2-submit', '');
+                }
+                
+                if (settings.location == 'in') {
+                    $this.html(img);
                 }
             } catch (e) {
-                console.log(e);
+              
             }
         }
 
         this.off = function () {
             try {
-                $this.attr('data-mg2-submit', 'login');
+                if ($this[0].hasAttribute('data-mg2-submit')) {
+                    $this.attr('data-mg2-submit', 'login');
+                }
+               
                 $this.html(text);
                 img.remove();
             } catch (e) {
 
             }
-            
         }
 
         // PUBLIC functions
 
-
-
         //return jquery object
         return this;
-
-
-
     }
 })(jQuery);
 
@@ -11772,7 +11769,7 @@ var ConnextAppInsights = function ($) {
     }
 }
 var CnnXt = function ($) {
-    var VERSION = '1.10.3';
+    var VERSION = '1.10.4';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
@@ -12689,8 +12686,8 @@ var CnnXt = function ($) {
         CloseTemplates: closeAllTemplates,
         IntegrateProduct: IntegrateProduct,
         Run: function () {
-            CnnXt.Event.fire("onRun");
             reInit();
+            CnnXt.Event.fire("onRun");
             FIRST_RUN_EXECUTED = true;
             clearTimeout(RUN_TIMEOUT);
         },
