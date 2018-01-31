@@ -1,3 +1,11 @@
+
+ window.connextVersion = "1.10"
+
+ window.connextBuild = "23618"
+
+ /* Version: 1.10 */ 
+
+ /* Build: 23618 */ 
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -4636,11 +4644,11 @@ var ConnextCommon = function () {
         S3LastPublishDatePath: "data/last_publish/<%= siteCode %>.json",
         CSSPluginUrl: {
             localhost: "http://localhost:20001/plugin/assets/css/themes/",
-            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.7/themes/",
-            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.7/themes/",
-            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.7/themes/",
-            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.7/themes/",
-            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.7/themes/',
+            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.10/themes/",
+            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.10/themes/",
+            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.10/themes/",
+            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.10/themes/",
+            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.10/themes/',
             prod: "https://cdn.mg2connext.com/prod/1.6/themes/",
             preprod: "https://cdn.mg2connext.com/preprod/1.6/themes/"
         },
@@ -4735,10 +4743,10 @@ var ConnextCommon = function () {
             "Equals": "==",
             "Not Equal": "!=",
             "Not Equals": "!=",
-            "More Then": ">",
-            "Less Then": ">",
-            "More Or Equal Then": ">=",
-            "Less Or Equal Then": "<="
+            "More Than": ">",
+            "Less Than": ">",
+            "More Than Or Equals To": ">=",
+            "Less Than Or Equals To": "<="
         },
         ERROR: {
             NO_CONFIG: {
@@ -7263,7 +7271,7 @@ var ConnextAPI = function ($) {
     
     var ROUTES = { //this holds the routes for the different api calls.  We use this in the universal 'Get' method and use the 'args' parameters to set the full api URL.
         GetConfiguration: _.template("configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>"),
-        GetUserByEmailAndPassword: _.template("user/email/<%= email %>/password/<%= password %>"),
+        GetUserByEmailAndPassword: _.template("user/?email=<%= email %>&password=<%= password %>"),
         GetUserByMasterId: _.template("user/id/<%= id %>"),
         GetUserByToken: _.template("user/token/<%= token %>"),
         EmailPreferences: "user/emailPreference",
@@ -7473,6 +7481,14 @@ var ConnextAPI = function ($) {
             return Get({ method: 'GetConfiguration', options: opts });
         },
         GetUserByEmailAndPassword: function (opts) {
+            if (opts && opts.payload) {
+                if (opts.payload.email) {
+                    opts.payload.email = encodeURIComponent(opts.payload.email);
+                }
+                if (opts.payload.password) {
+                    opts.payload.password = encodeURIComponent(opts.payload.password);
+                }
+            }
             return Get({ method: "GetUserByEmailAndPassword", options: opts });
         },
         ClearServerCache: function() {
@@ -9267,11 +9283,11 @@ var ConnextMeterCalculation = function ($) {
                     return item.trim().toLowerCase();
                 });
                 if (segment.Options.Qualifier == "Contains" ||
-                    segment.Options.Qualifier == "Doesn't contain") {
+                    segment.Options.Qualifier == "Does Not Contain") {
                     if (jsValue.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
                         isPassed = segment.Options.Qualifier == "Contains";
                     } else {
-                        isPassed = segment.Options.Qualifier == "Doesn't contain";
+                        isPassed = segment.Options.Qualifier == "Does Not Contain";
                     }
                 } else {
                     isPassed = segment.Options.Qualifier == "Equals";
@@ -9282,9 +9298,9 @@ var ConnextMeterCalculation = function ($) {
                 }
 
                 if (segment.Options.Qualifier == "Contains" ||
-                    segment.Options.Qualifier == "Doesn't contain") {
+                    segment.Options.Qualifier == "Does Not Contain") {
                     if (jsValue == undefined) {
-                        isPassed = segment.Options.Qualifier == "Doesn't contain";
+                        isPassed = segment.Options.Qualifier == "Does Not Contain";
                     } else {
                         var delimiter, array;
                         delimiter = segment.Options.Delimiter ? new RegExp(segment.Options.Delimiter.replace(/space/g, '/\s'), 'g') : /[ ,;]/g;
@@ -9293,7 +9309,7 @@ var ConnextMeterCalculation = function ($) {
                         if (array.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
                             isPassed = segment.Options.Qualifier == "Contains";
                         } else {
-                            isPassed = segment.Options.Qualifier == "Doesn't contain";
+                            isPassed = segment.Options.Qualifier == "Does Not Contain";
                         }
                     }
                 } else {
@@ -9721,7 +9737,7 @@ var ConnextCampaign = function ($) {
 
                     if (CURRENT_CONVERSATION) {
                         setDefaultConversationProps();
-                        CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
+                        CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
                         CnnXt.Event.fire("onDebugNote", "Conversation Expire: " + CURRENT_CONVERSATION.Props.expiredReason);
                         return CURRENT_CONVERSATION;
                     } else {
@@ -9759,7 +9775,7 @@ var ConnextCampaign = function ($) {
                         CURRENT_CONVO = getNextConversation();
 
                         if (CURRENT_CONVO) {
-                            CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
+                            CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
                             return CURRENT_CONVO;
                         }
                     }
@@ -11618,21 +11634,68 @@ var ConnextWhitelist = function ($) {
 var ConnextAppInsights = function ($) {
 
     var userId = null;
-    var init = function () {
+    var init = function (userId, masterId) {
 
         var appInsights = window.appInsights || function (config) {
-            function i(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i); if (t.context) { userId = t.context.user.id; } }) } }
-            var t = { config: config }, u = document, e = window, o = "script", s = "AuthenticatedUserContext", h = "start", c = "stop", l = "Track", a = l + "Event", v = l + "Page",
-                y = u.createElement(o), r, f; y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(y);
-            try { t.cookie = u.cookie } catch (p) { } for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;)i("track" + r.pop());
-            return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"), config.disableExceptionTracking || (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o)
-            { var s = f && f(config, i, u, e, o); return s !== !0 && t["_" + r](config, i, u, e, o), s }), t
+            function i(config) {
+                t[config] = function () {
+                    var i = arguments;
+                    t.queue.push(function() {
+                        t[config].apply(t, i);
+                        if (t.context) {
+                            //userId = t.context.user.id;
+                        }
+                    });
+                }
+            }
+            var t = {
+                    config: config
+                },
+                u = document,
+                e = window,
+                o = "script",
+                s = "AuthenticatedUserContext",
+                h = "start",
+                c = "stop",
+                l = "Track",
+                a = l + "Event",
+                v = l + "Page",
+                y = u.createElement(o),
+                r, f;
+            y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js";
+            u.getElementsByTagName(o)[0].parentNode.appendChild(y);
+            try {
+                t.cookie = u.cookie
+            } catch (p) { }
+            for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;) i("track" + r.pop());
+            return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"),
+                config.disableExceptionTracking ||
+                (r = "onerror", i("_" + r), f = e[r], e[r] = function(config, i, u, e, o) {
+                    var s = f && f(config, i, u, e, o);
+                    return s !== !0 && t["_" + r](config, i, u, e, o), s;
+                }), t;
         }({
-            instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment]
+            instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment],
+            disableExceptionTracking: true,
+            appUserId: userId,
+            accountId: masterId
         });
-
         window.appInsights = appInsights;
+
+        appInsights.queue.push(function () {
+            appInsights.context.addTelemetryInitializer(function (envelope) {
+                var telemetryItem = envelope.data.baseData;
+                if (envelope.data.baseType === 'RemoteDependencyData') {
+                    return telemetryItem.target === 'freegeoip.net'
+                        || telemetryItem.data.indexOf('connext') !== -1
+                        || telemetryItem.target.indexOf('auth0') !== -1;
+                }
+            });
+        });
+        appInsights.setAuthenticatedUserContext(userId, masterId);
+
         appInsights.trackPageView();
+
     }
 
     var trackEvent = function (name, data) {
@@ -11769,7 +11832,7 @@ var ConnextAppInsights = function ($) {
     }
 }
 var CnnXt = function ($) {
-    var VERSION = '1.10.4';
+    var VERSION = '1.10.6';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
@@ -11950,7 +12013,7 @@ var CnnXt = function ($) {
 
             //if we intergrated with flittz 
             if (OPTIONS.integrateFlittz) {
-                OPTIONS.silentmode = true; 
+                OPTIONS.silentmode = true;
             }
 
             //check run settings
@@ -12085,18 +12148,31 @@ var CnnXt = function ($) {
             //init MeterCalculation
             CnnXt.MeterCalculation.init();
 
-            //init AppInsights
-            CnnXt.AppInsights.init();
 
             LOGGER.debug('OPTIONS.API', OPTIONS.api);
-            if (!CnnXt.Storage.GetGuid()) {
-                CnnXt.Storage.SetGuid(CnnXt.Utils.GenerateGuid());
-            }
+            //if (!CnnXt.Storage.GetGuid()) {
+            //    CnnXt.Storage.SetGuid(CnnXt.Utils.GenerateGuid());
+            //}
             Fprinting().init()
                 .done(function (id) {
                     OPTIONS.deviceId = id;
                 })
                 .always(function () {
+                    try {
+                        var masterId = CnnXt.Storage.GetUserData()
+                            ? (CnnXt.Storage.GetUserData().MasterId
+                                ? CnnXt.Storage.GetUserData().MasterId
+                                : CnnXt.Storage.GetUserData().IgmRegID)
+                            : null;
+                        //init AppInsights
+                        CnnXt.AppInsights.init(OPTIONS.deviceId, masterId);
+                    } catch (e) {
+                        CnnXt.AppInsights.init();
+                        LOGGER.exception(NAME, fnName, e);
+                    }
+
+
+
                     defineConfiguration();
                     CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext,
                         CnnXt.Utils.GetUserMeta());
@@ -12197,7 +12273,7 @@ var CnnXt = function ($) {
                                     LOGGER.error(NAME, fnName, "No Config Settings Found", "Error getting Config Settings", err);
                                     CnnXt.Event.fire("onNoConfigSettingFound", "No Config Settings Found", err);
                                 })
-                                .always(function() {
+                                .always(function () {
                                     CnnXt.Event.fire("onInit", null);
                                 });
 
@@ -12618,7 +12694,7 @@ var CnnXt = function ($) {
                 GetOptions: CnnXt.GetOptions,
                 Storage: {
                     GetLastPublishDate: CnnXt.Storage.GetLastPublishDate,
-                    GetSiteCode: function() { return CnnXt.Storage.GetLocalConfiguration().Site.SiteCode },
+                    GetSiteCode: function () { return CnnXt.Storage.GetLocalConfiguration().Site.SiteCode },
                     GetConfigCode: function () { return CnnXt.Storage.GetLocalConfiguration().Settings.Code },
                     GetLocalConfiguration: CnnXt.Storage.GetLocalConfiguration,
                     GetCurrentConversations: CnnXt.Storage.GetCurrentConversations,
