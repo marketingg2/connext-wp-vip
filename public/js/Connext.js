@@ -1,11 +1,3 @@
-
- window.connextVersion = "1.10"
-
- window.connextBuild = "23618"
-
- /* Version: 1.10 */ 
-
- /* Build: 23618 */ 
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -6765,7 +6757,7 @@ var ConnextStorage = function ($) {
             setCookie(oldCookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.CookieExpireDate), userCurDomain);
         }
 
-        if (articleCookie || articleCookie == "{}") {
+        if (articleCookie) {
             parsedViews = JSON.parse(articleCookie);
         } else {
             if (oldCookie) {
@@ -6854,7 +6846,7 @@ var ConnextStorage = function ($) {
     };
 
     var getCurrentConversationViewCount = function (id) {
-        if (!CnnXt.Storage.GetCurrentConverstaion())
+        if (!CnnXt.Storage.GetCurrentConverstaion() && !id)
             return null;
         var convoId = id;
         if (convoId == null) {
@@ -11681,7 +11673,9 @@ var ConnextAppInsights = function ($) {
             accountId: masterId
         });
         window.appInsights = appInsights;
-
+        if (!appInsights.queue) {
+            appInsights.queue = [];
+        }
         appInsights.queue.push(function () {
             appInsights.context.addTelemetryInitializer(function (envelope) {
                 var telemetryItem = envelope.data.baseData;
@@ -11699,9 +11693,15 @@ var ConnextAppInsights = function ($) {
     }
 
     var trackEvent = function (name, data) {
-        var appInsightsData = getEventDataByName(name, data);
-
-        appInsights.trackEvent(name, appInsightsData);
+        try {
+            var appInsightsData = getEventDataByName(name, data);
+            appInsights.trackEvent(name, appInsightsData);
+        }
+        catch (e) {
+            if (CnnXt.GetOptions().debug) {
+                console.warn("track Application insights error");
+            }
+        }
     }
 
     var getAppInsightsData = function (additionalData) {
@@ -11832,7 +11832,7 @@ var ConnextAppInsights = function ($) {
     }
 }
 var CnnXt = function ($) {
-    var VERSION = '1.10.6';
+    var VERSION = '1.10.7';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
@@ -12167,7 +12167,6 @@ var CnnXt = function ($) {
                         //init AppInsights
                         CnnXt.AppInsights.init(OPTIONS.deviceId, masterId);
                     } catch (e) {
-                        CnnXt.AppInsights.init();
                         LOGGER.exception(NAME, fnName, e);
                     }
 
@@ -12699,17 +12698,10 @@ var CnnXt = function ($) {
                     GetLocalConfiguration: CnnXt.Storage.GetLocalConfiguration,
                     GetCurrentConversations: CnnXt.Storage.GetCurrentConversations,
                     GetCurrentConversation: CnnXt.Storage.GetCurrentConverstaion,
-                    GetCurrentMeterLevel: function () {
-                        var conversation = CnnXt.Storage.GetCurrentConverstaion();
-
-                        if (conversation) {
-                            return conversation.MeterLevelId;
-                        } else {
-                            return undefined;
-                        }
-                    },
+                    GetCurrentMeterLevel: function () { return Connext.GetOptions().currentMeterLevel; },
                     GetCampaignData: CnnXt.Storage.GetCampaignData,
                     GetRegistrationType: CnnXt.Storage.GetRegistrationType,
+                    GetActualZipCodes: CnnXt.Storage.GetActualZipCodes,
 
                     //deprecated 12.11.2017. approved with Dael
                     //GetViewedArticles: function () {
