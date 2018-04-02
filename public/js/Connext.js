@@ -1,11 +1,11 @@
 /*
-* Version: 1.12.2 
-* Build: 20180215.2 
+* Version: 1.14 
+* Build: V.1.14-20180323.1 
 */ 
 
- window.connextVersion = "1.12.2"
+ window.connextVersion = "1.14"
 
- window.connextBuild = "20180215.2"
+ window.connextBuild = "V.1.14-20180323.1"
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -24,12 +24,12 @@
 		init: function (element, options) {
 			var that = this;
 
-			this.options = options;
+            this.options = options;
 
 			this.$element = $(element)
-				.delegate('[data-dismiss="modal"]', 'click.dismiss.modal', $.proxy(this.hide, this));
+                .on('click.dismiss.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this));
 
-			this.options.remote && this.$element.find('.modal-body').load(this.options.remote, function () {
+			this.options.remote && this.$element.find('.modal-body').on('load', this.options.remote, function () {
 				var e = $.Event('loaded');
 				that.$element.trigger(e);
 			});
@@ -2936,7 +2936,7 @@ if (!JSON) {
                         value = result;
                     }
                 } catch (e) { }
-                if (key != 'igmRegID' && key!='igmContent') {
+                if (key != 'igmRegID' && key != 'igmContent' && key != 'igmAuth') {
                     if (!converter.write) {
                         value = encodeURIComponent(String(value))
                             .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
@@ -4145,11 +4145,11 @@ var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) }
         // Select the correct events
         if( 'ontouchstart' in window || 'onmsgesturechange' in window ){
             // Device with touchscreen
-            $(document).bind("touchmove MSPointerMove pointermove", this.checkElements);
+            $(document).on('bind', "touchmove MSPointerMove pointermove", this.checkElements);
         }
 
         // Always load on window load
-        $(options.scrollBox).bind("load scroll", this.checkElements);
+        $(options.scrollBox).on('bind', "load scroll", this.checkElements);
 
         // On resize change the height var
         $(window).resize(function(e){
@@ -4279,7 +4279,7 @@ var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) }
         // setup options
         var defaultOptions = {
             location: 'in',
-            img: '<img src="https://s3.amazonaws.com/mg2.paywall.dev/img/ajax-loading.gif" style="margin: 7px auto" />',
+            img: '<img src="https://cdn.mg2connext.com/prod/template_images/ajax-loader.gif" style="margin: 7px auto" />',
             loaderId: 'loader'
         };
 
@@ -4331,6 +4331,21 @@ var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) }
     }
 })(jQuery);
 
+!(function () {
+
+  if ( typeof window.CustomEvent === "function" ) return false;
+
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
 !function (e, t, i) { "use strict"; "function" == typeof define && define.amd ? define(i) : "undefined" != typeof module && module.exports ? module.exports = i() : t.exports ? t.exports = i() : t[e] = i() }("Fingerprint2", this, function () {
     "use strict"; var e = function (t) { if (!(this instanceof e)) return new e(t); var i = { swfContainerId: "fingerprintjs2", swfPath: "flash/compiled/FontList.swf", detectScreenOrientation: !0, sortPluginsFor: [/palemoon/i], userDefinedFonts: [] }; this.options = this.extend(t, i), this.nativeForEach = Array.prototype.forEach, this.nativeMap = Array.prototype.map }; return e.prototype = {
         extend: function (e, t) { if (null == e) return t; for (var i in e) null != e[i] && t[i] !== e[i] && (t[i] = e[i]); return t }, get: function (e) { var t = this, i = { data: [], push: function (e) { var i = e.key, a = e.value; "function" == typeof t.options.preprocessor && (a = t.options.preprocessor(i, a)), this.data.push({ key: i, value: a }) } }; i = this.userAgentKey(i), i = this.languageKey(i), i = this.colorDepthKey(i), i = this.pixelRatioKey(i), i = this.hardwareConcurrencyKey(i), i = this.screenResolutionKey(i), i = this.availableScreenResolutionKey(i), i = this.timezoneOffsetKey(i), i = this.sessionStorageKey(i), i = this.localStorageKey(i), i = this.indexedDbKey(i), i = this.addBehaviorKey(i), i = this.openDatabaseKey(i), i = this.cpuClassKey(i), i = this.platformKey(i), i = this.doNotTrackKey(i), i = this.pluginsKey(i), i = this.canvasKey(i), i = this.webglKey(i), i = this.adBlockKey(i), i = this.hasLiedLanguagesKey(i), i = this.hasLiedResolutionKey(i), i = this.hasLiedOsKey(i), i = this.hasLiedBrowserKey(i), i = this.touchSupportKey(i), i = this.customEntropyFunction(i), this.fontsKey(i, function (i) { var a = []; t.each(i.data, function (e) { var t = e.value; "undefined" != typeof e.value.join && (t = e.value.join(";")), a.push(t) }); var r = t.x64hash128(a.join("~~~"), 31); return e(r, i.data) }) }, customEntropyFunction: function (e) { return "function" == typeof this.options.customFunction && e.push({ key: "custom", value: this.options.customFunction() }), e }, userAgentKey: function (e) { return this.options.excludeUserAgent || e.push({ key: "user_agent", value: this.getUserAgent() }), e }, getUserAgent: function () { return navigator.userAgent }, languageKey: function (e) { return this.options.excludeLanguage || e.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" }), e }, colorDepthKey: function (e) { return this.options.excludeColorDepth || e.push({ key: "color_depth", value: screen.colorDepth || -1 }), e }, pixelRatioKey: function (e) { return this.options.excludePixelRatio || e.push({ key: "pixel_ratio", value: this.getPixelRatio() }), e }, getPixelRatio: function () { return window.devicePixelRatio || "" }, screenResolutionKey: function (e) { return this.options.excludeScreenResolution ? e : this.getScreenResolution(e) }, getScreenResolution: function (e) { var t; return t = this.options.detectScreenOrientation && screen.height > screen.width ? [screen.height, screen.width] : [screen.width, screen.height], "undefined" != typeof t && e.push({ key: "resolution", value: t }), e }, availableScreenResolutionKey: function (e) { return this.options.excludeAvailableScreenResolution ? e : this.getAvailableScreenResolution(e) }, getAvailableScreenResolution: function (e) { var t; return screen.availWidth && screen.availHeight && (t = this.options.detectScreenOrientation ? screen.availHeight > screen.availWidth ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight] : [screen.availHeight, screen.availWidth]), "undefined" != typeof t && e.push({ key: "available_resolution", value: t }), e }, timezoneOffsetKey: function (e) { return this.options.excludeTimezoneOffset || e.push({ key: "timezone_offset", value: (new Date).getTimezoneOffset() }), e }, sessionStorageKey: function (e) { return !this.options.excludeSessionStorage && this.hasSessionStorage() && e.push({ key: "session_storage", value: 1 }), e }, localStorageKey: function (e) { return !this.options.excludeSessionStorage && this.hasLocalStorage() && e.push({ key: "local_storage", value: 1 }), e }, indexedDbKey: function (e) { return !this.options.excludeIndexedDB && this.hasIndexedDB() && e.push({ key: "indexed_db", value: 1 }), e }, addBehaviorKey: function (e) { return document.body && !this.options.excludeAddBehavior && document.body.addBehavior && e.push({ key: "add_behavior", value: 1 }), e }, openDatabaseKey: function (e) { return !this.options.excludeOpenDatabase && window.openDatabase && e.push({ key: "open_database", value: 1 }), e }, cpuClassKey: function (e) { return this.options.excludeCpuClass || e.push({ key: "cpu_class", value: this.getNavigatorCpuClass() }), e }, platformKey: function (e) { return this.options.excludePlatform || e.push({ key: "navigator_platform", value: this.getNavigatorPlatform() }), e }, doNotTrackKey: function (e) { return this.options.excludeDoNotTrack || e.push({ key: "do_not_track", value: this.getDoNotTrack() }), e }, canvasKey: function (e) { return !this.options.excludeCanvas && this.isCanvasSupported() && e.push({ key: "canvas", value: this.getCanvasFp() }), e }, webglKey: function (e) { return this.options.excludeWebGL ? e : this.isWebGlSupported() ? (e.push({ key: "webgl", value: this.getWebglFp() }), e) : e }, adBlockKey: function (e) { return this.options.excludeAdBlock || e.push({ key: "adblock", value: this.getAdBlock() }), e }, hasLiedLanguagesKey: function (e) { return this.options.excludeHasLiedLanguages || e.push({ key: "has_lied_languages", value: this.getHasLiedLanguages() }), e }, hasLiedResolutionKey: function (e) { return this.options.excludeHasLiedResolution || e.push({ key: "has_lied_resolution", value: this.getHasLiedResolution() }), e }, hasLiedOsKey: function (e) { return this.options.excludeHasLiedOs || e.push({ key: "has_lied_os", value: this.getHasLiedOs() }), e }, hasLiedBrowserKey: function (e) { return this.options.excludeHasLiedBrowser || e.push({ key: "has_lied_browser", value: this.getHasLiedBrowser() }), e }, fontsKey: function (e, t) { return this.options.excludeJsFonts ? this.flashFontsKey(e, t) : this.jsFontsKey(e, t) }, flashFontsKey: function (e, t) { return this.options.excludeFlashFonts ? t(e) : this.hasSwfObjectLoaded() && this.hasMinFlashInstalled() ? "undefined" == typeof this.options.swfPath ? t(e) : void this.loadSwfAndDetectFonts(function (i) { e.push({ key: "swf_fonts", value: i.join(";") }), t(e) }) : t(e) }, jsFontsKey: function (e, t) { var i = this; return setTimeout(function () { var a = ["monospace", "sans-serif", "serif"], r = ["Andale Mono", "Arial", "Arial Black", "Arial Hebrew", "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS", "Bitstream Vera Sans Mono", "Book Antiqua", "Bookman Old Style", "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic", "Century Schoolbook", "Comic Sans", "Comic Sans MS", "Consolas", "Courier", "Courier New", "Garamond", "Geneva", "Georgia", "Helvetica", "Helvetica Neue", "Impact", "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode", "Microsoft Sans Serif", "Monaco", "Monotype Corsiva", "MS Gothic", "MS Outlook", "MS PGothic", "MS Reference Sans Serif", "MS Sans Serif", "MS Serif", "MYRIAD", "MYRIAD PRO", "Palatino", "Palatino Linotype", "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol", "Tahoma", "Times", "Times New Roman", "Times New Roman PS", "Trebuchet MS", "Verdana", "Wingdings", "Wingdings 2", "Wingdings 3"], n = ["Abadi MT Condensed Light", "Academy Engraved LET", "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO", "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium", "Algerian", "Amazone BT", "American Typewriter", "American Typewriter Condensed", "AmerType Md BT", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER", "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville", "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni", "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT", "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed", "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD", "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed", "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Californian FB", "Calisto MT", "Calligrapher", "Candara", "CaslonOpnface BT", "Castellar", "Centaur", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer", "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold", "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark", "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant", "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT", "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC", "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte", "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER", "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Gautami", "Geeza Pro", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "GeoSlab 703 Lt BT", "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT", "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold", "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha", "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD", "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV", "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT", "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT", "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET", "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT", "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN", "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC", "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script", "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT", "LilyUPC", "Lithograph", "Lithograph Light", "Long Island", "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic", "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Mongolian Baiti", "MONO", "MoolBoran", "Mrs Eaves", "MS LineDraw", "MS Mincho", "MS PMincho", "MS Reference Specialty", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli", "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN", "OSAKA", "OzHandicraft BT", "Palace Script MT", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB", "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET", "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic", "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed", "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla", "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood", "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard", "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed", "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell", "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket", "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC", "Terminal", "Thonburi", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold", "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin", "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"]; i.options.extendedJsFonts && (r = r.concat(n)), r = r.concat(i.options.userDefinedFonts); var o = "mmmmmmmmmmlli", s = "72px", l = document.getElementsByTagName("body")[0], h = document.createElement("div"), u = document.createElement("div"), c = {}, d = {}, g = function () { var e = document.createElement("span"); return e.style.position = "absolute", e.style.left = "-9999px", e.style.fontSize = s, e.style.lineHeight = "normal", e.innerHTML = o, e }, p = function (e, t) { var i = g(); return i.style.fontFamily = "'" + e + "'," + t, i }, f = function () { for (var e = [], t = 0, i = a.length; t < i; t++) { var r = g(); r.style.fontFamily = a[t], h.appendChild(r), e.push(r) } return e }, m = function () { for (var e = {}, t = 0, i = r.length; t < i; t++) { for (var n = [], o = 0, s = a.length; o < s; o++) { var l = p(r[t], a[o]); u.appendChild(l), n.push(l) } e[r[t]] = n } return e }, T = function (e) { for (var t = !1, i = 0; i < a.length; i++)if (t = e[i].offsetWidth !== c[a[i]] || e[i].offsetHeight !== d[a[i]]) return t; return t }, S = f(); l.appendChild(h); for (var x = 0, v = a.length; x < v; x++)c[a[x]] = S[x].offsetWidth, d[a[x]] = S[x].offsetHeight; var E = m(); l.appendChild(u); for (var M = [], A = 0, y = r.length; A < y; A++)T(E[r[A]]) && M.push(r[A]); l.removeChild(u), l.removeChild(h), e.push({ key: "js_fonts", value: M }), t(e) }, 1) }, pluginsKey: function (e) { return this.options.excludePlugins || (this.isIE() ? this.options.excludeIEPlugins || e.push({ key: "ie_plugins", value: this.getIEPlugins() }) : e.push({ key: "regular_plugins", value: this.getRegularPlugins() })), e }, getRegularPlugins: function () { for (var e = [], t = 0, i = navigator.plugins.length; t < i; t++)e.push(navigator.plugins[t]); return this.pluginsShouldBeSorted() && (e = e.sort(function (e, t) { return e.name > t.name ? 1 : e.name < t.name ? -1 : 0 })), this.map(e, function (e) { var t = this.map(e, function (e) { return [e.type, e.suffixes].join("~") }).join(","); return [e.name, e.description, t].join("::") }, this) }, getIEPlugins: function () { var e = []; if (Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject") || "ActiveXObject" in window) { var t = ["AcroPDF.PDF", "Adodb.Stream", "AgControl.AgControl", "DevalVRXCtrl.DevalVRXCtrl.1", "MacromediaFlashPaper.MacromediaFlashPaper", "Msxml2.DOMDocument", "Msxml2.XMLHTTP", "PDF.PdfCtrl", "QuickTime.QuickTime", "QuickTimeCheckObject.QuickTimeCheck.1", "RealPlayer", "RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)", "RealVideo.RealVideo(tm) ActiveX Control (32-bit)", "Scripting.Dictionary", "SWCtl.SWCtl", "Shell.UIHelper", "ShockwaveFlash.ShockwaveFlash", "Skype.Detection", "TDCCtl.TDCCtl", "WMPlayer.OCX", "rmocx.RealPlayer G2 Control", "rmocx.RealPlayer G2 Control.1"]; e = this.map(t, function (e) { try { return new ActiveXObject(e), e } catch (t) { return null } }) } return navigator.plugins && (e = e.concat(this.getRegularPlugins())), e }, pluginsShouldBeSorted: function () { for (var e = !1, t = 0, i = this.options.sortPluginsFor.length; t < i; t++) { var a = this.options.sortPluginsFor[t]; if (navigator.userAgent.match(a)) { e = !0; break } } return e }, touchSupportKey: function (e) { return this.options.excludeTouchSupport || e.push({ key: "touch_support", value: this.getTouchSupport() }), e }, hardwareConcurrencyKey: function (e) { return this.options.excludeHardwareConcurrency || e.push({ key: "hardware_concurrency", value: this.getHardwareConcurrency() }), e }, hasSessionStorage: function () { try { return !!window.sessionStorage } catch (e) { return !0 } }, hasLocalStorage: function () { try { return !!window.localStorage } catch (e) { return !0 } }, hasIndexedDB: function () { try { return !!window.indexedDB } catch (e) { return !0 } }, getHardwareConcurrency: function () { return navigator.hardwareConcurrency ? navigator.hardwareConcurrency : "unknown" }, getNavigatorCpuClass: function () { return navigator.cpuClass ? navigator.cpuClass : "unknown" }, getNavigatorPlatform: function () { return navigator.platform ? navigator.platform : "unknown" }, getDoNotTrack: function () { return navigator.doNotTrack ? navigator.doNotTrack : navigator.msDoNotTrack ? navigator.msDoNotTrack : window.doNotTrack ? window.doNotTrack : "unknown" }, getTouchSupport: function () { var e = 0, t = !1; "undefined" != typeof navigator.maxTouchPoints ? e = navigator.maxTouchPoints : "undefined" != typeof navigator.msMaxTouchPoints && (e = navigator.msMaxTouchPoints); try { document.createEvent("TouchEvent"), t = !0 } catch (i) { } var a = "ontouchstart" in window; return [e, t, a] }, getCanvasFp: function () { var e = [], t = document.createElement("canvas"); t.width = 2e3, t.height = 200, t.style.display = "inline"; var i = t.getContext("2d"); return i.rect(0, 0, 10, 10), i.rect(2, 2, 6, 6), e.push("canvas winding:" + (i.isPointInPath(5, 5, "evenodd") === !1 ? "yes" : "no")), i.textBaseline = "alphabetic", i.fillStyle = "#f60", i.fillRect(125, 1, 62, 20), i.fillStyle = "#069", this.options.dontUseFakeFontInCanvas ? i.font = "11pt Arial" : i.font = "11pt no-real-font-123", i.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 2, 15), i.fillStyle = "rgba(102, 204, 0, 0.2)", i.font = "18pt Arial", i.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 4, 45), i.globalCompositeOperation = "multiply", i.fillStyle = "rgb(255,0,255)", i.beginPath(), i.arc(50, 50, 50, 0, 2 * Math.PI, !0), i.closePath(), i.fill(), i.fillStyle = "rgb(0,255,255)", i.beginPath(), i.arc(100, 50, 50, 0, 2 * Math.PI, !0), i.closePath(), i.fill(), i.fillStyle = "rgb(255,255,0)", i.beginPath(), i.arc(75, 100, 50, 0, 2 * Math.PI, !0), i.closePath(), i.fill(), i.fillStyle = "rgb(255,0,255)", i.arc(75, 75, 75, 0, 2 * Math.PI, !0), i.arc(75, 75, 25, 0, 2 * Math.PI, !0), i.fill("evenodd"), e.push("canvas fp:" + t.toDataURL()), e.join("~") }, getWebglFp: function () { var e, t = function (t) { return e.clearColor(0, 0, 0, 1), e.enable(e.DEPTH_TEST), e.depthFunc(e.LEQUAL), e.clear(e.COLOR_BUFFER_BIT | e.DEPTH_BUFFER_BIT), "[" + t[0] + ", " + t[1] + "]" }, i = function (e) { var t, i = e.getExtension("EXT_texture_filter_anisotropic") || e.getExtension("WEBKIT_EXT_texture_filter_anisotropic") || e.getExtension("MOZ_EXT_texture_filter_anisotropic"); return i ? (t = e.getParameter(i.MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0 === t && (t = 2), t) : null }; if (e = this.getWebglCanvas(), !e) return null; var a = [], r = "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}", n = "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}", o = e.createBuffer(); e.bindBuffer(e.ARRAY_BUFFER, o); var s = new Float32Array([-.2, -.9, 0, .4, -.26, 0, 0, .732134444, 0]); e.bufferData(e.ARRAY_BUFFER, s, e.STATIC_DRAW), o.itemSize = 3, o.numItems = 3; var l = e.createProgram(), h = e.createShader(e.VERTEX_SHADER); e.shaderSource(h, r), e.compileShader(h); var u = e.createShader(e.FRAGMENT_SHADER); e.shaderSource(u, n), e.compileShader(u), e.attachShader(l, h), e.attachShader(l, u), e.linkProgram(l), e.useProgram(l), l.vertexPosAttrib = e.getAttribLocation(l, "attrVertex"), l.offsetUniform = e.getUniformLocation(l, "uniformOffset"), e.enableVertexAttribArray(l.vertexPosArray), e.vertexAttribPointer(l.vertexPosAttrib, o.itemSize, e.FLOAT, !1, 0, 0), e.uniform2f(l.offsetUniform, 1, 1), e.drawArrays(e.TRIANGLE_STRIP, 0, o.numItems), null != e.canvas && a.push(e.canvas.toDataURL()), a.push("extensions:" + e.getSupportedExtensions().join(";")), a.push("webgl aliased line width range:" + t(e.getParameter(e.ALIASED_LINE_WIDTH_RANGE))), a.push("webgl aliased point size range:" + t(e.getParameter(e.ALIASED_POINT_SIZE_RANGE))), a.push("webgl alpha bits:" + e.getParameter(e.ALPHA_BITS)), a.push("webgl antialiasing:" + (e.getContextAttributes().antialias ? "yes" : "no")), a.push("webgl blue bits:" + e.getParameter(e.BLUE_BITS)), a.push("webgl depth bits:" + e.getParameter(e.DEPTH_BITS)), a.push("webgl green bits:" + e.getParameter(e.GREEN_BITS)), a.push("webgl max anisotropy:" + i(e)), a.push("webgl max combined texture image units:" + e.getParameter(e.MAX_COMBINED_TEXTURE_IMAGE_UNITS)), a.push("webgl max cube map texture size:" + e.getParameter(e.MAX_CUBE_MAP_TEXTURE_SIZE)), a.push("webgl max fragment uniform vectors:" + e.getParameter(e.MAX_FRAGMENT_UNIFORM_VECTORS)), a.push("webgl max render buffer size:" + e.getParameter(e.MAX_RENDERBUFFER_SIZE)), a.push("webgl max texture image units:" + e.getParameter(e.MAX_TEXTURE_IMAGE_UNITS)), a.push("webgl max texture size:" + e.getParameter(e.MAX_TEXTURE_SIZE)), a.push("webgl max varying vectors:" + e.getParameter(e.MAX_VARYING_VECTORS)), a.push("webgl max vertex attribs:" + e.getParameter(e.MAX_VERTEX_ATTRIBS)), a.push("webgl max vertex texture image units:" + e.getParameter(e.MAX_VERTEX_TEXTURE_IMAGE_UNITS)), a.push("webgl max vertex uniform vectors:" + e.getParameter(e.MAX_VERTEX_UNIFORM_VECTORS)), a.push("webgl max viewport dims:" + t(e.getParameter(e.MAX_VIEWPORT_DIMS))), a.push("webgl red bits:" + e.getParameter(e.RED_BITS)), a.push("webgl renderer:" + e.getParameter(e.RENDERER)), a.push("webgl shading language version:" + e.getParameter(e.SHADING_LANGUAGE_VERSION)), a.push("webgl stencil bits:" + e.getParameter(e.STENCIL_BITS)), a.push("webgl vendor:" + e.getParameter(e.VENDOR)), a.push("webgl version:" + e.getParameter(e.VERSION)); try { var c = e.getExtension("WEBGL_debug_renderer_info"); c && (a.push("webgl unmasked vendor:" + e.getParameter(c.UNMASKED_VENDOR_WEBGL)), a.push("webgl unmasked renderer:" + e.getParameter(c.UNMASKED_RENDERER_WEBGL))) } catch (d) { } return e.getShaderPrecisionFormat ? (a.push("webgl vertex shader high float precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_FLOAT).precision), a.push("webgl vertex shader high float precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_FLOAT).rangeMin), a.push("webgl vertex shader high float precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_FLOAT).rangeMax), a.push("webgl vertex shader medium float precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_FLOAT).precision), a.push("webgl vertex shader medium float precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_FLOAT).rangeMin), a.push("webgl vertex shader medium float precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_FLOAT).rangeMax), a.push("webgl vertex shader low float precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_FLOAT).precision), a.push("webgl vertex shader low float precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_FLOAT).rangeMin), a.push("webgl vertex shader low float precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_FLOAT).rangeMax), a.push("webgl fragment shader high float precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_FLOAT).precision), a.push("webgl fragment shader high float precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_FLOAT).rangeMin), a.push("webgl fragment shader high float precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_FLOAT).rangeMax), a.push("webgl fragment shader medium float precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_FLOAT).precision), a.push("webgl fragment shader medium float precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_FLOAT).rangeMin), a.push("webgl fragment shader medium float precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_FLOAT).rangeMax), a.push("webgl fragment shader low float precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_FLOAT).precision), a.push("webgl fragment shader low float precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_FLOAT).rangeMin), a.push("webgl fragment shader low float precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_FLOAT).rangeMax), a.push("webgl vertex shader high int precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_INT).precision), a.push("webgl vertex shader high int precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_INT).rangeMin), a.push("webgl vertex shader high int precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.HIGH_INT).rangeMax), a.push("webgl vertex shader medium int precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_INT).precision), a.push("webgl vertex shader medium int precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_INT).rangeMin), a.push("webgl vertex shader medium int precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.MEDIUM_INT).rangeMax), a.push("webgl vertex shader low int precision:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_INT).precision), a.push("webgl vertex shader low int precision rangeMin:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_INT).rangeMin), a.push("webgl vertex shader low int precision rangeMax:" + e.getShaderPrecisionFormat(e.VERTEX_SHADER, e.LOW_INT).rangeMax), a.push("webgl fragment shader high int precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_INT).precision), a.push("webgl fragment shader high int precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_INT).rangeMin), a.push("webgl fragment shader high int precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.HIGH_INT).rangeMax), a.push("webgl fragment shader medium int precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_INT).precision), a.push("webgl fragment shader medium int precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_INT).rangeMin), a.push("webgl fragment shader medium int precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.MEDIUM_INT).rangeMax), a.push("webgl fragment shader low int precision:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_INT).precision), a.push("webgl fragment shader low int precision rangeMin:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_INT).rangeMin), a.push("webgl fragment shader low int precision rangeMax:" + e.getShaderPrecisionFormat(e.FRAGMENT_SHADER, e.LOW_INT).rangeMax), a.join("~")) : a.join("~") }, getAdBlock: function () { var e = document.createElement("div"); e.innerHTML = "&nbsp;", e.className = "adsbox"; var t = !1; try { document.body.appendChild(e), t = 0 === document.getElementsByClassName("adsbox")[0].offsetHeight, document.body.removeChild(e) } catch (i) { t = !1 } return t }, getHasLiedLanguages: function () { if ("undefined" != typeof navigator.languages) try { var e = navigator.languages[0].substr(0, 2); if (e !== navigator.language.substr(0, 2)) return !0 } catch (t) { return !0 } return !1 }, getHasLiedResolution: function () { return screen.width < screen.availWidth || screen.height < screen.availHeight }, getHasLiedOs: function () { var e, t = navigator.userAgent.toLowerCase(), i = navigator.oscpu, a = navigator.platform.toLowerCase(); e = t.indexOf("windows phone") >= 0 ? "Windows Phone" : t.indexOf("win") >= 0 ? "Windows" : t.indexOf("android") >= 0 ? "Android" : t.indexOf("linux") >= 0 ? "Linux" : t.indexOf("iphone") >= 0 || t.indexOf("ipad") >= 0 ? "iOS" : t.indexOf("mac") >= 0 ? "Mac" : "Other"; var r; if (r = "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0, r && "Windows Phone" !== e && "Android" !== e && "iOS" !== e && "Other" !== e) return !0; if ("undefined" != typeof i) { if (i = i.toLowerCase(), i.indexOf("win") >= 0 && "Windows" !== e && "Windows Phone" !== e) return !0; if (i.indexOf("linux") >= 0 && "Linux" !== e && "Android" !== e) return !0; if (i.indexOf("mac") >= 0 && "Mac" !== e && "iOS" !== e) return !0; if (0 === i.indexOf("win") && 0 === i.indexOf("linux") && i.indexOf("mac") >= 0 && "other" !== e) return !0 } return a.indexOf("win") >= 0 && "Windows" !== e && "Windows Phone" !== e || ((a.indexOf("linux") >= 0 || a.indexOf("android") >= 0 || a.indexOf("pike") >= 0) && "Linux" !== e && "Android" !== e || ((a.indexOf("mac") >= 0 || a.indexOf("ipad") >= 0 || a.indexOf("ipod") >= 0 || a.indexOf("iphone") >= 0) && "Mac" !== e && "iOS" !== e || (0 === a.indexOf("win") && 0 === a.indexOf("linux") && a.indexOf("mac") >= 0 && "other" !== e || "undefined" == typeof navigator.plugins && "Windows" !== e && "Windows Phone" !== e))) }, getHasLiedBrowser: function () { var e, t = navigator.userAgent.toLowerCase(), i = navigator.productSub; if (e = t.indexOf("firefox") >= 0 ? "Firefox" : t.indexOf("opera") >= 0 || t.indexOf("opr") >= 0 ? "Opera" : t.indexOf("chrome") >= 0 ? "Chrome" : t.indexOf("safari") >= 0 ? "Safari" : t.indexOf("trident") >= 0 ? "Internet Explorer" : "Other", ("Chrome" === e || "Safari" === e || "Opera" === e) && "20030107" !== i) return !0; var a = eval.toString().length; if (37 === a && "Safari" !== e && "Firefox" !== e && "Other" !== e) return !0; if (39 === a && "Internet Explorer" !== e && "Other" !== e) return !0; if (33 === a && "Chrome" !== e && "Opera" !== e && "Other" !== e) return !0; var r; try { throw "a" } catch (n) { try { n.toSource(), r = !0 } catch (o) { r = !1 } } return !(!r || "Firefox" === e || "Other" === e) }, isCanvasSupported: function () { var e = document.createElement("canvas"); return !(!e.getContext || !e.getContext("2d")) }, isWebGlSupported: function () { if (!this.isCanvasSupported()) return !1; var e, t = document.createElement("canvas"); try { e = t.getContext && (t.getContext("webgl") || t.getContext("experimental-webgl")) } catch (i) { e = !1 } return !!window.WebGLRenderingContext && !!e }, isIE: function () { return "Microsoft Internet Explorer" === navigator.appName || !("Netscape" !== navigator.appName || !/Trident/.test(navigator.userAgent)) }, hasSwfObjectLoaded: function () { return "undefined" != typeof window.swfobject }, hasMinFlashInstalled: function () { return swfobject.hasFlashPlayerVersion("9.0.0") }, addFlashDivNode: function () { var e = document.createElement("div"); e.setAttribute("id", this.options.swfContainerId), document.body.appendChild(e) }, loadSwfAndDetectFonts: function (e) { var t = "___fp_swf_loaded"; window[t] = function (t) { e(t) }; var i = this.options.swfContainerId; this.addFlashDivNode(); var a = { onReady: t }, r = { allowScriptAccess: "always", menu: "false" }; swfobject.embedSWF(this.options.swfPath, i, "1", "1", "9.0.0", !1, a, r, {}) }, getWebglCanvas: function () { var e = document.createElement("canvas"), t = null; try { t = e.getContext("webgl") || e.getContext("experimental-webgl") } catch (i) { } return t || (t = null), t }, each: function (e, t, i) { if (null !== e) if (this.nativeForEach && e.forEach === this.nativeForEach) e.forEach(t, i); else if (e.length === +e.length) { for (var a = 0, r = e.length; a < r; a++)if (t.call(i, e[a], a, e) === {}) return } else for (var n in e) if (e.hasOwnProperty(n) && t.call(i, e[n], n, e) === {}) return }, map: function (e, t, i) { var a = []; return null == e ? a : this.nativeMap && e.map === this.nativeMap ? e.map(t, i) : (this.each(e, function (e, r, n) { a[a.length] = t.call(i, e, r, n) }), a) }, x64Add: function (e, t) { e = [e[0] >>> 16, 65535 & e[0], e[1] >>> 16, 65535 & e[1]], t = [t[0] >>> 16, 65535 & t[0], t[1] >>> 16, 65535 & t[1]]; var i = [0, 0, 0, 0]; return i[3] += e[3] + t[3], i[2] += i[3] >>> 16, i[3] &= 65535, i[2] += e[2] + t[2], i[1] += i[2] >>> 16, i[2] &= 65535, i[1] += e[1] + t[1], i[0] += i[1] >>> 16, i[1] &= 65535, i[0] += e[0] + t[0], i[0] &= 65535, [i[0] << 16 | i[1], i[2] << 16 | i[3]] }, x64Multiply: function (e, t) { e = [e[0] >>> 16, 65535 & e[0], e[1] >>> 16, 65535 & e[1]], t = [t[0] >>> 16, 65535 & t[0], t[1] >>> 16, 65535 & t[1]]; var i = [0, 0, 0, 0]; return i[3] += e[3] * t[3], i[2] += i[3] >>> 16, i[3] &= 65535, i[2] += e[2] * t[3], i[1] += i[2] >>> 16, i[2] &= 65535, i[2] += e[3] * t[2], i[1] += i[2] >>> 16, i[2] &= 65535, i[1] += e[1] * t[3], i[0] += i[1] >>> 16, i[1] &= 65535, i[1] += e[2] * t[2], i[0] += i[1] >>> 16, i[1] &= 65535, i[1] += e[3] * t[1], i[0] += i[1] >>> 16, i[1] &= 65535, i[0] += e[0] * t[3] + e[1] * t[2] + e[2] * t[1] + e[3] * t[0], i[0] &= 65535, [i[0] << 16 | i[1], i[2] << 16 | i[3]] }, x64Rotl: function (e, t) { return t %= 64, 32 === t ? [e[1], e[0]] : t < 32 ? [e[0] << t | e[1] >>> 32 - t, e[1] << t | e[0] >>> 32 - t] : (t -= 32, [e[1] << t | e[0] >>> 32 - t, e[0] << t | e[1] >>> 32 - t]) }, x64LeftShift: function (e, t) { return t %= 64, 0 === t ? e : t < 32 ? [e[0] << t | e[1] >>> 32 - t, e[1] << t] : [e[1] << t - 32, 0] }, x64Xor: function (e, t) { return [e[0] ^ t[0], e[1] ^ t[1]] }, x64Fmix: function (e) { return e = this.x64Xor(e, [0, e[0] >>> 1]), e = this.x64Multiply(e, [4283543511, 3981806797]), e = this.x64Xor(e, [0, e[0] >>> 1]), e = this.x64Multiply(e, [3301882366, 444984403]), e = this.x64Xor(e, [0, e[0] >>> 1]) }, x64hash128: function (e, t) {
@@ -4543,35 +4558,60 @@ var Fprinting = function ($) {
 
 var ConnextLogger = function ($) {
 
-    //#region GLOBALS
-    var isDebugging = true; //default logLevel is 'debug'
+    var isDebugging = false;
 
-    //#endregion - Globals
+    var collectionLogs = [];
 
-    //we have this function so we can turn off debug calls based on the 'debug' setting.  We also add a preface to every call so our calls stand out on client sites.
-    //We can't just take the 'logType' and then pass in all other arguments because if we do this we get an array of arguments split, so things don'y look right.
-    //we loop through extra arguments and we create an array that we then output as a string so everyting looks pretty in the console.
-    var log = function () {
+    function getSessionLogs(n) {
+        var responseArr = [];
+            rest = ((collectionLogs.length - n) <= 0) ? 0 : collectionLogs.length - n;
+
+            responseArr.push(getMetaInfo());
+
+        if (arguments.length === 0) {
+            collectionLogs.unshift(getMetaInfo());
+            return collectionLogs;
+        } else {
+            for (var i = rest; i < collectionLogs.length; i += 1) {
+                responseArr.push(collectionLogs[i]);
+            }
+        }
+        return responseArr;
+    }
+
+    function getMetaInfo() {
+        var userMeta = CnnXt.Utils.GetUserMeta();
+        var optionsInfo = Connext.GetOptions();
+        var objOptions = {};
+
+        for (var key in optionsInfo) {
+            if (typeof optionsInfo[key] !== 'object' && typeof optionsInfo[key] !== 'function' && !Array.isArray(optionsInfo[key])) {
+                objOptions[key] = optionsInfo[key];
+            }
+        }
+        return 'USER META:' + JSON.stringify(userMeta) + ' || OPTIONS: ' + JSON.stringify(objOptions);
+
+    }
+
+    function log() {
         try {
-
             //gets arguments in array so we can use 'shift'
-
             var args = Array.prototype.slice.call(arguments[2]);
             var logType = arguments[0];
 
             var strPreface = arguments[1];
+
             //get number of arguments
             var argsLen = args.length;
 
             var arrStrs = []; //holds array of strings
             var arrObjs = []; //holds array of objects
-            //var strOutput = ""; //holds a string output up until an object is detected.
 
             //we need to loop through the arguments and add each string until we hit an object.
             //once we hit an object we exit loop and create a string of from str array + the object.
             if (argsLen > 0) {
                 $.each(args, function (k, v) {
-                    if (typeof v == "string") {
+                    if (typeof v === "string") {
                         arrStrs.push(v);
                     } else {
                         arrObjs.push(v);
@@ -4579,53 +4619,102 @@ var ConnextLogger = function ($) {
                 });
             }
 
+            //holds a string output up until an object is detected.
             var strOutput = strPreface + arrStrs.join(" => ");
-            
+
             if (arrObjs.length > 0) {
-                
                 console[logType](strOutput, arrObjs);
             } else {
                 console[logType](strOutput);
             }
 
         } catch (e) {
-            //console.log('CnnXt.Logger.Exception =>', e);
-        }
 
+        }
+    }
+
+    function logCollect() {
+        try {
+            //gets arguments in array so we can use 'shift'
+            var args = Array.prototype.slice.call(arguments[1]),
+                strPreface = arguments[0],
+                argsLen = args.length,
+
+                arrStrs = [], //holds array of strings
+                arrObjs = [], //holds array of objects
+                currentTime = new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds(),
+                strOutput;
+
+            if (argsLen > 0) {
+                $.each(args, function (k, v) {
+                    if (typeof v === 'string') {
+                        arrStrs.push(v);
+                    } else if(Array.isArray(v)) {
+                            arrObjs.push('Array(' + v.length + ')');
+                    } else if (typeof v === 'object') {
+                        var rootProp = {};
+                        for (var key in v) {
+                            if (typeof v[key] !== 'object' && !Array.isArray(v)) {
+                                rootProp[key] = v[key];
+                            }
+                        }
+                        arrObjs.push(rootProp)
+                    } else {
+                        arrObjs.push(v)
+                    }
+                });
+            }
+
+            strOutput = strPreface + arrStrs.join(' => ');
+
+            if (arrObjs.length > 0) {
+                collectionLogs.push(currentTime + ' || ' + strOutput + ', ' + JSON.stringify(arrObjs));
+            } else {
+                collectionLogs.push(currentTime + ' || ' + strOutput);
+            }
+
+        } catch (e) {
+
+        }
     }
 
     return {
         debug: function () {
-            var args = arguments;
-            //only call log if we are debugging
             if (isDebugging) {
-                log("log", "Connext >>>> DEBUG <<<<< ", args);
-                
+                log("log", "ConneXt >>>> DEBUG <<<<< ", arguments);
             }
-        },
-        log: function () {
-            log("log", "Connext >>>> LOG <<<<< ", arguments);
-        },
-        info: function () {
-            log("info", "Connext >>>> INFO <<<<< ", arguments);
+            logCollect("ConneXt >>>> DEBUG <<<<< ", arguments)
         },
         warn: function () {
-            log("warn", "Connext >>>> WARN <<<<< ", arguments);
-        },
-        error: function () {
-            //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
-            log("exception", "MG2Connext >>>> ERROR <<<<< ", arguments);
+            log("warn", "ConneXt >>>> WARNING <<<<< ", arguments);
+            logCollect("ConneXt >>>> WARNING <<<<< ", arguments);
         },
         exception: function () {
-            //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
-            log("error", "MG2Connext >>>> EXCEPTION <<<<< ", arguments);
+            if (isDebugging) {
+                log("error", "ConneXt >>>> EXCEPTION <<<<< ", arguments);
+            }
+            logCollect("ConneXt >>>> EXCEPTION <<<<< ", arguments);
         },
         setDebug: function (_isDebugging) {
-            isDebugging = _isDebugging;
-        }
-    };
+            //var storedTracing = $.jStorage.get('cxt_trcng');
 
-}//(jQuery);
+            //if (storedTracing) {
+            //    isDebugging = storedTracing.isDebugging;
+            //} else {
+                isDebugging = _isDebugging;
+            //}
+        },
+        startTracing: function () {
+            $.jStorage.set('cxt_trcng', { isDebugging: true });
+            this.setDebug(true);
+        },
+        stopTracing: function () {
+            $.jStorage.set('cxt_trcng', { isDebugging: false });
+            this.setDebug(false);
+        },
+        getSessionLogs: getSessionLogs
+    };
+}
 
 var ConnextCommon = function () {
     //Holds common objects, enums and lookups.
@@ -4639,32 +4728,32 @@ var ConnextCommon = function () {
             test20: "https://prodmg2.blob.core.windows.net/connext/test20/",
             prod: "https://prodmg2.blob.core.windows.net/connext/prod/",
             preprod: "https://prodmg2.blob.core.windows.net/connext/preprod/"
-            //test20: 'https://s3.amazonaws.com/connext.test/'
+           
         },
         S3LastPublishDatePath: "data/last_publish/<%= siteCode %>.json",
         CSSPluginUrl: {
             localhost: "http://localhost:20001/plugin/assets/css/themes/",
-            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.7/themes/",
-            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.7/themes/",
-            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.7/themes/",
-            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.7/themes/",
-            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.7/themes/',
+            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.13/themes/",
+            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.13/themes/",
+            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.13/themes/",
+            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.13/themes/",
+            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.13/themes/',
             prod: "https://cdn.mg2connext.com/prod/1.6/themes/",
             preprod: "https://cdn.mg2connext.com/preprod/1.6/themes/"
         },
         APIUrl: {
-            localhost: "http://localhost:34550/",
-            //localhost: "https://dev-connext-api.azurewebsites.net/",
+            //localhost: "http://localhost:34550/",
+            localhost: "https://dev-connext-api.azurewebsites.net/",
             dev: "https://dev-connext-api.azurewebsites.net/",
             test: "https://test-connext-api.azurewebsites.net/",
+            //stage: "http://localhost:34550/",
             //stage: 'https://stage-connext-api.azurewebsites.net/',
-            stage: 'https://stage-newsday-proxy-connext.azurewebsites.net/',
-            //stage: '{{apiUrl}}',
+            stage: 'https://stage-mng-proxy-connext.azurewebsites.net/',
             test20: 'https://test20-connext-api.azurewebsites.net/',
             demo: 'https://demo-connext-api.azurewebsites.net/',
             preprod: 'https://preprod-connext-api.azurewebsites.net/',
-            prod: 'https://api.mg2connext.com/'
-            //prod: '{{apiUrl}}'
+            //prod: 'https://api.mg2connext.com/'
+            prod: 'https://mng-api.mg2connext.com/'
         },
         APPInsightKeys: {
             localhost: "a57959cf-5e4d-4ab3-8a3e-d17f7e2a8bf8",
@@ -4703,37 +4792,83 @@ var ConnextCommon = function () {
             repeatablesInConv: 'repeatablesInConv',
             igmRegID: 'igmRegID',
             igmContent: 'igmContent',
+            igmAuth: 'igmAuth',
             connext_user_Id: 'connext_anonymousUserId',
             WhitelistSet: "WhitelistSet",
             WhitelistInfobox: "WhitelistInfobox",
             NeedHidePinTemplate: "NeedHidePinTemplate",
+            PinAttempts: "PinAttempts",
             connext_user_profile: "connext_user_profile",
             connext_user_data: "connext_user_data",
             connext_paywallFired: "connext_paywallFired",
             connext_auth_type: 'connext_auth_type',
-            connext_viewstructure: 'connext_viewstructure',
+            connext_viewstructure: 'nxt',   // Cookie name
             connext_userLastUpdateDate: 'connext_userLastUpdateDate',
-           // connext_returnUrl: 'c_desturl',
-            device_postfix: '_device'
+            //connext_returnUrl: 'connext_returnUrl',
+            connext_updateArticleCount: 'nxt_upd_ac',
+            connext_domain: 'nxt_dmn',
+            connext_root_domain: 'nxt_rt_dmn',
+            connext_check_domain_write: 'nxt_ckck_dmn_wrt',
+            device_postfix: '_device',
+            connext_time_repeatable_actions: 'nxtact',
         },
+
+        // New Views Cookie Structure
+        MeteredArticleCountObj: {
+            active_convo_id: "_acnv",     // Active conversation Id
+        },
+
+        ConvoArticleCountObj: {
+            article_count: "ac",          // Article count on conversation level
+            device_article_count: "ac_d", // Device article count on conversation level
+            start_date: "s"               // Conversation start date
+        },
+
+        TimeRepeatableActionsCS: {
+            repeat_after: 'rpt',           // Repeat after
+            count: 'rtpc'                  // Repeated times (count)
+        },
+
+        // End New Views Cookie Structure
+
         MeterLevels: {
             1: "Free",
             2: "Metered",
             3: "Premium"
         },
-        ConversationOptionMap: { //this maps conversation options to this parent name...this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
-            2: "Time",
-            6: "Register",
-            11: "CustomAction",
-            27: "UserState",
-            32: "JSVar",
-            38: "Activate"
-
+        ConversationOptionNamesMap: { //this maps conversation options to this parent name...this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
+            Expiration: {
+                2: "Time",
+                6: "Register",
+                11: "CustomAction",
+                27: "UserState",
+                32: "JSVar",
+                57: "FlittzStatus"
+            },
+            Activation: {
+                38: "Activate"
+            },
+            Filter: {
+                1: 'Geo',
+                2: 'Javascript',
+                3: 'DeviceType',
+                4: 'UserState',
+                5: 'AdBlock'
+            }
+        },
+        FlittzStatusesMap: {
+            "FlittzLoggedIn": "Logged In",
+            "FlittzLoggedOut": "Logged Out"
         },
         ActionOptionMap: { //this maps action option values to this parent name...this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
-            Who: [5, 6, 14, 16, 17, 18, 19, 21, 23, 24, 25, 12, 27, 28, 29], //ActionOption classes for WHO
+            Who: [5, 6, 14, 16, 17, 18, 19, 21, 23, 24, 25, 12, 27, 28, 29, 30, 31], //ActionOption classes for WHO
             What: [2, 7, 13, 20, 15, 22, 26], //ActionOption classes for WHAT
             When: [8, 9, 10] //ActionOption classes for WHEN
+        },
+        ConversationOptionMap: {
+            Expiration: [2],
+            Filter: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            Activation: [4],
         },
         WhenClassMap: { //this maps the when options based on ClassId....this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
             8: "Time",
@@ -4749,7 +4884,7 @@ var ConnextCommon = function () {
             "Not Equal": "!=",
             "Not Equals": "!=",
             "More Than": ">",
-            "Less Than": ">",
+            "Less Than": "<",
             "More Or Equal Than": ">=",
             "Less Or Equal Than": "<=",
             "Yes": "true",
@@ -4760,11 +4895,78 @@ var ConnextCommon = function () {
         ERROR: {
             NO_CONFIG: {
                 code: 600,
-                message: "No Configuration Found"
+                message: "No Configuration Found. ",
+                custom: true
             },
             NO_CONVO_FOUND: {
                 code: 601,
-                message: "No Conversation found to process."
+                message: "No Conversation found to process. ",
+                custom: true
+            },
+            NO_SITE_CODE: {
+                code: 602,
+                message: 'No Site Code. ',
+                custom: true
+            },
+            NO_CONFIG_CODE: {
+                code: 603,
+                message: 'No Config Code. ',
+                custom: true
+            },
+            NO_JQUERY: {
+                code: 604,
+                message: 'Jquery not loaded. ',
+                custom: true
+            },
+            NO_METER_LEVEL_SET: {
+                code: 605,
+                message: 'No meter level set. ',
+                custom: true
+            },
+            NO_CAMPAIGN: {
+                code: 606,
+                message: 'No campaign data. ',
+                custom: true
+            },
+            NO_AUTH0_LOCK: {
+                code: 607,
+                message: 'No auth0Lock object in the authSettings! ',
+                custom: true
+            },
+            UNKNOWN_REG_TYPE: {
+                code: 608,
+                message: 'Unknown registration type. ',
+                custom: true
+            },
+            UNKNOWN_USER_STATE: {
+                code: 609,
+                message: 'Unknown user state. ',
+                custom: true
+            },
+            NO_USER_DATA: {
+                code: 610,
+                message: 'No user data result. ',
+                custom: true
+            },
+            NO_JANRAIN_DATA: {
+                code: 611,
+                message: 'No user data UUID. ',
+                custom: true
+            },
+            CONFIG_HAS_NOT_PUBLISHED: {
+                code: 612,
+                message: 'Configuration has not published. ',
+                custom: true
+            },
+            S3DATA_IS_INVALID: {
+                code: 613,
+                message: 's3Data is not an object. ',
+                custom: true
+            },
+            HIDE_CONTENT: {
+                code: 614,
+                message: 'Cannot hide content! ',
+                custom: true
             }
 
         },
@@ -4786,6 +4988,13 @@ var ConnextCommon = function () {
             3: 'GUP',
             4: 'Auth0',
             5: 'Custom'
+        },
+        AuthSystem: {
+            MG2: 1,
+            Janrain: 2,
+            GUP: 3,
+            Auth0: 4,
+            Custom: 5
         },
         DigitalAccessLevels: {
             Premium: 'PREMIUM',
@@ -4810,6 +5019,7 @@ var ConnextCommon = function () {
             atLeast1Number: /(?=.*[\d])/
         },
         TimeTypeMap: {
+            "s": "seconds",
             "m": "minutes",
             "h": "hours",
             "d": "days",
@@ -4819,7 +5029,13 @@ var ConnextCommon = function () {
         },
         DisplayName: 'ConneXt',
         InfinityDate: '9999-01-01',
-        CookieExpireDate: '2018-02-28'
+        CookieExpireDate: '2018-02-28',
+        CLOSE_CASES: {
+            CloseButton: "closeButton",
+            CloseSpan: "closeSpan",
+            ClickOutside: "clickOutside",
+            EscButton: "escButton"
+        }
     }
 };
 
@@ -4830,11 +5046,11 @@ var ConnextEvents = function ($) {
 
     var OPTIONS;
 
-    //local reference to CnnXt.Logger
     var LOGGER;
     var MG2ACCOUNTDATA;
     var MeterLevel = null, MeterLevelMethod = null;
 
+    var AUTHSYSTEM;
 
     //not sure if there is a better way to do this, but this holds refernces to functions we should fire on certain events. (since the passed in 'event' on 'fire' is just a string we can't check if that string is a function.
     //NOTE: DEFAULT_FUNCTIONS are only fired when debug=true, since these are mainly used for Logging or updating the Debug Details panel. (This check is handled in the 'fire' function, so we don't need to check this again within any of the default functions).
@@ -4843,13 +5059,10 @@ var ConnextEvents = function ($) {
         "onDynamicMeterFound": onDynamicMeterFound,
         "onCampaignFound": onCampaignFound,
         "onConversationDetermined": onConversationDetermined,
-        //"onHasAccessToken": onHasAccessToken,
         "onHasAccess": onHasAccess,
         "onHasAccessNotEntitled": onHasAccessNotEntitled,
         "onHasNoActiveSubscription": onHasNoActiveSubscription,
         "onCriticalError": onCriticalError,
-        //"onHasUserToken": onHasUserToken,
-        //"onUserTokenSuccess": onUserTokenSuccess,
         "onAuthorized": onAuthorized,
         "onLoggedIn": onLoggedIn,
         "onNotAuthorized": onNotAuthorized,
@@ -4860,6 +5073,11 @@ var ConnextEvents = function ($) {
         "onButtonClick": onButtonClick,
         "onRun": onRun,
         "onFinish": onFinish,
+        //Login Flow
+        "onLoginShown": onLoginShown,
+        "onLoginClosed": onLoginClosed,
+        "onLoginSuccess": onLoginSuccess,
+        "onLoginError": onLoginError,
         //Getting Access Flow
         "onAccessTemplateShown": onAccessTemplateShown,
         "onAccessTemplateClosed": onAccessTemplateClosed,
@@ -4889,488 +5107,263 @@ var ConnextEvents = function ($) {
 
     //#endregion - Globals
 
-    //#region INIT Functions
-
-    var init = function () {
-        var fnName = "Init";
-
-        try {
-            LOGGER.debug(NAME, fnName, "Initializing Events...");
-
-        } catch (ex) {
-            console.error(fnName, ex);
-        }
-    }
-    //#endregion INIT Functions
-
     //#region PLUGIN EVENTS (These are functions that will be fired on certain events, regardless if the client sets a callback for them (mainly we use these functions to update debugging details based on certain events).
 
     function onDebugNote(note) {
-        var fnName = "onDebugNote";
-
-        try {
+        if (CnnXt.GetOptions().debug) {
             NOTES.push(note);
             $("#ddNote").html(note);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
         }
     }
 
-    function onInit(e) {
-        var fnName = "onInit";
+    function onInit(event) {
+        LOGGER.debug("Fire Default onInit function.", event);
+    }
 
-        try {
-            LOGGER.debug("Fire Default onInit function.", e);
+    function onFlittzPaywallShown(event) {
+        event.EventData.conversation = CnnXt.Storage.GetCurrentConversation();
+        event.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
+        event.EventData.hasFlittz = OPTIONS.integrateFlittz;
 
-        } catch (e) {
-            console.error(fnName, 'EXCEPTION', e);
+        window.CommonFz.PushData("Connext-onFlittzPaywallShown", event);
+
+        LOGGER.debug("Flittz paywall shown", event);
+    }
+
+    function onFlittzPaywallClosed(event) {
+        event.EventData.conversation = CnnXt.Storage.GetCurrentConversation();
+        event.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
+        event.EventData.hasFlittz = OPTIONS.integrateFlittz;
+
+        window.CommonFz.PushData("Connext-onFlittzPaywallClosed", event);
+
+        LOGGER.debug("Flittz paywall closed", event);
+    }
+
+    function onFlittzButtonClick(event) {
+        event.EventData.conversation = CnnXt.Storage.GetCurrentConversation();
+        event.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
+        event.EventData.hasFlittz = OPTIONS.integrateFlittz;
+
+        window.CommonFz.PushData("Connext-onFlittzButtonClick", event);
+
+        LOGGER.debug("Click on Flittz button", event);
+    }
+
+    function onCriticalError(event) {
+        if (CnnXt.GetOptions().debug) {
+            LOGGER.debug('Fire Default onCriticalError function.', event);
+            NOTES.push(event.EventData.message);
+            $('#ddNote').html(event.EventData.message);
         }
     }
 
-    function onFlittzPaywallShown(e) {
-        var fnName = "onFlittzPaywallShown";
+    function onDynamicMeterFound(event) {
+        LOGGER.debug("Fire Default onDynamicMeterFound function.", event);
 
-        try {
-            e.EventData.conversation = CnnXt.Storage.GetCurrentConverstaion();
-            e.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
-            e.EventData.hasFlittz = OPTIONS.integrateFlittz;
-
-            window.CommonFz.PushData("Connext-onFlittzPaywallShown", e);
-
-            LOGGER.debug("Flittz paywall shown", e);
-        } catch (ex) {
-            console.error(NAME, fnName, "EXCEPTION", ex);
+        if (CnnXt.GetOptions().debug) {
+            $("#ddMeterSet").html(event.EventData);
         }
     }
 
-    function onFlittzPaywallClosed(e) {
-        var fnName = "onFlittzPaywallClosed";
-
-        try {
-            e.EventData.conversation = CnnXt.Storage.GetCurrentConverstaion();
-            e.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
-            e.EventData.hasFlittz = OPTIONS.integrateFlittz;
-
-            window.CommonFz.PushData("Connext-onFlittzPaywallClosed", e);
-
-            LOGGER.debug("Flittz paywall closed", e);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+    function onMeterLevelSet(event) {
+        if (CnnXt.GetOptions().debug) {
+            $('#ddMeterLevel').html(CnnXt.Common.MeterLevels[event.EventData.level] + ' (' + event.EventData.method + ')');
         }
+
+        LOGGER.debug('Fire Default onMeterLevelSet function.', event);
+
+        CnnXt.Storage.SetMeter(event.EventData);
     }
 
-    function onFlittzButtonClick(e) {
-        var fnName = "onFlittzButtonClick";
+    function onLoggedIn(event) {
+        LOGGER.debug('Fire Default onLoggedIn function.', event);
 
-        try {
-            e.EventData.conversation = CnnXt.Storage.GetCurrentConverstaion();
-            e.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
-            e.EventData.hasFlittz = OPTIONS.integrateFlittz;
-
-            window.CommonFz.PushData("Connext-onFlittzButtonClick", e);
-
-            LOGGER.debug("Click on Flittz button", e);
-
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        onDebugNote(event);
     }
 
-    function onCriticalError(e) {
-        var fnName = "onCriticalError";
+    function onHasAccess(event) {
+        LOGGER.debug('Fire Default onHasAccess function.', event);
 
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onCriticalError function.', e);
-                NOTES.push(e.EventData.message);
-                $('#ddNote').html(e.EventData.message);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        onDebugNote(event.EventData);
     }
 
-    function onDynamicMeterFound(e) {
-        var fnName = "onDynamicMeterFound";
+    function onHasAccessNotEntitled(event) {
+        LOGGER.debug('Fire Default onHasAccessNotEntitled function.', event);
 
-        try {
-            LOGGER.debug("Fire Default onDynamicMeterFound function.", e);
-            $("#ddMeterSet").html(e.EventData);
-        } catch (ex) {
-            console.error(NAME, fnName, "EXCEPTION", ex);
-        }
+        onDebugNote(event.EventData);
     }
 
-    function onMeterLevelSet(e) {
-        var fnName = "onMeterLevelSet";
+    function onHasNoActiveSubscription(event) {
+        LOGGER.debug('Fire Default onHasNoActiveSubscription function.', event);
 
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onMeterLevelSet function.', e);
-                $('#ddMeterLevel').html(CnnXt.Common.MeterLevels[e.EventData.level] + ' (' + e.EventData.method + ')');                           
-            }
-
-            CnnXt.Storage.SetMeter(e.EventData);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        onDebugNote(event.EventData);
     }
 
-    function onLoggedIn(e) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = "onLoggedIn";
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onLoggedIn function.', e);
-                //$('.account-toggler').find('span').text('UPDATED');
-                onDebugNote(e);
-            }
-            //$('#ddMeterLevel').html(CnnXt.Common.MeterLevels[e.level] + ' (' + e.method + ')');
-        } catch (e) {
-            console.error(fnName, 'EXCEPTION', e);
-        }
+    function onAuthorized(event) {
+        LOGGER.debug('Fire Default onAuthorized function.', event);
+
+        onDebugNote(event.EventData);
     }
 
-    function onHasAccess(e) {
-        var fnName = "onHasAccess";
+    function onNotAuthorized(event) {
+        LOGGER.debug('Fire Default onNotAuthorized function.', event);
 
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onHasAccess function.', e);
-                onDebugNote(e.EventData);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        onDebugNote(event.EventData);
     }
 
-    function onHasAccessNotEntitled(e)
-    {
-        var fnName = "onHasAccessNotEntitled";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onHasAccessNotEntitled function.', e);
-                onDebugNote(e.EventData);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+    function onCampaignFound(event) {
+        if (CnnXt.GetOptions().debug) {
+            $('#ddCampaign').html(event.EventData.Name);
         }
+
+        LOGGER.debug('Fire Default onCampaignFound function.', event);
     }
 
-    function onHasNoActiveSubscription(e) {
-        var fnName = "onHasNoActiveSubscription";
+    function onConversationDetermined(event) {
 
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onHasNoActiveSubscription function.', e);
-                onDebugNote(e.EventData);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+
+        LOGGER.debug('Fire Default onConversationDetermined function.', event);
     }
 
-    function onAuthorized(e) {
-        var fnName = "onAuthorized";
+    function onActionShown(event) {
+        LOGGER.debug("Fire Default onActionShown", event);
 
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onAuthorized function.', e);
-                onDebugNote(e.EventData);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+        if (event && event.EventData && event.EventData.actionDom && $(event.EventData.actionDom).hasClass("flittz") && OPTIONS.integrateFlittz) {
+            CnnXt.Event.fire("onFlittzPaywallShown", event.EventData);
         }
+
+        //JUST PER PHILLY
+        // IF IT IS PAYWALL
+        if (event && event.ActionTypeId == 3) {
+            CnnXt.Storage.SetConnextPaywallCookie(true);
+        }
+
+        CnnXt.Action.actionStartTime = Date.now();
     }
 
-    function onNotAuthorized(e) {
-        var fnName = "onNotAuthorized";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onNotAuthorized function.', e);
-                onDebugNote(e.EventData);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+    function onActionClosed(event) {
+        if (CnnXt.GetOptions().debug) {
+            CnnXt.Action.actionEndTime = Date.now();
+            var difference = CnnXt.Action.actionEndTime - CnnXt.Action.actionStartTime;
+            $("#ddViewTime")[0].textContent = difference + 'ms';
         }
+
+        LOGGER.debug('Fire Default onActionClosed', event);
     }
 
-    function onCampaignFound(e) {
-        var fnName = "onCampaignFound";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onCampaignFound function.', e);
-                $('#ddCampaign').html(e.EventData.Name);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+    function onButtonClick(event) {
+        LOGGER.debug("Fire Default onButtonClick", event);
     }
 
-    function onConversationDetermined(e) {
-        var fnName = "onConversationDetermined";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onConversationDetermined function.', e);
-
-                $('#ddCurrentConversation').html(e.EventData.Name);
-
-                if ($.jStorage.get('uniqueArticles')) {
-                    $('#ddCurrentConversationArticleViews').html(CnnXt.Storage.GetViewedArticles(e.EventData.id).length);
-                } else {
-                    $('#ddCurrentConversationArticleViews').html(e.EventData.Props.views);
-                }
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+    function onLoginShown(event) {
+        LOGGER.debug("Fire Default onLoginShown", event);
     }
 
-    function onActionShown(e) {
-        var fnName = "onActionShown";
-
-        try {
-            LOGGER.debug("Fire Default onActionShown", e);
-
-            if (e && e.EventData && e.EventData.actionDom && e.EventData.actionDom.hasClass("flittz") && OPTIONS.integrateFlittz) {
-                CnnXt.Event.fire("onFlittzPaywallShown", e.EventData);
-            }
-
-            //JUST PER PHILLY
-            // IF IT IS PAYWALL
-            if (e && e.EventData.ActionTypeId == 3) {
-                CnnXt.Storage.SetConnextPaywallCookie(true);
-            }
-
-            CnnXt.Action.actionStartTime = Date.now();
-
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+    function onLoginClosed(event) {
+        LOGGER.debug("Fire Default onLoginClosed", event);
     }
 
-    function onActionClosed(e) {
-        var fnName = "onActionClosed";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onActionClosed', e);
-                CnnXt.Action.actionEndTime = Date.now();
-                var difference = CnnXt.Action.actionEndTime - CnnXt.Action.actionStartTime;
-                $("#ddViewTime")[0].textContent = difference + 'ms';
-
-                if (e && e.EventData && e.EventData.When && e.EventData.When.Time) {
-                    CnnXt.Action.SetTimedAction(e.EventData);
-                }
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+    function onLoginSuccess(event) {
+        LOGGER.debug("Fire Default onLoginSuccess", event);
     }
 
-    function onButtonClick(e) {
-        var fnName = "onButtonClick";
-
-        try {
-            LOGGER.debug("Fire Default onButtonClick", e);
-
-            //CnnXt.Storage.RemoveReturnUrlCookie();
-            //var buttonHtml = e.EventData.ButtonHTML;
-            //var returnUrlRegExp = /\?returnUrl=([^"]+)"/;
-            //var returnUrl = returnUrlRegExp.exec(buttonHtml);
-            //if (returnUrl && returnUrl[1]) {
-            //    CnnXt.Storage.SetReturnUrlCookie(returnUrl[1]);
-            //}
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+    function onLoginError(event) {
+        LOGGER.debug("Fire Default onLoginError", event);
     }
 
     function onAccessTemplateShown(event) {
-        var fnName = "onAccessTemplateShown";
-
-        try {
-            LOGGER.debug("Fire Default onAccessTemplateShown", event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onAccessTemplateShown", event);
     }
 
     function onAccessTemplateClosed(event) {
-        var fnName = "onAccessTemplateClosed";
-
-        try {
-            LOGGER.debug("Fire Default onAccessTemplateClosed", event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onAccessTemplateClosed", event);
     }
 
     function onAccessGranted(event) {
-        var fnName = "onAccessGranted";
-
-        try {
-            LOGGER.debug("Fire Default onAccessGranted", event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onAccessGranted", event);
     }
 
     function onAccessDenied(event) {
-        var fnName = "onAccessDenied";
-
-        try {
-            LOGGER.debug("Fire Default onAccessDenied", event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onAccessDenied", event);
     }
 
     function onActivationFormShown(event) {
-        var fnName = "onActivationFormShown";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationFormShown", event);
     }
 
     function onActivationLoginStepShown(event) {
-        var fnName = "onActivationLoginStepShown";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLoginStepShown", event);
     }
 
     function onActivationLoginStepClosed(event) {
-        var fnName = "onActivationLoginStepClosed";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLoginStepClosed", event);
     }
 
     function onActivationLinkStepShown(event) {
-        var fnName = "onActivationLinkStepShown";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkStepShown", event);
     }
 
     function onActivationLinkStepClosed(event) {
-        var fnName = "onActivationLinkStepClosed";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkStepClosed", event);
     } 
 
     function onActivationLinkStepSubmitted(event) {
-        var fnName = "onActivationLinkStepSubmitted";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkStepSubmitted", event);
     }
 
     function onActivationLinkSuccessStepShown(event) {
-        var fnName = "onActivationLinkSuccessStepShown";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkSuccessStepShown", event);
     }
 
     function onActivationLinkSuccessStepClosed(event) {
-        var fnName = "onActivationLinkSuccessStepClosed";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkSuccessStepClosed", event);
     }
 
     function onActivationLinkErrorStepShown(event) {
-        var fnName = "onActivationLinkErrorStepShown";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkErrorStepShown", event);
     }
 
     function onActivationLinkErrorStepClosed(event) {
-        var fnName = "onActivationLinkErrorStepClosed";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
+        LOGGER.debug("Fire Default onActivationLinkErrorStepClosed", event);
     }
 
-    function onNewsdayButtonClick(event) {
-        LOGGER.debug("Fire Default onNewsdayButtonClick", event);
+    function onActivationFormClosed(event) {
+        LOGGER.debug("Fire Default onActivationFormClosed", event);
+    }
+    function onRun() {
+        LOGGER.debug("Fire Default onRun");
+    }
+
+    function onFinish() {
+        if (CnnXt.GetOptions().debug) {
+            var views = CnnXt.Storage.GetCurrentConversationViewCount();
+            $('#ddCurrentConversationArticleViews').html(views);
+        }
+        LOGGER.debug("Fire Default onFinish");
+    }
+
+    function onNewsdayButtonClick() {
+        LOGGER.debug("Fire Default onNewsdayButtonClick");
 
         if (window.setDestUrl && _.isFunction(window.setDestUrl)) {
             window.setDestUrl();
         }
     }
 
-    function onActivationFormClosed(event) {
-        var fnName = "onActivationFormClosed";
-
-        try {
-            LOGGER.debug("Fire Default " + fnName, event);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
-    }
-
-    function onRun() {
-        LOGGER.debug("Fire Default onRun", event);
-    }
-
-
-    function onFinish() {
-        LOGGER.debug("Fire Default onFinish", event);
-    }
-
-
     //#endregion PLUGIN EVENTS
+
 
     return {
         //main function to initiate the module
         init: function (options) {
             LOGGER = CnnXt.Logger; //assign local reference to CnnXt.Logger
+            LOGGER.debug(NAME, "Initializing Events Module...");
             OPTIONS = (options) ? options : { debug: true }; //if not options set to object that at least has the debug property set to true.
-            init();
         },
         fire: function (event, data) {
             var fnName = "fire";
+
             try {
                 //add common data
                 var eventResult = {
@@ -5383,8 +5376,8 @@ var ConnextEvents = function ($) {
 
                 var registrationTypeId = null;
                 var AUTHSYSTEM = null;
-                if (Connext.Storage.GetLocalConfiguration()) {
-                    registrationTypeId = Connext.Storage.GetLocalConfiguration().Site.RegistrationTypeId;
+                if (CnnXt.Storage && CnnXt.Storage.GetLocalConfiguration()) {
+                    registrationTypeId = CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId;
                     AUTHSYSTEM = CnnXt.Common.RegistrationTypes[registrationTypeId];
                 }
                
@@ -5399,7 +5392,7 @@ var ConnextEvents = function ($) {
 
                 var action;
 
-                var currentConversation = CnnXt.Storage.GetCurrentConverstaion();
+                var currentConversation = CnnXt.Storage.GetCurrentConversation();
 
                 if (currentConversation) {
                     if (data && (data.actionId || data.id)) {
@@ -5409,7 +5402,7 @@ var ConnextEvents = function ($) {
                     eventResult.Config = CnnXt.Storage.GetLocalConfiguration();
                     eventResult.Action = action;
                     eventResult.Conversation = currentConversation;
-                    eventResult.CampaignName = eventResult.Config.Campaign.Name;
+                    eventResult.CampaignName = (eventResult.Config) ? eventResult.Config.Campaign.Name : '';
                     eventResult.CampaignId = currentConversation.CampaignId;
                     eventResult.MeterLevel = CnnXt.Common.MeterLevels[MeterLevel];
                     eventResult.MeterLevelId = MeterLevel;
@@ -5444,28 +5437,30 @@ var ConnextEvents = function ($) {
                 if (_.isFunction(DEFAULT_FUNCTIONS[event])) {
                     //invoke default event function
                     DEFAULT_FUNCTIONS[event](eventResult);
+
                     try {
                         if (_.isFunction(OPTIONS[event])) {
                             //invoke custom event function
                             OPTIONS[event](eventResult);
                         }
-                    } catch (e) {
-                        console.error(fnName, 'on', 'EXCEPTION', e);
+                    } catch (ex) {
+                        LOGGER.exception(NAME, fnName, 'USER CALLBACK FUNCTION', ex);
                     }
+
                     //send native custom event (this uses in wordpress)
                     var customEvent = new CustomEvent(event, { detail: eventResult });
                     document.dispatchEvent(customEvent);
 
-                    if(event !== 'onDebugNote'){
+                    if (event !== 'onDebugNote') {
                         CnnXt.AppInsights.trackEvent(event, eventResult);
                     }
 
                 } else {
-                    LOGGER.debug(fnName, event, 'Event function does not exist');
+                    LOGGER.debug(NAME, fnName, event, 'Event function does not exist');
                 }
 
-            } catch (e) {
-                LOGGER.warn(fnName, 'on', 'EXCEPTION');
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
             }
         }
     };
@@ -5491,10 +5486,12 @@ var ConnextUtils = function ($) {
         var fnName = "processConfiguration";
 
         try {
-            LOGGER.debug(NAME, fnName, "starting to process...");
+            LOGGER.debug(NAME, fnName, "Starting to process configuration...", data);
+
             curSite = data.Site;
             //create parent config object we will populate.
             var configuration = {};
+            var whitelistSets = [];
 
             //create settings property with only relevant  keys
             configuration["Settings"] = _.pick(data,
@@ -5504,8 +5501,6 @@ var ConnextUtils = function ($) {
                 "ReturnUrl", "UseActivationFlow");
 
             if (data.DynamicMeter) {
-                CnnXt.Event.fire("onDynamicMeterFound", data.DynamicMeter.Name);
-
                 data.DynamicMeter.Rules = _.sortBy(data.DynamicMeter.Rules, function (obj) {
                     return obj.Priority;
                 });
@@ -5517,6 +5512,8 @@ var ConnextUtils = function ($) {
             if (configuration.Settings) {
                 configuration.Settings = checkForLastPublishDate(configuration.Settings);
                 configuration.Settings["LoginModal"] = data.Template ? data.Template.Html : "";
+                configuration.Settings["LoginModalName"] = data.Template ? data.Template.Name : "";
+                configuration.Settings["LoginModalId"] = data.Template ? data.Template.id : null;
             }
             //set 'Site' specific settings, no need to process, just assign entire Site object.
             configuration["Site"] = data.Site;
@@ -5524,15 +5521,23 @@ var ConnextUtils = function ($) {
             if (data.Campaign) {
                 //process the campaign data (group/organize all conversations and conversation actions).
                 configuration["Campaign"] = processCampaignData(data.Campaign);
+            } else {
+                configuration["Campaign"] = {};
             }
-            
-            configuration["WhitelistSets"] = data["WhitelistSets"];
+
+            if (data["Configuration_WhitelistSets"]) {
+                data["Configuration_WhitelistSets"].forEach(function (value, index) {
+                    whitelistSets.push(value.WhitelistSet);
+                });
+            }
+
+            configuration["WhitelistSets"] = whitelistSets;
 
             LOGGER.debug(NAME, fnName, "done processing configuration", configuration);
 
             return configuration;
-        } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -5541,16 +5546,18 @@ var ConnextUtils = function ($) {
         /// <param name="configurationSettings" type="Object">configuration.Settings object</param>
         /// <returns type="Object">Returns modified or same configuration.Settings</returns>
         var fnName = "checkForLastPublishDate";
+
+        LOGGER.debug(NAME, fnName, configurationSettings);
+
         try {
-            //LOGGER.debug(pName, fnName);
             if (!configurationSettings.LastPublishDate) {
-                LOGGER.warn(NAME, fnName, "Configuration.Settings.LastPublishDate is null...setting it to todays datetime.");
+                LOGGER.debug(NAME, fnName, "Configuration.Settings.LastPublishDate is null...setting it to todays datetime.");
                 configurationSettings.LastPublishDate = new Date().format();
             }
 
             return configurationSettings;
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             return configurationSettings; //even if error, return original configurationSettings no matter what.
         }
     };
@@ -5560,20 +5567,19 @@ var ConnextUtils = function ($) {
         /// <param name="campaign" type="Object">Campaign object</param>
         /// <returns type="Object">Processed Campaign object</returns>
         var fnName = "processCampaignData";
-        try {
-            LOGGER.debug(NAME, fnName);
 
+        try {
             //for now, at the Campaign level we are only picking the Name and id keys to return
             var processedCampaign = _.pick(campaign, "id", "Name", "Conversations");
 
             processedCampaign.Conversations = processConversationData(processedCampaign.Conversations);
 
-
             LOGGER.debug(NAME, fnName, "processedCampaign", processedCampaign);
+
             return processedCampaign;
 
-        } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -5583,6 +5589,7 @@ var ConnextUtils = function ($) {
         /// <param name="conversations" type="Object">Conversation object</param>
         /// <returns type="Object">Processed Conversation object</returns>
         var fnName = "processConversationData";
+
         try {
             LOGGER.debug(NAME, fnName, "conversations", conversations);
 
@@ -5602,38 +5609,13 @@ var ConnextUtils = function ($) {
 
             //loop through conversations and process the conversation options by grouping and renaming properties.
 
-            $.each(conversations, function (key, val) {
-                //'val' is a single conversation object.  We use this to group val.options and fix naming conventions.
+            $.each(conversations, function (conversationKey, conversation) {
+                conversation.Options = processConversationOptions(conversation.Options);
 
-                LOGGER.debug(NAME, fnName, "conversations.EACH", key, val);
+                conversation.Props = defaultConversationProps;
 
-                var groupedOptions = _.groupBy(val.Options, function (obj) {
-                    return obj.ConversationOption.ParentConversationOptionId;
-                });
-
-                var processedGroup = {};
-                $.each(groupedOptions, function (key, val) {
-                    console.info("GROUPEDOPTIONS.EACH", key, val);
-                    var optionObj = {};
-
-                    $.each(val, function (k, v) {
-                        optionObj[v.ConversationOption.DisplayName] = v.Value;
-                    });
-
-                    processedGroup[CnnXt.Common.ConversationOptionMap[key]] = optionObj;
-
-
-                });
-
-                val.Options = { "Expirations": processedGroup };
-
-                val.Props = defaultConversationProps;
-
-                //Process the actions array 
-                val.Actions = processConversationActions(val.Actions);
-
+                conversation.Actions = processConversationActions(conversation.Actions);
             });
-
 
             //group conversations by MeterLevelId
             var groupedConversationsByMeterLevel = _.groupBy(conversations, "MeterLevelId");
@@ -5641,25 +5623,96 @@ var ConnextUtils = function ($) {
             //we grouped by 'MeterLevelId', replace these keys (which are integers) into their string equaliviants (from CnnXt.Common.MeterLevels).
             groupedConversationsByMeterLevel = _.replaceObjKeysByMap(groupedConversationsByMeterLevel, CnnXt.Common.MeterLevels);
 
-            //LOGGER.warn(NAME, fnName, 'conversations', conversations);
-            //LOGGER.warn(NAME, fnName, 'groupedConversationsByMeterLevel', groupedConversationsByMeterLevel);
+            LOGGER.debug(NAME, fnName, "Grouped Conversations By Meter Level", groupedConversationsByMeterLevel);
 
             return groupedConversationsByMeterLevel;
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
+    var processConversationOptions = function (conversationOptions) {
+        var fnName = 'processConversationOptions';
+
+        LOGGER.debug(NAME, fnName, conversationOptions);
+
+        var expirationOptions = _.filter(conversationOptions, function (option) {
+            return _.contains(CnnXt.Common.ConversationOptionMap.Expiration, option.ConversationOption.ClassId);
+        });
+
+        var activationOptions = _.filter(conversationOptions, function (option) {
+            return _.contains(CnnXt.Common.ConversationOptionMap.Activation, option.ConversationOption.ClassId);
+        });
+
+        var filterOptions = _.filter(conversationOptions, function (option) {
+            return _.contains(CnnXt.Common.ConversationOptionMap.Filter, option.ConversationOption.ClassId);
+        });
+
+        return {
+            Expirations: processExpirationOptions(expirationOptions),
+            Activation: processActivationOptions(activationOptions),
+            Filter: processFilterOptions(filterOptions),
+        };
+    }
+
+    var processExpirationOptions = function (expirationOptions) {
+        LOGGER.debug(NAME, 'processExpirationOptions', expirationOptions);
+        return processOptionsForClass(expirationOptions, 'Expiration');
+    }
+
+    var processActivationOptions = function (activationOptions) {
+        LOGGER.debug(NAME, 'processActivationOptions', activationOptions);
+        return processOptionsForClass(activationOptions, 'Activation');
+    }
+
+    var processFilterOptions = function (filterOptions) {
+        LOGGER.debug(NAME, 'processFilterOptions', filterOptions);
+        return mapOptionsByClassesAndInstances(filterOptions, {
+            Entity: 'ConversationOption',
+            EntityParentId: 'ParentConversationOptionId',
+            Entity_OptionClass: 'Conversation_OptionClass'
+        });
+    }
+
+    var processOptionsForClass = function (options, optionsClass) {
+        var fnName = 'processOptionsForClass';
+
+        try {
+            LOGGER.debug(NAME, fnName, arguments);
+
+            var groupedOptions = _.groupBy(options, function (option) {
+                return option.ConversationOption.ParentConversationOptionId;
+            });
+
+            var result = {};
+
+            $.each(groupedOptions, function (optionsGroupKey, optionsGroup) {
+                var mappedOption = {};
+
+                $.each(optionsGroup, function (optionKey, option) {
+                    mappedOption[option.ConversationOption.DisplayName] = option.Value;
+                });
+
+                result[CnnXt.Common.ConversationOptionNamesMap[optionsClass][optionsGroupKey]] = mappedOption;
+            });
+
+            LOGGER.debug(NAME, fnName, 'Processed options', result);
+
+            return result;
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return {};
+        }
+    }
+
     //TODO: this should get moved into the API, for time constraints just doing it here in js since its quicker.
     var processConversationActions = function (actions) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "processConversationActions";
-        try {
-            //LOGGER.debug(NAME, fnName, 'actions', actions);
 
+        LOGGER.debug(NAME, fnName, actions);
+
+        try {
             //loop through actions to process action option values and group them into 'Who' 'What' and 'When' properties
             $.each(actions, function (key, val) {
                 //val is an Action object    
@@ -5699,68 +5752,44 @@ var ConnextUtils = function ($) {
 
             });
 
+            LOGGER.debug(NAME, fnName, 'Processed actions', actions);
+
             //actions have been processed so sort them by 'Order' property.
             return _.sortBy(actions, "Order");
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     //TODO: This is not efficient and bad logistically, but for time constraints we process it in JS. THIS NEEDS REMOVED so this is all processed in the API, for now just do it here.
     var processWhoOptions = function (options) {
-        /// <summary>Takes an array of 'WHO' action options and creates a more readable object for processing.</summary>
-        /// <param name="options" type="Array">Array of who options for a given action.</param>
-        /// <returns type="Object">Proccessed 'Who' object</returns>
         var fnName = "processWhoOptions";
+
+        LOGGER.debug(NAME, fnName, options);
+
         try {
-            var who = {},
-                allCriterias = [];
-
-            //group the options by ActionOption.ActionOptionParentId (will group related options like View options and Geo options etc...).
-            var groupedOptions = _.groupBy(options, function (obj) {
-                return obj.ActionOption.ActionOptionParentId;
+            var who = mapOptionsByClassesAndInstances(options, {
+                Entity: 'ActionOption',
+                EntityParentId: 'ActionOptionParentId',
+                Entity_OptionClass: 'Action_OptionClass'
             });
 
-            $.each(groupedOptions, function (key, value) {
-                var criteriaInstances = _.groupBy(groupedOptions[key], 'CriteriaInstanceNumber');
-
-                $.each(criteriaInstances, function (instanceNumber) {
-                    allCriterias.push(criteriaInstances[instanceNumber]);
-                });
-
-            });
-
-            allCriterias.forEach(function (criteria) {
-                var criteriaFields = {};
-                var criteriaClassName = criteria[0].ActionOption.Action_OptionClass.Name;
-
-                criteria.forEach(function (option) {
-                    var dn = option.ActionOption.DisplayName;
-                    dn = dn.replace(option.ActionOption.ActionOptionParentId, '');
-                    criteriaFields[dn] = option.Value;
-                });
-
-                if (who[criteriaClassName] && who[criteriaClassName].length) {
-                    who[criteriaClassName].push(criteriaFields);
-                } else {
-                    who[criteriaClassName] = [criteriaFields];
-                }
-            });
+            LOGGER.debug(NAME, fnName, "Processed who options", who);
 
             return who;
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     //TODO: This is not efficient and bad logistically, but for time constraints we process it in JS. THIS NEEDS REMOVED so this is all processed in the API, for now just do it here.
     var processWhatOptions = function (options) {
-        /// <summary>Takes an array of 'WHAT' action options and creates a more readable object for processing.</summary>
-        /// <param name="options" type="Array">Array of what options for a given action.</param>
-        /// <returns type="Object">Proccessed 'What' object</returns>
         var fnName = "processWhatOptions";
+
+        LOGGER.debug(NAME, fnName, options);
+
         try {
             var what = {},
                 userDeviceType = CnnXt.Utils.getDeviceType(),
@@ -5768,9 +5797,13 @@ var ConnextUtils = function ($) {
                 optionsForDeviceType = {},
                 commonOptions = [];
 
+            if (!options || !options.length) {
+                return what;
+            }
+
             $.each(optionsGroupedByDeviceType, function (instance, deviceTypeOptions) {
                 var deviceTypeOption;
- 
+
                 deviceTypeOptions.forEach(function (option) {
                     if (option.ActionOption.Name == 'TemplateDeviceSettings') {
                         deviceTypeOption = option;
@@ -5799,60 +5832,108 @@ var ConnextUtils = function ($) {
                     what[option.ActionOption.DisplayName] = option.Value;
                 });
             } else {
-                if (optionsForDeviceType['Default']) {
-                    optionsForDeviceType['Default'].forEach(function (option) {
-                        what[option.ActionOption.DisplayName] = option.Value;
-                    });
-                }
+                optionsForDeviceType['Default'].forEach(function (option) {
+                    what[option.ActionOption.DisplayName] = option.Value;
+                });
             }
 
             commonOptions.forEach(function (option) {
                 what[option.ActionOption.DisplayName] = option.Value;
             });
 
+            LOGGER.debug(NAME, fnName, "Processed what options", what);
+
             return what;
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     //TODO: This is not efficient and bad logistically, but for time constraints we process it in JS. THIS NEEDS REMOVED so this is all processed in the API, for now just do it here.
     var processWhenOptions = function (options) {
-        /// <summary>Takes an array of 'WHEN' action options and creates a more readable object for processing.</summary>
-        /// <param name="options" type="Array">Array of WHEN options for a given action.</param>
-        /// <returns type="Object">Proccessed 'When' object</returns>
         var fnName = "processWhenOptions";
-        try {
-            //LOGGER.debug(NAME, fnName, 'options', options);
 
+        LOGGER.debug(NAME, fnName, options);
+
+        try {
             var when = {}; //empty object to assign properties to based on options
             var whenOptions = {};
+
+            if (!options || !options.length) {
+                return when;
+            }
+
             $.each(options, function (key, val) {
-                //LOGGER.debug(NAME, fnName, '---WHEN OPTIONS -- ..... EACH', val);
                 //set whenOption property name based on this options Display name and assign it's value on the Value property.
                 whenOptions[val.ActionOption.DisplayName] = val.Value;
-
             });
+
             //since these when 'options' are all the same 'type' we assign the when object with a property based on the WhenClassMap and the first object in the options array OptionClassId (not ideal, needs updated).
-            if (options && options.length) {
-                when[CnnXt.Common.WhenClassMap[options[0].ActionOption.ClassId]] = whenOptions;
-            }
+            when[CnnXt.Common.WhenClassMap[options[0].ActionOption.ClassId]] = whenOptions;
+
+            LOGGER.debug(NAME, fnName, "Processed when options", when);
+
             return when;
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    var processDynamicMeter = function (dynamicmeter) {
-        /// <summary>Segments are already grouped, this is just taking segmentoptionvalues and creating a more user friendly json object.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = "processDynamicMeter";
-        try {
-            LOGGER.debug(NAME, fnName, dynamicmeter);
+    var mapOptionsByClassesAndInstances = function (entityOptions, mapSettings) {
+        var fnName = "mapOptionsByClassesAndInstances";
 
+        LOGGER.debug(NAME, fnName, arguments);
+
+        try {
+            var result = {},
+                allCriterias = [];
+
+            var groupedOptions = _.groupBy(entityOptions, function (option) {
+                return option[mapSettings.Entity][mapSettings.EntityParentId];
+            });
+
+            $.each(groupedOptions, function (key, value) {
+                var criteriaInstances = _.groupBy(groupedOptions[key], 'CriteriaInstanceNumber');
+
+                $.each(criteriaInstances, function (instanceNumber) {
+                    allCriterias.push(criteriaInstances[instanceNumber]);
+                });
+            });
+
+            allCriterias.forEach(function (criteria) {
+                var criteriaFields = {};
+                var criteriaClassName = criteria[0][mapSettings.Entity][mapSettings.Entity_OptionClass].Name;
+
+                criteria.forEach(function (option) {
+                    var displayName = option[mapSettings.Entity].DisplayName;
+                    displayName = displayName.replace(option[mapSettings.Entity][mapSettings.EntityParentId], '');
+                    criteriaFields[displayName] = option.Value;
+                });
+
+                if (result[criteriaClassName] && result[criteriaClassName].length) {
+                    result[criteriaClassName].push(criteriaFields);
+                } else {
+                    result[criteriaClassName] = [criteriaFields];
+                }
+            });
+
+            LOGGER.debug(NAME, fnName, "Maped Options By Classes And Instances", result);
+
+            return result;
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
+
+    var processDynamicMeter = function (dynamicmeter) {
+        var fnName = "processDynamicMeter";
+
+        LOGGER.debug(NAME, fnName, dynamicmeter);
+
+        try {
             //loop through rules.
             $.each(dynamicmeter.Rules, function (key, val) {
 
@@ -5861,11 +5942,10 @@ var ConnextUtils = function ($) {
 
                     //this gets the class name for this segment. We use _.find because some properties might not have a ClassId property, so we grab the first one that is not null.
                     var className = _.find(v.SegmentOptionValues, function (obj) { return obj.SegmentOption.ClassId != null; }).SegmentOption.Segment_OptionClass.Name;
-                    ////LOGGER.debug('classname', className);
-
                     var segmentOptions = {}; //empty object which we'll populate with key/val based on DisplayName and Value
                     var exceptions = curSite.Client.Client_SegmentOption_Exceptions;
                     var newSegmentOptionValues;
+
                     $.each(exceptions,
                         function (key, value) {
                             newSegmentOptionValues = _.reject(v.SegmentOptionValues,
@@ -5880,8 +5960,8 @@ var ConnextUtils = function ($) {
                     if (val.Segments[k] != null) {
                         $.each(v.SegmentOptionValues,
                             function (key, val) {
-                                //segmentObject[val.SegmentOption.Segment_OptionClass.Name][val.SegmentOption.DisplayName] = val.Value;
                                 var dn = val.SegmentOption.DisplayName;
+
                                 dn = dn.replace(val.SegmentOption.SegmentOptionParentId, '');
                                 segmentOptions[dn] = val.Value;
                             });
@@ -5895,22 +5975,25 @@ var ConnextUtils = function ($) {
                         val.Segments[k] = _.omit(v, "SegmentOptionValues");
                     }
                 });
-                val.Segments = _.filter(val.Segments, function (s) { return s != null });
 
+                val.Segments = _.filter(val.Segments, function (s) { return s != null });
             });
+
+            LOGGER.debug(NAME, fnName, "Processed dynamicmeter", dynamicmeter);
 
             return dynamicmeter;
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var mergeConfiguration = function (newConfig) {
         var fnName = "mergeConfiguration";
-        try {
-            LOGGER.debug(NAME, fnName, "newConfig", newConfig);
 
+        LOGGER.debug(NAME, fnName, newConfig);
+
+        try {
             //We don't really merge the 'configuration' object, we are actually going to replace the current configuration with the new configuration.  
             //This is because the 'configuration' object doesn't hold any user specific data that is stored for each user besides the conversations, but the configuration.Campaign.Conversations array just holds the data that we use to determine FUTURE conversations/actions.  
             //Any current conversations that are happening are stored in the 'conversations.current' local storage object. So this is what we need merge with the new configuration object.
@@ -5918,15 +6001,8 @@ var ConnextUtils = function ($) {
             //save new configuration to local storage.
             CnnXt.Storage.SetLocalConfiguration(newConfig);
 
-            ////var mergedConfig = $.extend(true, currentLocalConfig, newConfig);
-            //////we extend the currentLocalConfig and the newConfig.
-
-
-
             //get the array of current conversations from local storage.
             var currentConversations = CnnXt.Storage.GetCurrentConversations();
-
-            LOGGER.debug(NAME, fnName, "CurrentConversations", currentConversations);
 
             //create empty object to store the new conversations.  
             //we are doing this so we don't have to worry about removing a stored conversation if it no longer exists in the newConfig.Campaign.Conversations array. 
@@ -5935,14 +6011,12 @@ var ConnextUtils = function ($) {
             //we now loop through the current (local) conversations and do 2 things A) Check if this conversation still exists in the new configuration, B) update/merge appropriate conversation data based on any changes in the new configuration, but still maintain current 'user related data'.
             $.each(currentConversations, function (key, val) {
                 //'key' is the meterlevel name for this conversation (Free, Metered, Premium) and 'val' is the conversation object.
-                LOGGER.debug(NAME, fnName, "currentConversations.EACH", key, val);
 
                 //this searches the _Newconfig object to see if this conversation still exists. If it does we update this conversation in the _Newconfig object with stored user data (right now, just views).
                 //var foundStoredConvo = _.findByKey(newConfig.Campaign.Conversations[MeterLevelsDict[key]], { id: val.id });
 
                 //search the newConfig.Campaign.Conversations.METERLEVEL array on id and val.id. 
                 var foundStoredConvo = _.findByKey(newConfig.Campaign.Conversations[key], { id: val.id });
-                LOGGER.debug(NAME, fnName, "currentConversations.EACH", "foundStoredConvo", foundStoredConvo);
 
                 if (foundStoredConvo) {
                     //this stored conversation still exists in the newConfigration.Campaign.Conversations array
@@ -5955,15 +6029,16 @@ var ConnextUtils = function ($) {
                     //the newCurrentConversations[key] object has all the settings from the newConfig object, now we replace the 'Props' key which holds any user specific data that we need to preserve (views, Date.Start, Date.Expiration etc...).
                     newCurrentConversations[key].Props = val.Props;
                 }
-
             });
 
             //we now save the 'newCurrentConversations' Object to local storage.  Since we created a new 'current conversation' object and only added conversations from the 'newConfig' object to this new Object we automatically take care of the scenario that a user is in a conversation that is then deleted from the Admin.  
             //Since this conversation doesn't exist in the 'newConfig' object, we will not add it to the 'newConversation' object, therefore if this user was in a conversation that was deleted they will just move into a new conversation (as if this was there first time visiting, so first conversation in this campaign).
             CnnXt.Storage.SetCurrentConversations(newCurrentConversations);
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.debug(NAME, fnName, "Done", newCurrentConversations);
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -5982,158 +6057,731 @@ var ConnextUtils = function ($) {
         }
     };
 
-    var handleDebugDetails = function () {
-        /// <summary>This sets up the Debug Details panel and any event listeners for the debug panel.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = "handleDebugDetails";
+    var resolveQualifiersFor = function (entity, additionaData) {
+        var fnName = "resolveQualifiersFor";
+
         try {
-            try {
-                // append debug css
-                var cssLink = $("<link>");
-                $("head").append(cssLink); //IE hack: append before setting href
+            var conditionsWerePassed = true;
 
-                cssLink.attr({
-                    rel: "stylesheet",
-                    type: "text/css",
-                    href: 'https://mg2assetsdev.blob.core.windows.net/connext/assets/connext-debug-panels.min.css'
-                });
+            LOGGER.debug(NAME, fnName, entity);
 
-                //creates and appends debug details html.
-                var html = '<div class="debug_details opened" style="left: 0;"><div class="debug_details_icon">&nbsp;</div><div class="debug_details_content"><h4>Debug Details</h4><ul>' +
-                    '<li class="debug_details_header hide_on_mobile"><label>Meter Level: <strong id="ddMeterLevel">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Meter Set: <strong id="ddMeterSet">...</strong></label><label>Campaign: <strong id="ddCampaign">...</strong></label><label>Conversation: <strong id="ddCurrentConversation">...</strong></label><label>Article Views: <strong id="ddCurrentConversationArticleViews">...</strong></label><label>Articles Left: <strong id="ddCurrentConversationArticleLeft">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>View Time: <strong id="ddViewTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Current Zip: <strong id="ddZipCode">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Auth Time: <strong id="ddAuthTime">...</strong></label><label>Processing Time: <strong id="ddProcessingTime">...</strong></label><label>Total Time: <strong id="ddTotalProcessingTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Note: <strong id="ddNote">...</strong></label></li><li class="debug_details_header hide_on_mobile"><div id="ConnextCustomConfigurationDiv"><label for="ConnextSiteCode">Site code: </label><input type="text" id="ConnextSiteCode"><label for="ConnextConfigCode">Config code: </label><input type="text" id="ConnextConfigCode"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomConfiguration">Set configuration</a></div><label class="overlay_label check" for="ConnextCustomConfiguration">Use custom configuration: </label> <input type="checkbox" id="ConnextCustomConfiguration"><label class="overlay_label check" for="ConnextCustomConfiguration">Unique Articles Count: </label> <input type="checkbox" id="uniqueArticles"></li>' +
-                    '<li class="debug_details_header" > <label class="overlay_label check">AnonymousId: </label> <input type="text" id="connext_anonymousId" style="\r\n    width: 47px; */\r\n    padding:;\r\n    padding: 5px 1px;\r\n"><a href="#" class="more highlight margin_top_15" id="connext_anonymousIdApplyBtn" style="\r\n    padding: 4px 13px;\r\n    width: 35px;\r\n    margin-left: 10px;\r\n    display: inline;\r\n">Set</a></li>' +
-                    '<li class="debug_details_header hide_on_mobile"><label for="ConnextCustomTimeChk" class="overlay_label check">Custom Time: </label> <input type="checkbox" id="ConnextCustomTimeChk"><div id="ConnextCustomTimeDiv"><input type="text" id="ConnextCustomTimeTxt" placeholder="MM/DD/YYYY" value="" name="name" class="text_input hint"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomTimeBtn">Set</a></div></li><li class="debug_details_header hide_on_mobile"><a href="#" class="more highlight margin_top_15" id="connextClearAllData">Clear All Data</a></li></ul></div></div>';
-                $("body").append(html);
-
-                $("#ConnextSetCustomConfiguration").on("click", saveConfiguration);
-
-                //handles when a user clicks the hide/show icon.
-                $(".debug_details_icon").on("click", handleDebugDetailsDisplayClick);
-
-                //registers 'clearAllData' button click event.
-                $("#connextClearAllData").on("click", clearAllSettings);
-
-                //handle custom time section (call this before we setup event listeners for the time checkbox so we set initial values correctly.
-                handleCustomTime();
-                handleCustomConfiguration();
-
-                $("#ddZipCode").html(CnnXt.Storage.GetActualZipCodes());
-
-                if ($.jStorage.get("uniqueArticles")) {
-                    $("#uniqueArticles").attr("checked", "checked");
-                }
-
-                $("#ConnextCustomConfiguration").on("change", function () {
-                    var $this = $(this);
-
-                    if ($this.prop("checked")) {
-                        $("#ConnextCustomConfigurationDiv").show();
-                    }
-
-                    else {
-                        $("#ConnextCustomConfigurationDiv").hide();
-                        CnnXt.Storage.SetIsCustomConfiguration(false);
-                    }
-                });
-
-                //event listener when checkbox is clicked.
-                $("#ConnextCustomTimeChk").on("change", function () {
-                    var $this = $(this);
-                    if ($this.prop("checked")) {
-                        $("#ConnextCustomTimeDiv").show();
-                        //set custom time
-                    } else {
-                        //remove custom time.
-                        $("#ConnextCustomTimeDiv").hide();
-                        $.jStorage.deleteKey("CustomTime");
-                    }
-                });
-
-                $("#uniqueArticles").on("change", function () {
-                    var $this = $(this);
-                    $.jStorage.set("uniqueArticles", $this.prop("checked"));
-                });
-
-                //event listener when 'Set' button is clicked.
-                $("#ConnextSetCustomTimeBtn").on("click", function (e) {
-                    e.preventDefault();
-                    $.jStorage.set("CustomTime", $("#ConnextCustomTimeTxt").val());
-                    // CnnXt.Storage.SetLocalConfiguration('');
-                });
-
-            } catch (err) {
-                console.error(NAME, fnName, "CreateDebugDetailPanel");
+            if (!entity) {
+                return conditionsWerePassed
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            if (entity.HiddenFieldCriteria && conditionsWerePassed) {
+                //We have a 'HiddenField' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.HiddenFieldCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking HiddenFieldCriteria: ", criteria);
+
+                        if (CnnXt.Utils.JSEvaluate(
+                            CnnXt.Utils.GetHiddenFormFieldValue(criteria.Id),
+                            criteria.Qualifier,
+                            criteria.Val,
+                            "HiddenFormField"
+                        )) {
+                            //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                        } else {
+                            //this failed, so set conditionsWerePassed to false;
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.GeoCriteria && conditionsWerePassed) {
+                //We have a 'GeoCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                try {
+                    entity.GeoCriteria.forEach(function (criteria) {
+                        if (conditionsWerePassed) {
+                            LOGGER.debug(NAME, fnName, "Checking GeoCriteria: ", criteria);
+
+                            var userZipCodes = CnnXt.Storage.GetActualZipCodes();
+
+                            if (userZipCodes && criteria.Type !== undefined) {
+                                userZipCodes.forEach(function (zipCode) {
+                                    if (~criteria.Zip.indexOf(zipCode)) {
+                                        conditionsWerePassed = (criteria.Type.toUpperCase() == "IN");
+                                    } else if (criteria.Zip.indexOf('*') >= 0) {
+                                        var valueItems = criteria.Zip.split(",") || criteria.Zip.split("");
+                                        var foundZip = valueItems.filter(function (value) {
+                                            var valueItem = value.split("");
+                                            var zipItems = zipCode.split("");
+                                            return zipItems.length != valueItem.length ? false : valueItem.every(function (item, i) {
+                                                return valueItem[i] === "*" ? true : item === zipItems[i];
+                                            });
+                                        });
+
+                                        if (foundZip.length > 0) {
+                                            conditionsWerePassed = (criteria.Type.toUpperCase() == "IN");
+                                        } else {
+                                            conditionsWerePassed = (criteria.Type.toUpperCase() != "IN");
+                                        }
+                                    } else {
+                                        conditionsWerePassed = (criteria.Type.toUpperCase() != "IN");
+                                    }
+                                });
+                            }
+
+                            LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                        }
+                    });
+
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
+                    conditionsWerePassed = false;
+                }
+            }
+
+            if (entity.JavascriptCriteria && conditionsWerePassed) {
+                //We have a 'JavascriptCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                try {
+                    entity.JavascriptCriteria.forEach(function (criteria) {
+                        if (conditionsWerePassed) {
+                            LOGGER.debug(NAME, fnName, "Checking JavascriptCriteria: ", criteria);
+
+                            var varValue = criteria.Eval;
+                            var jsValue;
+
+                            try {
+                                jsValue = eval(varValue);
+                            } catch (ex) {
+                                LOGGER.warn(NAME, fnName, ex);
+                            }
+
+                            if ($.isArray(jsValue)) {
+                                jsValue = jsValue.map(function (item) {
+                                  return item.toString().trim().toLowerCase();
+                                });
+
+                                if (criteria.Qualifier == "In" || criteria.Qualifier == "NotIn") {
+                                    if (jsValue.indexOf(criteria.Val.toLowerCase()) >= 0) {
+                                        conditionsWerePassed = (criteria.Qualifier == "In");
+                                    } else {
+                                        conditionsWerePassed = (criteria.Qualifier == "NotIn");
+                                    }
+                                } else {
+                                    conditionsWerePassed = (criteria.Qualifier == "==");
+                                }
+                            } else {
+                                if (jsValue !== undefined && jsValue !== "") {
+                                    jsValue = jsValue.toString().toLowerCase();
+                                }
+
+                                if (criteria.Qualifier == "In" || criteria.Qualifier == "NotIn") {
+                                    if (jsValue == undefined) {
+                                        conditionsWerePassed = (criteria.Qualifier == "NotIn");
+                                    } else {
+                                        var delimiter = criteria.Delimiter
+                                            ? new RegExp(criteria.Delimiter.replace(/space/g, ' '), 'g')
+                                            : /[ ,;]/g;
+                                        array = jsValue.split(delimiter);
+
+                                        if (array.indexOf(criteria.Val.toLowerCase()) >= 0) {
+                                            conditionsWerePassed = (criteria.Qualifier == "In");
+                                        } else {
+                                            conditionsWerePassed = (criteria.Qualifier == "NotIn");
+                                        }
+                                    }
+                                } else {
+                                    if (CnnXt.Utils.JSEvaluate(
+                                        jsValue,
+                                        criteria.Qualifier,
+                                        criteria.Val,
+                                        "JavascriptCriteria"
+                                    )) {
+                                        //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                                    } else {
+                                        //this failed, so set conditionsWerePassed to false;
+                                        conditionsWerePassed = false;
+                                    }
+                                }
+                            }
+
+                            LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                        }
+                    });
+
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, "Evaluating javascript criteria.", ex);
+                    conditionsWerePassed = false; //the eval through an exception so this action doesn't pass.
+                }
+            }
+
+            if (entity.ScreenSizeCriteria && conditionsWerePassed) {
+                //We have a 'ScreenSizeCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.ScreenSizeCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking ScreenSizeCriteria: ", criteria);
+
+                        if (CnnXt.Utils.JSEvaluate(
+                            CnnXt.Utils.getDeviceType(),
+                            criteria.Qualifier,
+                            criteria.Value,
+                            "ScreenSizeCriteria"
+                        )) {
+                            //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
+                        } else {
+                            //this failed, so set conditionsWerePassed to false;
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.UrlCriteria && conditionsWerePassed) {
+                //We have a 'UrlCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.UrlCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking UrlCriteria", criteria);
+
+                        if (CnnXt.Utils.JSEvaluate(
+                            CnnXt.Utils.getUrlParam(criteria.Eval),
+                            criteria.Qualifier,
+                            criteria.Value,
+                            "UrlCriteria"
+                        )) {
+                            //keep conditionsWerePassed in true state
+                        } else {
+                            //this failed, so set conditionsWerePassed to false;
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.URLMaskCriteria && conditionsWerePassed) {
+                //We have a 'UrlCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.URLMaskCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking UrlCriteria", criteria);
+
+                        var href = window.location.href,
+                            hrefFormatted = href.replace(/#$/, ''),
+                            hrefLength = hrefFormatted.length,
+                            criteriaHrefFormatted = criteria.Value.replace(/\*$/, ''),
+                            valLength = criteriaHrefFormatted.length;
+
+                        if (hrefFormatted.indexOf(criteriaHrefFormatted) == 0 && hrefLength > valLength && criteria.Qualifier == '==') {
+                            //keep conditionsWerePassed in true state
+                        } else if (hrefFormatted.indexOf(criteriaHrefFormatted) != 0 && criteria.Qualifier == '!=') {
+                            //keep conditionsWerePassed in true state
+                        } else {
+                            //this failed, so set conditionsWerePassed to false;
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.SubDomainCriteria && conditionsWerePassed) {
+                //We have a 'SubDomainCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.SubDomainCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking SubDomainCriteria", criteria);
+
+                        var searchingVal = criteria.Value.toUpperCase();
+                        var sourceVal = window.location.hostname.toUpperCase();
+                        // root domain won't be included
+                        var qualifier = criteria.Qualifier.toUpperCase();
+
+                        if ((qualifier == "==") ^ (sourceVal.split('.').reverse().indexOf(searchingVal) > 1)) {
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.MetaKeywordCriteria && conditionsWerePassed) {
+                //We have a 'MetaKeywordCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.MetaKeywordCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking MetaKeywordCriteria: ", criteria);
+
+                        var metaArray = CnnXt.Utils.getMetaTagsWithKeywords();
+                        var evalResult = false;
+                        var regExpStr = "\\b" + criteria.Value + "\\b";
+                        var regExp = new RegExp(regExpStr);
+
+                        for (var i = 0; i < metaArray.length; i++) {
+                            if (regExp.test(metaArray[i].content)) {
+                                LOGGER.debug(NAME, fnName, "Found keyword", criteria.Value);
+                                evalResult = true;
+                                break;
+                            }
+                        }
+
+                        if (evalResult && criteria.Qualifier == "!=") {
+                            conditionsWerePassed = false;
+                        }
+
+                        if (!evalResult) {
+                            conditionsWerePassed = (criteria.Qualifier == "!=") ? true : false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.UserStateCriteria && conditionsWerePassed) {
+                //We have a 'UserStateCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.UserStateCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking UserStateCriteria", criteria);
+
+                        var userState = CnnXt.User.getUserState();
+
+                        if (!userState) {
+                            userState = "Logged Out";
+                        }
+
+                        if (!CnnXt.Utils.JSEvaluate(
+                            userState,
+                            criteria.Qualifier,
+                            criteria.Value,
+                            "UserStateCriteria"
+                        )) {
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.AdBlockCriteria && conditionsWerePassed) {
+                //We have a 'AdBlockCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.AdBlockCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking AdBlockCriteria", criteria);
+
+                        var hasAdBlock = CnnXt.Utils.detectAdBlock();
+
+                        if (hasAdBlock && criteria.Value == "Detected") {
+                            //keep conditionsWerePassed in true state
+                        } else if (!hasAdBlock && criteria.Value == "Not Detected") {
+                            //keep conditionsWerePassed in true state
+                        } else {
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.FlittzStatusCriteria && conditionsWerePassed) {
+                //We have a 'FlittzStatusCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                if (CnnXt.GetOptions().integrateFlittz && window.Flittz) {
+                    var currentFlittzStatus = window.Flittz.FlittzUserStatus;
+
+                    entity.FlittzStatusCriteria.forEach(function (criteria) {
+                        if (conditionsWerePassed) {
+                            LOGGER.debug(NAME, fnName, "Checking FlittzStatusCriteria", criteria);
+
+                            if (!CnnXt.Utils.JSEvaluate(
+                                CnnXt.Common.FlittzStatusesMap[currentFlittzStatus],
+                                criteria.Qualifier,
+                                criteria.Value,
+                                "FlittzStatusCriteria"
+                            )) {
+                                conditionsWerePassed = false;
+                            }
+
+                            LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                        }
+                    });
+                } else {
+                    conditionsWerePassed = false;
+                    LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed. No Flittz integration', entity.FlittzStatusCriteria);
+                }
+            }
+
+            if (entity.EZPayCriteria && conditionsWerePassed) {
+                //We have a 'EZPayCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.EZPayCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking EZPayCriteria", criteria);
+                        var userState = CnnXt.User.getUserState(),
+                            userData;
+
+                        if (userState !== 'Logged Out') {
+                            userData = CnnXt.Storage.GetUserData();
+                            if (userData && userData.Subscriptions) {
+                                var subscription = userData.Subscriptions[0];
+                                if (subscription.IsEZPay.toString() != criteria.Value) {
+                                    conditionsWerePassed = false;
+                                }
+                            } else {
+                                conditionsWerePassed = false;
+                            }
+                        } else {
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.ExpireDateCriteria && conditionsWerePassed) {
+                //We have a 'ExpireDateCriteria' criteria(s) and 'conditionsWerePassed' is still true so we need to check this.
+                entity.ExpireDateCriteria.forEach(function (criteria) {
+                    if (conditionsWerePassed) {
+                        LOGGER.debug(NAME, fnName, "Checking ExpireDateCriteria", criteria);
+                        var userState = CnnXt.User.getUserState(),
+                            userData;
+
+                        if (userState !== 'Logged Out') {
+                            userData = CnnXt.Storage.GetUserData();
+                            if (userData && userData.Subscriptions) {
+                                var subscription = userData.Subscriptions[0];
+
+                                if (subscription.ExpirationDate) {
+                                    var diff = CnnXt.Utils.GetTimeByType(subscription.ExpirationDate, criteria["Expire Date Type"]);
+                                    if (!CnnXt.Utils.JSEvaluate(
+                                        diff,
+                                        criteria.Qualifier,
+                                        criteria.Value,
+                                        "ExpireDateCriteria"
+                                    )) {
+                                        conditionsWerePassed = false;
+                                    }
+                                }
+                            } else {
+                                conditionsWerePassed = false;
+                            }
+                        } else {
+                            conditionsWerePassed = false;
+                        }
+
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    }
+                });
+            }
+
+            if (entity.MeterViewsCriteria && conditionsWerePassed) {
+                var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+                var articleCount = CnnXt.Common.ConvoArticleCountObj.article_count;
+                var articleCookie = CnnXt.Storage.GetCookie(cookieName);
+
+                if (articleCookie) {
+                    entity.MeterViewsCriteria.forEach(function (criteria) {
+                        if (conditionsWerePassed) {
+                            LOGGER.debug(NAME, fnName, "Checking MeterViewsCriteria", criteria);
+                            var meterArticleCount;
+
+                            var meterArticleViews = JSON.parse(articleCookie);
+                            if (_.isEmpty(meterArticleViews)) {
+                                meterArticleCount = 0;
+                                if (!CnnXt.Utils.JSEvaluate(
+                                    meterArticleCount,
+                                    criteria.Qualifier,
+                                    criteria.Val,
+                                    "MeterViewsCriteria"
+                                )) {
+                                    conditionsWerePassed = false;
+                                }
+                            } else {
+                                if (meterArticleViews[additionaData.meterId]) {
+                                    meterArticleCount = meterArticleViews[additionaData.meterId]['_' + articleCount];
+
+                                    if (!CnnXt.Utils.JSEvaluate(
+                                        meterArticleCount,
+                                        criteria.Qualifier,
+                                        criteria.Val,
+                                        "MeterViewsCriteria"
+                                    )) {
+                                        conditionsWerePassed = false;
+                                    }
+                                } else {
+                                    conditionsWerePassed = false;
+                                }
+                            }
+                        }
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    });
+                } else {
+                    conditionsWerePassed = false;
+                }
+            }
+
+            if (entity.ConversationViewsCriteria && conditionsWerePassed) {
+                var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+                var articleCount = CnnXt.Common.ConvoArticleCountObj.article_count;
+                var articleCookie = CnnXt.Storage.GetCookie(cookieName);
+
+                if (articleCookie) {
+                    entity.ConversationViewsCriteria.forEach(function (criteria) {
+                        if (conditionsWerePassed) {
+                            LOGGER.debug(NAME, fnName, "Checking ConversationViewsCriteria", criteria);
+                            var convoArticleCount;
+
+                            var meterArticleViews = JSON.parse(articleCookie);
+
+                            if (_.isEmpty(meterArticleViews)) {
+                                convoArticleCount = 0;
+                                if (!CnnXt.Utils.JSEvaluate(
+                                    convoArticleCount,
+                                    criteria.Qualifier,
+                                    criteria.Val,
+                                    "MeterViewsCriteria"
+                                )) {
+                                    conditionsWerePassed = false;
+                                }
+                            } else {
+                                if (meterArticleViews[additionaData.meterId]) {
+                                    var viewsCookieConvoId = meterArticleViews[additionaData.meterId][additionaData.conversationId];
+
+                                    if (viewsCookieConvoId) {
+                                        convoArticleCount = viewsCookieConvoId[articleCount];
+                                        if (!CnnXt.Utils.JSEvaluate(
+                                            convoArticleCount,
+                                            criteria.Qualifier,
+                                            criteria.Val,
+                                            "ConversationViewsCriteria"
+                                        )) {
+                                            conditionsWerePassed = false;
+                                        }
+                                    } else {
+                                        conditionsWerePassed = false;
+                                    }
+                                } else {
+                                    conditionsWerePassed = false;
+                                }
+                            }
+                        }
+                        LOGGER.debug(NAME, fnName, 'Criteria was ' + (conditionsWerePassed ? '' : 'not') + ' passed', criteria);
+                    });
+                } else {
+                    conditionsWerePassed = false;
+                }
+            }
+
+            return conditionsWerePassed;
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return false;
+        }
+    }
+
+    var resolvePromiseQualifiers = function (entity, timeout) {
+        var fnName = 'resolvePromiseQualifier';
+        var promiseCiteriaResult = $.Deferred();
+        try {
+            if (entity.PromiseCriteria) {
+
+                var promises = [];
+
+                entity.PromiseCriteria.forEach(function (criteria) {
+                    promises.push(eval(criteria.Name));
+                });
+
+                LOGGER.debug(NAME, fnName, 'Setup "Q all" for promise criterias');
+
+                var timerId = null;
+                if (timeout) {
+                    timerId = setTimeout(function () {
+                        LOGGER.debug(NAME, fnName, 'Criterias rejected on timeout');
+                        promiseCiteriaResult.reject();
+                    }, timeout);
+                }
+
+                $.when.apply($, promises).then(function () {
+                    LOGGER.debug(NAME, fnName, '"Q all" results', arguments);
+                   
+                    var resolvedPromises = arguments;
+
+                    if (!arguments.length) {
+                        arguments = [null];
+                    }
+
+                    var allCriteriasPassed = Array.prototype.every.call(entity.PromiseCriteria, function (criteria, index) {
+                        var promiseResult = resolvedPromises[index],
+                            criteriaValue = criteria.Value;
+
+                        if (!CnnXt.Utils.JSEvaluate(
+                            promiseResult,
+                            criteria.Qualifier,
+                            criteriaValue,
+                            "Promise"
+                        )) {
+                            LOGGER.debug(NAME, fnName, 'Criteria ' + criteria.Name + ' not passed');
+
+                            if (timerId) {
+                                clearTimeout(timerId);
+                            }
+
+                            promiseCiteriaResult.reject();
+                            return false;
+                        }
+
+                        return true;
+                    });
+
+                    if (allCriteriasPassed) {
+                        LOGGER.debug(NAME, fnName, 'All criterias passed');
+                        if (timerId) {
+                            clearTimeout(timerId);
+                        }
+                        promiseCiteriaResult.resolve();
+                    }
+                    
+                },
+                function () {
+                    LOGGER.debug(NAME, fnName, 'Criteria rejected');
+                    if (timerId) {
+                        clearTimeout(timerId);
+                    }
+                    promiseCiteriaResult.reject();
+                });
+            } else {
+                promiseCiteriaResult.resolve();
+            }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            promiseCiteriaResult.reject();
+        }
+
+        return promiseCiteriaResult.promise();
+    }
+
+    var handleDebugDetails = function () {
+        var fnName = "handleDebugDetails";
+
+
+        try {
+            // append debug css
+            var cssLink = $("<link>");
+            $("head").append(cssLink); //IE hack: append before setting href
+
+            cssLink.attr({
+                rel: "stylesheet",
+                type: "text/css",
+                href: 'https://mg2assetsdev.blob.core.windows.net/connext/assets/connext-debug-panels.min.css'
+            });
+
+            //creates and appends debug details html.
+            var html = '<div class="debug_details opened" style="left: 0;"><div class="debug_details_icon">&nbsp;</div><div class="debug_details_content"><h4>Debug Details</h4><ul>' +
+                '<li class="debug_details_header hide_on_mobile"><label>Meter Level: <strong id="ddMeterLevel">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Meter Set: <strong id="ddMeterSet">...</strong></label><label>Campaign: <strong id="ddCampaign">...</strong></label><label>Conversation: <strong id="ddCurrentConversation">...</strong></label><label>Article Views: <strong id="ddCurrentConversationArticleViews">...</strong></label><label>Articles Left: <strong id="ddCurrentConversationArticleLeft">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>View Time: <strong id="ddViewTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Current Zip: <strong id="ddZipCode">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Auth Time: <strong id="ddAuthTime">...</strong></label><label>Processing Time: <strong id="ddProcessingTime">...</strong></label><label>Total Time: <strong id="ddTotalProcessingTime">...</strong></label></li><li class="debug_details_header hide_on_mobile"><label>Note: <strong id="ddNote">...</strong></label></li><li class="debug_details_header hide_on_mobile"><div id="ConnextCustomConfigurationDiv"><label for="ConnextSiteCode">Site code: </label><input type="text" id="ConnextSiteCode"><label for="ConnextConfigCode">Config code: </label><input type="text" id="ConnextConfigCode"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomConfiguration">Set configuration</a></div><label class="overlay_label check" for="ConnextCustomConfiguration">Use custom configuration: </label> <input type="checkbox" id="ConnextCustomConfiguration"><label class="overlay_label check" for="ConnextCustomConfiguration">Unique Articles Count: </label> <input type="checkbox" id="uniqueArticles"></li>' +
+                '<li class="debug_details_header" > <label class="overlay_label check">AnonymousId: </label> <input type="text" id="connext_anonymousId" style="\r\n    width: 47px; */\r\n    padding:;\r\n    padding: 5px 1px;\r\n"><a href="#" class="more highlight margin_top_15" id="connext_anonymousIdApplyBtn" style="\r\n    padding: 4px 13px;\r\n    width: 35px;\r\n    margin-left: 10px;\r\n    display: inline;\r\n">Set</a></li>' +
+                '<li class="debug_details_header hide_on_mobile"><label for="ConnextCustomTimeChk" class="overlay_label check">Custom Time: </label> <input type="checkbox" id="ConnextCustomTimeChk"><div id="ConnextCustomTimeDiv"><input type="text" id="ConnextCustomTimeTxt" placeholder="MM/DD/YYYY" value="" name="name" class="text_input hint"><a href="#" class="more highlight margin_top_15" id="ConnextSetCustomTimeBtn">Set</a></div></li><li class="debug_details_header hide_on_mobile"><a href="#" class="more highlight margin_top_15" id="connextClearAllData">Clear All Data</a></li></ul></div></div>';
+            $("body").append(html);
+
+            $("#ConnextSetCustomConfiguration").on("click", saveConfiguration);
+
+            //handles when a user clicks the hide/show icon.
+            $(".debug_details_icon").on("click", handleDebugDetailsDisplayClick);
+
+            //registers 'clearAllData' button click event.
+            $("#connextClearAllData").on("click", clearAllSettings);
+
+            //handle custom time section (call this before we setup event listeners for the time checkbox so we set initial values correctly.
+            handleCustomTime();
+            handleCustomConfiguration();
+
+            if ($.jStorage.get("uniqueArticles")) {
+                $("#uniqueArticles").attr("checked", "checked");
+            }
+
+            $("#ConnextCustomConfiguration").on("change", function () {
+                var $this = $(this);
+
+                if ($this.prop("checked")) {
+                    $("#ConnextCustomConfigurationDiv").show();
+                }
+
+                else {
+                    $("#ConnextCustomConfigurationDiv").hide();
+                    CnnXt.Storage.SetIsCustomConfiguration(false);
+                }
+            });
+
+            //event listener when checkbox is clicked.
+            $("#ConnextCustomTimeChk").on("change", function () {
+                var $this = $(this);
+                if ($this.prop("checked")) {
+                    $("#ConnextCustomTimeDiv").show();
+                    //set custom time
+                } else {
+                    //remove custom time.
+                    $("#ConnextCustomTimeDiv").hide();
+                    $.jStorage.deleteKey("CustomTime");
+                }
+            });
+
+            $("#uniqueArticles").on("change", function () {
+                var $this = $(this);
+                $.jStorage.set("uniqueArticles", $this.prop("checked"));
+            });
+
+            //event listener when 'Set' button is clicked.
+            $("#ConnextSetCustomTimeBtn").on("click", function (e) {
+                e.preventDefault();
+                $.jStorage.set("CustomTime", $("#ConnextCustomTimeTxt").val());
+            });
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    //#endregion FUNCTIONS
-
-    //#region EVENT LISTENERS
-
-
-    //#endregion EVENT LISTENERS
-
-
-    //#region HELPERS
-
     var handleDebugDetailsDisplayClick = function (e) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "handleDebugDetailsDisplayClick";
+
         try {
             e.preventDefault();
             //get debug details div
             var $panel = $(this).parent("div");
             $panel.toggleClass("opened");
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var clearAllSettings = function (e) {
-        /// <summary>This is mainly used when debugging so we can clear all local storage and cookies in between test.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "clearAllSettings";
+
         try {
             e.preventDefault();
             LOGGER.debug(NAME, fnName, "clearAllSettings");
             if (CnnXt.Storage.GetLocalConfiguration()) {
-                CnnXt.API.DeleteViewsByUserId();
+                CnnXt.API.ServerStorageDeleteViewsByUserId();
                 CnnXt.API.ClearServerCache();
-                CnnXt.Storage.ResetConversationViews(CnnXt.Storage.GetCurrentConverstaion(), CnnXt.GetOptions().configSettings.UseParentDomain);
+                CnnXt.Storage.ResetConversationViews(CnnXt.Storage.GetCurrentConversation(), Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
                 CnnXt.Storage.SetRegistrationType({});
                 CnnXt.Storage.ClearConfigSettings();
             }
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var handleCustomConfiguration = function () {
         if (CnnXt.Storage.GetIsCustomConfiguration()) {
             $("#ConnextCustomConfigurationDiv").show();
-        }
-        else {
+        } else {
             $("#ConnextCustomConfigurationDiv").hide();
         }
     }
 
     var handleCustomTime = function () {
-        /// <summary>This handles initial custom time settings. Any changes are handled in event listeners set in the above handleDebugDetails function.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "handleCustomTime";
-        try {
-            //LOGGER.debug(NAME, fnName);
 
+        try {
             if ($.jStorage.get("CustomTime")) {
                 $("#ConnextCustomTimeChk").prop("checked", true);
                 $("#ConnextCustomTimeTxt").val($.jStorage.get("CustomTime"));
@@ -6144,9 +6792,8 @@ var ConnextUtils = function ($) {
                 $("#ConnextCustomTimeTxt").val(new Date());
             }
 
-
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -6161,8 +6808,7 @@ var ConnextUtils = function ($) {
         });
     }
 
-
-    var fillUserMeta = function() {
+    var fillUserMeta = function () {
         var find,
             userAgent;
 
@@ -6175,107 +6821,97 @@ var ConnextUtils = function ($) {
         // Main functions
         // --------------
 
-        device.ios = function() {
+        device.ios = function () {
             return device.iphone() || device.ipod() || device.ipad();
         };
 
-        device.iphone = function() {
+        device.iphone = function () {
             return !device.windows() && find("iphone");
         };
 
-        device.ipod = function() {
+        device.ipod = function () {
             return find("ipod");
         };
 
-        device.ipad = function() {
+        device.ipad = function () {
             return find("ipad");
         };
 
-        device.android = function() {
+        device.android = function () {
             return !device.windows() && find("android");
         };
 
-        device.androidPhone = function() {
+        device.androidPhone = function () {
             return device.android() && find("mobile");
         };
 
-        device.androidTablet = function() {
+        device.androidTablet = function () {
             return device.android() && !find("mobile");
         };
 
-        device.blackberry = function() {
+        device.blackberry = function () {
             return find("blackberry") || find("bb10") || find("rim");
         };
 
-        device.blackberryPhone = function() {
+        device.blackberryPhone = function () {
             return device.blackberry() && !find("tablet");
         };
 
-        device.blackberryTablet = function() {
+        device.blackberryTablet = function () {
             return device.blackberry() && find("tablet");
         };
 
-        device.windows = function() {
+        device.windows = function () {
             return find("windows");
         };
 
-        device.windowsPhone = function() {
+        device.windowsPhone = function () {
             return device.windows() && find("phone");
         };
 
-        device.windowsTablet = function() {
+        device.windowsTablet = function () {
             return device.windows() && (find("touch") && !device.windowsPhone());
         };
 
-        device.fxos = function() {
+        device.fxos = function () {
             return (find("(mobile;") || find("(tablet;")) && find("; rv:");
         };
 
-        device.fxosPhone = function() {
+        device.fxosPhone = function () {
             return device.fxos() && find("mobile");
         };
 
-        device.fxosTablet = function() {
+        device.fxosTablet = function () {
             return device.fxos() && find("tablet");
         };
 
-        device.meego = function() {
+        device.meego = function () {
             return find("meego");
         };
 
-        device.cordova = function() {
+        device.cordova = function () {
             return window.cordova && location.protocol === "file:";
         };
 
-        device.nodeWebkit = function() {
+        device.nodeWebkit = function () {
             return typeof window.process === "object";
         };
 
-        device.mobile = function() {
-            return device.androidPhone() ||
-                device.iphone() ||
-                device.ipod() ||
-                device.windowsPhone() ||
-                device.blackberryPhone() ||
-                device.fxosPhone() ||
-                device.meego();
+        device.mobile = function () {
+            return device.androidPhone() || device.iphone() || device.ipod() || device.windowsPhone() || device.blackberryPhone() || device.fxosPhone() || device.meego();
         };
 
-        device.tablet = function() {
-            return device.ipad() ||
-                device.androidTablet() ||
-                device.blackberryTablet() ||
-                device.windowsTablet() ||
-                device.fxosTablet();
+        device.tablet = function () {
+            return device.ipad() || device.androidTablet() || device.blackberryTablet() || device.windowsTablet() || device.fxosTablet();
         };
 
-        device.desktop = function() {
+        device.desktop = function () {
             return !device.tablet() && !device.mobile();
         };
 
 
         // Simple UA string search
-        find = function(needle) {
+        find = function (needle) {
             return userAgent.indexOf(needle) !== -1;
         };
 
@@ -6301,22 +6937,90 @@ var ConnextUtils = function ($) {
         }
         if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
             userMeta.Browser = "Opera";
-        } else if (navigator.userAgent.indexOf("Chrome") != -1) {
+        }
+        else if (navigator.userAgent.indexOf("Chrome") != -1) {
             userMeta.Browser = "Chrome";
-        } else if (navigator.userAgent.indexOf("Safari") != -1) {
+        }
+        else if (navigator.userAgent.indexOf("Safari") != -1) {
             userMeta.Browser = "Safari";
-        } else if (navigator.userAgent.indexOf("Firefox") != -1) {
+        }
+        else if (navigator.userAgent.indexOf("Firefox") != -1) {
             userMeta.Browser = "Firefox";
-        } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) //IF IE > 10
+        }
+        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) //IF IE > 10
         {
             userMeta.Browser = "IE";
-        } else {
+        }
+        else {
             userMeta.Browser = "unknown";
         }
         userMeta.URL = window.location.href;
-    };
+    }
 
+    var checkWriteDomainCookie = function (domain) {
+        var cookieKey = CnnXt.Common.StorageKeys.connext_check_domain_write,
+            result = false;
+
+        Cookies.set(cookieKey, 'Done!', { domain: domain });
+
+        result = !!Cookies.get(cookieKey);
+
+        Cookies.set(cookieKey, 'null', { domain: domain, expires: -1 });
+
+        return result;
+    }
+
+    var prepareValueToCompare = function (value) {
+        var fnName = 'prepareValueToCompare';
+
+        try {
+            if (_.isNumber(value) || _.isBoolean(value)) {
+                return value;
+            }
+
+            if (_.isString(value)) {
+                if (value === "''") {
+                    return '';
+                }
+
+                if (value.toLowerCase() === 'true') {
+                    return true;
+                }
+
+                if (value.toLowerCase() === 'false') {
+                    return false;
+                }
+
+                if (value.toLowerCase() === 'null') {
+                    return null;
+                }
+
+                if (value.toLowerCase() === 'undefined') {
+                    return undefined;
+                }
+
+                var number = Number(value);
+
+                if (_.isNaN(number)) {
+                    return value.toLowerCase();
+                } else {
+                    return number;
+                }
+            }
+
+            if (_.isObject(value)) {
+                return value.toString().toLowerCase();
+            }
+
+            return value;
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, 'value: ' + value, ex);
+        }
+    }
+    
     //#endregion HELPERS
+
     //HELPER FUNCTION FOR CIDR CALCULARION
     function ipToIp32(ip) {
         var ip32 = false;
@@ -6375,6 +7079,7 @@ var ConnextUtils = function ($) {
     return {
         init: function () {
             LOGGER = CnnXt.Logger;
+            LOGGER.debug(NAME, 'Initializing Utils Module...');
             fillUserMeta();
             String.prototype.replaceAt = function (index, replacement) {
                 return this.substr(0, index) + replacement + this.substr(index + replacement.length);
@@ -6389,12 +7094,11 @@ var ConnextUtils = function ($) {
                     //no custom time set, so return the current moment object.                  
                     return new Date();
                 }
-            } catch (e) {
-                console.error(NAME, "Now", e);
+            } catch (ex) {
+                LOGGER.exception(NAME, "Now", ex);
             }
         },
-        ProcessConfiguration:
-        function (data) { //typically Utils is reserverd for functions that can be used throughout the App, but we have ProcessConfiguration here because it requires alot of other functions and its cleaner to have that all in here instead of in the main 'CnnXt.Core' file.
+        ProcessConfiguration: function (data) { //typically Utils is reserverd for functions that can be used throughout the App, but we have ProcessConfiguration here because it requires alot of other functions and its cleaner to have that all in here instead of in the main 'CnnXt.Core' file.
             return processConfiguration(data);
         },
         MergeConfiguration: function (newConfig) {
@@ -6402,6 +7106,12 @@ var ConnextUtils = function ($) {
         },
         CreateDebugDetailPanel: function () {
             handleDebugDetails();
+        },
+        ResolveQualifiersFor: resolveQualifiersFor,
+        ResolvePromiseQualifiers: resolvePromiseQualifiers,
+        AddParameterToURL: function (_url, param) {
+            _url += (_url.split("?")[1] ? "&" : "?") + param;
+            return _url;
         },
         GetUrlParam: function (paramName) {
             var searchString = window.location.search.substring(1),
@@ -6458,7 +7168,7 @@ var ConnextUtils = function ($) {
             return result;
         },
         GetActivationUrlParams: function () {
-            return CnnXt.Utils.GetQueryStringParams(['email', 'subscriptionNumber', 'productCode', 'returnUrl']);
+            return CnnXt.Utils.GetQueryStringParams(['email', 'productCode', 'returnUrl', 'confirmationNumber', 'accountNumber', 'lastName']);
         },
         GetProductCode: function () {
             var options = CnnXt.GetOptions(),
@@ -6466,7 +7176,7 @@ var ConnextUtils = function ($) {
                 activationUrlParams = CnnXt.Utils.GetActivationUrlParams(),
                 productCode = null;
 
-                productCode = activationUrlParams.productCode;
+            productCode = activationUrlParams.productCode;
 
             if (!productCode) {
                 productCode = options.productCode;
@@ -6476,8 +7186,10 @@ var ConnextUtils = function ($) {
                 productCode = (configSettings) ? configSettings.DefaultProduct : null;
             }
 
+            LOGGER.debug(NAME, 'GetProductCode', 'Product code: ', productCode);
+
             return productCode;
-        },        
+        },
         ParseCustomDate: function (input, format) {
             format = format || "dd.mm.yyyy"; // some default format'
             if (!input) return new Date();
@@ -6511,34 +7223,33 @@ var ConnextUtils = function ($) {
                 var hidValue = $("#" + selector).val();
                 LOGGER.debug(NAME, "GetHiddenFormFieldValue", "hidValue", hidValue);
                 return hidValue; //$(selector).val();
-            } catch (e) {
-                console.error(NAME, "GetHiddenFormFieldValue", e);
+            } catch (ex) {
+                LOGGER.exception(NAME, "GetHiddenFormFieldValue", ex);
                 return ""; //we return empty string on error so any checks that call this function can still be evaluated.
             }
         },
         JSEvaluate: function (value1, qualifier, value2) { //this calls JS 'eval' to test a javascript condition. We take 2 values and a qualifier and return the result.
             try {
-                var label = (arguments[3])
-                    ? arguments[3] + " ---- "
-                    : ""; //set label to what we are evaluating (the label is the 4th argument passed in, if one is not passed in we set this to an empty string.  We do this here so we don't need to hanldle debugging tests for each type of evaluation.
-                var type = (arguments[4])
-                    ? arguments[4]
-                    : "string"; //5th argument is the type of values (for view counts we can't wrap them in a single quote...we default to string, unless passed in).
+                var label = (arguments[3]) ? arguments[3] + " ---- " : "";
+
+                var evalString = '';
+                var preparedValue1 = prepareValueToCompare(value1);
+                var preparedValue2 = prepareValueToCompare(value2);
                 var fixedqualifier = CnnXt.Utils.FixQualifier(qualifier);
 
-                var evalString = (type == "string")
-                    ? "'" + value1 + "'" + fixedqualifier + "'" + value2 + "'"
-                    : "" + value1 + "" + fixedqualifier + "" + value2 + "";
-                //LOGGER.debug(NAME, 'JSEvaluate', 'evalString', evalString);
+                evalString += (_.isString(preparedValue1)) ? "'" + preparedValue1 + "'" : preparedValue1;
+                evalString += fixedqualifier;
+                evalString += (_.isString(preparedValue2)) ? "'" + preparedValue2 + "'" : preparedValue2;
+
                 if (eval(evalString)) {
-                    LOGGER.debug(NAME, "JSEvalute --- <<<<< " + evalString, " >>>>> ---- PASSES");
+                    LOGGER.debug(NAME, "JSEvaluate --- <<<<< " + evalString, " >>>>> ---- PASSES");
                     return true;
                 } else {
-                    LOGGER.debug(NAME, label + "JSEvalute --- <<<<< " + evalString, " >>>>> ---- FAILS");
+                    LOGGER.debug(NAME, label + "JSEvaluate --- <<<<< " + evalString, " >>>>> ---- FAILS");
                     return false;
                 }
-            } catch (e) {
-                LOGGER.warn(NAME, "JSEvaluate", e);
+            } catch (ex) {
+                LOGGER.exception(NAME, "JSEvaluate", ex);
                 return false; //if there is an error we return false since we don't know the true determination of this evaluation.
             }
 
@@ -6548,16 +7259,16 @@ var ConnextUtils = function ($) {
         },
         FixQualifier: function (qualifier) {
             try {
-                //LOGGER.debug(NAME, fnName);
                 var fixedQualifier = CnnXt.Common.QualifierMap[qualifier];
+
                 if (fixedQualifier) {
                     return fixedQualifier;
                 } else {
                     return qualifier; //we don't have a fix for this qualifier, so just return the original.
                 }
 
-            } catch (e) {
-                console.error(NAME, null, "EXCEPTION", e);
+            } catch (ex) {
+                LOGGER.exception(NAME, 'FixQualifier', ex);
                 return qualifier; //if we fail, return original qualifier.
             }
         },
@@ -6577,14 +7288,12 @@ var ConnextUtils = function ($) {
                 $input.val(localStorage._matherAnonId);
             }
 
-            $bttn.on('click',
-                function () {
-                    var id = $input.val();
-                    if (id) {
-                        localStorage._matherAnonId = id;
-                    }
-                });
-
+            $bttn.on('click', function () {
+                var id = $input.val();
+                if (id) {
+                    localStorage._matherAnonId = id;
+                }
+            });
         },
         getParam: function (paramName) {
             //returns value of param if it exists, if not we return null.
@@ -6630,16 +7339,11 @@ var ConnextUtils = function ($) {
             return randomString;
         },
         getScreenSize: function () {
-
             var screenWidth = $(window).width();
-            //var screenHeight = $(window).height();
 
             if (window.screen) {
                 screenWidth = window.screen.width;
-                //screenHeight = window.screen.height;
             }
-
-            //return Math.min(screenWidth, screenHeight);
 
             return screenWidth;
         },
@@ -6683,23 +7387,37 @@ var ConnextUtils = function ($) {
         },
         GetCookieName: function (name) {
             var config = CnnXt.Storage.GetLocalConfiguration();
+
+            if (!config) {
+                return name;
+            }
+
             name = name + "_" +
                 config.Site.SiteCode.toUpperCase() +
                 "_" +
                 config.Settings.Code.toUpperCase() +
                 "_" +
                 CnnXt.GetOptions().environment.toUpperCase();
+
             if (!config.Settings.UseParentDomain) {
                 name = 'sub_' + name;
             }
+
             return name;
         },
         GetViewedArticlesCookiesOLDName: function () {
             var config = CnnXt.Storage.GetLocalConfiguration();
-            var name = CnnXt.Common.StorageKeys.connext_viewstructure;
-            if (!config.Settings.UseParentDomain) {
+
+            var name = CnnXt.Common.StorageKeys.viewedArticles
+                + "_site=" + config.Site.SiteCode
+                + "_environment=" + CnnXt.GetOptions().environment
+                + "_config=" + config.Settings.Code
+                + "_conversation=" + conversationId;
+
+            if (config.Settings.UseParentDomain == invert) {
                 name = 'sub_' + name;
             }
+
             return name;
         },
         GetLocalStorageNamePrefix: function () {
@@ -6715,6 +7433,15 @@ var ConnextUtils = function ($) {
                 name += "_" + CnnXt.GetOptions().settingsKey;
             }
             return name;
+        },
+        GetCookieNamePostfix: function () {
+            var postfix = '_' +
+                CnnXt.GetOptions().siteCode +
+                '_' +
+                CnnXt.GetOptions().configCode +
+                '_' +
+                CnnXt.GetOptions().environment;
+            return postfix;
         },
         AddParameterToURL: function (url, paramName, param) {
             var segment = paramName + '=' + param;
@@ -6755,10 +7482,10 @@ var ConnextUtils = function ($) {
             return returnUrl;
         },
         getUrlParam: function (urlParam) {
-
             var paramValue = "";
             var url = document.location.search.substr(1);
             var paramArray = url.split("&");
+
             paramArray.every(function (elem) {
                 var arr = elem.split("=");
                 if (arr[0] == urlParam) {
@@ -6768,6 +7495,7 @@ var ConnextUtils = function ($) {
                     return true;
                 }
             });
+
             return paramValue;
         },
         AddQueryParamsToAllLinks: function ($html) {
@@ -6783,7 +7511,6 @@ var ConnextUtils = function ($) {
             });
         },
         getSubdomains: function () {
-
             var array = document.location.origin.split(".");
             //remove domain name .com
             array.pop();
@@ -6802,7 +7529,6 @@ var ConnextUtils = function ($) {
             return array;
         },
         getMetaTagsWithKeywords: function () {
-
             return $("meta[name=keywords]");
         },
         detectAdBlock: function () {
@@ -6812,6 +7538,18 @@ var ConnextUtils = function ($) {
             if (testAd.offsetHeight === 0) {
                 adBlockEnabled = true;
             }
+
+            var testImg = document.getElementById("06db9294");
+            if (testImg.offsetHeight === 0) {
+                adBlockEnabled = true;
+            }
+
+            var testScript = document.getElementById("295f89b1");
+            if (testScript.className !== "adstestloaded") {
+                adBlockEnabled = true;
+            }
+
+            LOGGER.debug(NAME, 'detectAdBlock', 'detected: ', adBlockEnabled);
 
             return adBlockEnabled;
         },
@@ -6834,7 +7572,6 @@ var ConnextUtils = function ($) {
             }
 
             return decodeURIComponent(results[2].replace(/\+/g, " "));
-
         },
         GetUserMeta: function () {
             return userMeta;
@@ -6876,23 +7613,20 @@ var ConnextUtils = function ($) {
             localStorage.ConnextIP = ip;
             IP = ip;
         },
-
         GetElementHTML: function (element) {
             return $('<div>').append($(element).clone()).html();
         },
-
         ShapeUserData: function (data) {
-            if (!data)
-                return {};
-            if (data.DigitalAccess && _.isString(data.DigitalAccess.AccessLevel)){
+            if (data && data.DigitalAccess && data.DigitalAccess.AccessLevel && _.isString(data.DigitalAccess.AccessLevel)) {
                 data.DigitalAccess.AccessLevel = {
                     IsPremium: data.DigitalAccess.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Premium,
                     IsUpgrade: data.DigitalAccess.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Upgrade,
                     IsPurchase: data.DigitalAccess.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Purchase
                 }
             }
+
             if (data.EncryptedCustomerRegistrationId) {
-                data.IgmRegID = EncryptedCustomerRegistrationId;
+                data.IgmRegID = data.EncryptedCustomerRegistrationId;
             }
 
             if (data.CookieContent && _.isArray(data.CookieContent)) {
@@ -6905,14 +7639,121 @@ var ConnextUtils = function ($) {
                 if (igmRegIdCookie) {
                     data.IgmRegID = igmRegIdCookie.Content;
                 }
+
+                var igmAuthCookie = _.findWhere(data.CookieContent, { Name: "igmAuth" });
+                if (igmAuthCookie) {
+                    data.IgmAuth = igmAuthCookie.Content;
+                }
             }
 
             return data;
+        },
+        GetUserAuthData: function () {
+            var fnName = 'GetUserAuthData';
+
+            try {
+                var userData = CnnXt.Storage.GetUserData(),
+                    authData = {};
+
+                var customRegId = (userData) ? userData.MasterId : null;
+
+                if (customRegId) {
+                    authData = {
+                        CustomRegId: customRegId,
+                        MasterId: customRegId,
+                        Mode: 0
+                    }
+
+                    return authData;
+                }
+
+                var customRegId = (userData) ? userData.IgmRegID : null;
+
+                if (customRegId) {
+                    authData = {
+                        CustomRegId: customRegId,
+                        MasterId: customRegId,
+                        Mode: 1
+                    }
+
+                    return authData;
+                }
+
+                return authData;
+            } catch (ex){
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         GetTimeByType: function (value, type) {
             var now = moment(),
                 endDate = new Date(value);
             return moment(endDate).diff(now, CnnXt.Common.TimeTypeMap[type]);
+        },
+        AddTimeInervalToDate: function (value, type) {
+            var milliseconds = 0;
+
+            value = parseInt(value);
+
+            if (!value) {
+                return milliseconds;
+            }
+
+            switch (type) {
+                case 's': milliseconds = value * 1000;
+                    break;
+                case 'm': milliseconds = value * 60 * 1000;
+                    break;
+                case 'h': milliseconds = value * 60 * 60 * 1000;
+                    break;
+                case 'd': milliseconds = value * 24 * 60 * 60 * 1000;
+                    break;
+                case 'w': milliseconds = value * 7 * 24 * 60 * 60 * 1000;
+                    break;
+                default: milliseconds = 0;
+            }
+
+            var now = new Date();
+            var futureDate = new Date(now.valueOf());
+
+            futureDate.setMilliseconds(futureDate.getMilliseconds() + milliseconds);
+
+            return futureDate;
+        },
+        CalculateDomain: function (isRoot) {
+            var domain = null,
+                host = window.location.host;
+
+            if (!~host.indexOf('localhost')) {
+                if (isRoot) {
+                    var segments = host.split('.'),
+                        positions = 2;
+
+                    do {
+                        domain = '';
+
+                        for (var i = positions; i > 0; i--) {
+                            domain += '.' + segments[segments.length - i];
+                        }
+
+                        positions++;
+
+                    } while (!checkWriteDomainCookie(domain));
+
+                } else {
+                    domain = window.location.host;
+                }
+            } else {
+                domain = 'localhost';
+            }
+
+            return domain;
+        },
+        GetSiteConfigEnvString: function () {
+            var options = CnnXt.GetOptions(),
+                siteCode = options.siteCode,
+                configCode = options.configCode,
+                environment = options.environment;
+            return '_' + siteCode + '_' + configCode + '_' + environment;
         },
         IPWithinRangeCIDR: function (ip, cidr) {
             var IPsRangeByCIDR = CnnXt.Utils.GetIPsRangeByCIDR(cidr);
@@ -6965,6 +7806,49 @@ var ConnextUtils = function ($) {
             }
 
             return ips;
+        },
+        GetDynamicMeterIdByKey: function (dynamicMeterKey) {
+
+            if ((typeof (dynamicMeterKey)).toLowerCase() != 'string') {
+                return dynamicMeterKey;
+            }
+
+            switch (dynamicMeterKey.toLowerCase()) {
+                case 'free':
+                    return '1';
+                case 'metered':
+                    return '2';
+                case 'premium':
+                    return '3';
+                default:
+                    return dynamicMeterKey;
+            }
+        },
+        GetErrorMessageFromAPIResponse: function (response, defaultMessage) {
+          var fnName = "GetErrorMessageFromAPIResponse";
+          try {
+            if (!response || !response.Message)
+              return defaultMessage;
+            var parsedErrorMessage = $.parseJSON(response.Message);
+            var errorMessage = defaultMessage;
+            if ($.isArray(parsedErrorMessage.Errors)) {
+              errorMessage = '';
+              parsedErrorMessage.Errors.forEach(function (msg) {
+                if (_.isString(msg)) {
+                  errorMessage += msg + ' ';
+                } else {
+                  errorMessage += msg.Message + ' ';
+                }
+              });
+            } else {
+              errorMessage = parsedErrorMessage.Message;
+            }
+            return errorMessage;
+          }
+          catch (ex) {
+            LOGGER.debug(NAME, fnName, "can't get errorMessage from API response", response);
+            return defaultMessage;
+          }
         }
     };
 
@@ -6973,10 +7857,10 @@ var ConnextUtils = function ($) {
 var ConnextStorage = function ($) {
 
     //#region GLOBALS
-    var name = "STORAGE";
+    var NAME = "Storage";
 
     //create local reference to CnnXt.Logger
-    var logger;
+    var LOGGER;
 
     var METER;
 
@@ -6985,84 +7869,99 @@ var ConnextStorage = function ($) {
     //#region LOCAL STORAGE FUNCTIONS
 
     var getLocalStorage = function (key) {
-        // <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "getLocalStorage";
+
         try {
             var storageKey = key;
+
             if (CnnXt.Common.StorageKeys[key]) {
                 storageKey = CnnXt.Common.StorageKeys[key];
             }
+
             var fullKey = CnnXt.Utils.GetLocalStorageNamePrefix() + storageKey;
+
             return $.jStorage.get(fullKey);
-        } catch (e) {
-            console.log(name, fnName, 'EXCEPTION', e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+
             if (key == 'configuration') {
-                CnnXt.Api.meta.storageException = e;
+                CnnXt.Api.meta.storageException = ex;
             }
         }
     };
 
     var setLocalStorage = function (key, val) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "setLocalStorage";
+
         try {
             var storageKey = key;
+
             if (CnnXt.Common.StorageKeys[key]) {
                 storageKey = CnnXt.Common.StorageKeys[key];
             }
+
             var fullKey = CnnXt.Utils.GetLocalStorageNamePrefix() + storageKey;
+
             return $.jStorage.set(fullKey, val);
-        } catch (e) {
-            console.log(name, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var removeLocalStorage = function (key) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "removeLocalStorage";
+
         try {
             var storageKey = key;
+
             if (CnnXt.Common.StorageKeys[key]) {
                 storageKey = CnnXt.Common.StorageKeys[key];
             }
+
             var fullKey = CnnXt.Utils.GetLocalStorageNamePrefix() + storageKey;
+
             return $.jStorage.deleteKey(fullKey);
-        } catch (e) {
-            console.log(name, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var getCookie = function (key) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "getCookie";
+
         try {
-            logger.debug(name, fnName, key, "CnnXt.Common.StorageKeys[key] || key", CnnXt.Common.StorageKeys[key] || key);
-            return Cookies.get(CnnXt.Common.StorageKeys[key] || key);
-        } catch (e) {
-            console.log(name, fnName, "EXCEPTION", e);
+            var cookieKey = CnnXt.Common.StorageKeys[key] || key;
+
+            LOGGER.debug(NAME, fnName, 'cookieKey', cookieKey);
+
+            return Cookies.get(cookieKey);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
+
     var storageRegistry = [];
 
     // ask local storage every second 
     var listenStorageChange = function (storageName, callback) {
-        storageRegistry[storageName] = localStorage.getItem(storageName);
-        setInterval(function () {
-            if (localStorage.getItem(storageName) != storageRegistry[storageName]) {
-                // update registry so we dont get triggered again
-                storageRegistry[storageName] = localStorage.getItem(storageName);
-                return callback();
-            }
-        },
-            1000);
+        var fnName = 'listenStorageChange';
+
+        try {
+            storageRegistry[storageName] = localStorage.getItem(storageName);
+            setInterval(function () {
+                try {
+                    if (localStorage.getItem(storageName) != storageRegistry[storageName]) {
+                        // update registry so we dont get triggered again
+                        storageRegistry[storageName] = localStorage.getItem(storageName);
+                        return callback();
+                    }
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
+                }
+            }, 1000);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
     }
 
     var addListners = function () {
@@ -7072,12 +7971,6 @@ var ConnextStorage = function ($) {
                 CnnXt.Storage.SetUserZipCodes(null);
                 if (CnnXt.Activation.IsActivationFlowRunning()) {
                     CnnXt.User.CheckAccess()
-                        .done(function (data) {
-                            LOGGER.debug(NAME, fnName, "User.CheckAccess.Done", data);
-                        })
-                        .fail(function () {
-                            LOGGER.debug(NAME, fnName, "User.CheckAccess.Fail");
-                        })
                         .always(function () {
                             CnnXt.Activation.Run({ runAfterSuccessfulLogin: true });
                         });
@@ -7088,322 +7981,417 @@ var ConnextStorage = function ($) {
     };
 
     var setCookie = function (key, data, expiration, useWholeDomain) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = 'setCookie';
+
+        LOGGER.debug(NAME, fnName, arguments);
+
         try {
-            logger.debug(name, fnName);
-            var domains = window.location.host.split('.');
-            var curdomain = window.location.host;
-            if (curdomain.indexOf('localhost') > -1) {
-                curdomain = 'localhost';
-            }
-            if (!useWholeDomain && domains.length >= 2) {
-                curdomain = '.' + domains[domains.length - 2] + '.' + domains[domains.length - 1];
-            }
+            var isRootDomain = !useWholeDomain;
+            var curdomain = CnnXt.Storage.GetDomain(isRootDomain);
+
             if (expiration) {
                 //will be an expiration. 
-                logger.debug(name, fnName, 'HasExpiration', 'key', key, 'expiration', expiration);
+                LOGGER.debug(NAME, fnName, 'HasExpiration', 'key', key, 'expiration', expiration);
+
                 return Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { expires: expiration, domain: curdomain });
             } else {
                 //this is a session cookie.
                 return Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { domain: curdomain });
             }
-        } catch (e) {
-            console.log(name, fnName, 'EXCEPTION', e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    var removeCookie = function (key, useWholeDomain) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
+    var removeCookie = function (key) {
         var fnName = "removeCookie";
+
         try {
-            logger.debug(name, fnName);
+            LOGGER.debug(NAME, fnName, key);
 
-            var domains = window.location.host.split(".");
-            var curdomain = window.location.host;
-            if (curdomain.indexOf('localhost') > -1) {
-                curdomain = 'localhost';
-            }
-            if (!useWholeDomain && domains.length >= 2) {
-                curdomain = '.' + domains[domains.length - 2] + '.' + domains[domains.length - 1];
-            }
-            //we don't have a 3rd argument, so don't use one (this means this is a session cookie).
-            return Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: curdomain, expires: -1 });
+            var domain = CnnXt.Storage.GetDomain(),
+                rootDomain = CnnXt.Storage.GetDomain(true);
 
-        } catch (e) {
-            console.log(name, fnName, "EXCEPTION", e);
+            Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: domain, expires: -1 });
+            Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: rootDomain, expires: -1 });
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
+    var incrementView = function (conversation) {
+        var fnName = 'incrementView';
 
-    var getCookies = function () {
-        var pairs = document.cookie.split(";");
-        var cookies = {};
-        for (var i = 0; i < pairs.length; i++) {
-            var pair = pairs[i].split("=");
-            cookies[pair[0]] = unescape(pair[1]);
-        }
-        return cookies;
-    };
+        try {
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
 
+            var activeConvoId = CnnXt.Common.MeteredArticleCountObj.active_convo_id,
+                articleCount = CnnXt.Common.ConvoArticleCountObj.article_count,
+                deviceArticleCount = CnnXt.Common.ConvoArticleCountObj.device_article_count,
+                startDate = CnnXt.Common.ConvoArticleCountObj.start_date;
 
-    //#region VIEWS INNER FUNCTIONS
-    var incrementView = function (convId) {
-        var userCurDomain = !CnnXt.GetOptions().configSettings.UseParentDomain;
-        var cookieName = CnnXt.Utils.GetViewedArticlesCookiesName();
-        var articleCookie = getCookie(cookieName);
-        if (articleCookie) {
-            try {
-                var parsedViews = JSON.parse(articleCookie);
-                parsedViews[convId] = parsedViews[convId] ? parsedViews[convId] + 1 : 1;
-                parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] = parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] ?
-                    parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] + 1 : 1;
+            var articleCookie = getCookie(cookieName);
+
+            if (articleCookie) {
+                var parserViews = JSON.parse(articleCookie);
+                var cookieMeterViews = parserViews[METER.level];
+
+                if (cookieMeterViews) {
+                    var cookieConversation = cookieMeterViews[conversation.id];
+                    cookieMeterViews[activeConvoId] = conversation.id;
+                    cookieMeterViews['_' + articleCount] = cookieMeterViews['_' + articleCount] ? cookieMeterViews['_' + articleCount] + 1 : 1;
+                    cookieMeterViews['_' + deviceArticleCount] = cookieMeterViews['_' + deviceArticleCount] ? cookieMeterViews['_' + deviceArticleCount] + 1 : 1;
+
+                    if (cookieConversation) {
+                        cookieConversation[articleCount] = cookieConversation[articleCount] + 1;
+                        cookieConversation[deviceArticleCount] = cookieConversation[deviceArticleCount] + 1;
+                    } else {
+                        cookieMeterViews[conversation.id] = {};
+                        cookieMeterViews[conversation.id][articleCount] = 1;
+                        cookieMeterViews[conversation.id][deviceArticleCount] = 1;
+                        cookieMeterViews[conversation.id][startDate] = conversation.Props.Date.started;
+                    }
+                } else {
+                    parserViews[METER.level] = {};
+                    parserViews[METER.level]['_' + articleCount] = 1;
+                    parserViews[METER.level]['_' + deviceArticleCount] = 1;
+                    parserViews[METER.level][activeConvoId] = conversation.id;
+
+                    parserViews[METER.level][conversation.id] = {};
+                    parserViews[METER.level][conversation.id][articleCount] = 1;
+                    parserViews[METER.level][conversation.id][deviceArticleCount] = 1;
+                    parserViews[METER.level][conversation.id][startDate] = conversation.Props.Date.started;
+                }
 
                 removeCookie(cookieName);
-                setCookie(cookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.InfinityDate), userCurDomain);
-            } catch (ex) {
+                setCookie(cookieName, JSON.stringify(parserViews), new Date('9999-01-01'), useCurDomain);
+
+            } else {
+                var meteredViews = {},
+                    meteredViewsObj = meteredViews[METER.level] = {};
+
+                meteredViewsObj['_' + articleCount] = 1;
+                meteredViewsObj['_' + deviceArticleCount] = 1;
+                meteredViewsObj[activeConvoId] = conversation.id;
+
+                meteredViewsObj[conversation.id] = {};
+                meteredViewsObj[conversation.id][articleCount] = 1;
+                meteredViewsObj[conversation.id][deviceArticleCount] = 1;
+                meteredViewsObj[conversation.id][startDate] = conversation.Props.Date.started;
+
+                removeCookie(cookieName);
+                setCookie(cookieName, JSON.stringify(meteredViews), new Date('9999-01-01'), useCurDomain);
             }
-        } else {
-            var views = {};
-            views[convId] = 1;
-            removeCookie(cookieName);
-            setCookie(cookieName, JSON.stringify(views), new Date(CnnXt.Common.InfinityDate), userCurDomain);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
-    };
-
-    var checkViewsCookie = function () {
-        var data = getViewsData();
-        var parsedViews = data.parsedViews;
-        var deferred = $.Deferred();
-
-        if (!parsedViews) {
-            CnnXt.API.GetViewData()
-                .done(function (successData) {
-                    if (successData) {
-                        ////var viewData = successData.ViewData;
-                        //var views = JSON.parse(successData).filter(function (item) {
-                        //    return item.ViewCount;
-                        //})[0];
-                        //parserViews = {};
-                        //parserViews[views.Id] = views.ViewCount;
-                        //setCookie(data.cookieName,
-                        //    JSON.stringify(parserViews),
-                        //    new Date('9999-01-01'),
-                        //    data.userCurDomain);
-                        //var configuration = getLocalStorage("configuration");
-                        //var conversations = configuration.Campaign.Conversations;
-                        //for (key in conversations) {
-                        //    conversations[key].forEach(function (conversation) {
-                        //        if (conversation.id == views.Id) {
-                        //            conversation.Props.Date.started = views.StartDate;
-                        //        }
-                        //    });
-                        //}
-                        //CnnXt.Storage.SetLocalConfiguration(configuration);
-
-                        //================
-                        if (successData.AllowedIpSet) {
-                            CnnXt.Storage.SetWhitelistSetIdCookie({ Id: successData.AllowedIpSet.Id, Expiration: successData.AllowedIpSet.Expiration }, 
-                                new Date(successData.AllowedIpSet.Expiration));
-                        }
-                        parsedViews = {};
-                        var localConfig = Connext.Storage.GetLocalConfiguration();
-                        var configConversations = localConfig.Campaign.Conversations;
-                        for(meterLevelKey in CnnXt.Common.MeterLevels) {
-                            var meterLevel = CnnXt.Common.MeterLevels[meterLevelKey];
-                            if (successData[meterLevel] && successData[meterLevel].Conversations) {
-                                var conversations = successData[meterLevel].Conversations;
-                                conversations.forEach(function(conversation) {
-                                    if (conversation.Id && conversation.ViewCount) {
-                                        parsedViews[conversation.Id] = conversation.ViewCount;
-                                        parsedViews[conversation.Id + CnnXt.Common.StorageKeys.device_postfix] = conversation.DeviceViewCount;
-                                    }
-                                    if (configConversations && configConversations[meterLevel]) {
-                                        configConversations[meterLevel].forEach(function(configConversation) {
-                                            if (configConversation.id == conversation.Id) {
-                                                configConversation.Props.Date.started = conversation.StartDate;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                        localConfig.Campaign.Conversations = configConversations;
-                        setCookie(data.cookieName,
-                            JSON.stringify(parsedViews),
-                            new Date(CnnXt.Common.InfinityDate),
-                            data.userCurDomain);
-                        CnnXt.Storage.SetLocalConfiguration(localConfig);
-                    }
-                    deferred.resolve();
-                }).fail(function (error) {
-                    deferred.resolve();
-                    console.log(error.error());
-                });
-        } else {
-            deferred.resolve();
-        }
-        return deferred.promise();
     };
 
     var getViewsData = function () {
-        var userCurDomain = !CnnXt.GetOptions().configSettings.UseParentDomain;
-        var cookieName = CnnXt.Utils.GetViewedArticlesCookiesName();
-        var oldCookieName = CnnXt.Utils.GetViewedArticlesCookiesOLDName(); 
-        var parsedViews;
+        var fnName = 'getViewsData';
 
-        var articleCookie = getCookie(cookieName);
-        var oldCookie = getCookie(oldCookieName);
-        if (oldCookie) {
-            parsedViews = JSON.parse(oldCookie);
-            //expire old cookie in 2 month
-            setCookie(oldCookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.CookieExpireDate), userCurDomain);
+        try {
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+            var articleCookie = getCookie(cookieName);
+            var parserViews;
+            if (articleCookie) {
+                parserViews = JSON.parse(articleCookie);
+            }
+            var data = {
+                parserViews: parserViews,
+                cookieName: cookieName,
+                useCurDomain: useCurDomain
+            };
+            return data;
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
+    };
 
-        if (articleCookie || articleCookie == "{}") {
-            parsedViews = JSON.parse(articleCookie);
-        } else {
-            if (oldCookie) {
-                //copy data to new cookie
-                setCookie(cookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.InfinityDate), userCurDomain);
+    // var clearOldCookies = function () {
+    //     try {
+    //         if (!String.prototype.startsWith) {
+    //             String.prototype.startsWith = function (searchString, position) {
+    //                 position = position || 0;
+    //                 return this.indexOf(searchString, position) === position;
+    //             };
+    //         }
+    //         $.each(getCookies(), function (item) {
+    //             var str = item.toString();
+    //             if (str.startsWith(' '))
+    //             { str = str.trim(); }
+    //             str = decodeURIComponent(str);
+    //             if (str.startsWith('Connext_ViewedArticles') || str.startsWith('sub_Connext_ViewedArticles')) {
+    //                 Cookies.remove(str);
+    //                 var domainArr = location.host.split('.');
+    //                 var rootDomain = '.' + domainArr[(domainArr.length - 2)] + '.' + domainArr[(domainArr.length - 1)];
+    //                 Cookies.remove(str, { domain: rootDomain });
+    //             }
+    //         });
+    //     } catch (ex) {
+    //         LOGGER.exception(NAME, fnName, ex);
+    //     }
+    // }
+
+    var recalculateDynamicMeterArticleViewCount = function (dynamicMeter) {
+        var dynamicMeterViewCount = 0;
+        for (var key in dynamicMeter) {
+            if (/^(0|[1-9]\d*)$/.test(key) && dynamicMeter[key] != null && (typeof (dynamicMeter[key])).toLowerCase() == 'object') {
+                dynamicMeterViewCount += dynamicMeter[key][CnnXt.Common.ConvoArticleCountObj.article_count] ?
+                    dynamicMeter[key][CnnXt.Common.ConvoArticleCountObj.article_count] : 0;
             }
         }
 
+        return dynamicMeterViewCount;
+    }
 
-        var data = {
-            parsedViews: parsedViews,
-            cookieName: cookieName,
-            userCurDomain: userCurDomain
-        };
-        return data;
+    var mapServerStorageViewsToDynamicMeterViews = function (viewsFromStorage, actionData) {
+        var fnName = 'mapServerStorageViewsToDynamicMeterViews';
+        var dynamicMeterViews = {};
+
+        try {
+            dynamicMeterViews['_' + CnnXt.Common.ConvoArticleCountObj.article_count] = viewsFromStorage.ArticleCount;
+            dynamicMeterViews['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count] = viewsFromStorage.DeviceArticleCount;
+            dynamicMeterViews[CnnXt.Common.MeteredArticleCountObj.active_convo_id] = viewsFromStorage.ActiveConversationId;
+
+            if (viewsFromStorage.Conversations) {
+                viewsFromStorage.Conversations.forEach(function (conversation) {
+                    dynamicMeterViews[conversation.Id] = {};
+
+                    dynamicMeterViews[conversation.Id][CnnXt.Common.ConvoArticleCountObj.article_count] = conversation.ViewCount;
+                    dynamicMeterViews[conversation.Id][CnnXt.Common.ConvoArticleCountObj.device_article_count] = conversation.DeviceViewCount;
+                    dynamicMeterViews[conversation.Id][CnnXt.Common.ConvoArticleCountObj.start_date] = conversation.StartDate;
+
+                    if (conversation.Actions && actionData) {
+                        var repeatAfterKey = CnnXt.Common.TimeRepeatableActionsCS.repeat_after;
+                        var countKey = CnnXt.Common.TimeRepeatableActionsCS.count;
+                        actionData[conversation.Id] = {};
+                        conversation.Actions.forEach(function(action) {
+                            actionData[conversation.Id][action.Id] = {};
+                            actionData[conversation.Id][action.Id][repeatAfterKey] = action.RepeatAfter;
+                            actionData[conversation.Id][action.Id][countKey] = action.Count;
+                        });
+                    }
+                });
+            }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+        return dynamicMeterViews;
+    }
+
+    var processViewData = function (successData) {
+        var fnName = 'processViewData';
+
+        try {
+            var data = getViewsData();
+            if (successData.AllowedIpSet) {
+                CnnXt.Storage.SetWhitelistSetIdCookie({ Id: successData.AllowedIpSet.Id, Expiration: successData.AllowedIpSet.Expiration },
+                    new Date(successData.AllowedIpSet.Expiration));
+            }
+
+            var parserViews = {};
+            var actionData = {};
+
+            if (successData.DynamicMeterViews) {
+                for (var dynamicMeterKey in successData.DynamicMeterViews) {
+                    if (successData.DynamicMeterViews.hasOwnProperty(dynamicMeterKey)) {
+
+                        var dynamicMeterId = CnnXt.Utils.GetDynamicMeterIdByKey(dynamicMeterKey);
+
+                        if (successData.DynamicMeterViews[dynamicMeterKey]) {
+                            parserViews[dynamicMeterId] = mapServerStorageViewsToDynamicMeterViews(successData.DynamicMeterViews[dynamicMeterKey], actionData);
+                        }
+                    }
+                }
+            }
+
+            if (_.keys(actionData).length) {
+                var config = CnnXt.Storage.GetLocalConfiguration();
+                var useParentDomain = false;
+                var keyName = CnnXt.Common.StorageKeys.connext_time_repeatable_actions;
+                if (config && config.Settings) {
+                    useParentDomain = config.Settings.UseParentDomain;
+                }
+
+                if (useParentDomain) {
+	                keyName += CnnXt.Utils.GetCookieNamePostfix();
+	                setCookie(keyName, JSON.stringify(actionData), new Date('9999-01-01'), false);
+                } else {
+	                setLocalStorage(keyName, actionData);
+	            }
+            }
+
+            setCookie(data.cookieName,
+                JSON.stringify(parserViews),
+                new Date('9999-01-01'),
+                data.useCurDomain);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
+
+    var processLinkedDevicesViewData = function (successData) {
+        var fnName = 'processLinkedDevicesViewData';
+
+        try {
+            var data = getViewsData(),
+            parserViews = data.parserViews;
+
+            if (successData.DynamicMeterViews) {
+                for (var dynamicMeterKey in successData.DynamicMeterViews) {
+                    if (successData.DynamicMeterViews.hasOwnProperty(dynamicMeterKey)) {
+
+                        var dynamicMeterId = CnnXt.Utils.GetDynamicMeterIdByKey(dynamicMeterKey);
+
+                        if (successData.DynamicMeterViews[dynamicMeterKey]) {
+                            if (parserViews[dynamicMeterId]) {
+                                var dynamicMeter = parserViews[dynamicMeterId];
+                                var viewsFromStorage = successData.DynamicMeterViews[dynamicMeterKey];
+
+                                //recalculate article views per conversation
+                                if(viewsFromStorage.Conversations) {
+                                    viewsFromStorage.Conversations.forEach(function (conversation) {
+                                        if (dynamicMeter[conversation.Id]) {
+                                            var updatedViewCount = conversation.ViewCount - conversation.DeviceViewCount +
+                                                dynamicMeter[conversation.Id][CnnXt.Common.ConvoArticleCountObj.device_article_count];
+
+                                            dynamicMeter[conversation.Id][CnnXt.Common.ConvoArticleCountObj.article_count] =
+                                                updatedViewCount > 0 ? updatedViewCount : conversation.ViewCount;
+                                        } else {
+                                            dynamicMeter[conversation.Id] = {};
+                                            dynamicMeter[conversation.Id][CnnXt.Common.ConvoArticleCountObj.article_count] = conversation.ViewCount;
+                                            dynamicMeter[conversation.Id][CnnXt.Common.ConvoArticleCountObj.device_article_count] = conversation.DeviceViewCount;
+                                            dynamicMeter[conversation.Id][CnnXt.Common.ConvoArticleCountObj.start_date] = conversation.StartDate;
+                                        }
+                                    });
+                                }
+
+                                dynamicMeter['_' + CnnXt.Common.ConvoArticleCountObj.article_count] = recalculateDynamicMeterArticleViewCount(dynamicMeter);
+
+                            } else {
+                                parserViews[dynamicMeterId] = mapServerStorageViewsToDynamicMeterViews(successData.DynamicMeterViews[dynamicMeterKey]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            setCookie(data.cookieName,
+                JSON.stringify(parserViews),
+                new Date('9999-01-01'),
+                data.useCurDomain);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
+
+    var checkViewCookies = function () {
+        var fnName = 'checkViewCookies';
+
+        try {
+            var data = getViewsData();
+            var parserViews = data.parserViews;
+            var deferred = $.Deferred();
+
+            if (!parserViews) {
+                CnnXt.API.GetViewData()
+                    .done(function (successData) {
+                        if (successData) {
+                            processViewData(successData);
+                        }
+
+                        setUpdateArticleCountCookie();
+
+                        deferred.resolve();
+                    })
+                    .fail(function (error) {
+                        deferred.resolve();
+                    });
+            //} else if (getUpdateArticleCountCookie() == undefined) {
+            //    CnnXt.API.GetViewData()
+            //        .done(function (successData) {
+            //            if (successData) {
+            //                processLinkedDevicesViewData(successData);
+            //            }
+            //
+            //            setUpdateArticleCountCookie();
+            //
+            //            deferred.resolve();
+            //        })
+            //        .fail(function (error) {
+            //            deferred.resolve();
+            //        });
+            } else {
+                deferred.resolve();
+            }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+
+        return deferred.promise();
     };
+
+    var getUpdateArticleCountCookie = function () {
+        return getCookie(CnnXt.Common.StorageKeys.connext_updateArticleCount + CnnXt.Utils.GetCookieNamePostfix());
+    };
+
+    var setUpdateArticleCountCookie = function () {
+        var expire = new Date();
+        expire.setHours(expire.getHours() + CnnXt.GetOptions().ViewsUpdateFromServerPeriod);
+        return setCookie(CnnXt.Common.StorageKeys.connext_updateArticleCount + CnnXt.Utils.GetCookieNamePostfix(), 1, expire);
+    }
 
     var getArticleCookie = function (convId) {
-        var data = getViewsData();
-        var parsedViews = data.parsedViews;
-        for(key in parsedViews) {
-            if(key == convId){
-                return parsedViews[key];
+        var fnName = 'getArticleCookie';
+
+        try {
+            var data = getViewsData();
+            var parserViews = data.parserViews;
+            for (var meterLevelKey in parserViews) {
+                if (parserViews[meterLevelKey] != null && (typeof (parserViews[meterLevelKey])).toLowerCase() == 'object') {
+                    for (var key in parserViews[meterLevelKey]) {
+                        if (key == convId) {
+                            return parserViews[meterLevelKey][key];
+                        }
+                    }
+                }
             }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    var resetViews = function (convId, useRootDomain) {
-        var userCurDomain = !useRootDomain;
-        var cookieName = CnnXt.Utils.GetViewedArticlesCookiesName();
-        var articleCookie = getCookie(cookieName);
-        if (convId) {
-            if (articleCookie) {
-                try {
-                    var parsedViews = JSON.parse(articleCookie);
-                    parsedViews[convId] = 0;
-                    parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] = 0;
-                    removeCookie(cookieName);
-                    setCookie(cookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.InfinityDate), userCurDomain);
-                    var key = CnnXt.Common.StorageKeys.viewedArticles + "_" + convId;
-                    setLocalStorage(key, []);
-                } catch (ex) {
-                }
+    var getCookies = function () {
+        var fnName = 'getCookies';
+
+        try {
+            var pairs = document.cookie.split(";");
+            var cookies = {};
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split("=");
+                cookies[pair[0]] = unescape(pair[1]);
             }
-        } else {
+            return cookies;
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    };
+
+    var resetViews = function () {
+        var fnName = 'resetViews';
+
+        try {
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
             var empty = {};
-            removeCookie(cookieName, !userCurDomain);
-            setCookie(cookieName, JSON.stringify(empty), new Date(CnnXt.Common.InfinityDate), userCurDomain);
+            setCookie(cookieName, JSON.stringify(empty), new Date('9999-01-01'), useCurDomain);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
-
-
-    var updateViewedArticles = function (conversationId) {
-        var viewedArticles = CnnXt.Storage.GetViewedArticles(conversationId),
-            articleUrl = CnnXt.Utils.GetUrl(),
-            options = CnnXt.GetOptions(),
-            articleHash;
-        if (viewedArticles == null)
-            viewedArticles = [];
-        if (options.articlesCounter && options.articlesCounter.params && options.articlesCounter.params.length) {
-            var params = options.articlesCounter.params,
-                domain = location.hostname,
-                indicatorOfTheArticle = domain + "_";
-
-            params.forEach(function (param) {
-                var paramValue = CnnXt.Utils.getQueryParamByName(param);
-
-                if (paramValue) {
-                    indicatorOfTheArticle += (param + "=" + paramValue);
-                }
-            });
-
-            articleHash = MD5(indicatorOfTheArticle);
-        } else {
-            articleHash = MD5(articleUrl);
-        }
-        if (viewedArticles.indexOf(articleHash) > -1) {
-            if (!$.jStorage.get("uniqueArticles") && CnnXt.GetOptions().debug) {
-                incrementView(conversationId);
-            }
-        } else {
-            viewedArticles.push(articleHash);
-            incrementView(conversationId);
-            CnnXt.Storage.SetViewedArticles(viewedArticles, conversationId);
-        }
-    };
-
-    var getCurrentConversationViewCount = function (id) {
-        if (!CnnXt.Storage.GetCurrentConverstaion() && !id)
-            return null;
-        var convoId = id;
-        if (convoId == null) {
-            convoId = CnnXt.Storage.GetCurrentConverstaion().id;
-        }
-        var cookieName = CnnXt.Utils.GetViewedArticlesCookiesName();
-        var articleCookie = getCookie(cookieName);
-        if (articleCookie) {
-            try {
-                var parsedViews = JSON.parse(articleCookie);
-                if (parsedViews[convoId]) {
-                    return parsedViews[convoId];
-                }
-            } catch (ex) {
-                return 0;
-            }
-        }
-        return 0;
-    };
-
-    var getViewedArticles = function (conversationId) {
-        var key = CnnXt.Common.StorageKeys.viewedArticles;
-        var viewsObj = getLocalStorage(key);
-        if (viewsObj)
-            return viewsObj[conversationId];
-    };
-
-    var setViewedArticles = function (articles, conversationId) {
-        var key = CnnXt.Common.StorageKeys.viewedArticles;
-        var viewsObj = getLocalStorage(key);
-        if (viewsObj == null) {
-            viewsObj = {};
-        }
-        viewsObj[conversationId] = articles;
-        setLocalStorage(key, viewsObj);
-    };
-
-    var resetConversationViews = function (conversation, useParentDomain) {
-        if (conversation) {
-            conversation.Props.views = 0;
-            CnnXt.Storage.SetViewedArticles([], conversation.id);
-            resetViews(conversation.id, useParentDomain);
-        } else {
-            setLocalStorage(CnnXt.Common.StorageKeys.viewedArticles, {});
-            resetViews(null, useParentDomain);
-        }
-    };
-    //#endregion
-
-
 
     var clearUserStorage = function () {
         Cookies.remove(CnnXt.Common.StorageKeys.userToken);
@@ -7415,24 +8403,135 @@ var ConnextStorage = function ($) {
         $.jStorage.deleteKey(CnnXt.Common.StorageKeys.user.zipCodes);
         $.jStorage.deleteKey(CnnXt.Common.StorageKeys.user.state);
         $.jStorage.deleteKey(CnnXt.Common.StorageKeys.user.data);
-        //removeCookie(CnnXt.Common.StorageKeys.igmRegID);
-        //removeCookie(CnnXt.Common.StorageKeys.IgmContent);
         $.jStorage.deleteKey(CnnXt.Common.StorageKeys.connext_user_profile);
         $.jStorage.deleteKey(CnnXt.Common.StorageKeys.connext_user_data);
-        //$.jStorage.deleteKey(CnnXt.Common.StorageKeys.user.state);
         CnnXt.Storage.SetUserState("Logged Out");
         removeCookie('ExternalUserId');
         removeCookie('connext_user_profile');
         removeCookie('connext_user_data');
     }
 
+    var resetConversationArticleCount = function (conversation) {
+        var fnName = 'resetConversationArticleCount';
 
-    //#endregion LOCAL STORAGE FUNCTIONS
+        try {
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+            var articleCount = CnnXt.Common.ConvoArticleCountObj.article_count,
+                deviceArticleCount = CnnXt.Common.ConvoArticleCountObj.device_article_count;
+
+            var articleCookie = getCookie(cookieName);
+            if (articleCookie) {
+                var parserViews = JSON.parse(articleCookie),
+                    meterView = parserViews[METER.level],
+                    convoView = meterView[conversation.id];
+
+                if (meterView) {
+                    if (convoView) {
+                        meterView['_' + articleCount] = meterView['_' + articleCount] - convoView[articleCount];
+                        meterView['_' + deviceArticleCount] = meterView['_' + deviceArticleCount] - convoView[deviceArticleCount];
+                        convoView[articleCount] = 0;
+                        convoView[deviceArticleCount] = 0;
+                    }
+                }
+                setCookie(cookieName, JSON.stringify(parserViews), new Date('9999-01-01'), useCurDomain);
+            }
+
+            CnnXt.Storage.RemoveTimeRepeatableActionData(conversation.id);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    };
+
+    // var migrateDataFromPrevVersionStructure = function () {
+    //     var fnName = 'resetConversationArticleCount';
+    //     try {
+    //         var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+    //         //if we have new cookie, don't need to do migration
+    //         if (getCookie(cookieName))
+    //             return;
+    //
+    //         cookieName = CnnXt.Utils.GetCookieName("connext_viewstructure");
+    //         var oldCookie = getCookie(cookieName);
+    //         //if we don't have old cookie we can't do migration
+    //         if (!oldCookie)
+    //             return;
+    //         var parsedOldCookie = JSON.parse(oldCookie);
+    //         // expire old cookie in 3 months
+    //         setCookie(cookieName, parsedOldCookie, new Date('2018-04-01'));
+    //         //if old cookie is empty we can't do migration
+    //         if (parsedOldCookie == {})
+    //             return;
+    //         var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+    //         var newStructure = {};
+    //         for (var item in parsedOldCookie) {
+    //             var convoId;
+    //             if (item.indexOf("_device") > 0) {
+    //                 convoId = item.split('_')[0];
+    //             } else convoId = item;
+    //             var meterlevelId = findMeterLevelByConversatinoId(convoId);
+    //             if (meterlevelId != 0) {
+    //                 newStructure[meterlevelId] = newStructure[meterlevelId] ? newStructure[meterlevelId] : {};
+    //                 newStructure[meterlevelId][convoId] = newStructure[meterlevelId][convoId]
+    //                     ? newStructure[meterlevelId][convoId]
+    //                     : {};
+    //                 if (item.indexOf("_device") > 0) {
+    //                     newStructure[meterlevelId][convoId][CnnXt.Common.ConvoArticleCountObj.device_article_count] =
+    //                         parsedOldCookie[item];
+    //                     try {
+    //                         newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count] =
+    //                             newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count]
+    //                             ? parseInt(newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count])
+    //                             : 0 +
+    //                             parseInt(parsedOldCookie[item]);
+    //                     } catch (ex) {
+    //                         LOGGER.exception(NAME, "cannot parse meterlevel viewsCount", fnName, ex);
+    //                     }
+    //                 } else {
+    //                     newStructure[meterlevelId][convoId][CnnXt.Common.ConvoArticleCountObj.article_count] = parsedOldCookie[item];
+    //                     try {
+    //                         newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.article_count] =
+    //                             newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.article_count]
+    //                             ? parseInt(newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.article_count])
+    //                             : 0 +
+    //                             parseInt(parsedOldCookie[item]);
+    //                     } catch (ex) {
+    //                         LOGGER.exception(NAME, "cannot parse meterlevel viewsCount", fnName, ex);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure), newStructure, new Date('9999-01-01'), useCurDomain);
+    //
+    //     } catch (ex) {
+    //         LOGGER.exception(NAME, fnName, ex);
+    //     }
+    // }
+
+    // var findMeterLevelByConversatinoId = function (id) {
+    //     var conversationsByMeterLevels = CnnXt.Storage.GetCampaignData().Conversations;
+    //     var currentMeterLevel = 0;
+    //     if (!conversationsByMeterLevels)
+    //         return 0;
+    //     for (var meterLevel in conversationsByMeterLevels) {
+    //         if (conversationsByMeterLevels.hasOwnProperty(meterLevel)) {
+    //             if (conversationsByMeterLevels[meterLevel]) {
+    //                 for (var convo in conversationsByMeterLevels[meterLevel]) {
+    //                     if (conversationsByMeterLevels[meterLevel][convo].id == id) {
+    //                         currentMeterLevel = conversationsByMeterLevels[meterLevel][convo].MeterLevelId;
+    //                         return currentMeterLevel;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return currentMeterLevel;
+    // }
 
     return {
         init: function () {
-            logger = CnnXt.Logger; //assign local reference to CnnXt.Logger
-            logger.debug(name, "Init");
+            LOGGER = CnnXt.Logger; //assign local reference to CnnXt.Logger
+            LOGGER.debug(NAME, "Initializing Storage Module...");
             addListners();
         },
         GetLocalConfiguration: function () {
@@ -7461,35 +8560,35 @@ var ConnextStorage = function ($) {
 
                 $.jStorage.set(CnnXt.Common.StorageKeys.customZip, zipCode);
             } catch (ex) {
-                logger.debug(NAME, fnName, ex);
+                LOGGER.exception(NAME, fnName, ex);
             }
         },
         SetUserZipCodes: function (codes) {
             return setLocalStorage(CnnXt.Common.StorageKeys.user.zipCodes, codes);
         },
         GetActualZipCodes: function () {
-            var userState = CnnXt.Storage.GetUserState(),
-                userZipCodes;
+            var fnName = 'GetActualZipCodes';
 
-            if (CnnXt.User.isUserHasHighState()) {
-                userZipCodes = getLocalStorage(CnnXt.Common.StorageKeys.user.zipCodes) || [];
-            } else {
-                userZipCodes = [$.jStorage.get(CnnXt.Common.StorageKeys.customZip)];
+            try {
+                var userZipCodes;
+
+                if (CnnXt.User.isUserHasHighState()) {
+                    userZipCodes = getLocalStorage(CnnXt.Common.StorageKeys.user.zipCodes) || [];
+                } else {
+                    userZipCodes = [$.jStorage.get(CnnXt.Common.StorageKeys.customZip)];
+                }
+
+                return userZipCodes;
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
             }
-
-            return userZipCodes;
         },
         GetLastPublishDate: function () {
             return getCookie(CnnXt.Utils.GetCookieName("lastPublishDate"));
         },
         SetLastPublishDate: function (data, expired) {
-            if (!expired) {
-                expired = new Date();
-                expired.setMonth(expired.getMonth() + 1);
-                expired = new Date(expired);
-            }
-            var userCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
-            return setCookie(CnnXt.Utils.GetCookieName("lastPublishDate"), data, expired, userCurDomain);
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            return setCookie(CnnXt.Utils.GetCookieName("lastPublishDate"), data, expired, useCurDomain);
         },
         GetCurrentConversations: function () {
             var currentConvos = getLocalStorage(CnnXt.Common.StorageKeys.conversations.current);
@@ -7502,40 +8601,173 @@ var ConnextStorage = function ($) {
         GetCampaignData: function () {
             return getLocalStorage(CnnXt.Common.StorageKeys.configuration) ? getLocalStorage(CnnXt.Common.StorageKeys.configuration).Campaign : null;
         },
-        GetCurrentConversationViewCount: getCurrentConversationViewCount,
-        GetViewedArticles: getViewedArticles,
-        SetViewedArticles: setViewedArticles,
-        UpdateViewedArticles: updateViewedArticles,
-        ResetConversationViews: resetConversationViews,
+        GetCurrentConversationViewCount: function () {
+            var currentConvo = CnnXt.Storage.GetCurrentConversation();
 
-        GetRepeatablesInConv: function (actionId) {
-            if (!getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)) {
-                setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, {});
+            var convoId = null;
+            if (currentConvo) {
+                convoId = currentConvo.id;
+            } else {
+                convoId = CnnXt.Storage.GetActiveConversationId();
+            }
+            if (!convoId) {
+                return 0;
             }
 
-            var obj = getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv);
-            if (!getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)[actionId]) {
-                obj[actionId] = 0;
-                setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, obj);
+            var meterLevel = METER.level;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+            var articleCookie = getCookie(cookieName);
+            if (articleCookie) {
+                try {
+                    var parserViews = JSON.parse(articleCookie);
+                    if (parserViews[meterLevel]) {
+                        return parserViews[meterLevel][convoId] ? parserViews[meterLevel][convoId][CnnXt.Common.ConvoArticleCountObj.article_count] : 0;
+                    }
+                } catch (ex) {
+                    LOGGER.exception(NAME, 'GetCurrentConversationViewCount', ex);
+                    return 0;
+                }
             }
-            return getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)[actionId];
-
+            return 0;
+        },
+        GetCurrenDynamicMeterViewCount: function() {
+            var meterLevel = CnnXt.GetOptions().currentMeterLevel;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+            var articleCookie = getCookie(cookieName);
+            if (articleCookie) {
+                try {
+                    var parserViews = JSON.parse(articleCookie);
+                    if (parserViews[meterLevel]) {
+                        return parserViews[meterLevel]['_' + CnnXt.Common.ConvoArticleCountObj.article_count];
+                    }
+                } catch (ex) {
+                    LOGGER.exception(NAME, 'GetCurrenDynamicMeterViewCount', ex);
+                    return 0;
+                }
+            }
+            return 0;
+        },
+        GetViewedArticles: function (conversationId) {
+            var key = CnnXt.Common.StorageKeys.viewedArticles;
+            var viewsObj = getLocalStorage(key);
+            if (viewsObj)
+                return viewsObj[conversationId];
 
         },
-        UpdateRepeatablesInConv: function (actionId) {
-            if (!getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)) {
-                setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, {});
+        SetViewedArticles: function (articles, conversationId) {
+            var key = CnnXt.Common.StorageKeys.viewedArticles;
+            var viewsObj = getLocalStorage(key);
+            if (viewsObj == null) {
+                viewsObj = {};
             }
-            var obj = getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv);
-            obj[actionId] = obj[actionId] + 1;
-            setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, obj);
+            viewsObj[conversationId] = articles;
+            setLocalStorage(key, viewsObj);
+        },
+        UpdateViewedArticles: function (conversation) {
+            var fnName = 'UpdateViewedArticles';
+
+            try {
+                var viewedArticles = CnnXt.Storage.GetViewedArticles(conversation.id),
+                    articleUrl = CnnXt.Utils.GetUrl(),
+                    options = CnnXt.GetOptions(),
+                    articleHash;
+                if (viewedArticles == null)
+                    viewedArticles = [];
+                if (options.articlesCounter && options.articlesCounter.params && options.articlesCounter.params.length) {
+                    var params = options.articlesCounter.params,
+                        domain = location.hostname,
+                        indicatorOfTheArticle = domain + "_";
+
+                    params.forEach(function (param) {
+                        var paramValue = CnnXt.Utils.getQueryParamByName(param);
+
+                        if (paramValue) {
+                            indicatorOfTheArticle += (param + "=" + paramValue);
+                        }
+                    });
+
+                    articleHash = MD5(indicatorOfTheArticle);
+                } else {
+                    articleHash = MD5(articleUrl);
+                }
+                if (viewedArticles.indexOf(articleHash) > -1) {
+                    if (!$.jStorage.get("uniqueArticles") && CnnXt.GetOptions().debug) {
+                        incrementView(conversation);
+                    }
+                } else {
+                    viewedArticles.push(articleHash);
+                    incrementView(conversation);
+                    CnnXt.Storage.SetViewedArticles(viewedArticles, conversation.id);
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
+        },
+        ResetConversationViews: function (conversation, useParentDomain) {
+            var fnName = 'ResetConversationViews';
+
+            try {
+                if (conversation) {
+                    conversation.Props.views = 0;
+                    CnnXt.Storage.SetViewedArticles([], conversation.id);
+                    resetConversationArticleCount(conversation);
+                    CnnXt.API.ServerStorageResetConversationViews(conversation.id);
+                } else {
+                    setLocalStorage(CnnXt.Common.StorageKeys.viewedArticles, {});
+                    resetViews();
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
+        },
+        GetRepeatablesInConv: function (actionId) {
+            var fnName = 'GetRepeatablesInConv';
+
+            try {
+                if (!getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)) {
+                    setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, {});
+                }
+
+                var obj = getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv);
+
+                if (!getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)[actionId]) {
+                    obj[actionId] = 0;
+                    setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, obj);
+                }
+
+                return getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)[actionId];
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
+        },
+        UpdateRepeatablesInConv: function (actionId) {
+            var fnName = 'UpdateRepeatablesInConv';
+
+            try {
+                if (!getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv)) {
+                    setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, {});
+                }
+                var obj = getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv);
+                obj[actionId] = obj[actionId] + 1;
+                setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, obj);
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
 
         ClearConfigSettings: function () {
+            var fnName = 'ClearConfigSettings';
+
             try {
-                CnnXt.Storage.SetViewedArticles([], CnnXt.Storage.GetCurrentConverstaion().id);
+                var conversation = CnnXt.Storage.GetCurrentConversation();
+
+                if (conversation){
+                    CnnXt.Storage.SetViewedArticles([], conversation.id);
+                }
+                
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
             }
-            catch (e) { }
 
             removeLocalStorage(CnnXt.Common.StorageKeys.conversations.current);
             removeLocalStorage(CnnXt.Common.StorageKeys.conversations.previous);
@@ -7560,41 +8792,26 @@ var ConnextStorage = function ($) {
         Logout: function () {
             clearUserStorage();
             removeCookie(CnnXt.Common.StorageKeys.igmRegID);
-            removeCookie(CnnXt.Common.StorageKeys.IgmContent);
+            removeCookie(CnnXt.Common.StorageKeys.igmContent);
+            removeCookie(CnnXt.Common.StorageKeys.igmAuth);
         },
-        ClearOldCookies: function () {
-            if (!String.prototype.startsWith) {
-                String.prototype.startsWith = function (searchString, position) {
-                    position = position || 0;
-                    return this.indexOf(searchString, position) === position;
-                };
-            }
-            $.each(getCookies(), function (item) {
-                var str = item.toString();
-                if (str.startsWith(' '))
-                { str = str.trim(); }
-                str = decodeURIComponent(str);
-                if (str.startsWith('Connext_ViewedArticles') || str.startsWith('sub_Connext_ViewedArticles')) {
-                    Cookies.remove(str);
-                    var domainArr = location.host.split('.');
-                    var rootDomain = '.' + domainArr[(domainArr.length - 2)] + '.' + domainArr[(domainArr.length - 1)];
-                    Cookies.remove(str, { domain: rootDomain });
-                }
-            });
-        },
+        // CheckOldCookies: function () {
+        //     clearOldCookies();
+        //     migrateDataFromPrevVersionStructure();
+        // },
         SetAccessToken: function (token) {
             //TODO: Use some sort of encryption to encrypte access token and then use that to decode.
             return setCookie("accessToken", token); //set AccessToken with an expiration of 1 day.
         },
         GetAccessToken: function () {
             //TODO: Use some sort of encryption to encrypte access token and then use that to decode.
-            logger.debug(name, "GetAccessToken", CnnXt.Common.StorageKeys.accessToken);
+            LOGGER.debug(NAME, "GetAccessToken", CnnXt.Common.StorageKeys.accessToken);
             return getCookie("accessToken");
         },
-        GetCurrentConverstaion: function () {
+        GetCurrentConversation: function () {
             return getLocalStorage("CurrentConversation");
         },
-        SetCurrentConverstaion: function (e) {
+        SetCurrentConversation: function (e) {
             setLocalStorage("CurrentConversation", e);
         },
         SetUserToken: function (token) {
@@ -7603,22 +8820,29 @@ var ConnextStorage = function ($) {
         GetUserToken: function () {
             return getCookie("userToken");
         },
-        GetigmRegID: function () {
-            return Cookies.get("igmRegID");
-        },
-        GetIgmContent: function () {
-            return getCookie("igmContent");
-        },
-        SetIgmContent: function (value) {
-            var expire = new Date();
-            //value = decodeURIComponent(value);
-            expire.setDate(expire.getDate() + 30);
-            return setCookie("igmContent", value, expire);
-        },
         SetigmRegID: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 30);
-            return setCookie('igmRegID', value, expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmRegID, value, expire);
+        },
+        GetigmRegID: function () {
+            return Cookies.get(CnnXt.Common.StorageKeys.igmRegID);
+        },
+        SetIgmContent: function (value) {
+            var expire = new Date();
+            expire.setDate(expire.getDate() + 30);
+            return setCookie(CnnXt.Common.StorageKeys.igmContent, value, expire);
+        },
+        GetIgmContent: function () {
+            return getCookie(CnnXt.Common.StorageKeys.igmContent);
+        },
+        SetIgmAuth: function (value) {
+            var expire = new Date();
+            expire.setDate(expire.getDate() + 1);
+            return setCookie(CnnXt.Common.StorageKeys.igmAuth, value, expire);
+        }, 
+        GetIgmAuth: function () {
+            return getCookie(CnnXt.Common.StorageKeys.igmAuth);
         },
         SetExternalUserId: function (value) {
             var expire = new Date();
@@ -7635,42 +8859,98 @@ var ConnextStorage = function ($) {
             return getCookie("userMasterId");
         },
         GetWhitelistInfoboxCookie: function () {
-            return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox));
+            var fnName = 'GetWhitelistInfoboxCookie';
+            try {
+                return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox));
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         SetWhitelistInfoboxCookie: function (value) {
-            var expire = new Date();
-            expire.setDate(expire.getDate() + 30);
-            return setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox), value, expire);
+            var fnName = 'SetWhitelistInfoboxCookie';
+            try {
+                var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+                var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox);
+                var expire = new Date();
+
+                expire.setDate(expire.getDate() + 30);
+
+                return setCookie(cookieName, value, expire, useCurDomain);
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         RemoveWhitelistInfoboxCookie: function () {
-            return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox));
+            var fnName = 'RemoveWhitelistInfoboxCookie';
+            try {
+                return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox));
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         GetNeedHidePinTemplateCookie: function () {
-            return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate));
+            var fnName = 'GetNeedHidePinTemplateCookie';
+            try {
+                return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate));
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         SetNeedHidePinTemplateCookie: function (value) {
-            var expire = new Date();
-            expire.setDate(expire.getDate() + 1);
-            return setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate), value, expire);
+            var fnName = 'SetNeedHidePinTemplateCookie';
+            try {
+                var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+                var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate);
+                var expire = new Date();
+
+                expire.setDate(expire.getDate() + 1);
+                return setCookie(cookieName, value, expire, useCurDomain);
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         RemoveNeedHidePinTemplateCookie: function () {
-            return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate));;
+            var fnName = 'RemoveNeedHidePinTemplateCookie';
+            try {
+                return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate));
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         GetWhitelistSetIdCookie: function () {
-            return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet));
+            var fnName = 'GetWhitelistSetIdCookie';
+            try {
+                return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet));
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         SetWhitelistSetIdCookie: function (value, expiration) {
-            return setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet), value, expiration);
+            var fnName = 'SetWhitelistSetIdCookie';
+            try {
+                var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+                var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet);
+                return setCookie(cookieName, value, expiration, useCurDomain);
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
         RemoveWhitelistSetIdCookie: function () {
-            return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet));
+            var fnName = 'RemoveWhitelistSetIdCookie';
+            try {
+                return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet));
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         },
+
         GetJanrainUser: function () {
             var profileData = localStorage.getItem(CnnXt.Common.StorageKeys.janrainUserProfile);
 
             try {
-                return $.parseJSON(profileData);
+                return JSON.parse(profileData);
             } catch (ex) {
+                LOGGER.exception(NAME, 'GetJanrainUser', ex);
                 return null;
             }
         },
@@ -7715,14 +8995,7 @@ var ConnextStorage = function ($) {
         },
         GetUserProfile: function () {
             var data = $.jStorage.get(CnnXt.Common.StorageKeys.connext_user_profile);
-            if (data) {
-                try {
-                    return data;
-                } catch (e) {
-                    return null;
-                }
-            }
-            return null;
+            return data || null;
         },
         SetUserProfile: function (value) {
             return $.jStorage.set(CnnXt.Common.StorageKeys.connext_user_profile, value);
@@ -7731,8 +9004,8 @@ var ConnextStorage = function ($) {
             return getCookie(CnnXt.Common.StorageKeys.connext_paywallFired);
         },
         SetConnextPaywallCookie: function (value) {
-            var userCurDomain = !CnnXt.GetOptions().configSettings.UseParentDomain;
-            return setCookie(CnnXt.Common.StorageKeys.connext_paywallFired, value, null, userCurDomain);
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            return setCookie(CnnXt.Common.StorageKeys.connext_paywallFired, value, null, useCurDomain);
         },
         SetAccountDataExpirationCookie: function (value) {
             var expire = new Date();
@@ -7742,7 +9015,7 @@ var ConnextStorage = function ($) {
         GetAccountDataExpirationCookie: function () {
             return Cookies.get("Connext_AccountDataExpirationCookie");
         },
-        //SetReturnUrlCookie: function(value) {
+        //SetReturnUrlCookie: function (value) {
         //    return setCookie(CnnXt.Common.StorageKeys.connext_returnUrl, value);
         //},
         //GetReturnUrlCookie: function () {
@@ -7752,6 +9025,8 @@ var ConnextStorage = function ($) {
         //    return removeCookie(CnnXt.Common.StorageKeys.connext_returnUrl);
         //},
         WrongPin: function () {
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.PinAttempts);
             var value = CnnXt.Storage.GetPinAttempts();
             if (value) {
                 value++;
@@ -7760,10 +9035,15 @@ var ConnextStorage = function ($) {
             }
             var expire = new Date();
             expire.setMinutes(expire.getMinutes() + 15);
-            return setCookie("PinAttempts", value, expire);
+            return setCookie(cookieName, value, expire, useCurDomain);
         },
         GetPinAttempts: function () {
-            return getCookie('PinAttempts');
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.PinAttempts);
+            return getCookie(cookieName);
+        },
+        ResetPinAttemptsCookie: function () {
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.PinAttempts);
+            removeCookie(cookieName);
         },
         SetRegistrationType: function (data) {
             $.jStorage.set(CnnXt.Common.StorageKeys.connext_auth_type, data);
@@ -7772,13 +9052,19 @@ var ConnextStorage = function ($) {
             return $.jStorage.get(CnnXt.Common.StorageKeys.connext_auth_type) || {};
         },
         GetDeviceViews: function (convId) {
-            return getArticleCookie(convId + CnnXt.Common.StorageKeys.device_postfix);
+            var conversationViews = getArticleCookie(convId);
+            return conversationViews
+                ? conversationViews[CnnXt.Common.ConvoArticleCountObj.device_article_count]
+                : undefined;
         },
         GetViews: function (convId) {
-            return getArticleCookie(convId);
+            var conversationViews = getArticleCookie(convId);
+            return conversationViews
+                ? conversationViews[CnnXt.Common.ConvoArticleCountObj.article_count]
+                : undefined;
         },
-        CheckCookie: function () {
-            return checkViewsCookie();
+        CheckViewCookies: function () {
+            return checkViewCookies();
         },
         GetViewsData: function () {
             return getViewsData();
@@ -7789,30 +9075,174 @@ var ConnextStorage = function ($) {
         GetMeter: function () {
             return METER;
         },
+        GetDomain: function (isRoot) {
+            var domain = null,
+                domainStorageKey = (isRoot) ? CnnXt.Common.StorageKeys.connext_root_domain : CnnXt.Common.StorageKeys.connext_domain;
+
+            domain = getLocalStorage(domainStorageKey);
+
+            if (!domain) {
+                domain = CnnXt.Utils.CalculateDomain(isRoot);
+
+                setLocalStorage(domainStorageKey, domain);
+            }
+
+            return domain;
+        },
+        ResetConversationArticleCount: function (conversation) {
+            return resetConversationArticleCount(conversation);
+        },
+        GetActiveConversationId: function (meterLevel) {
+            if (!meterLevel)
+                meterLevel = METER.level;
+            var data = getViewsData();
+            if (data.parserViews && data.parserViews[meterLevel] && data.parserViews[meterLevel][CnnXt.Common.MeteredArticleCountObj.active_convo_id]) {
+                return data.parserViews[meterLevel][CnnXt.Common.MeteredArticleCountObj.active_convo_id];
+            }
+            return 0;
+        },
+        SetActiveConversationId: function (convId, meterLevel) {
+            if (!meterLevel)
+                meterLevel = METER.level;
+            var data = getViewsData();
+
+            var parsedViews = data.parserViews ? data.parserViews : {};
+            parsedViews[meterLevel] = parsedViews[meterLevel] ? parsedViews[meterLevel] : {};
+            parsedViews[meterLevel][CnnXt.Common.MeteredArticleCountObj.active_convo_id] = convId;
+            var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+            setCookie(cookieName, JSON.stringify(parsedViews), new Date('9999-01-01'), useCurDomain);
+        },
+        GetTimeRepeatableActionData: function (action) {
+            try {
+                var config = CnnXt.Storage.GetLocalConfiguration(),
+                    useParentDomain = false,
+                    repeatableData = null,
+                    result = null,
+                    keyName = CnnXt.Common.StorageKeys.connext_time_repeatable_actions;
+
+                if (config && config.Settings) {
+                    useParentDomain = config.Settings.UseParentDomain;
+                }
+
+                if (useParentDomain) {
+                    keyName += CnnXt.Utils.GetCookieNamePostfix();
+
+                    repeatableData = JSON.parse(getCookie(keyName) || '{}');
+                } else {
+                    repeatableData = getLocalStorage(keyName);
+                }
+
+                if (!action) {
+                    result = repeatableData;
+                } else if (repeatableData && repeatableData[action.ConversationId] && repeatableData[action.ConversationId][action.id]) {
+                    result = {
+                        date: repeatableData[action.ConversationId][action.id][CnnXt.Common.TimeRepeatableActionsCS.repeat_after],
+                        count: repeatableData[action.ConversationId][action.id][CnnXt.Common.TimeRepeatableActionsCS.count]
+                    };
+                }
+
+                return result;
+            } catch (ex) {
+                LOGGER.exception(NAME, 'GetTimeRepeatableActionData', ex);
+                return null;
+            }
+        },
+        SetTimeRepeatableActionData: function (action) {
+            try {
+                var config = CnnXt.Storage.GetLocalConfiguration(),
+                    useParentDomain = false,
+                    actionRepeatableData = null,
+                    keyName = CnnXt.Common.StorageKeys.connext_time_repeatable_actions;
+
+                if (config && config.Settings) {
+                    useParentDomain = config.Settings.UseParentDomain;
+                }
+
+                actionRepeatableData = CnnXt.Storage.GetTimeRepeatableActionData() || {};
+
+                if (!actionRepeatableData[action.ConversationId]) {
+                    actionRepeatableData[action.ConversationId] = {}
+                }
+
+                if (!actionRepeatableData[action.ConversationId][action.id]) {
+                    actionRepeatableData[action.ConversationId][action.id] = {};
+                }
+
+                var newActionData = {},
+                    count = actionRepeatableData[action.ConversationId][action.id][CnnXt.Common.TimeRepeatableActionsCS.count] || 0,
+                    pendingExecutionDate = CnnXt.Utils.AddTimeInervalToDate(action.When.Time.RepeatAfterTime, action.When.Time.RepeatAfterTimeType);
+
+                newActionData[CnnXt.Common.TimeRepeatableActionsCS.repeat_after] = pendingExecutionDate;
+                newActionData[CnnXt.Common.TimeRepeatableActionsCS.count] = count + 1;
+
+                actionRepeatableData[action.ConversationId][action.id] = newActionData;
+
+                if (useParentDomain) {
+                    keyName += CnnXt.Utils.GetCookieNamePostfix();
+
+                    setCookie(keyName, JSON.stringify(actionRepeatableData), new Date('9999-01-01'), false);
+                } else {
+                    setLocalStorage(keyName, actionRepeatableData);
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, 'SetTimeRepeatableActionData', ex);
+            }
+        },
+        RemoveTimeRepeatableActionData: function (conversationId) {
+            try {
+                var config = CnnXt.Storage.GetLocalConfiguration(),
+                    useParentDomain = false,
+                    keyName = CnnXt.Common.StorageKeys.connext_time_repeatable_actions,
+                    repeatableData = null;
+
+                if (config && config.Settings) {
+                    useParentDomain = config.Settings.UseParentDomain;
+                }
+
+                if (!conversationId) {
+                    removeLocalStorage(keyName);
+                    removeCookie(keyName + CnnXt.Utils.GetCookieNamePostfix());
+                } else {
+                    repeatableData = CnnXt.Storage.GetTimeRepeatableActionData();
+
+                    if (repeatableData) {
+                        delete repeatableData[conversationId];
+                    }
+                   
+                    if (useParentDomain) {
+                        keyName += CnnXt.Utils.GetCookieNamePostfix();
+
+                        setCookie(keyName, JSON.stringify(repeatableData), new Date('9999-01-01'), false);
+                    } else {
+                        setLocalStorage(keyName, repeatableData);
+                    }
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, 'RemoveTimeRepeatableActionData', ex);
+            }
+        },
+
         UpdateWhitelistSetCookieName: function () {
             var fnName = 'UpdateWhitelistSetCookieName';
             try {
-
                 var oldCookieName = CnnXt.Common.StorageKeys.WhitelistSet;
                 var newCookieName = CnnXt.Utils.GetCookieName(oldCookieName);
 
                 if (getCookie(newCookieName) == undefined && getCookie(oldCookieName) != undefined) {
                     var whitelistSet = JSON.parse(getCookie(oldCookieName));
                     if (whitelistSet.Id && whitelistSet.Expiration) {
-                        CnnXt.Storage.SetWhitelistSetIdCookie(
-                            { Id: whitelistSet.Id, Expiration: whitelistSet.Expiration }, new Date(whitelistSet.Expiration));
+                        CnnXt.Storage.SetWhitelistSetIdCookie( { Id: whitelistSet.Id, Expiration: whitelistSet.Expiration }, new Date(whitelistSet.Expiration));
                         removeCookie(oldCookieName);
                     }
                 }
-
             } catch (ex) {
                 LOGGER.exception(NAME, fnName, ex);
             }
         },
         UpdateWhitelistInfoboxCookieName: function () {
-            var fnName = 'UpdateWhitelistSetCookieName';
+            var fnName = 'UpdateWhitelistInfoboxCookieName';
             try {
-
                 var oldCookieName = CnnXt.Common.StorageKeys.WhitelistInfobox;
                 var newCookieName = CnnXt.Utils.GetCookieName(oldCookieName);
 
@@ -7820,7 +9250,6 @@ var ConnextStorage = function ($) {
                     CnnXt.Storage.SetWhitelistInfoboxCookie(true);
                     removeCookie(oldCookieName);
                 }
-
             } catch (ex) {
                 LOGGER.exception(NAME, fnName, ex);
             }
@@ -7828,7 +9257,6 @@ var ConnextStorage = function ($) {
         UpdateNeedHidePinTemplateCookieName: function () {
             var fnName = 'UpdateNeedHidePinTemplateCookieName';
             try {
-
                 var oldCookieName = CnnXt.Common.StorageKeys.NeedHidePinTemplate;
                 var newCookieName = CnnXt.Utils.GetCookieName(oldCookieName);
 
@@ -7836,14 +9264,222 @@ var ConnextStorage = function ($) {
                     CnnXt.Storage.SetNeedHidePinTemplateCookie(true);
                     removeCookie(oldCookieName);
                 }
-
             } catch (ex) {
                 LOGGER.exception(NAME, fnName, ex);
             }
+        },
+
+        GetCookie: function (name) {
+            return getCookie(name);
+        },
+        GetLocalViewData: function () {
+            var fnName = 'getLocalViewData';
+
+            if (LOGGER) {
+                LOGGER.debug(NAME, fnName, "Get local view data");
+            }
+
+            try {
+                var data = {};
+                var viewsCookie = CnnXt.Storage.GetViewsData();
+                var repeatableActionsCookie = CnnXt.Storage.GetTimeRepeatableActionData();
+
+                data.AllowedIpSet = CnnXt.Storage.GetWhitelistSetIdCookie()
+                    ? JSON.parse(CnnXt.Storage.GetWhitelistSetIdCookie())
+                    : undefined;
+
+                data.DynamicMeterViews = {};
+
+                if (viewsCookie != undefined && viewsCookie.parserViews != undefined) {
+                    for (var meterLevelId in viewsCookie.parserViews) {
+                        var meterLevelKey = CnnXt.Common.MeterLevels[meterLevelId] != undefined ? CnnXt.Common.MeterLevels[meterLevelId] : meterLevelId;
+
+                        var conversations = [];
+
+                        for (var key in viewsCookie.parserViews[meterLevelId]) {
+                            if (/^-?(0|[1-9]\d*)$/.test(key) && viewsCookie.parserViews[meterLevelId][key] != null
+                                && (typeof (viewsCookie.parserViews[meterLevelId][key])).toLowerCase() == 'object') {   //is conversastion object
+
+                                var conversationActions = null;
+                                if (repeatableActionsCookie && repeatableActionsCookie[key]) {
+                                    conversationActions = [];
+                                    for (var actionKey in repeatableActionsCookie[key]) {
+                                        if (/^(0|[1-9]\d*)$/.test(actionKey) && repeatableActionsCookie[key][actionKey] != null
+                                            && (typeof (repeatableActionsCookie[key][actionKey])).toLowerCase() == 'object') {
+                                            conversationActions.push({
+                                                Id: +actionKey,
+                                                RepeatAfter: repeatableActionsCookie[key][actionKey][CnnXt.Common.TimeRepeatableActionsCS.repeat_after],
+                                                Count: repeatableActionsCookie[key][actionKey][CnnXt.Common.TimeRepeatableActionsCS.count]
+                                            });
+                                        }
+                                    }
+                                }
+
+                                conversations.push({
+                                    Id: +key,
+                                    ViewCount: viewsCookie.parserViews[meterLevelId][key][CnnXt.Common.ConvoArticleCountObj.device_article_count],
+                                    StartDate: viewsCookie.parserViews[meterLevelId][key][CnnXt.Common.ConvoArticleCountObj.start_date],
+                                    Actions: conversationActions
+                                });
+                            }
+                        }
+
+                        data.DynamicMeterViews[meterLevelKey] = {
+                            ActiveConversationId: viewsCookie.parserViews[meterLevelId][CnnXt.Common.MeteredArticleCountObj.active_convo_id],
+                            Conversations: conversations
+                        };
+                    }
+                }
+                if (LOGGER) {
+                    LOGGER.debug(NAME, fnName, "Local view data is found", data);
+                }
+
+                return data;
+            } catch (ex) {
+                if (LOGGER) {
+                    LOGGER.exception(NAME, fnName, ex);
+                }
+                return {};
+            }
+        },
+
+        SetCookie: function (key, data, expiration, useWholeDomain) {
+            setCookie(key, data, expiration, useWholeDomain);
+        },
+        GetCookies: function () {
+            return getCookies();
         }
     }
 };
+var CookieMigration = function ($) {
 
+    var NAME = 'CookieMigration',
+        LOGGER;
+
+    var migrateDataFromPrevVersionStructure = function () {
+        var fnName = 'migrateDataFromPrevVersionStructure';
+        try {
+            var cookieName = CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure);
+            //if we have new cookie, don't need to do migration
+            if (CnnXt.Storage.GetCookie(cookieName))
+                return;
+
+            cookieName = CnnXt.Utils.GetCookieName("connext_viewstructure");
+            var oldCookie = CnnXt.Storage.GetCookie(cookieName);
+            //if we don't have old cookie we can't do migration
+            if (!oldCookie)
+                return;
+            var parsedOldCookie = JSON.parse(oldCookie);
+            // expire old cookie in 3 months
+            CnnXt.Storage.SetCookie(cookieName, parsedOldCookie, new Date('2018-04-30'));
+            //if old cookie is empty we can't do migration
+            if (parsedOldCookie == {})
+                return;
+            var useCurDomain = !CnnXt.Storage.GetLocalConfiguration().Settings.UseParentDomain;
+            var newStructure = {};
+            for (var item in parsedOldCookie) {
+                var convoId;
+                if (item.indexOf("_device") > 0) {
+                    convoId = item.split('_')[0];
+                } else convoId = item;
+                var meterlevelId = findMeterLevelByConversationId(convoId);
+                if (meterlevelId != 0) {
+                    newStructure[meterlevelId] = newStructure[meterlevelId] ? newStructure[meterlevelId] : {};
+                    newStructure[meterlevelId][convoId] = newStructure[meterlevelId][convoId]
+                        ? newStructure[meterlevelId][convoId]
+                        : {};
+                    if (item.indexOf("_device") > 0) {
+                        newStructure[meterlevelId][convoId][CnnXt.Common.ConvoArticleCountObj.device_article_count] =
+                            parsedOldCookie[item];
+                        try {
+                            newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count] =
+                                newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count]
+                                    ? parseInt(newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.device_article_count])
+                                    : parseInt(parsedOldCookie[item]);
+                        } catch (ex) {
+                            LOGGER.exception(NAME, "cannot parse meterlevel viewsCount", fnName, ex);
+                        }
+                    } else {
+                        newStructure[meterlevelId][convoId][CnnXt.Common.ConvoArticleCountObj.article_count] = parsedOldCookie[item];
+                        try {
+                            newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.article_count] =
+                                newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.article_count]
+                                    ? parseInt(newStructure[meterlevelId]['_' + CnnXt.Common.ConvoArticleCountObj.article_count])
+                                    : parseInt(parsedOldCookie[item]);
+                        } catch (ex) {
+                            LOGGER.exception(NAME, "cannot parse meterlevel viewsCount", fnName, ex);
+                        }
+                    }
+                }
+            }
+            CnnXt.Storage.setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.connext_viewstructure), newStructure, new Date('9999-01-01'), useCurDomain);
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    };
+
+    var findMeterLevelByConversationId = function (id) {
+        var conversationsByMeterLevels = CnnXt.Storage.GetCampaignData().Conversations;
+        var currentMeterLevel = 0;
+        if (!conversationsByMeterLevels)
+            return 0;
+        for (var meterLevel in conversationsByMeterLevels) {
+            if (conversationsByMeterLevels.hasOwnProperty(meterLevel)) {
+                if (conversationsByMeterLevels[meterLevel]) {
+                    for (var convo in conversationsByMeterLevels[meterLevel]) {
+                        if (conversationsByMeterLevels[meterLevel][convo].id == id) {
+                            currentMeterLevel = conversationsByMeterLevels[meterLevel][convo].MeterLevelId;
+                            return currentMeterLevel;
+                        }
+                    }
+                }
+            }
+        }
+        return currentMeterLevel;
+    };
+
+    var clearOldCookies = function () {
+        var fnName = 'clearOldCookies';
+        try {
+            if (!String.prototype.startsWith) {
+                String.prototype.startsWith = function (searchString, position) {
+                    position = position || 0;
+                    return this.indexOf(searchString, position) === position;
+                };
+            }
+
+            $.each(CnnXt.Storage.GetCookies(), function (item) {
+                var str = item.toString();
+                if (str.startsWith(' '))
+                { str = str.trim(); }
+                str = decodeURIComponent(str);
+                if (str.startsWith('Connext_ViewedArticles') || str.startsWith('sub_Connext_ViewedArticles')) {
+                    Cookies.remove(str);
+                    var domainArr = location.host.split('.');
+                    var rootDomain = '.' + domainArr[(domainArr.length - 2)] + '.' + domainArr[(domainArr.length - 1)];
+                    Cookies.remove(str, { domain: rootDomain });
+                }
+            });
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    };
+
+    var migrate = function () {
+        clearOldCookies();
+        migrateDataFromPrevVersionStructure();
+    };
+
+    return {
+        init: function () {
+            LOGGER = CnnXt.Logger;
+            LOGGER.debug(NAME, "Initializing CookieMigration Module...");
+        },
+
+        Migrate: migrate
+    }
+};
 var ConnextAPI = function ($) {
 
     //#region GLOBALS
@@ -7861,7 +9497,7 @@ var ConnextAPI = function ($) {
     var ROUTES = { //this holds the routes for the different api calls.  We use this in the universal 'Get' method and use the 'args' parameters to set the full api URL.
         GetConfiguration: _.template("configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>"),
         GetUserByEmailAndPassword: _.template("user?email=<%= email %>&password=<%= password %>"),
-        GetUserByMasterId: _.template("user/id/<%= id %>"),
+        GetUserByMasterId: _.template("user/masterId/<%= id %>"),
         GetUserByToken: _.template("user/token/<%= token %>"),
         EmailPreferences: "user/emailPreference",
         GetUserLastUpdateDate: _.template("user/getLastUpdateDate?masterId=<%=masterId%>"),
@@ -7869,17 +9505,18 @@ var ConnextAPI = function ($) {
         GetUserByEncryptedMasterId: _.template("user/encryptedMasterId?encryptedMasterId=<%= encryptedMasterId %>"),
         ClearServerCache: _.template("clear/siteCode/<%=siteCode%>/configCode/<%=configCode%>"),
         viewsData: "views",
-        DeleteViewsByUserId: _.template("views/user/delete?siteCode=<%=SiteCode%>&configCode=<%=ConfigCode%>&userId=<%=UserId%>&masterId=<%=MasterId%>&settingsKey=<%=SettingsKey%>"),
+        ServerStorageDeleteViewsByUserId: _.template("views/user/delete?"),
+        ServerStorageResetConversationViews: _.template("views/user/delete?"),
         CreateUser: _.template("user/create?email=<%=email%>&password=<%= password %>"),
-        ActivateByAccountNumber: _.template("user/Activate/customRegId/<%= customRegId %>/LastName/<%= LastName %>/accountNumber/<%= AccountNumber %>"),
-        ActivateByZipCodeAndHouseNumber: _.template("user/Activate/customRegId/<%= customRegId %>/LastName/<%= LastName %>/ZipCode/<%= ZipCode %>/HouseNumber/<%= HouseNumber %>"),
-        ActivateByZipCodeAndPhoneNumber: _.template("user/Activate/customRegId/<%= customRegId %>/LastName/<%= LastName %>/ZipCode/<%= ZipCode %>/Phone/<%= PhoneNumber %>"),
-        LinkingBySubscription: _.template("user/Activate/customRegId/<%= customRegId %>/Subscription/<%= SubscriptionId %>"),
+        ActivateByAccountNumber: _.template("user/ActivateByAccountNumber"),
+        ActivateByConfirmationNumber: _.template("user/ActivateByConfirmationNumber"),
+        ActivateByZipCodeAndHouseNumber: _.template("user/ActivateByZipCodeAndHouseNumber"),
+        ActivateByZipCodeAndPhoneNumber: _.template("user/ActivateByZipCodeAndPhoneNumber"),
+        SyncUser: _.template("user/sync"),
         GetDictionaryValue: _.template("dictionary/<%= ValueName %>"),
-        GetClientIpInfo: "utils/ipInfo",
-        CheckDigitalAccess: _.template("user/masterId/<%= masterId %>/DigitalAccess")
+        CheckDigitalAccess: _.template("user/masterId/<%= masterId %>/DigitalAccess?mode=<%= mode %>"),
+        GetClientIpInfo: "utils/ipInfo"
     };
-
 
     var Meta = {
         publishFile: {
@@ -7901,20 +9538,20 @@ var ConnextAPI = function ($) {
     //region API CALLS
 
     var Get = function (args) {
-        /// <summary>Universal call to API. Handles parsing returned data and calling provided callbacks.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>Deferred $.ajax</returns>
         var fnName = "Get";
+
         try {
 
             //creates url based on the passed method option from routes object and then calls this function with the payload passed in (the routes object is an underscore template so the passed in payload will be parsed to create the correct url
             var url = API_URL + ROUTES[args.method](args.options.payload);
-            LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
             var stringMeta = "";
-            if (args.options.meta)
-            {
+
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'args', args);
+
+            if (args.options.meta) {
                 stringMeta = JSON.stringify(args.options.meta);
             }
+
             CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
@@ -7924,8 +9561,6 @@ var ConnextAPI = function ($) {
             //      I would think we would need some sort of checking based on the source header and if that domain matches a list of domains/tokens.
 
             return $.ajax({
-                //crossDomain: true,
-                //contentType: "application/json; charset=utf-8",
                 headers: {
                     'Site-Code': OPTIONS.siteCode,
                     'Paper-Code': CnnXt.GetOptions().paperCode,
@@ -7943,28 +9578,27 @@ var ConnextAPI = function ($) {
                 type: "GET",
                 dataType: "json",
                 success: function (data, textStatus, xhr) {
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
-                    try {
+                    //empty results or returned a 204 'No Content', call onNull
+                    if (!data || xhr.status == 204) {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS NULL RESULT >>", "textStatus", textStatus, "data", data);
 
-                        if (!data || xhr.status == 204) {
-                            //empty results or returned a 204 'No Content', call onNull
-                            if (_.isFunction(args.options.onNull)) {
-                                args.options.onNull();
-                            }
-                        } else {
-                            //we have a return object
-                            if (_.isFunction(args.options.onSuccess)) {
-                                args.options.onSuccess(data);
-                            }
+                        if (_.isFunction(args.options.onNull)) {
+                            args.options.onNull();
                         }
-                    } catch (e) {
-                        LOGGER.exception(fnName, e);
-                    };
+                    } else {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS RESULT>>", "textStatus", textStatus, "data", data);
+
+                        if (_.isFunction(args.options.onSuccess)) {
+                            args.options.onSuccess(data);
+                        }
+                    }
                 },
-                error: function (err) {
-                    LOGGER.error(fnName, "Ajax.Error", err);
+                error: function (error) {
+                    LOGGER.debug(NAME, fnName, "Ajax.Error", error);
+
                     if (_.isFunction(args.options.onError)) {
-                        args.options.onError(err); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
+                        var errorData = JSON.parse(error.responseText);
+                        args.options.onError(errorData); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
                     }
                 },
                 complete: function () {
@@ -7973,8 +9607,9 @@ var ConnextAPI = function ($) {
                     }
                 }
             });
-        } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+
             if (_.isFunction(args.options.onError)) {
                 args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
             }
@@ -7982,19 +9617,20 @@ var ConnextAPI = function ($) {
     };
 
     var Post = function (args) {
-        /// <summary>Universal call to API. Handles parsing returned data and calling provided callbacks.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>Deferred $.ajax</returns>
         var fnName = "Post";
+
         try {
 
             //creates url based on the passed method option from routes object and then calls this function with the payload passed in (the routes object is an underscore template so the passed in payload will be parsed to create the correct url
             var url = API_URL + ROUTES[args.method](args.options.payload);
-            LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
             var stringMeta = "";
+
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'args', args);
+
             if (args.options.meta) {
                 stringMeta = JSON.stringify(args.options.meta);
             }
+
             CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
@@ -8003,8 +9639,6 @@ var ConnextAPI = function ($) {
             //      We need to find a way to enable this Authentication when calling the API via Postman or 3rd party source, but not require the API-Key when calling from the Connext Plugin since we do not want to store Token values in JS.
             //      I would think we would need some sort of checking based on the source header and if that domain matches a list of domains/tokens.
             return $.ajax({
-                //crossDomain: true,
-                //contentType: "application/json; charset=utf-8",
                 headers: {
                     'Site-Code': OPTIONS.siteCode,
                     'Paper-Code': CnnXt.GetOptions().paperCode,
@@ -8024,28 +9658,27 @@ var ConnextAPI = function ($) {
                 data: args.options.payload,
                 dataType: "json",
                 success: function (data, textStatus, xhr) {
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
-                    try {
+                    //empty results or returned a 204 'No Content', call onNull
+                    if (!data || xhr.status == 204) {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS NULL RESULT >>", "textStatus", textStatus, "data", data);
 
-                        if (!data || xhr.status == 204) {
-                            //empty results or returned a 204 'No Content', call onNull
-                            if (_.isFunction(args.options.onNull)) {
-                                args.options.onNull();
-                            }
-                        } else {
-                            //we have a return object
-                            if (_.isFunction(args.options.onSuccess)) {
-                                args.options.onSuccess(data);
-                            }
+                        if (_.isFunction(args.options.onNull)) {
+                            args.options.onNull();
                         }
-                    } catch (e) {
-                        LOGGER.exception(fnName, e);
-                    };
+                    } else {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS RESULT >>", "textStatus", textStatus, "data", data);
+
+                        if (_.isFunction(args.options.onSuccess)) {
+                            args.options.onSuccess(data);
+                        }
+                    }
                 },
-                error: function (err) {
-                    LOGGER.error(fnName, "Ajax.Error", err);
+                error: function (error) {
+                    LOGGER.debug(NAME, fnName, "Ajax.Error", error);
+
                     if (_.isFunction(args.options.onError)) {
-                        args.options.onError(err); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
+                        var errorData = JSON.parse(error.responseText);
+                        args.options.onError(errorData); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
                     }
                 },
                 complete: function () {
@@ -8054,26 +9687,24 @@ var ConnextAPI = function ($) {
                     }
                 }
             });
-        } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+
             if (_.isFunction(args.options.onError)) {
                 args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
             }
         }
     };
 
-
     var GetNewsletters = function (args) {
-        /// <summary>Universal call to API. Handles parsing returned data and calling provided callbacks.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>Deferred $.ajax</returns>
         var fnName = "GetNewsletters";
-        try {
 
+        try {
             //creates url based on the passed method option from routes object and then calls this function with the payload passed in (the routes object is an underscore template so the passed in payload will be parsed to create the correct url
             var url = API_URL + ROUTES.EmailPreferences;
             url += "?email=" + args.options.email + "&emailPreferenceId=" + args.options.id;
-            LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
+
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'args', args);
 
             CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options });
 
@@ -8088,29 +9719,26 @@ var ConnextAPI = function ($) {
                 type: "GET",
                 dataType: "json",
                 success: function (data, textStatus, xhr) {
-                    LOGGER.debug('data:', data);
-                    try {
+                    //empty results or returned a 204 'No Content', call onNull
+                    if (!data || xhr.status == 204) {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS NULL RESULT >>", "textStatus", textStatus, "data", data);
 
-                        if (!data || xhr.status == 204) {
-                            //empty results or returned a 204 'No Content', call onNull
-                            if (_.isFunction(args.options.onNull)) {
-                                args.options.onNull();
-                            }
-                        } else {
-                            //we have a return object
-                            if (_.isFunction(args.options.onSuccess)) {
-                                args.options.onSuccess();
-                            }
+                        if (_.isFunction(args.options.onNull)) {
+                            args.options.onNull();
                         }
-                    } catch (e) {
-                        LOGGER.exception(fnName, e);
+                    } else {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS RESULT >>", "textStatus", textStatus, "data", data);
+
+                        if (_.isFunction(args.options.onSuccess)) {
+                            args.options.onSuccess();
+                        }
                     }
                 },
-                error: function (err) {
-                    //var errorObject = JSON.parse(err.responseJSON.Message) || err;
-                    LOGGER.debug('error', err);
+                error: function (error) {
+                    LOGGER.debug(NAME, fnName, "Ajax.Error", error);
+
                     if (_.isFunction(args.options.onError)) {
-                        args.options.onError(err);
+                        args.options.onError(error);
                     }
                 },
                 complete: function () {
@@ -8119,8 +9747,9 @@ var ConnextAPI = function ($) {
                     }
                 }
             });
-        } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+
             if (_.isFunction(args.options.onError)) {
                 args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
             }
@@ -8135,23 +9764,22 @@ var ConnextAPI = function ($) {
         };
         var url = API_URL + ROUTES["ClearServerCache"](payload);
 
+        LOGGER.debug(NAME, fnName, 'calling...', url, 'payload', payload);
+
         CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: payload });
 
         return $.ajax({
-            //crossDomain: true,
-            //contentType: "application/json; charset=utf-8",
             headers: { 'attr': CnnXt.GetOptions().attr },
             url: url,
             type: "POST",
             dataType: "json",
             success: function (data, textStatus, xhr) {
-                LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
+                LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data);
             },
-            error: function (err) {
-                LOGGER.error(fnName, "Ajax.Error", err);
+            error: function (error) {
+                LOGGER.debug(NAME, fnName, "Ajax.Error", error);
             }
         });
-
     }
 
     //#endregion API CALLS
@@ -8159,10 +9787,9 @@ var ConnextAPI = function ($) {
     return {
         init: function (options) {
             LOGGER = CnnXt.Logger; //assign local reference to CnnXt.LOGGER
+            LOGGER.debug(NAME, 'Initializing API Module...');
             OPTIONS = options; //set global OPIONS variable (need this for siteCode and api setting (but passing in entire options object in case we need other things in the future).
             API_URL = OPTIONS.api + BASE_API_ROUTE; //set the API_URL (which is the api from options plus the BASE_API_ROUTE set here).
-            //LOGGER.debug(NAME, "Init", "_Url", _Url);
-            //ApiUrl = _Url + BaseRoute; //create full base api url based on base url from Core and BaseRoute.
         },
         GetConfiguration: function (opts) {
             Meta.clientUrl = document.location.href;
@@ -8170,6 +9797,7 @@ var ConnextAPI = function ($) {
             Meta.guid = CnnXt.Storage.GetGuid();
             Meta.localConfig = localStorage.getItem("IsLocalConfig");
             opts.meta = Meta;
+
             return Get({ method: 'GetConfiguration', options: opts });
         },
         GetUserByEmailAndPassword: function (opts) {
@@ -8183,9 +9811,7 @@ var ConnextAPI = function ($) {
             }
             return Get({ method: "GetUserByEmailAndPassword", options: opts });
         },
-        ClearServerCache: function() {
-            clearServerCache();
-        },
+        ClearServerCache: clearServerCache,
         CheckAccess: function (opts) {
             return Get({ method: "CheckAccess", options: opts });
         },
@@ -8218,44 +9844,88 @@ var ConnextAPI = function ($) {
         ActivateByZipCodeAndPhoneNumber: function (opts) {
             return Post({ method: "ActivateByZipCodeAndPhoneNumber", options: opts });
         },
-        LinkingBySubscription: function (opts) {
-            return Post({ method: "LinkingBySubscription", options: opts });
+        ActivateByConfirmationNumber: function (opts) {
+            return Post({ method: "ActivateByConfirmationNumber", options: opts });
+        },
+        SyncUser: function (opts) {
+            return Post({ method: "SyncUser", options: opts });
         },
         SendViewData: function (data) {
             var fnName = 'SendViewData';
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData, ApiPayload: data });
+            var url = API_URL + ROUTES.viewsData;
+
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'data', data);
+
+            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: data });
 
             return $.ajax({
-                url: API_URL + ROUTES.viewsData,
+                url: url,
                 headers: {
-                    'Environment': CnnXt.GetOptions().environment
+                    'Environment': CnnXt.GetOptions().environment,
+                    'Content-Type': 'application/json'
                 },
                 type: "POST",
-                data: data,
+                data: JSON.stringify(data),
                 dataType: "json",
                 success: function (data, textStatus, xhr) {
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data);
                 },
-                error: function (err) {
-                    LOGGER.error(fnName, "Ajax.Error", err);
-                },
-                complete: function () {
+                error: function (error) {
+                    LOGGER.debug(NAME, fnName, "Ajax.Error", error);
                 }
             });
         },
-        GetViewData: function() {
+        GetViewData: function () {
+            var fnName = 'GetViewData';
+
             var data = {
-                UserId: CnnXt.GetOptions().deviceId,
-                ConfigCode: CnnXt.GetOptions().configCode,
-                SiteCode: CnnXt.GetOptions().siteCode,
-                SettingsKey: CnnXt.GetOptions().settingsKey
+                userId: Fprinting().getDeviceId(),
+                configCode: CnnXt.GetOptions().configCode,
+                siteCode: CnnXt.GetOptions().siteCode,
+                settingsKey: CnnXt.GetOptions().settingsKey
             };
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData });
+            var url = API_URL + ROUTES.viewsData;
+
+            LOGGER.debug(NAME, fnName, 'calling...', url);
+
+            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url });
 
             return $.ajax({
-                url: API_URL + ROUTES.viewsData,
+                url: url,
+                headers: {
+                    'Environment': CnnXt.GetOptions().environment
+                },
+                type: "GET",
+                data: data,
+                success: function (data, textStatus, xhr) {
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data);
+                },
+                error: function (error) {
+                    LOGGER.debug(NAME, fnName, "Ajax.Error", error);
+                }
+            });
+        },
+        ServerStorageDeleteViewsByUserId: function () {
+            var fnName = 'ServerStorageDeleteViewsByUserId';
+
+            var data = {
+                userId: CnnXt.GetOptions().deviceId,
+                masterId: CnnXt.User.getMasterId(),
+                configCode: CnnXt.GetOptions().configCode,
+                siteCode: CnnXt.GetOptions().siteCode,
+                settingsKey: CnnXt.GetOptions().settingsKey
+            };
+
+            var url = API_URL + ROUTES.ServerStorageDeleteViewsByUserId(data);
+
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'data', data);
+
+            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url });
+
+            return $.ajax({
+                url: url,
                 headers: {
                     'Environment': CnnXt.GetOptions().environment
                 },
@@ -8263,32 +9933,48 @@ var ConnextAPI = function ($) {
                 data: data
             });
         },
-        DeleteViewsByUserId: function() {
+        ServerStorageResetConversationViews: function (conversationId) {
+            var fnName = 'ServerStorageResetConversationViews';
+
             var data = {
-                UserId: CnnXt.GetOptions().deviceId,
-                MasterId: CnnXt.User.getMasterId(),
-                ConfigCode: CnnXt.GetOptions().configCode,
-                SiteCode: CnnXt.GetOptions().siteCode,
-                SettingsKey: CnnXt.GetOptions().settingsKey
+                userId: CnnXt.GetOptions().deviceId,
+                conversationId: conversationId,
+                configCode: CnnXt.GetOptions().configCode,
+                siteCode: CnnXt.GetOptions().siteCode,
+                settingsKey: CnnXt.GetOptions().settingsKey
             };
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.DeleteViewsByUserId });
+            var url = API_URL + ROUTES.ServerStorageResetConversationViews(data);
+
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'data', data);
+
+            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url });
 
             return $.ajax({
-                url: API_URL + ROUTES.DeleteViewsByUserId(data),
+                url: url,
+                headers: {
+                    'Environment': CnnXt.GetOptions().environment
+                },
                 type: "GET",
-                data: data
+                data: data,
+                success: function (data, textStatus, xhr) {
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data);
+                },
+                error: function (error) {
+                    LOGGER.debug(NAME, fnName, "Ajax.Error", error);
+                }
             });
         },
         meta: Meta,
         GetLastPublishDateS3: function () {
             var fnName = "GetLastPublishDateS3";
-            try {
 
+            try {
                 var jsonURL = CnnXt.Common.S3RootUrl[OPTIONS.environment] + 'data/last_publish/' + OPTIONS.siteCode + '.json?_=' + new Date().getTime();
+
                 LOGGER.debug(NAME, fnName, 'jsonURL', jsonURL);
+
                 Meta.publishFile.url = jsonURL;
-                //return $.ajax since it is a deferred object and we use that in the calling CnnXt.Core function.
 
                 CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: jsonURL });
 
@@ -8297,27 +9983,21 @@ var ConnextAPI = function ($) {
                     contentType: "application/json; charset=utf-8",
                     async: true,
                     url: jsonURL,
-                    success: function (data) {
-                        LOGGER.debug(NAME, fnName, 'success', data);
+                    success: function (data, textStatus) {
+                        LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data);
                         Meta.publishFile.responceCode = 200;
                     },
-                    error: function (a, b, c) {
-                        LOGGER.debug(NAME, fnName, 'error', 'a, b, c', a, b, c);
+                    error: function (error) {
+                        LOGGER.debug(NAME, fnName, "Ajax.Error", error);
+
                         Meta.publishFile.responceCode = a.status;
                         Meta.reason = CnnXt.Common.DownloadConfigReasons.getPublishFailed;
-                        //if (a.status == 403) {
-                        //    deferred.reject("JSON file does not exist in AWS");
-                        //} else {
-                        //    deferred.reject("Error Getting last_published JSON file");
-                        //}
-
                     }
                 });
-            } catch (e) {
-                console.error(NAME, fnName, '<<EXCEPTION>>', e);
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
                 Meta.reason = CnnXt.Common.DownloadConfigReasons.getPublishFailed;
-                Meta.publishFile.ex = e;
-                //deferred.reject(e);
+                Meta.publishFile.ex = ex;
             }
         },
         NewsletterSubscribe: function (opts) {
@@ -8330,15 +10010,15 @@ var ConnextAPI = function ($) {
 
             return Get({ method: "GetDictionaryValue", options: { payload: payload } });
         },
+        CheckDigitalAccess: function (opts) {
+            return Get({ method: "CheckDigitalAccess", options: opts });
+        },
         GetClientIpInfo: function () {
             var url = CnnXt.Common.APIUrl[CnnXt.GetOptions().environment] + BASE_API_ROUTE + ROUTES.GetClientIpInfo;
             return $.ajax({
                 url: url,
                 type: "GET"
             });
-        },
-        CheckDigitalAccess: function (opts) {
-            return Get({ method: "CheckDigitalAccess", options: opts });
         }
     }
 };
@@ -8370,27 +10050,32 @@ var ConnextUser = function ($) {
         show: function (notification) {
             try {
                 //TODO: for now just use passed in notification text, need to change to lookup of Notifications array after API is updated
-                FORM_ALERT.info(notification).show();
-            } catch (e) {
-
+                if (FORM_ALERT) {
+                    FORM_ALERT.info(notification).show();
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, 'NOTIFICATION.show', ex);
             }
         },
         hide: function () {
             try {
-                FORM_ALERT.hide();
-            } catch (e) {
-
+                if (FORM_ALERT){
+                    FORM_ALERT.hide();
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, 'NOTIFICATION.hide', ex);
             }
         },
         showAndHide: function (notification, delay) {
             try {
-                FORM_ALERT.info(notification);
-                TIMEOUT = setTimeout(function () {
-                    FORM_ALERT.find(".alert").remove();
-                },
-                    delay);
-            } catch (e) {
-
+                if (FORM_ALERT) {
+                    FORM_ALERT.info(notification);
+                    TIMEOUT = setTimeout(function () {
+                        FORM_ALERT.find(".alert").remove();
+                    }, delay);
+                }
+            } catch (ex) {
+                LOGGER.exception(NAME, 'NOTIFICATION.showAndHide', ex);
             }
         }
     };
@@ -8416,18 +10101,17 @@ var ConnextUser = function ($) {
     //#region INIT Functions
 
     var init = function () {
-        /// <summary>Instantite the plugin.</summary>
-        /// <param>Nothing</param>
-        /// <returns>Nothing</returns>
         var fnName = "Init";
+
         try {
-            LOGGER.debug(NAME, fnName, "Initializing User...");
+            LOGGER.debug(NAME, "Initializing User Module...");
+
             UI.LoginModal = OPTIONS.LoginModal;
             setAuthType();
             $("body").on("click", UI.LogoutButton, function (e) {
                 e.preventDefault();
                 var fnName = UI.LogoutButton + ".CLICK";
-                LOGGER.debug(NAME, fnName);
+                LOGGER.debug(NAME, fnName, e);
                 logoutUser();
             });
             $("body").on("click", '[data-dismiss="alert"]', function () {
@@ -8437,9 +10121,10 @@ var ConnextUser = function ($) {
             $("body").on("click", UI.SubscribeButton, function (e) {
                 e.preventDefault();
                 var fnName = UI.SubscribeButton + ".CLICK";
-                LOGGER.debug(NAME, fnName);
-                try {
 
+                LOGGER.debug(NAME, fnName, e);
+
+                try {
                     var $this = $(this),
                         href = $this.attr("href"),
                         email = $this.parents(".Mg2-connext").find('[data-mg2-input="Email"]').val();
@@ -8448,17 +10133,18 @@ var ConnextUser = function ($) {
                     $this.attr("href", href);
                     window.location.href = href;
 
-                } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
                 }
             });
 
             $("body").on("click", UI.SubmitZipCode, function (e) {
                 e.preventDefault();
                 var fnName = UI.SubmitZipCode + ".CLICK";
-                LOGGER.debug(NAME, fnName);
-                try {
 
+                LOGGER.debug(NAME, fnName, e);
+
+                try {
                     var $this = $(this),
                         href = $this.attr("href"),
                         zip = $this.parents(".Mg2-connext").find('[data-mg2-input="Zipcode"]').val();
@@ -8470,8 +10156,8 @@ var ConnextUser = function ($) {
                     } else {
                         window.location.href = href;
                     }
-                } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
                 }
             });
             //$("body").on("click", UI.ConnextRun, function(e) {
@@ -8484,7 +10170,9 @@ var ConnextUser = function ($) {
             $("body").on("click", UI.OpenNewsletterWidget, function (e) {
                 e.preventDefault();
                 var fnName = UI.OpenNewsletterWidget + ".CLICK";
-                LOGGER.debug(NAME, fnName);
+
+                LOGGER.debug(NAME, fnName, e);
+
                 try {
                     var $this = $(this);
                     var params = {};
@@ -8511,29 +10199,33 @@ var ConnextUser = function ($) {
 
                     mg2WidgetAPI.openNewsletter(params);
                 } catch (ex) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.exception(NAME, fnName, ex);
                 }
             });
 
             $("body").on("click", ".Mg2-btn-forgot", function (e) {
                 e.preventDefault();
                 var fnName = "Forgot password btn" + ".CLICK";
-                LOGGER.debug(NAME, fnName);
-                try {
 
+                LOGGER.debug(NAME, fnName, e);
+
+                try {
                     var $this = $(this),
                         href = $this.attr("href"),
                         email = $this.parents(".Mg2-connext").find('[data-mg2-input="Email"]').val();
+
                     href = CnnXt.Utils.AddReturnUrlParamToLink(href);
                     href = CnnXt.Utils.AddParameterToURL(href, "email", email);
                     $this.attr("href", href);
+
                     if ($this[0].hasAttribute("target")) {
                         window.open(href, "_blank");
                     } else {
                         window.location.href = href;
                     }
-                } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
                 }
             });
 
@@ -8541,10 +10233,10 @@ var ConnextUser = function ($) {
             $("body").on("click dblclick", UI.LoginButton, function (e) {
                 e.preventDefault();
                 var fnName = UI.LoginButton + ".CLICK";
-                LOGGER.debug(NAME, fnName);
+
+                LOGGER.debug(NAME, fnName, e);
 
                 try {
-
                     FORM_SUBMIT_LOADER = $(UI.LoginButton).loader();
                     FORM_ALERT = $(UI.LoginAlert).jalert();
 
@@ -8559,16 +10251,16 @@ var ConnextUser = function ($) {
                     } else {
                         JanrainAuthenticate($("[data-mg2-input=Username]:visible").val(), $("[data-mg2-input=Password]:visible").val());
                     }
-                } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
                 }
-
             });
 
             $("body").on("click", UI.JanrainLoginBtn, function (e) {
                 e.preventDefault();
                 var fnName = UI.JanrainLoginBtn + ".CLICK";
-                LOGGER.debug(NAME, fnName);
+
+                LOGGER.debug(NAME, fnName, e);
 
                 try {
                     if (window.janrain) {
@@ -8580,22 +10272,23 @@ var ConnextUser = function ($) {
                         $('#capture_signIn_traditionalSignIn_password').val(password);
                         $('#capture_signIn_traditionalSignIn_signInButton').click();
 
-                    } else console.error("No janrain global object found...");
+                    } else {
+                        LOGGER.warn("No janrain global object found!");
+                    }
 
-
-                } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
                 }
-
             });
 
             //Any element with a data-mg2-action= 'login' will fire this event.  This allows the client to set this data attribute to any element on their page and the appropriate login html will show based on the OPTIONS.Site.RegistrationTypeId.
             $("body").on("click", UI.ActionShowLogin, function (e) {
                 e.preventDefault();
                 var fnName = UI.ActionShowLogin + ".Click";
-                try {
-                    LOGGER.debug(NAME, fnName, "IS_LOGGED_IN", IS_LOGGED_IN);
 
+                LOGGER.debug(NAME, fnName, "IS_LOGGED_IN", IS_LOGGED_IN);
+
+                try {
                     if (AUTH_TYPE.MG2) {
                         //this is MG2 Auth type, show MG2 Login Modal.
                         var $loginModal = $(UI.LoginModal);
@@ -8607,9 +10300,33 @@ var ConnextUser = function ($) {
                         $loginModal.connextmodal({ backdrop: "true" });
                         $loginModal.resize();
 
-                        $loginModal.on('hidden.bs.modal', function (e) {
-                            CnnXt.Event.fire("onActionClosed", e);
-                        });
+                        var eventData = {
+                            LoginModalId: OPTIONS.LoginModalId,
+                            LoginModalName: OPTIONS.LoginModalName,
+                            LoginModalHtml: OPTIONS.LoginModal,
+                            jQueryElement: $loginModal
+                        }
+
+                        $loginModal
+                            .on('keydown', function (e) {
+                                if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
+                                    eventData.closeEvent = CnnXt.Common.CLOSE_CASES.EscButton;
+                                }
+                            })
+                            .on('hidden.bs.modal', function (e) {
+                                if (eventData.closeEvent == null || eventData.closeEvent == undefined) {
+                                    eventData.closeEvent = CnnXt.Common.CLOSE_CASES.ClickOutside;
+                                }
+
+                                CnnXt.Event.fire("onLoginClosed", eventData);
+                            });
+
+                        $loginModal
+                            .find("[data-dismiss=banner], [data-dismiss=info-box], [data-dismiss=inline], [data-dismiss=modal]")
+                            .on('click', function (e) {
+                                eventData.closeEvent = CnnXt.Common.CLOSE_CASES.CloseButton;
+                                CnnXt.Event.fire("onButtonClick", eventData);
+                            });
 
                     } else if (AUTH_TYPE.GUP) {
                         //this is a GUP AuthType, so show GUP popup modal
@@ -8617,40 +10334,39 @@ var ConnextUser = function ($) {
                     } else if (AUTH_TYPE.Janrain) {
                         if (window.janrain) {
                             janrain.capture.ui.modal.open();
-                        } else console.error("No janrain global object found...");
-                    }
-                    else if (AUTH_TYPE.Auth0) {
+                        } else {
+                            LOGGER.warn("No janrain global object found!");
+                        }
+                    } else if (AUTH_TYPE.Auth0) {
                         if (Auth0Lock) {
                             showAuth0Login();
-                        } else console.error("No Auth0 global object found...");
+                        } else {
+                            LOGGER.warn("No Auth0 global object found!");
+                        }
                     }
-                    window.CnnXt.Event.fire("onActionShown", e);
-                } catch (err) {
-                    console.error(NAME, fnName, "Exception", err);
+
+                    CnnXt.Event.fire("onLoginShown", eventData);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, ex);
                 }
             });
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
-
     };
 
     var setAuthType = function () {
-        /// <summary>Sets AUTH_TYPE object.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "setAuthType";
+
         try {
-            LOGGER.debug(NAME, fnName, "OPTIONS", OPTIONS);
-
-
+            LOGGER.debug(NAME, fnName, "Setting auth type...", OPTIONS);
 
             if (OPTIONS.Site.RegistrationTypeId == 1) {
-                LOGGER.debug(NAME, fnName, "IsMG2Auth");
+                LOGGER.debug(NAME, fnName, "Use MG2 auth system");
                 AUTH_TYPE["MG2"] = true;
             } else if (OPTIONS.Site.RegistrationTypeId == 2) {
-                LOGGER.debug(NAME, fnName, "IsJanrainAuth");
+                LOGGER.debug(NAME, fnName, "Use Janrain auth system");
                 AUTH_TYPE["Janrain"] = true;
 
                 //////by default setting this here in case of janrain modal login. (the same function for Authentication is called regardless if user used connext form for janrain or native janrain form.
@@ -8658,27 +10374,37 @@ var ConnextUser = function ($) {
                 FORM_ALERT = $(UI.LoginAlert).jalert();
 
             } else if (OPTIONS.Site.RegistrationTypeId == 3) {
+                LOGGER.debug(NAME, fnName, "Use GUP auth system");
                 AUTH_TYPE["GUP"] = true;
 
             } else if (OPTIONS.Site.RegistrationTypeId == 4) {
+                LOGGER.debug(NAME, fnName, "Use Auth0 auth system");
                 AUTH_TYPE["Auth0"] = true;
-                var lock = CnnXt.GetOptions().authSettings.auth0Lock;
+
+                var authSettings = CnnXt.GetOptions().authSettings;
+
+                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                    throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
+                }
+
+                var lock = authSettings.auth0Lock;
+
                 lock.on("authenticated", function (authResult) {
+                    LOGGER.debug(NAME, 'lock.on: authenticated', authResult);
                     lock.getUserInfo(authResult.accessToken, function (error, profile) {
                         if (error) {
-                            console.error('showAuth0Login', '', "<<EXCEPTION>>", error);
+                            LOGGER.debug(NAME, 'lock.getUserInfo', error);
                             CnnXt.Storage.SetUserProfile('');
+                            CnnXt.Event.fire("onLoginError", { ErrorMessage: (_.isString(error)) ? error : '' });
                             return;
                         }
+
+                        LOGGER.debug(NAME, 'lock.getUserInfo', profile);
+
                         CnnXt.Storage.SetUserProfile(profile);
+
                         if (CnnXt.Activation.IsActivationFlowRunning()) {
                             CnnXt.User.CheckAccess()
-                                .done(function (data) {
-                                    LOGGER.debug(NAME, fnName, "User.CheckAccess.Done", data);
-                                })
-                                .fail(function () {
-                                    LOGGER.debug(NAME, fnName, "User.CheckAccess.Fail");
-                                })
                                 .always(function () {
                                     CnnXt.Activation.Run({ runAfterSuccessfulLogin: true });
                                 });
@@ -8688,16 +10414,21 @@ var ConnextUser = function ($) {
                     });
                 });
             } else if (OPTIONS.Site.RegistrationTypeId == 5) {
-                LOGGER.debug(NAME, fnName, "IsCustomAuth");
+                LOGGER.debug(NAME, fnName, "Use Custom auth system");
                 //Registration type Custom
                 AUTH_TYPE[CnnXt.Common.RegistrationTypes[5]] = true;
             } else {
-                throw "Unknown Registration Type";
+                throw CnnXt.Common.ERROR.UNKNOWN_REG_TYPE;
             }
+
             registerEventlisteners();
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         }
     };
     //#endregion INIT Functions
@@ -8705,34 +10436,32 @@ var ConnextUser = function ($) {
     //#region ACCESS Functions
 
     var checkAccess = function () {
-        /// <summary>This is a deferred function that is called in the main 'Connext' function.  So any return needs to be a 'resolve' for successful access or 'reject' for a failed access.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "checkAccess";
 
-        var deferred = $.Deferred();
-        var lastUpdateDateDeferred = $.Deferred();
-        var customAuthTypeDeferred = $.Deferred();
+   
+        var deferred = $.Deferred(),
+            lastUpdateDateDeferred = $.Deferred(),
+            customAuthTypeDeferred = $.Deferred();
 
-        if (USER_DATA && USER_DATA.MasterId) {
+        LOGGER.debug(NAME, fnName, 'Checking user access...');
+
+        if (!AUTH_TYPE.Custom && USER_DATA && USER_DATA.MasterId) {
             CnnXt.API.GetUserLastUpdateDate({
                 payload: { masterId: USER_DATA.MasterId },
                 onSuccess: function (data) {
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                     if (CnnXt.Storage.GetUserLastUpdateDate() == null ||
                         new Date(CnnXt.Storage.GetUserLastUpdateDate()) < new Date(data)) {
                         CnnXt.Storage.SetUserState(null);
                         CnnXt.Storage.SetUserData(null);
                         CnnXt.Storage.SetUserLastUpdateDate(data);
                     }
+
                     lastUpdateDateDeferred.resolve();
                 },
                 onNull: function () {
-                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                     lastUpdateDateDeferred.resolve();
                 },
-                onError: function (err) {
-                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                onError: function (error) {
                     lastUpdateDateDeferred.resolve();
                 }
             });
@@ -8765,12 +10494,15 @@ var ConnextUser = function ($) {
                 try {
                     Connext.GetOptions().authSettings.CalculateAuthStatusFunc()
                         .done(function (data) {
-                            if (_.values(USER_STATES).indexOf(data) == -1) {
-                                throw "Unknown user state";
+                            if (_.values(USER_STATES).indexOf(data) == -1) {                             
+                                throw CnnXt.Common.ERROR.UNKNOWN_USER_STATE;
                             }
+
                             USER_STATE = data;
+
                             CnnXt.Storage.SetUserState(USER_STATE);
                             CnnXt.Storage.SetAccountDataExpirationCookie(true);
+
                             if (USER_STATE != USER_STATES.NotLoggedIn && !CnnXt.Storage.GetUserProfile()) {
                                 Connext.GetOptions().authSettings.GetAuthProfileFunc()
                                     .done(function(authProfile) {
@@ -8778,30 +10510,33 @@ var ConnextUser = function ($) {
                                             CnnXt.Storage.SetUserProfile(authProfile);
 
                                             var userDataObj = {};
+
                                             if (authProfile.MasterId) {
                                                 userDataObj.MasterId = authProfile.MasterId;
                                                 masterId = authProfile.MasterId;
                                             } else {
                                                 LOGGER.debug(NAME, fnName, "authProfile.MasterId is undefined");
                                             }
+
                                             if (authProfile.DisplayName) {
                                                 userDataObj.DisplayName = authProfile.DisplayName;
                                             } else {
                                                 LOGGER.debug(NAME, fnName, "authProfile.DisplayName is undefined");
                                             }
+
                                             if (Object.getOwnPropertyNames(userDataObj).length > 0) {
                                                 CnnXt.Storage.SetUserData(userDataObj);
                                             }
 
                                             customAuthTypeDeferred.resolve();
                                         } catch (ex) {
-                                            console.warn(NAME, fnName, "EXCEPTION", ex);
+                                            LOGGER.exception(NAME, fnName, ex);
                                             CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
                                             customAuthTypeDeferred.resolve();
                                         }
                                     })
-                                    .fail(function(error) {
-                                        LOGGER.debug(NAME, fnName, "customAuth.GetAuthProfileFunc.fail (error)", error);
+                                    .fail(function (error) {
+                                        LOGGER.debug(NAME, fnName, "customAuth.GetAuthProfileFunc.fail", error);
                                         CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
                                         customAuthTypeDeferred.resolve();
                                     });
@@ -8809,13 +10544,18 @@ var ConnextUser = function ($) {
                                 customAuthTypeDeferred.resolve();
                             }
                         })
-                        .fail(function(error) {
-                            LOGGER.debug(NAME, fnName, "customAuth.GetAuthProfileFunc.fail (error)", error);
+                        .fail(function (error) {
+                            LOGGER.debug(NAME, fnName, "customAuth.GetAuthProfileFunc.fail", error);
                             CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
                             customAuthTypeDeferred.resolve();
                         });
                 } catch (ex) {
-                    console.warn(NAME, fnName, "EXCEPTION", ex);
+                    if (ex.custom) {
+                        LOGGER.warn(ex.message);
+                    } else {
+                        LOGGER.exception(NAME, fnName, ex);
+                    }
+
                     CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
                     customAuthTypeDeferred.resolve();
                 }
@@ -8830,11 +10570,14 @@ var ConnextUser = function ($) {
                         if (!window.localStorage.getItem("janrainCaptureToken")) {
                             USER_STATE = USER_STATES.NotLoggedIn;
                             CnnXt.Storage.SetUserState(USER_STATE);
+                        } else {
+                            if (USER_STATE == USER_STATES.NotLoggedIn) {
+                                USER_STATE = null;
+                            }
                         }
                     }
 
                     if (USER_STATE == USER_STATES.NotLoggedIn) {
-                        //CnnXt.Event.fire("onNotAuthorized", USER_STATE);
                         CnnXt.Storage.ClearUser();
                         CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
                         deferred.reject("onNotAuthorized");
@@ -8855,16 +10598,14 @@ var ConnextUser = function ($) {
                                 AuthSystem = "Custom";
                             }
 
-                            //CnnXt.Event.fire("onAuthorized", { "UserState": USER_STATE, "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile() });
-                            //CnnXt.Event.fire("onLoggedIn", { "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile(), "AuthSystem": AuthSystem });
                             deferred.reject("onAuthorized");
 
                         } else if (isUserHasHighState()) {
                             var eventName = getEventNameForHighUserState();
-                            //CnnXt.Event.fire(eventName, USER_STATE);
                             deferred.reject(eventName);
                         }
                     }
+
                     if (USER_STATE != null) {
                         deferred.resolve(true);
                     }
@@ -8879,66 +10620,56 @@ var ConnextUser = function ($) {
                         CnnXt.Storage.SetAccountDataExpirationCookie(true);
                         getUserData()
                             .done(function (result) {
-                                LOGGER.debug(NAME, fnName, "getUserData.done -- result", result);
+                                LOGGER.debug(NAME, fnName, "User data", result);
+
                                 if (!result) {
-                                    throw "No User Data Result";
+                                    throw CnnXt.Common.ERROR.NO_USER_DATA;
                                 }
+
                                 masterId = result;
+
                                 if (AUTH_TYPE.MG2) {
                                     CnnXt.API.GetUserByEncryptedMasterId({
                                         payload: { encryptedMasterId: result },
                                         onSuccess: function (data) {
-
                                             if (AUTH_TYPE.Auth0) {
                                                 data.AuthSystem = "Auth0";
                                             } else if (AUTH_TYPE.GUP) {
                                                 data.AuthSystem = "GUP";
                                             }
 
-                                            LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                                             processSuccessfulLogin("MasterId", data);
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.resolve(true);
                                             $(UI.ActionShowLogin).hide();
                                             $(UI.LogoutButton).show();
-
                                         },
                                         onNull: function () {
-                                            LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.reject("GetUserByMasterId.onNull");
-                                            //CnnXt.Event.fire("onAuthorized", USER_STATE);
                                         },
-                                        onError: function (err) {
-                                            LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                                        onError: function (error) {
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.reject("GetUserMasterId.onError");
-                                            //CnnXt.Event.fire("onAuthorized", USER_STATE);
                                         }
                                     });
                                 } else if (AUTH_TYPE.Janrain) {
                                     CnnXt.API.GetUserByMasterId({
                                         payload: { id: result },
                                         onSuccess: function (data) {
-                                            LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
-
                                             data.AuthSystem = "Janrain";
-
                                             processSuccessfulLogin("externalId", data);
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.resolve(true);
                                         },
                                         onNull: function () {
-                                            LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.reject("GetUserByToken.onNull");
                                         },
                                         onError: function (err) {
-                                            LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.reject("GetUserByToken.onError");
                                         }
-
                                     });
                                 }
                                 else if (AUTH_TYPE.Auth0) {
@@ -8951,21 +10682,16 @@ var ConnextUser = function ($) {
                                         CnnXt.API.GetUserByMasterId({
                                             payload: { id: result },
                                             onSuccess: function (data) {
-
                                                 data.AuthSystem = "Auth0";
-
-                                                LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                                                 processSuccessfulLogin("externalId", data);
                                                 AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                                 deferred.resolve(true);
                                             },
                                             onNull: function () {
-                                                LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                                                 AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                                 deferred.reject("GetUserByExternalId.onNull");
                                             },
                                             onError: function (err) {
-                                                LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
                                                 AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                                 deferred.reject("GetUserByExternalId.onError");
                                             }
@@ -8983,13 +10709,18 @@ var ConnextUser = function ($) {
                                         { 'function': "getUserData.done", 'error': "Unknown Registration Type" });
                                 }
                             })
-                            .fail(function (err) {
-                                LOGGER.debug(NAME, fnName, "getUserData.fail -- err", err);
+                            .fail(function (error) {
+                                LOGGER.debug(NAME, fnName, "getUserData.fail -- error", error);
                                 AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                deferred.reject(err);
+                                deferred.reject();
                             });
-                    } catch (e) {
-                        console.error(NAME, fnName, "EXCEPTION", e);
+                    } catch (ex) {
+                        if (ex.custom) {
+                            LOGGER.warn(ex.message);
+                        } else {
+                            LOGGER.exception(NAME, fnName, ex);
+                        }
+
                         AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                         deferred.reject();
                     }
@@ -9006,11 +10737,16 @@ var ConnextUser = function ($) {
         /// <param name="data" type="Object">The data returned from whatever was used to determine authentication (we'll use AUTH_TYPE to handle this object in the appropriate way).</param>
         /// <returns>None</returns>
         var fnName = "processSuccessfulLogin";
-
+        LOGGER.debug(NAME, fnName, 'Process successful login', type, data);
         try {
             USER_STATE = USER_STATES.LoggedIn;
 
+            data.IgmAuth = data.IgmAuth || CnnXt.Storage.GetIgmAuth();
+            data.IgmContent = data.IgmContent || CnnXt.Storage.GetIgmContent();
+            data.IgmRegID = data.IgmRegID || CnnXt.Storage.GetigmRegID();
+
             USER_DATA = CnnXt.Utils.ShapeUserData(data);
+
             var localData = CnnXt.Storage.GetUserData();
             if (localData && USER_DATA) { //Merge local user data with response
                 USER_DATA.IgmContent = USER_DATA.IgmContent ? USER_DATA.IgmContent : localData.IgmContent;
@@ -9021,20 +10757,16 @@ var ConnextUser = function ($) {
             CnnXt.Storage.SetUserData(USER_DATA);
             CnnXt.Storage.SetAccountDataExpirationCookie(true);
 
-            //CnnXt.Event.fire("onLoggedIn", { "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile(), "AuthSystem": USER_DATA.AuthSystem });
-
             LOGGER.debug(NAME, fnName, "type", type, "USER_DATA", USER_DATA);
 
             HandleUiLoggedInStatus(true);
 
-            if ((!USER_DATA.Subscriptions || USER_DATA.Subscriptions == null) ||
-                (USER_DATA.Subscriptions && !_.values(USER_DATA.Subscriptions).length && USER_DATA.Subscriptions.OwnedSubscriptions == null)) {
+            if (checkNoSubscriptions(USER_DATA)) {
                 NOTIFICATION.show("NoSubscriptionData");
-                //CnnXt.Event.fire("onAuthorized", { "UserState": USER_STATE, "MG2AccountData": USER_DATA });
             } else {
                 //we have a USER_DATA.Subscriptions that is not an object, so parse it.
                 if (!_.isObject(USER_DATA.Subscriptions)) {
-                    USER_DATA.Subscriptions = $.parseJSON(USER_DATA.Subscriptions);
+                    USER_DATA.Subscriptions = JSON.parse(USER_DATA.Subscriptions);
                 }
                 var zipCodes = null;
                 if (USER_DATA.Subscriptions.OwnedSubscriptions) {
@@ -9051,8 +10783,8 @@ var ConnextUser = function ($) {
                     });
                 }
                 CnnXt.Storage.SetUserZipCodes(zipCodes);
-                $("#ddZipCode").html(zipCodes.toString());
             }
+
             //handle any AUTH_TYPE specific actions below.
             if (AUTH_TYPE.MG2) {
                 if (USER_DATA.IgmRegID) {
@@ -9060,6 +10792,9 @@ var ConnextUser = function ($) {
                 }
                 if (USER_DATA.IgmContent) {
                     CnnXt.Storage.SetIgmContent(USER_DATA.IgmContent);
+                }
+                if (USER_DATA.IgmAuth) {
+                    CnnXt.Storage.SetIgmAuth(USER_DATA.IgmAuth);
                 }
                 //MG2 Auth
             } else if (AUTH_TYPE.Janrain) {
@@ -9074,11 +10809,9 @@ var ConnextUser = function ($) {
             }
 
             defineUserState(USER_DATA);
+            $("#ddZipCode").html(CnnXt.Storage.GetActualZipCodes().toString());
 
             if (isUserHasHighState()) {
-                //var eventName = getEventNameForHighUserState();
-                //CnnXt.Event.fire(eventName, USER_STATE);
-
                 //We use bootstrap modalManager to check if we have any open modals (either Login modals or any 'Action' modals).
                 //if we do then we need to update the alert section so it says we have access and then we need to hide this modal.
 
@@ -9105,34 +10838,44 @@ var ConnextUser = function ($) {
                 ConfigCode: CnnXt.GetOptions().configCode,
                 SiteCode: CnnXt.GetOptions().siteCode,
                 SettingsKey: CnnXt.GetOptions().settingsKey,
-                ViewData: CnnXt.Campaign.GetLocalViewData()
+                ViewData: CnnXt.Storage.GetLocalViewData()
             };
             if (CnnXt.User.getMasterId()) {
                 data.masterId = CnnXt.User.getMasterId();
             }
 
             CnnXt.Storage.SetUserState(USER_STATE);
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
+    var checkNoSubscriptions = function (userData) {
+        return !userData.Subscriptions
+            || (_.isArray(userData.Subscriptions) && !userData.Subscriptions.length)
+            || (_.isObject(userData.Subscriptions) && (!userData.Subscriptions.OwnedSubscriptions || !userData.Subscriptions.OwnedSubscriptions.length));
+    }
+
     var defineUserState = function (data) {
         var fnName = "defineUserState";
+
         try {
             if (!data.DigitalAccess || !_.isEmpty(data.DigitalAccess.Errors)) {
                 USER_STATE = USER_STATES.LoggedIn;
-            } else if (!data.Subscriptions || data.Subscriptions.lenght == 0) {
+            } else if (!data.Subscriptions || data.Subscriptions.length == 0) {
                 USER_STATE = USER_STATES.LoggedIn;
             } else if (data.DigitalAccess.AccessLevel.IsPremium) {
                 USER_STATE = USER_STATES.Subscribed;
+                $('.Mg2-pin-modal').connextmodal("hide");
+                $('.Mg2-pin-infobox').hide();
             } else if (data.DigitalAccess.AccessLevel.IsUpgrade) {
                 USER_STATE = USER_STATES.SubscribedNotEntitled;
             } else if (data.DigitalAccess.AccessLevel.IsPurchase) {
                 USER_STATE = USER_STATES.NoActiveSubscription;
             }
-        } catch (e) {
-            LOGGER.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.debug(NAME, fnName, 'Defined user state', USER_STATE);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     }
 
@@ -9153,7 +10896,7 @@ var ConnextUser = function ($) {
     }
 
     var getEventNameForHighUserState = function () {
-        var eventName = "onNotAuthorized";
+        var eventName = 'onNotAuthorized';
         switch (USER_STATE) {
             case USER_STATES.LoggedIn:
                 eventName = 'onAuthorized';
@@ -9187,6 +10930,7 @@ var ConnextUser = function ($) {
 
             if (AUTH_TYPE.MG2) {
                 var encryptedMasterId = CnnXt.Storage.GetigmRegID();
+
                 if (encryptedMasterId) {
                     deferred.resolve(encryptedMasterId);
                 } else {
@@ -9206,6 +10950,7 @@ var ConnextUser = function ($) {
 
                         if (janrainProfile.uuid) {
                             USER_STATE = USER_STATES.LoggedIn;
+                            CnnXt.Storage.SetUserState(USER_STATE);
                             deferred.resolve(janrainProfile.uuid);
                             //deferred.resolve({ type: 'janrain', value: janrainProfile.uuid });
                         } else {
@@ -9216,7 +10961,7 @@ var ConnextUser = function ($) {
                 else {
                     USER_STATE = USER_STATES.NotLoggedIn;
                     CnnXt.Storage.SetUserState(USER_STATE);
-                    deferred.reject("Janrain object is exist");
+                    deferred.reject("Janrain object is not exist");
                 }
 
             } else if (AUTH_TYPE.GUP) {
@@ -9231,73 +10976,69 @@ var ConnextUser = function ($) {
 
                 }).fail(function (error) {
                     //we failed to get GUP user data.
-                    LOGGER.debug(NAME, fnName, "getCurrentGUPUser.fail (error)", error);
+                    LOGGER.debug(NAME, fnName, "getCurrentGUPUser", error);
                     deferred.reject();
 
                 });
             } else if (AUTH_TYPE.Auth0) {
-                var domain = Connext.GetOptions().authSettings.domain;
-                if (domain == null || domain == '') {
-                    domain = Connext.GetOptions().authSettings.auth0.client
-                        ? Connext.GetOptions().authSettings.auth0.client.baseOptions.domain
-                        : Connext.GetOptions().authSettings.auth0._domain;
+                var authSettings = CnnXt.GetOptions().authSettings;
+
+                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                    LOGGER.warn('No auth0Lock object in the authSettings!');
+                    USER_STATE = USER_STATES.NotLoggedIn;
+                    CnnXt.Storage.SetUserState(USER_STATE);
+                    CnnXt.Storage.ClearUser();
+                    deferred.reject(null);
                 }
-                var url = 'https://' + domain + '/user/ssodata/';
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    withCredentials: true,
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (data) {
-                        if (data && data.sso) {
-                            try {
-                                deferred.resolve(data.lastUsedUserID);
-                            }
-                            catch (ex) {
-                                LOGGER.error(NAME, fnName, "auth0 parse response error", ex);
+                var lock = authSettings.auth0Lock;
+                lock.checkSession({ scope: 'openid profile email', redirect_uri: window.location.origin }, function (error, authResult) {
+                    if (!error && authResult && authResult.accessToken) {
+                        lock.getUserInfo(authResult.accessToken, function (error, profile) {
+                            if (!error && profile && profile.sub) {
+                                LOGGER.debug(NAME, fnName, "CHECK SSO - true", profile);
+                                deferred.resolve(profile.sub);
+                            } else {
+                                LOGGER.debug(NAME, fnName, "checkSession - error", error);
                                 USER_STATE = USER_STATES.NotLoggedIn;
                                 CnnXt.Storage.SetUserState(USER_STATE);
                                 CnnXt.Storage.ClearUser();
                                 deferred.reject(null);
                             }
-                        }
-                        else {
-                            LOGGER.debug(NAME, fnName, "SSO - false", data);
-                            USER_STATE = USER_STATES.NotLoggedIn;
-                            CnnXt.Storage.SetUserState(USER_STATE);
-                            CnnXt.Storage.ClearUser();
-                            deferred.reject(null);
-                        }
+                        });
+                    } else {
+                        LOGGER.debug(NAME, fnName, "checkSession - error", error);
+                        USER_STATE = USER_STATES.NotLoggedIn;
+                        CnnXt.Storage.SetUserState(USER_STATE);
+                        CnnXt.Storage.ClearUser();
+                        deferred.reject(null);
                     }
                 });
             } else {
                 //unknown AUTH_TYPE, fire critical event and .reject();
                 CnnXt.Event.fire("onCriticalError", { 'function': "getUserData", 'error': "Unknown Registration Type" });
                 deferred.reject("Unknown Registration Type");
+                LOGGER.debug(NAME, fnName, 'Unknown Registration Type', AUTH_TYPE);
             }
+
             return deferred.promise();
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
-
     };
 
     var logoutUser = function () {
         var fnName = "logoutUser";
 
         try {
-            LOGGER.debug(NAME, fnName);
+            LOGGER.debug(NAME, fnName, 'Logout!');
 
             HandleUiLoggedInStatus(false);
 
             CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
             CnnXt.Run();
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -9314,20 +11055,21 @@ var ConnextUser = function ($) {
         /// <param name="" type=""></param>
         /// <returns>None</returns>
         var fnName = "getJanrainProfileData";
+
         try {
             var profileData = window.localStorage.getItem("janrainCaptureProfileData");
-
+            LOGGER.debug(NAME, fnName, 'Get Janrain profile data', profileData);
             if (profileData == null) {
                 profileData = window.localStorage.getItem("janrainCaptureReturnExperienceData");
             }
 
             if (profileData) {
-                return $.parseJSON(profileData);
+                return JSON.parse(profileData);
             } else {
                 return false;
             }
-        } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             return false;
         }
     };
@@ -9337,31 +11079,31 @@ var ConnextUser = function ($) {
         /// <param name="result" type="Object">Result object returned from Janrain.</param>
         /// <returns>None</returns>
         var fnName = "janrainAuthenticationCallback";
+
         try {
             LOGGER.debug(NAME, fnName, result);
+
             if (!result.userData.uuid) {
-                throw "No userData UUID";
+                throw CnnXt.Common.ERROR.NO_JANRAIN_DATA;
             }
+
             CnnXt.API.GetUserByMasterId({
                 payload: { id: result.userData.uuid },
                 onSuccess: function (data) {
-
                     data.AuthSystem = 'Janrain';
-
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                     processSuccessfulLogin("Form", data);
                 },
-                onNull: function () {
-                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
-                },
-                onError: function (err) {
-                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                onError: function(err) {
+                    LOGGER.exception(NAME, fnName, err);
                 }
-
             });
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         }
     };
 
@@ -9370,7 +11112,6 @@ var ConnextUser = function ($) {
     //#region GUP Functions -- GUP only functions
 
     var executePopupLoginFlow = function () {
-
         var popupWidth = 500,
             popupHeight = 600,
             popupPositionLeft = (screen.width / 2) - (popupWidth / 2),
@@ -9391,7 +11132,6 @@ var ConnextUser = function ($) {
     };
 
     var GetCurrentGupUser = function () {
-        LOGGER.debug("User", "getCurrentGUPUser");
         return $.ajax({
             type: "POST",
             url: GUP_SETTINGS.UserServiceBasePath + "user/?callback=?", //need to update based on ADMIN settings.
@@ -9406,8 +11146,9 @@ var ConnextUser = function ($) {
         /// <param name="" type=""></param>
         /// <returns>None</returns>
         var fnName = "authenticateGUPUser";
+
         try {
-            LOGGER.debug(NAME, fnName);
+            LOGGER.debug(NAME, fnName, arguments);
 
             if (!data.meta.isAnonymous && data.response.user) {
                 //user is not anonymous and we have a response.user object, this means this user is logged in.
@@ -9417,31 +11158,26 @@ var ConnextUser = function ($) {
                     LOGGER.debug(NAME, fnName, "GUP User <<IS>> LOGGED IN, AND has market access");
                     USER_STATE = USER_STATES.Subscribed;
                     CnnXt.Storage.SetUserState(USER_STATE);
-                    //CnnXt.Event.fire("OnHasAccess", USER_STATE);
+                    $('.Mg2-pin-modal').connextmodal("hide");
+                    $('.Mg2-pin-infobox').hide();
                     return true;
                 } else {
                     //even though this user is logged in, they don't have access, so fire deferred.reject().
                     LOGGER.debug(NAME, fnName, "GUP User <<IS>> LOGGED IN, but doesnt have marketAccess");
                     USER_STATE = USER_STATES.LoggedIn;
                     CnnXt.Storage.SetUserState(USER_STATE);
-                    //CnnXt.Event.fire("onAuthorized", USER_STATE);
-                    ////deferred.reject();
                     return false;
                 }
                 //whether they have marketAccess or not, set logged in to true (so on login/logout click events we know logged in state and don't have to call GetUser again.;
-                ////IS_LOGGED_IN = true;
             } else {
                 //user is not logged into GUP.
                 LOGGER.debug(NAME, fnName, "GUP User <<NOT>> LOGGED IN");
                 USER_STATE = USER_STATES.NotLoggedIn;
                 CnnXt.Storage.SetUserState(USER_STATE);
-                //CnnXt.Event.fire("onNotAuthorized", USER_STATE);
                 return false;
-                ////IS_LOGGED_IN = false;
-                ////deferred.reject();
             }
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             USER_STATE = USER_STATES.NotLoggedIn;
             CnnXt.Storage.SetUserState(USER_STATE);
             return false;
@@ -9457,8 +11193,8 @@ var ConnextUser = function ($) {
         /// <param name="" type=""></param>
         /// <returns>None</returns>
         var fnName = "registerEventlisteners";
+
         try {
-            //LOGGER.debug(pName, fnName);
             if (AUTH_TYPE.GUP) {
                 //this is required for GUP, when the user closes the popup login modal (regardless of successful login, if they click 'cancel' or just close the popup modal.
                 window.jQuery(window)
@@ -9466,20 +11202,14 @@ var ConnextUser = function ($) {
                     function () {
                         //GUP does not have a callback for successful login, because of this and what i mentioned above about not knowing why the modal was closed, we need to call the GetUserStatus call again, 
                         //to see if they are now logged in. (This is not ideal, but this is actually according to the GUP documentation).
-                        //refresh();
                         LOGGER.debug("focus.gup_login_popup");
-                        //checkAccess();
                     });
             }
 
-
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
-
-
-
 
 
     //#region UI Functions
@@ -9489,6 +11219,7 @@ var ConnextUser = function ($) {
         /// <param name="isLoggedIn" type="Boolean">Logged in status.</param>
         /// <returns>None</returns>
         var fnName = "handleUILoggedInStatus";
+
         try {
             var $el = $(UI.ActionShowLogin); //gets all the elements that have the selector for UI.ActionShowLogin. We will change their status based on 'isLoggedIn' argument.
 
@@ -9501,24 +11232,25 @@ var ConnextUser = function ($) {
                 USER_STATE = USER_STATES.NotLoggedIn;
             }
 
+            LOGGER.debug(NAME, fnName, "USER_STATE", USER_STATE);
+
             if (IS_LOGGED_IN) {
                 //is logged in.
                 $(UI.LogoutButton).show();
                 $(UI.ActionShowLogin).hide();
                 //sets the html to the data property for 'mg2-logged-in'. This lets the client to set this on their site and we will update accordingly (i.e Logout or Log Out or Sign Out etc..).
                 $el.html($el.data("mg2-logged-in"));
-                //CnnXt.Event.fire("onAuthorized", null);
             } else {
                 //not logged in.
                 $el.html($el.data("mg2-logged-out"));
                 CnnXt.Storage.ClearUser();
                 $(UI.LogoutButton).hide();
                 $(UI.ActionShowLogin).show();
-                //CnnXt.Event.fire("onNotAuthorized", null);
-                $("#ddZipCode").html(CnnXt.Storage.GetActualZipCodes());
+                $("#ddZipCode").html(CnnXt.Storage.GetActualZipCodes().toString());
             }
-        } catch (e) {
-            LOGGER.debug(NAME, fnName, "EXCEPTION", e);
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -9531,122 +11263,134 @@ var ConnextUser = function ($) {
     //#region API CALLS
 
     var Mg2Authenticate = function (email, password) {
-        /// <summary>Authenticates an MG2 user by email and password.  Calls GetUserByEmailAndPassword (calls api/authentication in account services)</summary>
-        /// <param name="email" type="string"></param>
-        /// <param name="password" type="string"></param>
-        /// <returns>None</returns>
         var fnName = "MG2Authenticate";
+
         try {
             if (!email) {
                 FORM_ALERT.find(".alert").remove();
                 NOTIFICATION.showAndHide("Please enter email", 10000);
                 FORM_SUBMIT_LOADER.off();
+                LOGGER.debug(NAME, fnName, 'No email');
                 return false;
             }
+
             if (!password) {
                 FORM_ALERT.find(".alert").remove();
                 NOTIFICATION.showAndHide("Please enter password", 10000);
                 FORM_SUBMIT_LOADER.off();
+                LOGGER.debug(NAME, fnName, 'No password');
                 return false;
             }
-            LOGGER.debug(NAME, fnName);
+
+            LOGGER.debug(NAME, fnName, 'Login');
+
             CnnXt.API.GetUserByEmailAndPassword({
                 payload: { email: email, password: password },
                 onSuccess: function (data) {
                     data.Email = email;
-
                     data.AuthSystem = 'MG2';
-
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                     processSuccessfulLogin("Form", data);
+                    CnnXt.Event.fire("onLoginSuccess", { "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile(), "AuthSystem": USER_DATA.AuthSystem });
                     $(UI.ActionShowLogin).hide();
                     $(UI.LogoutButton).show();
                     CnnXt.Run();
                 },
                 onNull: function () {
-                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                     NOTIFICATION.show("NotAuthenticated");
                 },
                 onError: function (err) {
-                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
-                    var errorMessage = "GenericAuthFailed";
-                    if (err.responseJSON || err.responseText) {
-                        try {
-                            LOGGER.debug(NAME, fnName, "try parse error response");
-                            if (!err.responseJSON && err.responseText) {
-                                var respText = JSON.parse(err.responseText);
-                                if (respText.Message) {
-                                    var message = JSON.parse(respText.Message);
-                                    errorMessage = message.Message;
-                                    if (errorMessage == "UserName or Password invalid.") {
-                                        errorMessage = incorrectCreditsMessage;
-                                    }
-                                }
-                            } else {
-                                errorMessage = err.responseJSON.Message;
-                                var json = JSON.parse(err.responseJSON.Message);
-                                if (json.Message) {
-                                    errorMessage = json.Message;
-                                    if (errorMessage == "UserName or Password invalid.") {
-                                        errorMessage = incorrectCreditsMessage;
-                                    }
-                                }
-                            }
-                        }
-                        catch (e) {
-                            LOGGER.debug(NAME, fnName, "Error of parse response JSON");
-                        }
-                    }
+                    var errorMessage = getMessageFromErrorResponse(err);
+
+                    CnnXt.Event.fire("onLoginError", { ErrorMessage: errorMessage });
+
                     FORM_ALERT.find(".alert").remove();
                     NOTIFICATION.showAndHide(errorMessage, 10000);
                 },
                 onComplete: function () {
-
                     FORM_SUBMIT_LOADER.off();
                 }
             });
 
-
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
+
+    var getMessageFromErrorResponse = function (err) {
+        var fnName = 'getMessageFromErrorResponse';
+
+        var errorMessage = "GenericAuthFailed";
+
+        if (err && err.Message) {
+            try {
+                LOGGER.debug(NAME, fnName, "Try parse error message");
+
+                var message = JSON.parse(err.Message);
+
+                errorMessage = message.Message;
+
+                if (errorMessage == "UserName or Password invalid.") {
+                    errorMessage = incorrectCreditsMessage;
+                }
+
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, "parse response JSON", ex);
+                return incorrectCreditsMessage;
+            }
+
+            LOGGER.debug(NAME, fnName, 'Error message:', errorMessage);
+        }
+
+        return errorMessage;
+    }
 
     //#endregion API CALLS
 
     //#region AJAX CALLS
 
-    //var LogoutGupUser = function () {
-    //    LOGGER.debug("User", "logoutGUPUser");
-
-    //    return $.ajax({
-    //        type: "POST",
-    //        url: GUP_SETTINGS.UserServiceBasePath +
-    //        "user/logout/?callback=?", //need to update based on ADMIN settings.
-    //        contentType: "application/json; charset=utf-8",
-    //        dataType: "json",
-    //        async: true
-    //    });
-    //};
+    var LogoutGupUser = function () {
+        return $.ajax({
+            type: "POST",
+            url: GUP_SETTINGS.UserServiceBasePath +
+            "user/logout/?callback=?", //need to update based on ADMIN settings.
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true
+        });
+    };
 
     var showAuth0Login = function () {
-        var authObj = CnnXt.GetOptions().authSettings;
-        if (authObj.auth0Lock == null || authObj.auth0Lock == undefined) {
-            LOGGER.warn('showAuth0Login', '', "<<EXCEPTION>>  Auth0Lock object is null", authObj.auth0Lock);
+        var fnName = 'showAuth0Login';
+
+        try {
+            var authSettings = CnnXt.GetOptions().authSettings;
+
+            if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
+            }
+
+            authSettings.auth0Lock.show();
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         }
-        authObj.auth0Lock.show();
     };
 
     var clearUserStateIfWasRedirect = function () {
         var fnName = 'clearUserStateIfWasRedirect';
+
         try {
-            LOGGER.debug('User', fnName);
+            LOGGER.debug(NAME, fnName);
+
             if (CnnXt.Utils.getUrlParam('clearUserState')) {
                 CnnXt.Storage.SetUserData(null);
                 CnnXt.Storage.SetUserState(null);
             }
-        } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
     //#endregion AJAX CALLS
@@ -9668,20 +11412,20 @@ var ConnextUser = function ($) {
             //return this;
         },
         CheckAccess: function () {
-            var deferred = $.Deferred();
-            checkAccess()
-                .done(function () {
-                    deferred.resolve();
+            return checkAccess()
+                .done(function (data) {
+                    LOGGER.debug(NAME, 'CheckAccess', "User.CheckAccess.Done", data);
                 })
                 .fail(function () {
-                    deferred.reject();
+                    LOGGER.debug(NAME, 'CheckAccess', "User.CheckAccess.Fail");
                 })
                 .always(function () {
-                    var registrationTypeId = Connext.Storage.GetLocalConfiguration().Site.RegistrationTypeId;
-                    var AUTHSYSTEM = CnnXt.Common.RegistrationTypes[registrationTypeId];
-                    var eventName = getEventNameForHighUserState();
-                    if (CnnXt.Storage.GetUserState() != USER_STATES.NotLoggedIn &&
-                        CnnXt.Storage.GetUserState() != null) {
+                    var registrationTypeId = Connext.Storage.GetLocalConfiguration().Site.RegistrationTypeId,
+                        AUTHSYSTEM = CnnXt.Common.RegistrationTypes[registrationTypeId],
+                        eventName = getEventNameForHighUserState(),
+                        userState = CnnXt.Storage.GetUserState();
+
+                    if (userState != USER_STATES.NotLoggedIn && userState != null) {
                         CnnXt.Event.fire("onLoggedIn", {
                             AuthSystem: AUTHSYSTEM,
                             AuthProfile: CnnXt.Storage.GetUserProfile(),
@@ -9694,8 +11438,9 @@ var ConnextUser = function ($) {
                         AuthProfile: CnnXt.Storage.GetUserProfile(),
                         MG2AccountData: Connext.Storage.GetUserData()
                     });
+
+                    $("#ddZipCode").html(CnnXt.Storage.GetActualZipCodes().toString());
                 });
-            return deferred.promise();
         },
         GetAuthTiming: function () {
             return AUTH_TIMING;
@@ -9751,8 +11496,9 @@ var ConnextMeterCalculation = function ($) {
         "Meta": evalMeta,
         "UserState": evalUserState,
         "AdBlock": evalAdBlock,
-        "URLMask": evalUrlMask
-    }
+        "URLMask": evalUrlMask,
+        "FlittzStatus": evalFlittzStatus,
+    };
 
     //this will hold the cached results when we are determing segment values.  Once a 'Segment Type' is determined we set it's value here, then on subsqeunt checks to this type we will return the cached value instead of determining this value again.
     //i.e - once we determine an ArticleAge we set the value so we don't need to keep looking this up.
@@ -9775,72 +11521,91 @@ var ConnextMeterCalculation = function ($) {
         var deferred = $.Deferred();
 
         try {
-            LOGGER.debug(NAME, fnName, "calculating meter level....");
-            //LOGGER.debug(NAME, fnName, 'rules', rules);
+            LOGGER.debug(NAME, fnName, "Calculating meter level....", rules);
 
             //holds variable if this rule is passed. We will set this in the 'rules.each'. We use this in the rules.each so we don't process any other rules when this is set to true (we can't exit out of a $.each, so we need to just skip processing)
-            var rulePassed = false;
 
             $.each(rules, function (key, rule) {
                 //loop through rules. (val is a rule object)
                 LOGGER.debug(NAME, fnName, "rules.each", key, rule);
+                rule.EvaluationPromise = $.Deferred();
+                rule.Passed = false;
 
-                if (!rulePassed) { //we only loop through this rules segments if we have not already determined a rule to use.
+                var allSegmentsPass = true; //set this to true by default. If a segment fails we set this to false so we know at least one segment failed which means this rule failed, so we'll skip testing other segments in this rule.
+                ////var segmentFailed = false; //set this to false by default. If a segment fails we set this to true so we know the previous segment failed, so we should skip checking the other segments in this rule. This will be reset for each rule.
 
-                    var allSegmentsPass = true; //set this to true by default. If a segment fails we set this to false so we know at least one segment failed which means this rule failed, so we'll skip testing other segments in this rule.
-                    ////var segmentFailed = false; //set this to false by default. If a segment fails we set this to true so we know the previous segment failed, so we should skip checking the other segments in this rule. This will be reset for each rule.
+                $.each(rule.Segments, function (key, segment) {
+                    //loop through segments for this rule
+                    LOGGER.debug(NAME, fnName, "segments.each", key, segment);
 
-                    $.each(rule.Segments, function (key, segment) {
-                        //loop through segments for this rule
-                        LOGGER.debug(NAME, fnName, "segments.each", key, segment);
-
-                        if (allSegmentsPass) {
-                            //previous segment (or this is first segment) has not failed, so we should test this.
-
+                    if (allSegmentsPass) {
+                        //previous segment (or this is first segment) has not failed, so we should test this.
+                        if (segment.SegmentType != 'Promise') {
                             SEGMENT_TEST_FUNCTIONS[segment.SegmentType](segment)
                                 .done(function() {
                                     //.done means this segment passed, we really don't need to do anything here, since we only care if a segment fails.
-                                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- PASSED");
+                                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- PASSED", segment);
                                 })
                                 .fail(function() {
                                     //.fail means this segment failed, so set allSegmentsPass to false.
                                     allSegmentsPass = false;
-                                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- FAILED");
+                                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- FAILED", segment);
                                 });
-                        } else {
-                            //previous segment in this rule failed, so skip checking this segment.
-                            LOGGER.debug(NAME, fnName, "Previous Segment Failed, Not processing rest of segments.");
                         }
-                    }); // each rule.Segment loop.
+                    } else {
+                        //previous segment in this rule failed, so skip checking this segment.
+                        LOGGER.debug(NAME, fnName, "Previous Segment Failed, Not processing rest of segments.");
+                    }
+                }); // each rule.Segment loop.
 
-                    //we've finished looping through this rules 'Segment' array. Check if all allSegmentsPass is true, if it is then we know this rule passed and is the one we should use.
-                    if (allSegmentsPass) {
-                        LOGGER.debug(NAME, fnName, "All Segments Passed, Using [" + rule.Name + "] Rule ");
+                //we've finished looping through this rules 'Segment' array. Check if all allSegmentsPass is true, if it is then we know this rule passed and is the one we should use.
+                if (allSegmentsPass) {
 
-                        //we set rulePassed to true, so we skip checking any other rules.
-                        rulePassed = true;
+                    var promiseSegments = _.filter(rule.Segments, function(segment) {
+                        return segment.SegmentType == 'Promise';
+                    });
+
+                    if (promiseSegments && promiseSegments.length) {
+                        evaluatePromiseSegments(promiseSegments, CnnXt.GetOptions().DynamicMeterPromiseTimeout)
+                            .done(function() {
+                                LOGGER.debug(NAME, fnName, "All Segments Passed, Using [" + rule.Name + "] Rule ", rule);
+
+                                //we set rule.Passed to true, so we skip checking any other rules.
+                                rule.Passed = true;
+                            })
+                            .always(function() {
+                                rule.EvaluationPromise.resolve();
+                            });
+                    } else {
+                        LOGGER.debug(NAME, fnName, "All Segments Passed, for [" + rule.Name + "] Rule ", rule);
+
+                        //we set rule.Passed to true, so we skip checking any other rules.
+                        rule.Passed = true;
 
                         //we can call deferred.resolve and pass in this rules meterLevel
-                        deferred.resolve(rule);
-
+                        rule.EvaluationPromise.resolve();
                     }
-
                 } else {
-                    //rulePassed is true, so we already determined a rule to use, so not testing any other rules (can't exit out of this $.each so just don't process it's segments 
-                    LOGGER.debug(NAME, fnName, "Rule Already Set...Skipping this rule.");
-                }// !rulePassed
-
-
+                    rule.EvaluationPromise.resolve();
+                }
             });
 
-            if (!rulePassed) {
-                //a rule didn't pass so we call deferred.reject
-                deferred.reject();
-            }
+            $.when.apply($, _.map(rules, function (rule) { return rule.EvaluationPromise.promise(); }))
+                .done(function() {
+                    var passedRules = _.filter(rules, function(rule) {
+                        return rule.Passed == true;
+                    });
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
-            deferred.reject(e);
+                    if (!passedRules || passedRules.length == 0) {
+                        deferred.reject();
+                    } else {
+                        deferred.resolve(_.sortBy(passedRules, 'Priority')[0]);
+                    }
+                });
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
         }
 
         return deferred.promise();
@@ -9851,23 +11616,18 @@ var ConnextMeterCalculation = function ($) {
     //#region SEGMENT TESTS
 
     function evalArticleAge(segment) {
-        /// <summary>This checks article age based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalArticleAge";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
-
-            LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var articleAge = getArticleAge(segment.Options);
 
             //fixes qualifier so if it is an equal sign we set qualifier as ==
             var qualifier = (segment.Options.Qualifier == "=") ? "==" : segment.Options.Qualifier;
-
 
             if (eval(articleAge + qualifier + segment.Options.Val)) {
                 deferred.resolve();
@@ -9875,42 +11635,33 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             deferred.reject(false);
         }
 
-        //return deferred promise
         return deferred.promise();
-
     }
 
     function evalUrlParam(segment) {
-        /// <summary>This checks based on a Url parameter.</summary>
-        /// <param type="Array" name="_SegmentOptions">Holds array of segment options</param>
-        /// <returns type="Boolean">Boolean if segment passed.</returns>
         var fnName = "evalUrlParam";
 
         //create deferred object
         var deferred = $.Deferred();
 
         try {
-            LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             //gets the value of the url param. (this will be null if this url param does not exist
             var paramValue = CnnXt.Utils.GetUrlParam(segment.Options.ParamName);
             var qualifier = CnnXt.Common.QualifierMap[segment.Options.Qualifier];
+
             if (paramValue != null) {
-
-
                 if (eval("'" + paramValue.toUpperCase() + "'" + qualifier + "'" + segment.Options.Val.toUpperCase() + "'")) {
-                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- Passed");
                     deferred.resolve();
                 } else {
-                    LOGGER.debug(NAME, fnName, "Segment[" + segment.id + "] --- FAILED");
                     deferred.reject();
                 }
-
             } else {
                 if (qualifier == "==") {
                     deferred.reject();
@@ -9919,8 +11670,8 @@ var ConnextMeterCalculation = function ($) {
                 }
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             deferred.reject();
         }
 
@@ -9928,17 +11679,12 @@ var ConnextMeterCalculation = function ($) {
     }
 
     function evalHiddenField(segment) {
-        /// <summary>This checks hidden field value based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalHiddenField";
 
-        //create deferred object
         var deferred = $.Deferred();
 
         try {
-
-            LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var isPassed = false;
             var $hiddenField = segment.Options.Selector.trim() ? $(segment.Options.Selector + "[type='hidden']") : null;
@@ -9957,27 +11703,21 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             deferred.reject(false);
         }
 
-        //return deferred promise
         return deferred.promise();
     }
 
     function evalSubdomain(segment) {
-        /// <summary>This checks subdomain in domain based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalSubdomain";
 
-        //create deferred object
         var deferred = $.Deferred();
 
         try {
-
-            //LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var searchingVal = segment.Options.Val.toUpperCase();
             var sourceVal = window.location.hostname.toUpperCase(); // root domain won't be included
@@ -9989,25 +11729,23 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             deferred.reject(false);
         }
 
-        //return deferred promise
         return deferred.promise();
     }
 
     function evalGeo(segment) {
-        /// <summary>This checks the current user zip code</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
+        var fnName = 'evalGeo';
+
         var isPassed = false;
-        //create deferred object
+
         var deferred = $.Deferred();
 
         try {
-            //We have a 'HiddenField' criteria and 'actionPassed' is still true so we need to check this.
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var userZipCodes = CnnXt.Storage.GetActualZipCodes();
 
@@ -10015,27 +11753,28 @@ var ConnextMeterCalculation = function ($) {
                 userZipCodes.forEach(function (zipCode) {
                     if (~segment.Options.Zipcodes.indexOf(zipCode)) {
                         isPassed = segment.Options.GeoQalifier.toUpperCase() == "IN";
-                    } else if(segment.Options.Zipcodes.indexOf('*') >= 0){
-                        var valueItems =segment.Options.Zipcodes.split(",") || segment.Options.Zipcodes.split("");
-                        var foundZip =  valueItems.filter(function (value) {
+                    } else if (segment.Options.Zipcodes.indexOf('*') >= 0) {
+                        var valueItems = segment.Options.Zipcodes.split(",") || segment.Options.Zipcodes.split("");
+                        var foundZip = valueItems.filter(function (value) {
                             var valueItem = value.split("");
                             var zipItems = zipCode.split("");
                             return zipItems.length != valueItem.length ? false : valueItem.every(function (item, i) {
                                 return valueItem[i] === "*" ? true : item === zipItems[i];
                             });
                         });
-                        if(foundZip.length > 0 ) {
+                        if (foundZip.length > 0) {
                             isPassed = segment.Options.GeoQalifier.toUpperCase() == "IN";
                         }
                         else isPassed = segment.Options.GeoQalifier.toUpperCase() != "IN";
-                    }else {
+                    } else {
                         isPassed = segment.Options.GeoQalifier.toUpperCase() != "IN";
                     }
                 });
             }
 
-        } catch (e) {
-            isPassed = false;
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject(false);
         }
 
         if (isPassed) {
@@ -10048,38 +11787,42 @@ var ConnextMeterCalculation = function ($) {
     }
 
     function evalJsVar(segment) {
-        /// <summary>This checks JS variable value based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalJSVar";
 
-        //create deferred object
         var deferred = $.Deferred();
 
         try {
-
-            LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var isPassed = true;
             var varValue = segment.Options.VarName;
 
-            var jsValue = eval(varValue);
+            // var jsValue = eval(varValue);
+
+            var jsValue;
+            try {
+                jsValue = eval(varValue);
+            } catch (ex) {
+                LOGGER.warn(NAME, fnName, ex);
+                deferred.reject();
+            }
+
             if ($.isArray(jsValue)) {
-                jsValue = jsValue.map(function (item) {
-                    return item.trim().toLowerCase();
-                });
+              jsValue = jsValue.map(function (item) {
+                return item.toString().trim().toLowerCase();
+              });
                 if (segment.Options.Qualifier == "Contains" ||
                     segment.Options.Qualifier == "Does Not Contain") {
                     if (jsValue.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
                         isPassed = segment.Options.Qualifier == "Contains";
                     } else {
-                        isPassed = segment.Options.Qualifier == "Doesn't contain";
+                        isPassed = segment.Options.Qualifier == "Does Not Contain";
                     }
                 } else {
                     isPassed = segment.Options.Qualifier == "Equals";
                 }
             } else {
-                if (jsValue){
+                if (jsValue) {
                     jsValue = jsValue.toString().toLowerCase();
                 }
 
@@ -10089,8 +11832,8 @@ var ConnextMeterCalculation = function ($) {
                         isPassed = segment.Options.Qualifier == "Does Not Contain";
                     } else {
                         var delimiter, array;
-                        delimiter = segment.Options.Delimiter ? new RegExp(segment.Options.Delimiter.replace(/space/g, '/\s'), 'g') : /[ ,;]/g;
-                        array = jsValue.split(delimiter); //split(/[,;]/g);
+                        delimiter = segment.Options.Delimiter ? new RegExp(segment.Options.Delimiter.replace(/space/g, ' '), 'g') : /[ ,;]/g;
+                        array = jsValue.split(delimiter);
 
                         if (array.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
                             isPassed = segment.Options.Qualifier == "Contains";
@@ -10099,11 +11842,12 @@ var ConnextMeterCalculation = function ($) {
                         }
                     }
                 } else {
-                    if (CnnXt.Utils
-                        .JSEvaluate(jsValue,
-                            segment.Options.Qualifier,
-                            segment.Options.Val.toLowerCase(),
-                            "JavascriptCriteria")) {
+                    if (CnnXt.Utils.JSEvaluate(
+                        jsValue,
+                        segment.Options.Qualifier,
+                        segment.Options.Val,
+                        "JavascriptCriteria"
+                    )) {
                         //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
                     } else {
                         //this failed, so set actionPassed to false;
@@ -10111,16 +11855,15 @@ var ConnextMeterCalculation = function ($) {
                     }
                 }
             }
+
             if (isPassed) {
                 deferred.resolve();
             } else {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
-            //return false;
-            //_CB(false);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             deferred.reject();
         }
 
@@ -10129,30 +11872,27 @@ var ConnextMeterCalculation = function ($) {
     }
 
     function evalUserState(segment) {
-        /// <summary>This checks evalUserState presence based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalUserState";
 
-        //create deferred object
         var deferred = $.Deferred();
 
         try {
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
+
             var userState = CnnXt.User.getUserState();
 
             if (userState == null)
                 userState = "Logged Out";
             var isPassed = true;// userState == segment.Options["User State"];
 
-            if (!CnnXt.Utils
-                .JSEvaluate(userState,
-                    segment.Options['Qualifier'],
-                    segment.Options["User State"],
-                    "UserStateCriteria",
-                    "string")) {
+            if (!CnnXt.Utils.JSEvaluate(
+                userState,
+                segment.Options['Qualifier'],
+                segment.Options["User State"],
+                "UserStateCriteria"
+            )) {
                 isPassed = false;
             }
-
 
             if (isPassed) {
                 deferred.resolve();
@@ -10160,53 +11900,46 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
-            //return false;
-            //_CB(false);
-            deferred.reject(false);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
         }
-        //return deferred promise
+   
         return deferred.promise();
     }
 
     function evalAdBlock(segment) {
-        /// <summary>This checks evalAdBlock presence based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalAdBlock";
 
         var deferred = $.Deferred();
+
         try {
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
+
             var adBlockDetected = CnnXt.Utils.detectAdBlock();
             var qualifier = segment.Options["Ad Block"].toUpperCase();
+
             if (!((qualifier == "DETECTED") ^ adBlockDetected)) {
                 deferred.resolve();
             } else {
-                deferred.reject(false);
+                deferred.reject();
             }
-        } catch (e) {
-            console.error(NAME, fnName, e);
-            deferred.reject(false);
-        }
 
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
+        }
 
         return deferred.promise();
     }
 
     function evalUrlMask(segment) {
-
-        /// <summary>This checks URL mask on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalUrlMask";
 
-        //create deferred object
         var deferred = $.Deferred();
 
         try {
-
-            LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var isPassed = false,
                 hrefFormatted = window.location.href.replace(/#$/, ''),
@@ -10226,30 +11959,21 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
-            deferred.reject(false);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
         }
 
-        //return deferred promise
         return deferred.promise();
-
     }
 
     function evalMeta(segment) {
-
-
-        /// <summary>This checks Meta keyword presence based on qualifier and value of a segment.</summary>
-        /// <param type="Object" name="segment">Segment object to test against.</param>
-        /// <returns type="DeferredPromise"></returns>
         var fnName = "evalMeta";
 
-        //create deferred object
         var deferred = $.Deferred();
 
         try {
-
-            LOGGER.debug(NAME, fnName, "-- Testing ---");
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
 
             var isPassed = false,
                 metaArray = CnnXt.Utils.getMetaTagsWithKeywords(),
@@ -10278,23 +12002,52 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject();
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
-            //return false;
-            //_CB(false);
-            deferred.reject(false);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
         }
 
-        //return deferred promise
         return deferred.promise();
-
-
-
-
     }
+
+    function evalFlittzStatus(segment) {
+        var fnName = "evalFlittzStatus";
+
+        var deferred = $.Deferred();
+
+        try {
+            LOGGER.debug(NAME, fnName, "--- Testing ---", segment);
+
+            var isPassed = true;
+
+            if (CnnXt.GetOptions().integrateFlittz && window.Flittz) {
+                var flittzStatus = window.Flittz.FlittzUserStatus;
+                if (!CnnXt.Utils.JSEvaluate(
+                    CnnXt.Common.FlittzStatusesMap[flittzStatus],
+                    segment.Options['Qualifier'],
+                    segment.Options["Flittz Status"],
+                    "FlittzStatusCriteria"
+                )) {
+                    isPassed = false;
+                }
+            } else {
+                isPassed = false;
+            }
+
+            if (isPassed) {
+                deferred.resolve();
+            } else {
+                deferred.reject();
+            }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
+        }
+
+        return deferred.promise();
+    }
+
     //#endregion SEGMENT TESTS
-
-
 
 
     //#region EVALUATE SEGMENTS
@@ -10311,13 +12064,16 @@ var ConnextMeterCalculation = function ($) {
             if (_.isNumber(CACHED_RESULTS.articleAge) && !isNaN(CACHED_RESULTS.articleAge)) {
                 //we have a cached age from previous segment check, so return this so we don't process the article age again.
                 LOGGER.debug(NAME, fnName, "Article Age Already Deterimed...using Cached value");
+
                 return CACHED_RESULTS.articleAge;
             } else {
-
                 //set format for article check to DB value or if it does not exist or is set to empty string then use default value in CnnXt.Common.
                 var format = (_.isNothing(options.Format) ? CnnXt.Common.DefaultArticleFormat : options.Format);
-                LOGGER.info(NAME, fnName, "Using Format: ", format);
+
+                LOGGER.debug(NAME, fnName, "Using Format: ", format);
+
                 var articleDateData;
+
                 //get the article text based on the selector
                 if (options.Selector.indexOf("$") > -1) {
                     articleDateData = eval(options.Selector);
@@ -10325,7 +12081,7 @@ var ConnextMeterCalculation = function ($) {
                     articleDateData = $(options.Selector).text();
                 }
 
-                LOGGER.info(NAME, fnName, "articleDateData", articleDateData);
+                LOGGER.debug(NAME, fnName, "articleDateData", articleDateData);
 
                 var articleDate = CnnXt.Utils.ParseCustomDates(articleDateData, format);
 
@@ -10340,31 +12096,104 @@ var ConnextMeterCalculation = function ($) {
                 return CACHED_RESULTS.articleAge;
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             return false;
         }
     }
 
+    function evaluatePromiseSegments(segments, timeout) {
+        var fnName = 'evalPromise';
+        var deferred = $.Deferred();
+        try {
+            var promises = [];
+
+            segments.forEach(function (segment) {
+                promises.push(eval(segment.Options.PromiseName));
+            });
+
+            LOGGER.debug(NAME, fnName, 'Setup "Q all" for promise segments');
+
+            var timerId = null;
+            if (timeout) {
+                timerId = setTimeout(function () {
+                    LOGGER.debug(NAME, fnName, 'segments rejected on timeout');
+                    deferred.reject();
+                }, timeout);
+            }
+
+            $.when.apply($, promises).then(function () {
+                LOGGER.debug(NAME, fnName, '"Q all" results', arguments);
+
+                var resolvedPromises = arguments;
+
+                if (!resolvedPromises.length) {
+                    resolvedPromises = [null];
+                }
+
+                var allsegmentsPassed = Array.prototype.every.call(segments, function (segment, index) {
+                    var promiseResult = resolvedPromises[index],
+                        segmentValue = segment.Options.Val;
+
+                    if(promiseResult === null || promiseResult === undefined) {
+                        promiseResult = '';
+                    }
+
+                    if (!CnnXt.Utils.JSEvaluate(
+                        promiseResult,
+                        segment.Options.Qualifier,
+                        segmentValue,
+                        "Promise"
+                    )) {
+                        LOGGER.debug(NAME, fnName, 'segment ' + segment.Options.Name + ' not passed');
+
+                        if (timerId) {
+                            clearTimeout(timerId);
+                        }
+
+                        deferred.reject();
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                if (allsegmentsPassed) {
+                    LOGGER.debug(NAME, fnName, 'All segments passed');
+
+                    if (timerId) {
+                        clearTimeout(timerId);
+                    }
+
+                    deferred.resolve();
+                }
+            },
+            function () {
+                LOGGER.debug(NAME, fnName, 'segment rejected');
+                if (timerId) {
+                    clearTimeout(timerId);
+                }
+                deferred.reject();
+            });
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject();
+        }
+
+        return deferred.promise();
+    }
+
     //#endregion EVALUATE SEGMENTS
-
-
-
-
-    //#region HELPERS
-
-    //#endregion HELPERS
 
     return {
         init: function () {
             LOGGER = CnnXt.Logger;
-            LOGGER.debug(NAME, "MeterCalculation.Init");
+            LOGGER.debug(NAME, "Initializing MeterCalculation Module...");
         },
         CalculateMeterLevel: function (rules) {
             return calculateMeterLevel(rules);
         }
     };
-
 };
 
 var ConnextCampaign = function ($) {
@@ -10372,8 +12201,13 @@ var ConnextCampaign = function ($) {
     //#region GLOBALS
     var NAME = "Campaign"; //base name for logging.
     var ArticleLeftString = "{{ArticleLeft}}";
-    //create local reference to logger
-    var LOGGER;
+    var AFTER_EXPIRE_ACTIONS = {
+        GoToSelf: 'Self',
+        Recalculate: 'Recalc'
+    }
+    var NUMBER_OF_CONVERSATION_CALCULATION = 0; // we have limit which is equal to number of conversation (to avoid a looping)
+
+    var LOGGER; //create local reference to logger
 
     var CURRENT_CONVERSATION; //holds the current conversation once it was determined. We set a global reference so we can use this in Events that might be fired after a Campaign has been processed (i.e. Custom Actions, Login Events etc...).
     var METER_LEVEL; //We set a global reference so we can use this in Events that might be fired after a Campaign has been processed (i.e. Custom Actions, Login Events etc...).
@@ -10391,154 +12225,111 @@ var ConnextCampaign = function ($) {
         /// <returns>None</returns>
         var fnName = "processCampaign";
         try {
-            LOGGER.debug(NAME, fnName, meterLevel);
-            CnnXt.Storage.ClearOldCookies();
+            LOGGER.debug(NAME, fnName, 'Starting process campaign...', campaignData, meterLevel);
             //just for sanity check required arguments.
             if (!meterLevel) {
-                throw "No Meter Level Set";
+                throw CnnXt.Common.ERROR.NO_METER_LEVEL_SET;
             }
 
             if (!campaignData) {
-                throw "No Campaign Data.";
+                throw CnnXt.Common.ERROR.NO_CAMPAIGN
             }
             //set global meter level
             METER_LEVEL = meterLevel;
+            getCurrentConversation(meterLevel).done(function(conversation) {
+                CURRENT_CONVERSATION = conversation;
 
-            CURRENT_CONVERSATION = getCurrentConversation(meterLevel);
-            if (!CURRENT_CONVERSATION) {
-                CnnXt.Storage.SetCurrentConverstaion(null);
-                processFakeConversation();
-                //TODO: maybe add event firing here so we can update the 'Note' section on the debug panel letting user know that now conversation was found.
-                //throw "No Conversation Found To Process"
-                throw CnnXt.Common.ERROR.NO_CONVO_FOUND;
+                if (!CURRENT_CONVERSATION) {
+                    CnnXt.Storage.SetCurrentConversation(null);
+                    CnnXt.Storage.SetActiveConversationId(0);
+                    processFakeConversation();
 
+                    throw CnnXt.Common.ERROR.NO_CONVO_FOUND;
+                } else {
+                    LOGGER.debug(NAME, fnName, "Conversation To Process", CURRENT_CONVERSATION);
+                    $('#ddCurrentConversation').html(CURRENT_CONVERSATION ? CURRENT_CONVERSATION.Name : '...');
+                    processConversation(CURRENT_CONVERSATION);
+                }
+            });
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
             } else {
-                LOGGER.debug(NAME, fnName, "Conversation To Process", CURRENT_CONVERSATION);
-
-                processConversation();
-
+                LOGGER.exception(NAME, fnName, ex);
             }
-
-
-        } catch (e) {
-            console.warn(NAME, fnName, "EXCEPTION", e);
-            CnnXt.Event.fire("onCriticalError", e);
+           
+            CnnXt.Event.fire("onCriticalError", ex);
         }
-
     };
 
     //#endregion CAMPAIGN FUNCTIONS
 
     //#region CONVERSATION FUNCTIONS
 
-    var processFakeConversation = function() {
-        CnnXt.Storage.UpdateViewedArticles(-1);
-        $('#ddCurrentConversationArticleViews').html(CnnXt.Storage.GetCurrentConversationViewCount(-1));
-    }
-
-    var processConversation = function () {
-        /// <summary>We have done all our checks and have a valid conversation, so process it.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
+    var processConversation = function (conversation) {
         var fnName = "processConversation";
-        try {
-            LOGGER.debug(NAME, fnName);
-            //before we determine conversation actions we need to update the article view count (since new conversations have this set to 0 and under certain options we won't duplicate this count).
-            //handleArticleView();
 
-            CnnXt.Storage.UpdateViewedArticles(CURRENT_CONVERSATION.id);
-            updateArticleViewCount(CnnXt.Storage.GetCurrentConversationViewCount(CURRENT_CONVERSATION.id));
+        try {
+            LOGGER.debug(NAME, fnName, 'Starting process conversation...', conversation);
+
+            //before we determine conversation actions we need to update the article view count (since new conversations have this set to 0 and under certain options we won't duplicate this count).
+
+            // CnnXt.Storage.UpdateViewedArticles(conversation.id);
+            CnnXt.Storage.UpdateViewedArticles(conversation);
+            updateArticleViewCount(conversation, CnnXt.Storage.GetCurrentConversationViewCount(conversation.id));
 
             //we have a current conversation (either stored or a new conversation). Fire onConversationDetermined event and Proccess it.
-            CnnXt.Storage.SetCurrentConverstaion(CURRENT_CONVERSATION);
+            CnnXt.Storage.SetCurrentConversation(CURRENT_CONVERSATION);
 
             //we now need to determine which actions within this conversation should be fired.
-            var actions = determineConversationActions(),
-                validActions = determineConversationActions(true);
+            var actions = determineConversationActions(conversation),
+                validActions = determineConversationActions(conversation, true);
 
-            calculateArticleLeft(validActions);
-            CnnXt.Storage.SetCurrentConverstaion(CURRENT_CONVERSATION);
- 
+            calculateArticleLeft(conversation, validActions);
+            CnnXt.Storage.SetCurrentConversation(conversation);
+
             //we fire onConversationDetermined after the handleArticleView function because this even will update our Demo Debug details 'view' html.
-            CnnXt.Event.fire("onConversationDetermined", CURRENT_CONVERSATION);
+            CnnXt.Event.fire("onConversationDetermined", conversation);
 
-            proccessActivationFlow(CURRENT_CONVERSATION);
+            proccessActivationFlow(conversation);
 
             if (actions.length > 0) {
                 //we have at least one action to execute.
                 LOGGER.debug(NAME, fnName, "ACTIONS DETERMINGED ---> ", actions);
 
-
-
                 CnnXt.Action.ProcessActions(actions);
 
             } else {
-                LOGGER.warn(NAME, fnName, "No 'Actions' to execute.");
+                LOGGER.warn("No 'Actions' to execute.");
             }
-
-            //if (CnnXt.Campaign.GetCurrentConversationViewCount() !== 1
-            //        && CnnXt.Campaign.GetCurrentConversationViewCount() % CnnXt.GetOptions().BatchCount === 0) {
-
-            //    var data = {
-            //        UserId: CnnXt.GetOptions().deviceId,
-            //        ConfigCode: CnnXt.GetOptions().configCode,
-            //        SiteCode: CnnXt.GetOptions().siteCode,
-            //        SettingsKey: CnnXt.GetOptions().settingsKey,
-            //        ViewData: getLocalViewData()
-            //    };
-            //    if (CnnXt.User.getMasterId()) {
-            //        var id = CnnXt.User.getMasterId();
-            //        id = decodeURIComponent(id);
-            //        data.masterId = id;
-            //    }
-            //    CnnXt.API.SendViewData(data);
-            //}
-
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    var getLocalViewData = function () {
-        var data = {};
-        data.AllowedIpSet = CnnXt.Storage.GetWhitelistSetIdCookie()
-            ? JSON.parse(CnnXt.Storage.GetWhitelistSetIdCookie())
-            : undefined;
-        var localConfig = CnnXt.Storage.GetLocalConfiguration();
-
-        if (localConfig.Campaign && localConfig.Campaign.Conversations) {
-            var conversations = localConfig.Campaign.Conversations;
-            for (convo in conversations) {
-                data[convo] = {};
-                data[convo].ActiveConversationId = CnnXt.Storage.GetCurrentConversations()[convo] != null ? CnnXt.Storage.GetCurrentConversations()[convo].id : null;
-                data[convo].ArticleCount = CnnXt.Storage.GetCurrentConversations()[convo] != null ? CnnXt.Storage.GetViews(CnnXt.Storage.GetCurrentConversations()[convo].id ) : null;
-                data[convo].Conversations = [];
-                conversations[convo].forEach(function (conversation) {
-                    var views = CnnXt.Storage.GetDeviceViews(conversation.id);
-                    data[convo].Conversations.push({ Id: conversation.id, ViewCount: views, StartDate: conversation.Props.Date.started });
-                });
-                if (CnnXt.Storage.GetDeviceViews(-1)) {
-                    data[convo].Conversations.push({
-                        Id: -1,
-                        ViewCount: CnnXt.Storage.GetDeviceViews(-1),
-                        StartDate: null
-                    });
-                }
-            }
+    var processFakeConversation = function () {
+        var fakeConversation = {
+            id: -1,
+            Props: { Date: { started: null } }
         }
-        return data;
+        CnnXt.Storage.UpdateViewedArticles(fakeConversation);
     }
-    var proccessActivationFlow = function(convo) {
-        if (!convo || !convo.Options || !convo.Options.Expirations || !convo.Options.Expirations.Activate) {
+
+    var proccessActivationFlow = function (convo) {
+        var fnName = 'proccessActivationFlow';
+
+        if (!convo || !convo.Options || !convo.Options.Activation || !convo.Options.Activation.Activate) {
             return false;
         }
-            
-        var activateSettings = convo.Options.Expirations.Activate;
+
+        var activateSettings = convo.Options.Activation.Activate;
+
+        LOGGER.debug(NAME, fnName, 'Proccess activation flow for conversation', activateSettings);
 
         CnnXt.Activation.init(activateSettings);
     }
 
-    var calculateArticleLeft = function (validActions) {
+    var calculateArticleLeft = function (conversation, validActions) {
         var lastArticleNumber = 99999;
         var fnName = "calculateArticleLeft";
         var paywalls = _.where(validActions, { ActionTypeId: 3 });
@@ -10564,144 +12355,91 @@ var ConnextCampaign = function ($) {
                     });
                 }
 
+                if (paywall.Who.ConversationViewsCriteria) {
+                    $.each(paywall.Who.ConversationViewsCriteria, function (key, view) {
+                        if (view.Qualifier === "==" || view.Qualifier === ">=") {
+                            paywallView = view.Val > paywallView ? view.Val : paywallView;
+                        } else if (view.Qualifier === ">") {
+                            paywallView = parseInt(view.Val) + 1 > paywallView ? parseInt(view.Val) + 1 : paywallView;
+                        }
+
+                        paywallViews.push(paywallView);
+                    });
+                }
+
                 if (lastArticleNumber > paywallView) {
                     lastArticleNumber = paywallView;
                 }
             });
 
-            if (lastArticleNumber == -1) {
+            if (lastArticleNumber === -1) {
                 lastArticleNumber = 99999;
             } else {
                 lastArticleNumber = _.min(paywallViews);
             }
 
-            CURRENT_CONVERSATION.Props.ArticleLeft = lastArticleNumber == 99999
+            conversation.Props.ArticleLeft = lastArticleNumber === 99999
                 ? "unlimited"
                 : lastArticleNumber - getCurrentConversationViewCount();
 
-            if (CURRENT_CONVERSATION.Props.ArticleLeft < 0) {
-                CURRENT_CONVERSATION.Props.ArticleLeft = 0;
+            if (conversation.Props.ArticleLeft < 0) {
+                conversation.Props.ArticleLeft = 0;
             }
 
             $.each(validActions, function (key, val) {
                 if (val.What.Html) {
-                    val.What.Html = val.What.Html.replace(ArticleLeftString, CURRENT_CONVERSATION.Props.ArticleLeft);
+                    val.What.Html = val.What.Html.replace(ArticleLeftString, conversation.Props.ArticleLeft);
                 }
             });
 
         } else {
-            CURRENT_CONVERSATION.Props.ArticleLeft = "unlimited";
+            conversation.Props.ArticleLeft = "unlimited";
         }
-
-        $("#ddCurrentConversationArticleLeft").html(CURRENT_CONVERSATION.Props.ArticleLeft);
+        conversation.Props.paywallLimit = lastArticleNumber == 99999 ? Infinity : lastArticleNumber;
+        //if debug = true
+        $("#ddCurrentConversationArticleLeft").html(conversation.Props.ArticleLeft);
 
     };
 
-
     var getCurrentConversation = function () {
-        /// <summary>This will get the conversation that we should use. This handles checking for stored conversations, validating them and handling any conversation expirations</summary>
-        /// <param name="" type=""></param>
-        /// <returns type="Object">Conversation object to process.</returns>
         var fnName = "getCurrentConversation";
+        var deferred = $.Deferred();
+        LOGGER.debug(NAME, fnName, 'Get conversation for a processing');
+
         try {
             //we check if we a user is already in a conversation based on this meter level.
             var storedConversation = getStoredConversationByMeterLevel(METER_LEVEL);
 
-            if (storedConversation) {
-                LOGGER.debug(NAME, fnName, "Found Stored Conversation", storedConversation);
+            NUMBER_OF_CONVERSATION_CALCULATION = 0;
 
-                //we have a stored conversation, so set global object.
-                CURRENT_CONVERSATION = storedConversation;
-                //since this is a stored conversation so we need to make sure it is still valid.
-                if (isConversationValid()) {
-                    //current conversation is valid, so use it.
-                    LOGGER.debug(NAME, fnName, "Found Stored Conversation --- IS VALID");
+            if (storedConversation && isConversationValid(storedConversation)) {
+                LOGGER.debug(NAME, fnName, "Found stored valid conversation", storedConversation);
 
-                    //since it is valid, return the current conversation.
-                    return CURRENT_CONVERSATION;
-
-                } else {
-                    //current conversation is not valid, so try and get the next conversation.
-                    LOGGER.debug(NAME, fnName, "Found Stored Conversation --- NOT VALID");
-
-                    //reset old conversation after expire - RETURN this in the future releases
-                    //CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
-
-                    CURRENT_CONVERSATION = getNextConversation();
-
-                    if (CURRENT_CONVERSATION) {
-                        setDefaultConversationProps();
-                        CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain );
-                        CnnXt.Event.fire("onDebugNote", "Conversation Expire: " + CURRENT_CONVERSATION.Props.expiredReason);
-                        return CURRENT_CONVERSATION;
-                    } else {
-                        return storedConversation;
-                    }
-
-                    
-                }
-
+                deferred.resolve(storedConversation);
             } else {
-                //no stored conversation so we need to use the first conversation in the configuration.Campaign object (with this meter level).
+                LOGGER.debug(NAME, fnName, "Found new valid conversation", storedConversation);
 
-
-                var allConversations = getAllConversationsByMeterLevel(METER_LEVEL);
-                //var currentConversations = CnnXt.Storage.GetCampaignData().Conversations[METER_LEVEL];
-                if (allConversations) {
-
-                    //set global conversation object to this conversation.
-                    CURRENT_CONVERSATION = allConversations[0];
-                    setDefaultConversationProps();
-
-                    LOGGER.debug(NAME, fnName, "No Current Conversation Stored....Using first conversation in campaign", CURRENT_CONVERSATION);
-                    if (isConversationValid()) {
-                        //current conversation is valid, so use it.
-
-                        //since it is valid, return the current conversation.
-                        return CURRENT_CONVERSATION;
-
-                    } else {
-                        //current conversation is not valid, so try and get the next conversation.
-                        LOGGER.debug(NAME, fnName, "Found Stored Conversation --- NOT VALID");
-
-                        //reset old conversation after expire - RETURN this in the future releases
-                        //CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
-
-                        var CURRENT_CONVO = getNextConversation();
-
-                        if (CURRENT_CONVO) {
-                            CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
-                            return CURRENT_CONVO;
-                        }
-                    }
-
-                    //since we know this is a new conversation, set some values (like Date started, Expirate Date ect...). We also don't need to verify this conversation since this it is new.
-                    return CURRENT_CONVERSATION;
-
-                } else {
-                    LOGGER.debug(NAME, fnName, "No Conversation for this meter level");
-                }
+                getConversation(storedConversation).done(function(data) {
+                    deferred.resolve(data);
+                });
             }
 
-            //in case other returns weren't called with a valid convo we just return false here as a catch all.
-            LOGGER.debug(NAME, fnName, "NO RETURN FIRED, USING CATCH ALL");
-            return false;
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
-            return false;
+            return deferred.promise();
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return null;
         }
     };
 
-    var isConversationValid = function () {
-        /// <summary>Validates the current conversation.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
+    var isConversationValid = function (conversation) {
         var fnName = "isConversationValid",
-            ExpirationsObj = CURRENT_CONVERSATION.Options.Expirations;
+            ExpirationsObj = conversation.Options.Expirations;
+
+        LOGGER.debug(NAME, fnName, 'Check conversation expirations', ExpirationsObj);
+
         try {
-            //LOGGER.debug(pName, fnName);
             //first we check we this was flagged for expiration from an USER_ACTION on a previous page load
-            if (CURRENT_CONVERSATION.Props.isExpired) {
+            if (conversation.Props.isExpired) {
                 //this was previously flagged to expire.
                 LOGGER.debug(NAME, fnName, "Current conversation was previously set to expired.");
                 return false;
@@ -10710,45 +12448,78 @@ var ConnextCampaign = function ($) {
                 if (ExpirationsObj.Time) {
                     //we have a 'Time' expiration type, so check against it.
                     var now = CnnXt.Utils.Now();
-
-                    var momentConvEndDate = new Date(Date.parse(CURRENT_CONVERSATION.Props.Date.expiration)); //gets momentized object of expiration date.
+                    var momentConvEndDate = new Date(Date.parse(conversation.Props.Date.expiration)); //gets momentized object of expiration date.
 
                     var isExpired = now >= momentConvEndDate; //if now is after the expiration date this conversation has expired.
 
                     if (isExpired) {
                         LOGGER.debug(NAME, fnName, "Current conversation has expired base on date...");
                         //this is expired based on date, so we will set isExpired and expirationReason. (we set them because this function is just returning true/false. If it is false we will determine the next conversation based on expirationReason in the calling function.
-                        CURRENT_CONVERSATION.Props.isExpired = true;
-                        CURRENT_CONVERSATION.Props.expiredReason = "Time";
+                        conversation.Props.isExpired = true;
+                        conversation.Props.expiredReason = "Time";
+
+                        if (ExpirationsObj.Time['Reset Article Views'] == "Yes") {
+                            CnnXt.Storage.ResetConversationArticleCount(conversation);
+                        }
 
                         return false;
                     }
-
-
                 } else {
                     LOGGER.debug(NAME, fnName, "No expiration time set for this conversation.");
                 }
+
                 if (ExpirationsObj.UserState) {
                     var stateExpiration = ExpirationsObj.UserState;
                     if (stateExpiration["User State"] == CnnXt.User.getUserState()) {
-                        CURRENT_CONVERSATION.Props.isExpired = true;
-                        CURRENT_CONVERSATION.Props.expiredReason = "UserState";
+                        conversation.Props.isExpired = true;
+                        conversation.Props.expiredReason = "UserState";
+
+                        if (ExpirationsObj.UserState['Reset Article Views'] == "Yes") {
+                            CnnXt.Storage.ResetConversationArticleCount(conversation);
+                        }
                         return false;
                     }
                     if (stateExpiration["User State"] == "Logged In" && CnnXt.User.getUserState() == "Subscribed") {
-                        CURRENT_CONVERSATION.Props.isExpired = true;
-                        CURRENT_CONVERSATION.Props.expiredReason = "UserState";
+                        conversation.Props.isExpired = true;
+                        conversation.Props.expiredReason = "UserState";
+
+                        if (ExpirationsObj.UserState['Reset Article Views'] == "Yes") {
+                            CnnXt.Storage.ResetConversationArticleCount(conversation);
+                        }
                         return false;
                     }
                 }
+
                 if (ExpirationsObj.Register) {
                     if (CnnXt.GetOptions().integrateFlittz && window.Flittz &&
                         (window.Flittz.FlittzUserStatus == 'FlittzLoggedIn')) {
-                        CURRENT_CONVERSATION.Props.isExpired = true;
-                        CURRENT_CONVERSATION.Props.expiredReason = "Register";
+                        conversation.Props.isExpired = true;
+                        conversation.Props.expiredReason = "Register";
+
+                        if (ExpirationsObj.Register['Reset Article Views'] == "Yes") {
+                            CnnXt.Storage.ResetConversationArticleCount(conversation);
+                        }
                         return false;
                     }
                 }
+
+                if (ExpirationsObj.FlittzStatus) {
+                    var flittzStatus = ExpirationsObj.FlittzStatus["Flittz Status"];
+
+                    if (CnnXt.GetOptions().integrateFlittz && window.Flittz) {
+                        var currentFlittzStatus = CnnXt.Common.FlittzStatusesMap[window.Flittz.FlittzUserStatus];
+                        if (flittzStatus == currentFlittzStatus) {
+                            conversation.Props.isExpired = true;
+                            conversation.Props.expiredReason = "FlittzStatus";
+
+                            if (ExpirationsObj.FlittzStatus['Reset Article Views'] == "Yes") {
+                                CnnXt.Storage.ResetConversationArticleCount(conversation);
+                            }
+                            return false;
+                        }
+                    }
+                }
+
                 if (ExpirationsObj.JSVar) {
 
                     LOGGER.debug(NAME, fnName, "Checking Javascript Expiration Criteria: ", ExpirationsObj);
@@ -10758,24 +12529,34 @@ var ConnextCampaign = function ($) {
 
                     try {
                         jsValue = eval(varValue);
-                    } catch (e) { }
+                    } catch (ex) {
+                        LOGGER.warn(NAME, fnName, ex);
+                    }
 
                     if ($.isArray(jsValue)) {
                         jsValue = jsValue.map(function (item) {
-                            return item.trim().toLowerCase();
+                          return item.toString().trim().toLowerCase();
                         });
 
                         if (ExpirationsObj.JSVar.JSVarQualifier == "In" || ExpirationsObj.JSVar.JSVarQualifier == "NotIn") {
                             if (jsValue.indexOf(ExpirationsObj.JSVar.JSVarValue.toLowerCase()) >= 0) {
                                 if (ExpirationsObj.JSVar.JSVarQualifier == "In") {
-                                    CURRENT_CONVERSATION.Props.isExpired = true;
-                                    CURRENT_CONVERSATION.Props.expiredReason = "JSVar";
+                                    conversation.Props.isExpired = true;
+                                    conversation.Props.expiredReason = "JSVar";
+
+                                    if (ExpirationsObj.JSVar['Reset Article Views'] == "Yes") {
+                                        CnnXt.Storage.ResetConversationArticleCount(conversation);
+                                    }
                                     return false;
                                 }
                             } else {
                                 if (ExpirationsObj.JSVar.JSVarQualifier == "NotIn") {
-                                    CURRENT_CONVERSATION.Props.isExpired = true;
-                                    CURRENT_CONVERSATION.Props.expiredReason = "JSVar";
+                                    conversation.Props.isExpired = true;
+                                    conversation.Props.expiredReason = "JSVar";
+
+                                    if (ExpirationsObj.JSVar['Reset Article Views'] == "Yes") {
+                                        CnnXt.Storage.ResetConversationArticleCount(conversation);
+                                    }
                                     return false;
                                 }
                             }
@@ -10792,79 +12573,188 @@ var ConnextCampaign = function ($) {
                             var delimiter,
                                 array;
 
-                            delimiter = ExpirationsObj.JSVar.JSVarDelimiter ? new RegExp(ExpirationsObj.JSVar.JSVarDelimiter.replace(/space/g, '/\s'), 'g') : /[ ,;]/g;
+                            delimiter = ExpirationsObj.JSVar.JSVarDelimiter ? new RegExp(ExpirationsObj.JSVar.JSVarDelimiter.replace(/space/g, ' '), 'g') : /[ ,;]/g;
                             array = jsValue.split(delimiter);
 
-                            if (array.indexOf(ExpirationsObj.JSVar.JSVarValue.toLowerCase()) >= 0) {
-
-                                if (ExpirationsObj.JSVar.JSVarQualifier == "In") {
-                                    CURRENT_CONVERSATION.Props.isExpired = true;
-                                    CURRENT_CONVERSATION.Props.expiredReason = "JSVar";
-                                    return false;
-                                }
-                            } else {
-                                if (ExpirationsObj.JSVar.JSVarQualifier == "NotIn") {
-                                    CURRENT_CONVERSATION.Props.isExpired = true;
-                                    CURRENT_CONVERSATION.Props.expiredReason = "JSVar";
-                                    return false;
+                            var isContains = false;
+                            for (var i = 0; i < array.length; i++) {
+                                if (array[i] == ExpirationsObj.JSVar.JSVarValue.toLowerCase()) {
+                                    isContains = true;
                                 }
                             }
 
+                            if ((ExpirationsObj.JSVar.JSVarQualifier == "In" && isContains) || (ExpirationsObj.JSVar.JSVarQualifier == "NotIn" && !isContains)) {
+                                conversation.Props.isExpired = true;
+                                conversation.Props.expiredReason = "JSVar";
+
+                                if (ExpirationsObj.JSVar['Reset Article Views'] == "Yes") {
+                                    CnnXt.Storage.ResetConversationArticleCount(conversation);
+                                }
+                                return false;
+                            }
+
                         } else {
-                            if (CnnXt.Utils
-                                .JSEvaluate(jsValue,
+                            if (CnnXt.Utils.JSEvaluate(
+                                jsValue,
                                 ExpirationsObj.JSVar.JSVarQualifier,
-                                ExpirationsObj.JSVar.JSVarValue.toLowerCase(),
-                                "JavascriptCriteria")) {
-                                CURRENT_CONVERSATION.Props.isExpired = true;
-                                CURRENT_CONVERSATION.Props.expiredReason = "JSVar";
+                                ExpirationsObj.JSVar.JSVarValue,
+                                "JavascriptCriteria"
+                            )) {
+                                conversation.Props.isExpired = true;
+                                conversation.Props.expiredReason = "JSVar";
+
+                                if (ExpirationsObj.JSVar['Reset Article Views'] == "Yes") {
+                                    CnnXt.Storage.ResetConversationArticleCount(conversation);
+                                }
                                 return false;
                             }
                         }
                     }
-
                 }
-
             }
             //just as a catch all return true so we process this conversation (any reasons for expiration will call return false, so this will only be called if it is valid).
             return true;
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             return true;
         }
     };
 
-    var getNextConversation = function () {
-        /// <summary>This is called when the current Conversation is expired. We use the 'expiredReason' to try and determine the next conversation.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
-        var fnName = "getNextConversation";
-        try {
-            //LOGGER.debug(pName, fnName);
-            var expiredReason = CURRENT_CONVERSATION.Props.expiredReason;
-            var nextConvoId = CURRENT_CONVERSATION.Options.Expirations[expiredReason].nextConversation;
-            LOGGER.debug(NAME, fnName, "ExpirationReason", expiredReason, nextConvoId, getAllConversationsByMeterLevel(METER_LEVEL));
-            CURRENT_CONVERSATION = _.findByKey(getAllConversationsByMeterLevel(METER_LEVEL), { id: nextConvoId });
+    var getConversation = function (expiredConversation) {
+        var fnName = "getConversation";
+        var deferred = $.Deferred();
+        var newConversationDeferred = $.Deferred();
 
-            //for now return false.
-            return CURRENT_CONVERSATION;
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        try {
+            var expiredReason = null,
+                conversationExpiration = {},
+                newConversation;
+
+            if (expiredConversation) {
+                expiredReason = expiredConversation.Props.expiredReason;
+                conversationExpiration = expiredConversation.Options.Expirations[expiredReason];
+            }
+
+            if (!expiredConversation || (conversationExpiration && conversationExpiration.nextConversation == AFTER_EXPIRE_ACTIONS.Recalculate)) {
+                getFilteredConversation()
+                    .done(function(data) {
+                        newConversation = data;
+                        newConversationDeferred.resolve();
+                    })
+                    .fail(function() {
+                        newConversation = null;
+                        newConversationDeferred.resolve();
+                    });
+            } else if (conversationExpiration && conversationExpiration.nextConversation) {
+                newConversation = getNextConversation(conversationExpiration.nextConversation);
+                newConversationDeferred.resolve();
+            }
+
+            newConversationDeferred.promise().done(function() {
+                if (newConversation) {
+                    setDefaultConversationProps(newConversation);
+                }
+
+                NUMBER_OF_CONVERSATION_CALCULATION++;
+
+                if (!newConversation || (newConversation && isConversationValid(newConversation))) {
+                    deferred.resolve(newConversation);
+                } else {
+                    if (NUMBER_OF_CONVERSATION_CALCULATION > getAllConversationsByMeterLevel(METER_LEVEL).length) {
+                        LOGGER.warn('Exceeded the number of calculations of conversation! Please, check your conversations.');
+                        deferred.resolve(null);
+                    } else {
+                        getConversation(newConversation).done(function(data) {
+                            deferred.resolve(data);
+                        });
+                    }
+                }
+            });
+
+            return deferred.promise();
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
+
+    var getFilteredConversation = function () {
+        var fnName = 'getFilteredConversation';
+        var deferred = $.Deferred();
+
+        var conversationsOnMeterLevel = getAllConversationsByMeterLevel(METER_LEVEL);
+
+        if (conversationsOnMeterLevel.length) {
+            conversationsOnMeterLevel.forEach(function (conversation) {
+
+                conversation.EvaluationDeferred = $.Deferred();
+                conversation.Passed = false;
+                var additionalData = {
+                    conversationId: conversation.id,
+                    meterId: conversation.MeterLevelId
+                };
+
+                if (CnnXt.Utils.ResolveQualifiersFor(conversation.Options.Filter, additionalData)) {
+                    CnnXt.Utils.ResolvePromiseQualifiers(conversation.Options.Filter, CnnXt.GetOptions().ConversationPromiseTimeout)
+                        .done(function () {
+                            conversation.Passed = true;
+                        })
+                        .always(function() {
+                            conversation.EvaluationDeferred.resolve();
+                        });
+                } else {
+                    conversation.EvaluationDeferred.resolve();
+                }
+            });
+
+            $.when.apply($, _.map(conversationsOnMeterLevel, function (conversation) { return conversation.EvaluationDeferred.promise(); }))
+                .done(function () {
+                    var passedConversations = _.filter(conversationsOnMeterLevel, function (conversation) {
+                        return conversation.Passed == true;
+                    });
+
+                    if (!passedConversations || passedConversations.length == 0) {
+                        deferred.reject();
+                    } else {
+                        var filteredConversation = _.sortBy(passedConversations, 'Order')[0];
+                        LOGGER.debug(NAME, fnName, 'Filtered conversation', filteredConversation);
+                        deferred.resolve(filteredConversation);
+                    }
+                });
+
+        } else {
+            deferred.reject();
+        }
+
+        return deferred.promise();
+    }
+
+    var getNextConversation = function (conversationId) {
+        var fnName = 'getNextConversation';
+
+        LOGGER.debug(NAME, fnName, 'Go to conversation', conversationId);
+
+        var conversationsOnMeterLevel = getAllConversationsByMeterLevel(METER_LEVEL),
+            nextConversation = null;
+
+        if (conversationsOnMeterLevel.length && conversationId) {
+            nextConversation = _.findByKey(conversationsOnMeterLevel, { id: conversationId });
+        }
+
+        return nextConversation;
+    }
 
     //#endregion CONVERSATION FUNCTIONS
 
     //#region ACTION FUNCTIONS
 
-    var determineConversationActions = function (ignoreViewsFlag) {
+    var determineConversationActions = function (conversation, ignoreViewsFlag) {
         /// <summary>Takes current conversation and loops through each action to determine if it should be executed. This creates an array of action objects that are passed to the 'Action' function, which handles execution.</summary>
         /// <param name="" type=""></param>
         /// <returns type="Array">Array of Action objects to be executed.</returns>
         var fnName = "determineConversationActions";
 
         try {
-            LOGGER.debug(NAME, fnName, CURRENT_CONVERSATION.Actions);
+            LOGGER.debug(NAME, fnName, 'Begin determine conversation actions', conversation.Actions);
 
             var actions = []; //this will hold any actions that should be executed.
             var paywallActionFound = false; //we set this to true when we find an action that passes and is a 'Paywall' type. We only allow 1 'Paywall' type, so once we have one we ignore the others.
@@ -10872,18 +12762,24 @@ var ConnextCampaign = function ($) {
             //create local reference to current view count so we don't keep calling this function for each action view check (since all actions will check against this).
             var viewCount = getCurrentConversationViewCount();
 
-            //loop through conversation actions
-            $.each(CURRENT_CONVERSATION.Actions, function (key, val) {
+            // var allActions = conversation.Actions.slice(0);
+            var allActions = $.extend(true, [], conversation.Actions);
 
+            if (ignoreViewsFlag) {
+                allActions = _.where(allActions, { ActionTypeId: 3 });
+            }
+
+            //loop through conversation actions
+            $.each(allActions, function (key, val) {
                 LOGGER.debug(NAME, fnName, "Actions.EACH", val);
 
-                if (val.ActionTypeId == 3 && !CURRENT_CONVERSATION.Props.paywallLimit) {
-                    //this is a 'Paywall' action type and this conversation does not have a paywallLimit set yet. We don't care if this passes it's criteria yet, we st the paywallLimit to this value.
-                    CURRENT_CONVERSATION.Props.paywallLimit = (val.Who.ViewsCriteria) ? val.Who.ViewsCriteria[0].Val : Infinity;
-                    saveCurrentConversation();
-                }
+                //if (val.ActionTypeId == 3 && !conversation.Props.paywallLimit) {
+                //    //this is a 'Paywall' action type and this conversation does not have a paywallLimit set yet. We don't care if this passes it's criteria yet, we st the paywallLimit to this value.
+                //    conversation.Props.paywallLimit = (val.Who.ViewsCriteria) ? val.Who.ViewsCriteria[0].Val : Infinity;
+                //    saveCurrentConversation(conversation);
+                //}
 
-                if (val.ActionTypeId == 3 && paywallActionFound) {
+                if (val.ActionTypeId === 3 && paywallActionFound) {
                     //This action is a 'Paywall' and we have already added a 'Paywall' type to the 'actions' array, so do nothing.
                 } else {
                     var actionPassed = true;
@@ -10901,11 +12797,12 @@ var ConnextCampaign = function ($) {
                             who.ViewsCriteria.forEach(function (criteria) {
                                 LOGGER.debug(NAME, fnName, "Checking ViewsCriteria", criteria);
 
-                                if (CnnXt.Utils.JSEvaluate(parseInt(viewCount),
+                                if (CnnXt.Utils.JSEvaluate(
+                                    parseInt(viewCount),
                                     criteria.Qualifier,
                                     parseInt(criteria.Val),
-                                    "ArticleView",
-                                    "integer")) {
+                                    "ArticleView"
+                                )) {
                                     //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
                                 } else {
                                     //this failed, so set actionPassed to false;
@@ -10917,409 +12814,36 @@ var ConnextCampaign = function ($) {
                             actionPassed = true;
                         }
 
-                        if (who.HiddenFieldCriteria && actionPassed == true) {
-                            //We have a 'HiddenField' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            if (!_.isArray(who.HiddenFieldCriteria)) {
-                                who.HiddenFieldCriteria = [who.HiddenFieldCriteria];
-                            }
-                            who.HiddenFieldCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking HiddenFieldCriteria: ", criteria);
+                        if (actionPassed) {
+                            var additionalData = {
+                                conversationId: conversation.id,
+                                meterId: conversation.MeterLevelId
+                            };
 
-                                    if (CnnXt.Utils
-                                        .JSEvaluate(CnnXt.Utils.GetHiddenFormFieldValue(criteria.Id),
-                                        criteria.Qualifier,
-                                        criteria.Val,
-                                        "HiddenFormField")) {
-                                        //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
-                                    } else {
-                                        //this failed, so set actionPassed to false;
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.GeoCriteria && actionPassed == true) {
-                            //We have a 'GeoCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            try {
-                                if (!_.isArray(who.GeoCriteria)) {
-                                    who.GeoCriteria = [who.GeoCriteria];
-                                }
-                                who.GeoCriteria.forEach(function (criteria) {
-                                    if (actionPassed) {
-                                        LOGGER.debug(NAME, fnName, "Checking GeoCriteria: ", criteria);
-
-                                        var userZipCodes = CnnXt.Storage.GetActualZipCodes();
-
-                                        if (userZipCodes && criteria.Type !== undefined) {
-                                            userZipCodes.forEach(function (zipCode) {
-                                                if (~criteria.Zip.indexOf(zipCode)) {
-                                                    actionPassed = criteria.Type.toUpperCase() == "IN";
-                                                } else if (criteria.Zip.indexOf('*') >= 0) {
-                                                    var valueItems = criteria.Zip.split(",") || criteria.Zip.split("");
-                                                    var foundZip = valueItems.filter(function (value) {
-                                                        var valueItem = value.split("");
-                                                        var zipItems = zipCode.split("");
-                                                        return zipItems.length != valueItem.length ? false : valueItem.every(function (item, i) {
-                                                            return valueItem[i] === "*" ? true : item === zipItems[i];
-                                                        });
-                                                    });
-                                                    if (foundZip.length > 0) {
-                                                        actionPassed = criteria.Type.toUpperCase() == "IN";
-                                                    }
-                                                    else actionPassed = criteria.Type.toUpperCase() != "IN";
-                                                }
-                                                else {
-                                                    actionPassed = criteria.Type.toUpperCase() != "IN";
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-
-                            } catch (e) {
-                                actionPassed = false;
-                            }
-                        }
-
-                        if (who.JavascriptCriteria && actionPassed == true) {
-                            //We have a 'JavascriptCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            try {
-                                if (!_.isArray(who.JavascriptCriteria)) {
-                                    who.JavascriptCriteria = [who.JavascriptCriteria];
-                                }
-
-                                who.JavascriptCriteria.forEach(function (criteria) {
-                                    if (actionPassed) {
-                                        LOGGER.debug(NAME, fnName, "Checking JavascriptCriteria: ", criteria);
-
-                                        var varValue = criteria.Eval;
-                                        var jsValue;
-
-                                        try {
-                                            jsValue = eval(varValue);
-                                        } catch (e) { }
-
-                                        if ($.isArray(jsValue)) {
-                                            jsValue = jsValue.map(function (item) {
-                                                return item.trim().toLowerCase();
-                                            });
-
-                                            if (criteria.Qualifier == "In" || criteria.Qualifier == "NotIn") {
-                                                if (jsValue.indexOf(criteria.Val.toLowerCase()) >= 0) {
-                                                    actionPassed = criteria.Qualifier == "In";
-                                                } else {
-                                                    actionPassed = criteria.Qualifier == "NotIn";
-                                                }
-                                            } else {
-                                                actionPassed = criteria.Qualifier == "==";
-                                            }
-                                        } else {
-                                            if (jsValue !== undefined && jsValue !== "") {
-                                                jsValue = jsValue.toString().toLowerCase();
-                                            }
-
-                                            if (criteria.Qualifier == "In" || criteria.Qualifier == "NotIn") {
-                                                if (jsValue == undefined) {
-                                                    actionPassed = criteria.Qualifier == "NotIn";
-                                                } else {
-                                                    var delimiter,
-                                                        array;
-
-                                                    delimiter = criteria.Delimiter
-                                                        ? new RegExp(criteria.Delimiter.replace(/space/g, '/\s'), 'g')
-                                                        : /[ ,;]/g;
-                                                    array = jsValue.split(delimiter);
-
-                                                    if (array.indexOf(criteria.Val.toLowerCase()) >= 0) {
-                                                        actionPassed = criteria.Qualifier == "In";
-                                                    } else {
-                                                        actionPassed = criteria.Qualifier == "NotIn";
-                                                    }
-                                                }
-                                            } else {
-                                                if (CnnXt.Utils
-                                                    .JSEvaluate(jsValue,
-                                                    criteria.Qualifier,
-                                                    criteria.Val.toLowerCase(),
-                                                    "JavascriptCriteria")) {
-                                                    //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
-                                                } else {
-                                                    //this failed, so set actionPassed to false;
-                                                    actionPassed = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-
-                            } catch (e) {
-                                LOGGER.debug(NAME, fnName, "Error evaluating javascript criteria.");
-                                actionPassed = false; //the eval through an exception so this action doesn't pass.
-                            }
-                        }
-
-                        if (who.ScreenSizeCriteria && actionPassed == true) {
-                            //We have a 'ScreenSizeCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            if (!_.isArray(who.ScreenSizeCriteria)) {
-                                who.ScreenSizeCriteria = [who.ScreenSizeCriteria];
-                            }
-                            who.ScreenSizeCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking ScreenSizeCriteria: ", criteria);
-
-                                    if (CnnXt.Utils.JSEvaluate(CnnXt.Utils.getDeviceType(),
-                                        criteria.Qualifier,
-                                        criteria.Value,
-                                        "ScreenSizeCriteria",
-                                        "string")) {
-                                        //we don't care if it passed, we only care if a criteria fails, so this is only for debugging.
-                                    } else {
-                                        //this failed, so set actionPassed to false;
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.UrlCriteria && actionPassed == true) {
-                            //We have a 'UrlCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-
-                            if (!_.isArray(who.UrlCriteria)) {
-                                who.UrlCriteria = [who.UrlCriteria];
+                            if (ignoreViewsFlag) {
+                                delete who['ConversationViewsCriteria'];
                             }
 
-                            who.UrlCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking UrlCriteria", criteria);
-
-                                    if (CnnXt.Utils.JSEvaluate(CnnXt.Utils.getUrlParam(criteria.Eval),
-                                        criteria.Qualifier,
-                                        criteria.Value,
-                                        "UrlCriteria")) {
-                                        //keep actionPassed in true state
-                                    } else {
-                                        //this failed, so set actionPassed to false;
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.URLMaskCriteria && actionPassed == true) {
-                            //We have a 'UrlCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            who.URLMaskCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking UrlCriteria", criteria);
-
-                                    var href = window.location.href,
-                                        // protocol = window.location.protocol,
-                                        hrefFormatted = href.replace(/#$/, ''),
-                                        hrefLength = hrefFormatted.length,
-                                        criteriaHrefFormatted = criteria.Value.replace(/\*$/, ''),
-                                        valLength = criteriaHrefFormatted.length;
-
-                                    if (hrefFormatted.indexOf(criteriaHrefFormatted) == 0 && hrefLength > valLength && criteria.Qualifier == '==') {
-                                        //keep actionPassed in true state
-                                    } else if (hrefFormatted.indexOf(criteriaHrefFormatted) != 0 && criteria.Qualifier == '!=') {
-                                        //keep actionPassed in true state
-                                    } else {
-                                        //this failed, so set actionPassed to false;
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.SubDomainCriteria && actionPassed == true) {
-                            //We have a 'SubDomainCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-
-                            if (!_.isArray(who.SubDomainCriteria)) {
-                                who.SubDomainCriteria = [who.SubDomainCriteria];
-                            }
-
-                            who.SubDomainCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking SubDomainCriteria", criteria);
-
-                                    var searchingVal = criteria.Value.toUpperCase();
-                                    var sourceVal = window.location.hostname.toUpperCase();
-                                    // root domain won't be included
-                                    var qualifier = criteria.Qualifier.toUpperCase();
-
-                                    if ((qualifier == "==") ^ (sourceVal.split('.').reverse().indexOf(searchingVal) > 1)) {
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.MetaKeywordCriteria && actionPassed == true) {
-                            //We have a 'MetaKeywordCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-
-                            if (!_.isArray(who.MetaKeywordCriteria)) {
-                                who.MetaKeywordCriteria = [who.MetaKeywordCriteria];
-                            }
-
-                            who.MetaKeywordCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking MetaKeywordCriteria: ", criteria);
-
-                                    var metaArray = CnnXt.Utils.getMetaTagsWithKeywords();
-                                    var evalResult = false;
-                                    var regExpStr = "\\b" + criteria.Value + "\\b";
-                                    var regExp = new RegExp(regExpStr);
-
-                                    for (var i = 0; i < metaArray.length; i++) {
-                                        if (regExp.test(metaArray[i].content)) {
-                                            LOGGER.debug(NAME, fnName, "Found keyword", criteria.Value);
-                                            evalResult = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (evalResult && criteria.Qualifier == "!=") {
-                                        actionPassed = false;
-                                    }
-
-                                    if (!evalResult) {
-                                        actionPassed = criteria.Qualifier == "!=" ? true : false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.UserStateCriteria && actionPassed == true) {
-                            //We have a 'UserStateCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-
-                            if (!_.isArray(who.UserStateCriteria)) {
-                                who.UserStateCriteria = [who.UserStateCriteria];
-                            }
-
-                            who.UserStateCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking UserStateCriteria", criteria);
-
-                                    var userState = CnnXt.User.getUserState();
-
-                                    if (!userState) {
-                                        userState = "Logged Out";
-                                    }
-
-                                    if (!CnnXt.Utils.JSEvaluate(
-                                        userState,
-                                        criteria.Qualifier,
-                                        criteria.Value,
-                                        "UserStateCriteria",
-                                        "string")) {
-
-                                        actionPassed = false;
-                                    }
-                                }
-                                //if (!CnnXt.Utils.JSEvaluate(userState, "==", criteria.Value)) {
-                                //    actionPassed = false;
-                                //}
-                            });
-                        }
-
-                        if (who.EZPayCriteria && actionPassed == true) {
-                            //We have a 'EZPayCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            who.EZPayCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking EZPayCriteria", criteria);
-                                    var userState = CnnXt.User.getUserState(),
-                                        userData;
-
-                                    if (userState !== 'Logged Out') {
-                                        userData = CnnXt.Storage.GetUserData();
-                                        if (userData && userData.Subscriptions) {
-                                            var subscription = userData.Subscriptions[0];
-                                            if (subscription.IsEZPay.toString() != criteria.Value) {
-                                                actionPassed = false;
-                                            }
-                                        } else {
-                                            actionPassed = false;
-                                        }
-                                    } else {
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.ExpireDateCriteria && actionPassed == true) {
-                            //We have a 'ExpireDateCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-                            who.ExpireDateCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking ExpireDateCriteria", criteria);
-                                    var userState = CnnXt.User.getUserState(),
-                                        userData;
-
-                                    if (userState !== 'Logged Out') {
-                                        userData = CnnXt.Storage.GetUserData();
-                                        if (userData && userData.Subscriptions) {
-                                            var subscription = userData.Subscriptions[0];
-
-                                            if (subscription.ExpirationDate) {
-                                                var diff = CnnXt.Utils.GetTimeByType(subscription.ExpirationDate, criteria["Expire Date Type"]);
-                                                if (!CnnXt.Utils.JSEvaluate(
-                                                        diff,
-                                                        criteria.Qualifier,
-                                                        criteria.Value,
-                                                        "ExpireDateCriteria",
-                                                        "integer")) {
-
-                                                    actionPassed = false;
-                                                }
-                                            }
-                                        } else {
-                                            actionPassed = false;
-                                        }
-                                    } else {
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
-                        }
-
-                        if (who.AdBlockCriteria && actionPassed == true) {
-                            //We have a 'AdBlockCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
-
-                            if (!_.isArray(who.AdBlockCriteria)) {
-                                who.AdBlockCriteria = [who.AdBlockCriteria];
-                            }
-
-                            who.AdBlockCriteria.forEach(function (criteria) {
-                                if (actionPassed) {
-                                    LOGGER.debug(NAME, fnName, "Checking AdBlockCriteria", criteria);
-
-                                    var hasAdBlock = CnnXt.Utils.detectAdBlock();
-
-                                    if (hasAdBlock && criteria.Value == "Detected") {
-                                        //keep actionPassed in true state
-                                    } else if (!hasAdBlock && criteria.Value == "Not Detected") {
-                                        //keep actionPassed in true state
-                                    } else {
-                                        actionPassed = false;
-                                    }
-                                }
-                            });
+                            actionPassed = CnnXt.Utils.ResolveQualifiersFor(who, additionalData);
                         }
 
                     } catch (ex) {
                         actionPassed = false;
-                        console.error(NAME, fnName, "EXCEPTION", ex);
+                        LOGGER.exception(NAME, fnName, ex);
                     }
 
                     //we are done with this action check
-                    if (actionPassed) {
+                    if (actionPassed && !CnnXt.Action.ActionInPendingExecutionTime(val) && !CnnXt.Action.ActionLimitIsExceeded(val)) {
                         //if 'actionPassed' is still true, then we should execute this action.
                         LOGGER.debug(NAME, fnName, "===== ACTION PASSED =====", val);
 
-                        if (val.ActionTypeId == 3 && !ignoreViewsFlag) {
+                        if (val.ActionTypeId === 3 && !ignoreViewsFlag) {
                             //this is a paywall action, so set 'paywallActionFound' to true, so future action checks will skip paywalls.
                             paywallActionFound = true;
+                        }
+
+                        if (ignoreViewsFlag) {
+                            val = _.findWhere(conversation.Actions, { id: val.id });
                         }
 
                         actions.push(val); //this action has passed all criteria, so add it to the actions array.
@@ -11332,10 +12856,11 @@ var ConnextCampaign = function ($) {
                 //This sets the paywall limit for this conversation. We don't care if this action actually passed all criteria, we only care if this conversation does not have a paywallLimit set yet.
             });
 
+            LOGGER.debug(NAME, fnName, 'End determine conversation actions', actions);
             return actions;
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
     //#endregion ACTION FUNCTIONS
@@ -11347,14 +12872,12 @@ var ConnextCampaign = function ($) {
         /// <param name="meterlevel" type="Int">MeterLevel</param>
         /// <returns type="Object|Null">Conversation Object or Null if no convo is found</returns>
         var fnName = "getStoredConversationByMeterLevel";
+
         try {
             LOGGER.debug(NAME, fnName, "meterLevel", meterlevel);
 
             var foundConvo = null; //set default to null, since we return this variable regardless of the checks below.
-
             var currentConversations = CnnXt.Storage.GetCurrentConversations();
-            LOGGER.debug(NAME, fnName, "currentConversations", currentConversations);
-
 
             if (currentConversations) {
                 //we have stored conversations, check if we have one at this meterLevel
@@ -11363,48 +12886,53 @@ var ConnextCampaign = function ($) {
                 //we already set default to null, so do nothing
             }
 
+            LOGGER.debug(NAME, fnName, "Found stored conversations for meter level", meterlevel, foundConvo);
+
             return foundConvo;
 
-            //var allConversations = CnnXt.Storage.GetLocalConfiguration().Campaign.Conversations;
-            //LOGGER.debug(NAME, fnName, 'allConversations', allConversations);
-
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             return false;
         }
     };
 
     var getAllConversationsByMeterLevel = function (meterlevel) {
-        /// <summary>This returns all conversations by MeterLevel stored in the configuration setting (this is different than any stored current conversations).</summary>
-        /// <param name="meterlevel" type="Int">MeterLevel</param>
-        /// <returns type="Object|Null">Conversation Object or Null if no convo is found</returns>
         var fnName = "getAllConversationsMeterLevel";
+
         try {
             LOGGER.debug(NAME, fnName, "meterLevel", meterlevel);
-            return CnnXt.Storage.GetCampaignData().Conversations[meterlevel];
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
-            return false;
+            var conversations = CnnXt.Storage.GetCampaignData().Conversations[meterlevel];
+
+            if (!conversations) {
+                LOGGER.debug(NAME, fnName, "No Conversation for " + meterlevel + " meter level");
+                conversations = [];
+            }
+
+            LOGGER.debug(NAME, fnName, "Found conversations for meter level", meterlevel, conversations);
+
+            return _.sortBy(conversations, 'Order');
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return [];
         }
     };
 
-    var saveCurrentConversation = function () {
-        /// <summary>This uses the global variables to save this current conversation into the correct local storage object. This should get called anytime we change the CURRENT_CONVERSATION so on next page load we have this new data.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
+    var saveCurrentConversation = function (conversation) {
         var fnName = "saveCurrentConversation";
+
+        LOGGER.debug(NAME, fnName, conversation);
+
         try {
-            //LOGGER.debug(pName, fnName);
             //get all current conversations
-            var allcurrentConversations = CnnXt.Storage.GetCurrentConversations();
+            var allCurrentConversations = CnnXt.Storage.GetCurrentConversations();
             //set the object with this meterlevel to the current conversation.
-            allcurrentConversations[METER_LEVEL] = CURRENT_CONVERSATION;
+            allCurrentConversations[METER_LEVEL] = conversation;
             //re-set the entire conversations.current object back to local storage.
-            CnnXt.Storage.SetCurrentConversations(allcurrentConversations);
-            //$.jStorage.set(CnnXt.Common.StorageKeys.conversations.current, allcurrentConversations);
-            //CnnXt.Storage.GetCurrentConversations()[METER_LEVEL];
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            CnnXt.Storage.SetCurrentConversations(allCurrentConversations);
+            CnnXt.Storage.SetActiveConversationId(conversation.id);
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -11412,59 +12940,54 @@ var ConnextCampaign = function ($) {
 
     //#region HELPERS
 
-    var setDefaultConversationProps = function () {
-        /// <summary>This sets default props for a new conversation</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
+    var setDefaultConversationProps = function (conversation) {
         var fnName = "setDefaultConversationProps";
+
+        LOGGER.debug(NAME, fnName, conversation);
+
         try {
-            //LOGGER.debug(pName, fnName);
             var now = CnnXt.Utils.Now(); //this sets current date/time (based on if we are debugging/manually setting time or using the real time.
 
             //set the date started.
-            CURRENT_CONVERSATION.Props.Date.started = CURRENT_CONVERSATION.Props.Date.started ? CURRENT_CONVERSATION.Props.Date.started : CnnXt.Utils.Now();
+            conversation.Props.Date.started = conversation.Props.Date.started ? conversation.Props.Date.started : CnnXt.Utils.Now();
 
-            if (CURRENT_CONVERSATION.Options.Expirations.Time) {
-                switch (CURRENT_CONVERSATION.Options.Expirations.Time.key) {
-                    case "m": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setMinutes(now.getMinutes() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
-                    case "h": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setHours(now.getHours() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
-                    case "d": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setDate(now.getDate() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
-                    case "w": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setDate(now.getDate() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val) * 7)); break;
-                    case "M": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setMonth(now.getMonth() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
-                    case "y": CURRENT_CONVERSATION.Props.Date.expiration = new Date(now.setFullYear(now.getFullYear() + parseInt(CURRENT_CONVERSATION.Options.Expirations.Time.val))); break;
+            if (conversation.Options.Expirations.Time) {
+                switch (conversation.Options.Expirations.Time.key) {
+                    case "m": conversation.Props.Date.expiration = new Date(now.setMinutes(now.getMinutes() + parseInt(conversation.Options.Expirations.Time.val))); break;
+                    case "h": conversation.Props.Date.expiration = new Date(now.setHours(now.getHours() + parseInt(conversation.Options.Expirations.Time.val))); break;
+                    case "d": conversation.Props.Date.expiration = new Date(now.setDate(now.getDate() + parseInt(conversation.Options.Expirations.Time.val))); break;
+                    case "w": conversation.Props.Date.expiration = new Date(now.setDate(now.getDate() + parseInt(conversation.Options.Expirations.Time.val) * 7)); break;
+                    case "M": conversation.Props.Date.expiration = new Date(now.setMonth(now.getMonth() + parseInt(conversation.Options.Expirations.Time.val))); break;
+                    case "y": conversation.Props.Date.expiration = new Date(now.setFullYear(now.getFullYear() + parseInt(conversation.Options.Expirations.Time.val))); break;
                 }
             } else {
-                LOGGER.debug(fnName, "No expiration time set for this conversation.");
+                LOGGER.debug(NAME, fnName, "No expiration time set for this conversation.");
             }
 
             //we've updated necessary properties, save this conversation
-            saveCurrentConversation();
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            saveCurrentConversation(conversation);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    var updateArticleViewCount = function (count) {
-        /// <summary>This will update the current conversations viewed count.</summary>
-        /// <param name="count" type="Integer">Optional: If this is set we set the number of views to this, if not we just increment current value</param>
-        /// <returns>None</returns>
+    var updateArticleViewCount = function (conversation, count) {
         var fnName = "updateArticleViewCount";
 
+        LOGGER.debug(NAME, fnName);
+
         try {
-            LOGGER.debug(NAME, fnName);
             if (_.isNumber(arguments[0])) {
                 //we have an argument so we should set to this number
-                CURRENT_CONVERSATION.Props.views = count;
-
+                conversation.Props.views = count;
             } else {
                 //else we should increment view by 1
-
-                CURRENT_CONVERSATION.Props.views = getCurrentConversationViewCount();
+                conversation.Props.views = getCurrentConversationViewCount();
             }
             //save changes.
-            saveCurrentConversation();
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            saveCurrentConversation(conversation);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
@@ -11478,43 +13001,21 @@ var ConnextCampaign = function ($) {
         init: function (configSettings) {
             LOGGER = CnnXt.Logger;
             CONFIG_SETTINGS = configSettings;
-            LOGGER.debug(NAME, "Campaign.Init");
+            LOGGER.debug(NAME, "Initializing Campaign Module...");
         },
-        ProcessCampaign: function (meterLevel, campaign) {
-            return processCampaign(meterLevel, campaign);
-        },
+        ProcessCampaign: processCampaign,
         GetCurrentConversationProps: function () { //returns the current conversations Props object
             try {
                 return CURRENT_CONVERSATION.Props;
-            } catch (e) {
-                console.error(NAME, "GetCurrentConversationProps.Exception", e);
+            } catch (ex) {
+                LOGGER.exception(NAME, "GetCurrentConversationProps", ex);
                 return null;
             }
-            //return getCurrentConversationViewCount();
         },
         GetCurrentConversation: function () {
             return CURRENT_CONVERSATION;
         },
-        GetCurrentConversationViewCount: function () {
-            return getCurrentConversationViewCount();
-        },
-        EventCompleted: function () {
-            var fnName = "EventCompleted";
-            try {
-                //LOGGER.debug(NAME, fnName, 'event', event);
-
-            } catch (e) {
-                console.error(NAME, fnName, "<<EXCEPTION>>", e);
-            }
-
-        },
-        GetLocalViewData: function() {
-            return getLocalViewData();
-        }
-        //,
-        //SaveCurrentConversation: function () {
-        //    saveCurrentConversation();
-        //}
+        GetCurrentConversationViewCount: getCurrentConversationViewCount
     };
 
 };
@@ -11552,35 +13053,43 @@ var ConnextAction = function ($) {
 
     var processActions = function (actions) {
         var fnName = "processActions";
+
+        LOGGER.debug(NAME, fnName, actions);
+
         try {
-            LOGGER.debug(NAME, fnName, actions);
             $.each(actions, function (key, action) {
                 LOGGER.debug(NAME, fnName, "Actions.EACH", key, action);
-                if (action.What.Html) {
+
+                if (action && action.What && action.What.Html) {
                     //if action have Promise criteria
                     if (_.isArray(action.Who.PromiseCriteria)) {
-                        LOGGER.debug(NAME, fnName, "promises array found");
+                        LOGGER.debug(NAME, fnName, "Promises array was found");
+
                         resolvePromiseCriterias(action.Who.PromiseCriteria).then(function () {
-                            LOGGER.debug(NAME, fnName, "Promise Criterias Resolved");
+                            LOGGER.debug(NAME, fnName, "Promise criterias were resolved");
                             setupAction(action);
                         }, function () {
-                            LOGGER.debug(NAME, fnName, "Promise Criterias Rejected");
+                            LOGGER.debug(NAME, fnName, "Promise criterias were rejected");
                         });
                     } else {
                         setupAction(action);
                     }
+                } else if (action && action.What && action.What.Type == ACTION_TYPE.JSCall) {
+                    setupAction(action);
                 } else {
-                    LOGGER.debug(NAME, fnName, "ACTION has no html");
+                    LOGGER.warn(NAME, fnName, "ACTION has no html", action);
                 }
             });
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var resolvePromiseCriterias = function (promiseCriterias) {
         var fnName = 'resolvePromiseCriterias';
+
+        LOGGER.debug(NAME, fnName, promiseCriterias);
 
         var criteriaResult = $.Deferred();
 
@@ -11591,26 +13100,30 @@ var ConnextAction = function ($) {
                 promises.push(eval(criteria.Name));
             });
 
+            LOGGER.debug(NAME, fnName, 'Setup "Q all" for promise criterias');
+
             $.when.apply($, promises).then(function () {
                 //if all primises don't have values
-                if (arguments.length == 0) {
-                    arguments = [];
-                    arguments.push(null);
+                if (!arguments.length) {
+                    arguments = [null];
                 }
-                Array.prototype.forEach.call(arguments,
-                        function(result, index) {
-                            var criteria = promiseCriterias[index];
 
-                            if (!CnnXt.Utils.JSEvaluate(
-                                result ? result.toString().toLowerCase() : result,
-                                criteria.Qualifier,
-                                criteria.Value.toLowerCase(),
-                                "Promise")) {
+                LOGGER.debug(NAME, fnName, '"Q all" results', arguments);
 
-                                criteriaResult.reject();
-                            }
-                        });
-                
+                Array.prototype.forEach.call(arguments, function (result, index) {
+                    var criteria = promiseCriterias[index],
+                        promiseValue = result,
+                        criteriaValue = criteria.Value;
+
+                    if (!CnnXt.Utils.JSEvaluate(
+                        promiseValue,
+                        criteria.Qualifier,
+                        criteriaValue,
+                        "Promise"
+                    )) {
+                        criteriaResult.reject();
+                    }
+                });
 
                 criteriaResult.resolve();
             }, function () {
@@ -11618,8 +13131,7 @@ var ConnextAction = function ($) {
             });
 
         } catch (ex) {
-            // error of eval  - promise is or undefined null - don't show action
-            LOGGER.debug(NAME, fnName, "Promise object is null or undefined");
+            LOGGER.exception(NAME, fnName, ex);
             criteriaResult.reject();
         }
 
@@ -11627,49 +13139,61 @@ var ConnextAction = function ($) {
     }
 
     var setupAction = function (action) {
-        /// <summary>handles setting up the action based on type (adds to DOM, configures etc....)</summary>
-        /// <param name="_Action" type="Object">action object which holds all info needed to either show or execute this action.</param>
-        /// <returns>None</returns>
         var fnName = "handleAction";
-        try {
-            LOGGER.debug(NAME, fnName, "action", action);
-            var actionCSS = action.What.CSS;
-            var actionHtml = action.What.Html.trim(); //set html from action.What.Html prop.
-            actionHtml = handleDynamicHtml(actionHtml);
-            actionHtml = $(actionHtml).prop("id", DEFAULT_ACTION_ID + action.id);
-            console.info("ACTION HTML", actionHtml);
-            $(actionHtml).addClass("hide");
-            $(actionHtml).prepend('<style id="' + action.id + '-mg2style' + '"' + '>' + actionCSS + '</style>');
-            action.inProgress = false;
 
-            if ($("#themeLink").length == 0) {
-                $("body").append(actionHtml);
+        LOGGER.debug(NAME, fnName, 'Setup action', action);
+
+        try {
+            LOGGER.debug(NAME, fnName, 'Action type', action.What.Type);
+
+            if (action.What.Type != ACTION_TYPE.JSCall) {
+                var actionCSS = action.What.CSS,
+                    actionHtml = action.What.Html.trim(), //set html from action.What.Html prop.
+                    $action;
+
+                actionHtml = handleDynamicHtml(actionHtml);
+
+                $action = $(actionHtml);
+
+                $action.prop("id", DEFAULT_ACTION_ID + action.id);
+                $action.addClass("hide");
+                $action.prepend('<style id="' + action.id + '-mg2style' + '"' + '>' + actionCSS + '</style>');
+
+                if ($("#themeLink").length == 0) {
+                    $("body").append($action);
+                } else {
+                    $("#themeLink").before($action);
+                }
             } else {
-                $("#themeLink").before(actionHtml);
+                LOGGER.debug(NAME, fnName, 'Action type is JS Call');
             }
 
+            action.inProgress = false;
+            
             registerActionEvents(action);
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var executeAction = function (action) {
         var fnName = "executeAction";
-        var e;
+
+        LOGGER.debug(NAME, fnName, 'Starting executing action...', action);
 
         try {
-            LOGGER.debug(NAME, fnName, action);
-
             if (action.What.Type == ACTION_TYPE.Paywall) {
+                LOGGER.debug(NAME, fnName, 'Action type is paywall. So we hide a content.');
+
                 hideContent(action);
             }
-
             action.closeEvent = null;
             var $action = $("#" + DEFAULT_ACTION_ID + action.id);
 
             $action.removeClass("hide");
+
+            LOGGER.debug(NAME, fnName, 'Action type', action.What.Type, action);
 
             if (action.What.Type == ACTION_TYPE.Banner) {
                 //set bannerLocation to stored value if it exists, if not set it to top (we do this in case there are template not stored correctly...really just needed since templates were created before option to place them was introduced in Admin).
@@ -11704,22 +13228,21 @@ var ConnextAction = function ($) {
                 $($action).one('keydown', function (e) {
                     if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                         action.closeEvent = CLOSE_CASES.EscButton;
-                        //  action.isMultipleTimeRepeatable = false;
+                        
                     }
                 })
                     .one("hidden", function (e) {
-                        if (action.isMultipleTimeRepeatable) {
+                        
                             if (action.closeEvent == null || action.closeEvent == undefined) {
 
                                 action.closeEvent = CLOSE_CASES.ClickOutside;
-                                action.actionDom = $action;
+                                action.actionDom = $action[0].innerHTML;
                                 CnnXt.Event.fire("onActionClosed", action);
                             } else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
-                                action.actionDom = $action;
+                                action.actionDom = $action[0].innerHTML;
                                 CnnXt.Event.fire("onActionClosed", action);
                             }
-                        }
-                        action.isMultipleTimeRepeatable = false;
+                      
                     });
             }
 
@@ -11729,14 +13252,15 @@ var ConnextAction = function ($) {
             if (action.What.Type == ACTION_TYPE.Paywall) {
                 //a paywall can be either a 'modal' or 'inline', check the data-display-type property.
                 var displayType = $action.data("display-type");
-                LOGGER.debug(NAME, fnName, "displayType", displayType);
+
+                LOGGER.debug(NAME, fnName, "Paywall display type", displayType);
 
                 if (displayType == "inline") { //this is an inline paywall.
                     CONTENT_SELECTOR = action.What.Selector;
                     CONTENT_POSITION = action.What.Position;
                     //now that the content is hidden, we can append the inline html.
                     if ($(CONTENT_SELECTOR).length == 0) {
-                        LOGGER.debug(NAME, "not found element by current content selector", CONTENT_SELECTOR);
+                        LOGGER.warn(NAME, fnName, "Not found element by current content selector", CONTENT_SELECTOR);
                         $action.remove();
                         return false;
                     }
@@ -11785,25 +13309,21 @@ var ConnextAction = function ($) {
                         .one('keydown', function (e) {
                             if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                                 action.closeEvent = CLOSE_CASES.EscButton;
-                                // action.isMultipleTimeRepeatable = false;
                             }
                         })
                         .one("hidden", function (e) {
-                            if (action.isMultipleTimeRepeatable) {
-                                if (action.closeEvent == null || action.closeEvent == undefined) {
-                                    if (action.What["NotClosable_paywall"] == "True" || action.What["NotClosable_paywall"] == "true") {
-                                        return false;
-                                    }
-
-                                    action.closeEvent = CLOSE_CASES.ClickOutside;
-                                    action.actionDom = $action;
-                                    CnnXt.Event.fire("onActionClosed", action);
-                                } else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
-                                    action.actionDom = $action;
-                                    CnnXt.Event.fire("onActionClosed", action);
+                            if (action.closeEvent == null || action.closeEvent == undefined) {
+                                if (action.What["NotClosable_paywall"] == "True" || action.What["NotClosable_paywall"] == "true") {
+                                    return false;
                                 }
+
+                                action.closeEvent = CLOSE_CASES.ClickOutside;
+                                action.actionDom = $action;
+                                CnnXt.Event.fire("onActionClosed", action);
+                            } else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
+                                action.actionDom = $action[0].innerHTML;
+                                CnnXt.Event.fire("onActionClosed", action);
                             }
-                            action.isMultipleTimeRepeatable = false;
                         });
                 } else if (displayType == "banner") {
                     //set bannerLocation to stored value if it exists, if not set it to top (we do this in case there are template not stored correctly...really just needed since templates were created before option to place them was introduced in Admin).
@@ -11824,7 +13344,7 @@ var ConnextAction = function ($) {
 
                 } else {
                     //the action html didn't have the data-display-type property, so do nothing, just Log it.
-                    LOGGER.warn(NAME, fnName, "Can't determine display type.");
+                    LOGGER.debug(NAME, fnName, "Can't determine display type for paywall.");
                 }
 
                 $("#ConneXt_Action_Id-" + action.id)
@@ -11833,7 +13353,7 @@ var ConnextAction = function ($) {
                         action.Conversation = CnnXt.Campaign.GetCurrentConversation();
                         action.Conversation.Campaign = CnnXt.Storage.GetCampaignData();
                         action.ButtonArgs = e;
-                        action.ActionDom = $action;
+                        action.ActionDom = $action[0].innerHTML;
                         if (CnnXt.GetOptions().integrateFlittz) {
                             CnnXt.Event.fire("onFlittzButtonClick", action);
                         }
@@ -11845,7 +13365,7 @@ var ConnextAction = function ($) {
                 CONTENT_POSITION = action.What.Position;
                 //now that the content is hidden, we can append the inline html.
                 if ($(CONTENT_SELECTOR).length == 0) {
-                    LOGGER.debug(NAME, "not found element by current content selector", CONTENT_SELECTOR);
+                    LOGGER.warn(NAME, fnName, "Not found element by current content selector", CONTENT_SELECTOR);
                     $action.remove();
                     return false;
                 }
@@ -11882,22 +13402,25 @@ var ConnextAction = function ($) {
                     if (action.What.Javascript != undefined) {
                         try {
                             eval(action.What.Javascript);
-                        } catch (e) { }
+                        } catch (ex) {
+                            LOGGER.warn(NAME, fnName, ex);
+                        }
                     }
-                }
-                catch (e) {
-                    console.error(NAME, fnName, "Custom JS Call exception", e);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, "Custom JS Call", ex);
                 }
             }
+
             if (action.What.Type == ACTION_TYPE.Newsletter) {
                 displayType = $action.data("display-type");
+                LOGGER.debug(NAME, fnName, "Newsletter display type", displayType);
 
                 if (displayType == "inline") {
                     CONTENT_SELECTOR = action.What.Selector;
 
                     //now that the content is hidden, we can append the inline html.
                     if ($(CONTENT_SELECTOR).length == 0) {
-                        LOGGER.debug(NAME, "not found element by current content selector", CONTENT_SELECTOR);
+                        LOGGER.warn(NAME, fnName, "Not found element by current content selector", CONTENT_SELECTOR);
                         $action.remove();
                         return false;
                     }
@@ -11925,22 +13448,18 @@ var ConnextAction = function ($) {
                         .one('keydown', function (e) {
                             if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                                 action.closeEvent = CLOSE_CASES.EscButton;
-                                // action.isMultipleTimeRepeatable = false;
                             }
                         })
                         .one("hidden", function () {
-                            if (action.isMultipleTimeRepeatable) {
-                                if (action.closeEvent == null || action.closeEvent == undefined) {
-                                    action.closeEvent = CLOSE_CASES.ClickOutside;
-                                    action.actionDom = $action;
-                                    CnnXt.Event.fire("onActionClosed", action);
-                                }
-                                else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
-                                    action.actionDom = $action;
-                                    CnnXt.Event.fire("onActionClosed", action);
-                                }
+                            if (action.closeEvent == null || action.closeEvent == undefined) {
+                                action.closeEvent = CLOSE_CASES.ClickOutside;
+                                action.actionDom = $action[0].innerHTML;
+                                CnnXt.Event.fire("onActionClosed", action);
                             }
-                            action.isMultipleTimeRepeatable = false;
+                            else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
+                                action.actionDom = $action[0].innerHTML;
+                                CnnXt.Event.fire("onActionClosed", action);
+                            }
                         });
                 }
             }
@@ -11955,30 +13474,27 @@ var ConnextAction = function ($) {
                     e.preventDefault();
                     var $btn = $(this),
                         href = $btn.attr('href');
-
-                    
                     if (href == "#" || !href) {
                         action.closeEvent = CLOSE_CASES.CloseButton;
                         $btn.closest(".Mg2-connext").addClass("hide");
                         //fire close event & calculate total show time
-                        action.actionDom = $action;
-                        if (action.isMultipleTimeRepeatable) {
-                            if (!$(action.What.Html).hasClass('modal')) {
-                                CnnXt.Event.fire("onActionClosed", action);
-                                action.isMultipleTimeRepeatable = false;
-                            }
-                            
+                        action.actionDom = $action[0].innerHTML;
+                        LOGGER.debug(NAME, fnName, "Click by link without href", href);
+                        if (!$(action.What.Html).hasClass('modal')) {
+                            CnnXt.Event.fire("onActionClosed", action);
                         }
-                        
                     } else {
                         if ($btn[0].hasAttribute("target")) {
+                            LOGGER.debug(NAME, fnName, "Open in a new window", href);
                             window.open(href, "_blank");
                         } else {
+                            LOGGER.debug(NAME, fnName, "Open in the current window", href);
                             window.location.href = href;
                         }
                         CnnXt.Event.fire("onButtonClick", action);
                     }
                 });
+
             $("#" + id + " [data-dismiss=notclosablepaywall]").one('click', function (e) {
                 e.preventDefault();
                 var $btn = $(this),
@@ -11987,28 +13503,30 @@ var ConnextAction = function ($) {
                     return false;
                 } else {
                     if ($btn[0].hasAttribute("target")) {
+                        LOGGER.debug(NAME, fnName, "Open in a new window", href);
                         window.open(href, "_blank");
                     } else {
+                        LOGGER.debug(NAME, fnName, "Open in the current window", href);
                         window.location.href = href;
                     }
                     CnnXt.Event.fire("onButtonClick", action);
                 }
             });
 
-            action.actionDom = $action;
+            action.actionDom = $action[0].innerHTML;
 
-            //fire show event & save start time
-            if (!action.isMultipleTimeRepeatable) { // || !$action.is(':visible')
-                CnnXt.Event.fire("onActionShown", action);
+            CnnXt.Event.fire("onActionShown", action);
+
+            if (action.When && action.When.Time) {
+                CnnXt.Storage.SetTimeRepeatableActionData(action); 
             }
-            if (!action.isMultipleTimeRepeatable && action.When.Time.Repeatable > 1) {//  && action.ActionTypeId == 2
-                action.isMultipleTimeRepeatable = true;
+           
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, ex);
             }
-            if (action.When.Time.Repeatable == 1) {
-                action.isMultipleTimeRepeatable = true;
-            }
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -12020,6 +13538,7 @@ var ConnextAction = function ($) {
             return callback.apply(this, arguments);
         };
     };
+
     //#endregion FUNCTIONS
 
 
@@ -12027,14 +13546,14 @@ var ConnextAction = function ($) {
     //#region ACTION TRIGGER FUNCTIONS
 
     var registerActionEvents = function (action) {
-        /// <summary>This takes an action object and registers any user event listeners based on this action options.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "registerActionEvents";
-        try {
-            LOGGER.debug(NAME, fnName, "action", action);
 
+        LOGGER.debug(NAME, fnName, action);
+
+        try {
             if (!action.When) {
+                LOGGER.debug(NAME, fnName, 'Action has no When object. So we set default values');
+
                 action.When = {
                     Time: {
                         Delay: 0
@@ -12043,78 +13562,57 @@ var ConnextAction = function ($) {
             }
 
             if (action.When && action.When.Time) {
+                LOGGER.debug(NAME, fnName, 'Action has When.Time object.');
+
                 action.count = 0;
                 setTimedAction(action);
             } else if (action.When && action.When.Hover) {
+                LOGGER.debug(NAME, fnName, 'Action has When.Hover object.');
+
                 setHoverEvent(action);
             } else if (action.When && action.When.EOS) {
+                LOGGER.debug(NAME, fnName, 'Action has When.EOS object.');
+
                 SetEosEvent(action);
             } else {
-                console.log(NAME, fnName, "NO ACTION TO REGISTER", action);
+                LOGGER.warn("No action to register");
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
-    var setTimedAction = function (action) {
+    var setTimedAction = function (action, repeat) {
         var fnName = "setTimedAction";
+
+        LOGGER.debug(NAME, fnName, 'Set action start by time', arguments);
+
         try {
-            var repeatable = CnnXt.Storage.GetRepeatablesInConv(action.id);
+            setTimeout(function () {
+                executeAction(action);
+                action.count++;
+                CnnXt.Storage.UpdateRepeatablesInConv(action.id);
+            }, action.When.Time.Delay);
 
-            if (!action.When.Time.Repeatable) {
-                action.When.Time.Repeatable = 1;
-            }
+            LOGGER.debug(NAME, fnName, 'Action will be execute after: ', action.When.Time.Delay + 'ms');
 
-            if (!action.When.Time.RepeatableConv) {
-                action.When.Time.RepeatableConv = 1;
-            }
-
-            if (action.When.Time.Repeatable > action.count && action.When.Time.RepeatableConv > repeatable) {
-                setTimeout(function () {
-                    executeAction(action);
-                    action.count++;
-                    CnnXt.Storage.UpdateRepeatablesInConv(action.id);
-                },
-                    action.When.Time.Delay);
-            }
-
-            //var interval = setInterval(function () {
-            //    var repeatable = CnnXt.Storage.GetRepeatablesInConv(action.id);
-
-            //    if (action.When.Time.Repeatable > action.count && action.When.Time.RepeatableConv > repeatable) {
-            //        if (!action.inProgress) {
-            //            action.inProgress = true;
-            //            executeAction(action);
-            //            action.count++;
-            //            CnnXt.Storage.UpdateRepeatablesInConv(action.id);
-            //        } 
-            //    } else {
-            //        clearInterval(interval);
-            //    }
-
-            //}, action.When.Time.Delay);
-
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var SetEosEvent = function (action) {
-        /// <summary>Sets action based on an element on the screen.</summary>
-        /// <param name="action" type="Object">Action object.</param>
-        /// <returns>None</returns>
         var fnName = "SetEosEvent";
-        try {
 
+        LOGGER.debug(NAME, fnName, 'Set action start by EOS', arguments);
+
+        try {
             action.count = 0;
 
             var actionElem = "#ConneXt_Action_Id-" + action.id;
-            //LOGGER.debug(NAME, fnName);
+
             setTimeout(function () { //set timeout before we register listening for an element on the screen based on the .Time.Delay property.
-                //LOGGER.debug(NAME, fnName, 'EOS Delay Expired, listening for trigger.');
-                //executeAction(action);
                 $(action.When.EOS.Selector).viewportChecker({
                     // The offset of the elements (let them appear earlier or later)
                     offset: 10,
@@ -12146,21 +13644,19 @@ var ConnextAction = function ($) {
                     scrollHorizontal: false
                 });
             }, action.When.EOS.Delay);
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     //TODO: Move hover event to a seprate function so we call the same function for parent/child hover events
     //      Everything currently works, but when we start tracking hover events per-conversation it would be easier if they are separated.
     var setHoverEvent = function (action) {
-        /// <summary>Sets action based on a hover.</summary>
-        /// <param name="action" type="Object">Action object.</param>
-        /// <returns>None</returns>
         var fnName = "setHoverEvent";
-        try {
-            //LOGGER.debug(pName, fnName);
 
+        LOGGER.debug(NAME, fnName, 'Set action start by hover', arguments);
+
+        try {
             var delay = (action.When.Hover.Delay) ? (action.When.Hover.Delay) : 0;
 
             setTimeout(function () { //set execute action function with this action delay.
@@ -12170,10 +13666,7 @@ var ConnextAction = function ($) {
 
                 $(action.When.Hover.Selector).on("mouseenter", function (e) {
                     e.stopPropagation();
-                    //LOGGER.info(NAME, fnName, 'onMouseOver', e, $(this));
 
-
-                    //LOGGER.debug(fnName, 'Mouse Event', valid, action.When.Hover.Repeatable);
                     //since this is valid and the default is true, we check if the next run should be valid. this way we don't keep checking 
                     if (_.isNumber(parseInt(action.When.Hover.Repeatable)) && _.isNumber(parseInt(action.When.Hover.RepeatableConv))) {
                         var repeatable = CnnXt.Storage.GetRepeatablesInConv(action.id);
@@ -12201,22 +13694,19 @@ var ConnextAction = function ($) {
 
             }, delay);
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
     //#endregion ACTION TRIGGER FUNCTIONS
 
 
-
-
     //#region HELPERS
 
     var hideContent = function (action) {
-        /// <summary>Hides the content because we've hit the paywall. </summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "hideContent";
+
+        LOGGER.debug(NAME, fnName, arguments);
 
         try {
             var regExp = new RegExp(/script|style|meta/i);
@@ -12323,33 +13813,38 @@ var ConnextAction = function ($) {
                 }
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
-            throw { name: 'HideContentExeption', message: 'Cannot hide content!' };
+        } catch (ex) {
+            throw CnnXt.Common.ERROR.HIDE_CONTENT;
         }
     };
 
     var mixContent = function (item) {
-        if ($(item).children().length == 0) {
-            var txt = $(item).text();
-            if (txt) {
-                for (var i = 0; i < txt.length; i++) {
-                    txt = txt.replaceAt(i, CnnXt.Utils.GetNextLetter(txt[i]));
+        var fnName = 'mixContent';
+
+        try {
+            if ($(item).children().length == 0) {
+                var txt = $(item).text();
+
+                if (txt) {
+                    for (var i = 0; i < txt.length; i++) {
+                        txt = txt.replaceAt(i, CnnXt.Utils.GetNextLetter(txt[i]));
+                    }
                 }
-            }
-            $(item).text(txt);
-        } else {
-            $.each($(item).children(),
-                function (key, val) {
+
+                $(item).text(txt);
+            } else {
+                $.each($(item).children(), function (key, val) {
                     mixContent(val);
                 });
+            }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
+
     var integrateProduct = function () {
-        /// <summary>Shows the previously hidden content.</summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
         var fnName = "showContent";
+
         try {
             if (LOGGER) {
                 LOGGER.debug(NAME, fnName);
@@ -12357,29 +13852,51 @@ var ConnextAction = function ($) {
 
             $(CONTENT_SELECTOR).html(ORIGINAL_CONTENT);
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
-    var getDaysToExpire = function (currentConv) {
-        var now = CnnXt.Utils.Now(),
-            daysToExpire = new Date(currentConv.Props.Date.expiration),
-            diff;
-        if (currentConv.Options.Expirations.Time.key == "d" || currentConv.Options.Expirations.Time.key == "w" || currentConv.Options.Expirations.Time.key == "m" || currentConv.Options.Expirations.Time.key == "y") {
-            diff = parseInt((daysToExpire - now) / 86400000) + 1; //get diff in days by dividing on milliseconds
-        } else diff = parseInt((daysToExpire - now) / 86400000);
 
-        return (diff <= 0) ? 'less than 1' : diff;
+    var getDaysToExpire = function (currentConv) {
+        var fnName = 'getDaysToExpire';
+
+        LOGGER.debug(NAME, fnName, currentConv);
+
+        try {
+            var now = CnnXt.Utils.Now(),
+                daysToExpire = new Date(currentConv.Props.Date.expiration),
+                diff;
+
+            if (currentConv.Options.Expirations.Time.key == "d" || currentConv.Options.Expirations.Time.key == "w" || currentConv.Options.Expirations.Time.key == "m" || currentConv.Options.Expirations.Time.key == "y") {
+                diff = parseInt((daysToExpire - now) / 86400000) + 1; //get diff in days by dividing on milliseconds
+            } else {
+                diff = parseInt((daysToExpire - now) / 86400000);
+            }
+
+            return (diff <= 0) ? 'less than 1' : diff;
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
     };
+
+    function getArticleCost ()  {
+        var fnName = 'getArticleCost',
+            ARTICLE_COST_STORAGE_NAME = 'ArticleCost';
+
+        LOGGER.debug(NAME, fnName);
+
+        return sessionStorage.getItem(ARTICLE_COST_STORAGE_NAME)
+    }
+
     var handleDynamicHtml = function (html) {
         /// <summary>Takes html and replaces any dynamic {{ }} templating with appropriate values. </summary>
         /// <param name="html" type="String">html string to process templating against.</param>
         /// <returns type="String">Html string regardless if it has been processed for dynamic content.</returns>
         var fnName = "handleDynamicHtml";
+
+        LOGGER.debug(NAME, fnName, arguments);
+
         try {
-            //LOGGER.debug(pName, fnName);
-
-
             var regEx = /{{(.*?)}}/g;
 
             //this gets the current conversation props. We'll need some of these values to determine dynamic values below. Better to make one call here then multiple calls withing the .replace call below.
@@ -12396,22 +13913,30 @@ var ConnextAction = function ($) {
                         if (parseInt(viewsLeft) < 0) { //if we are negative (passed our limit) set this to 0, instead of the - number
                             viewsLeft = 0;
                         }
+                        LOGGER.debug(NAME, fnName, 'Replace FreeViewsLeft to', viewsLeft);
                         return viewsLeft;
                     case "{{CurrentViewCount}}":
+                        LOGGER.debug(NAME, fnName, 'Replace CurrentViewCount to', currentConversationProps.views);
                         return currentConversationProps.views;
                     case "{{ExpireTimeLeft}}":
+                        LOGGER.debug(NAME, fnName, 'Replace FreeViewsLeft to', getDaysToExpire(currentConversation));
                         return getDaysToExpire(currentConversation);
+                    case "{{ArticleCost}}":
+                        LOGGER.debug(NAME, fnName, 'Replace ArticleCost to', getArticleCost());
+                        return getArticleCost() ? getArticleCost() : '';
                     case "{{UserFullName}}":
                         try {
-
                             var state = CnnXt.Storage.GetUserState(),
                                 authType = CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId,
                                 userData;
+
+                            LOGGER.debug(NAME, fnName, 'Replace UserFullName');
 
                             if (state) {
                                 if (state == 'Logged Out') {
                                     return fallbackName;
                                 }
+
                                 if (state !== 'Logged Out') {
                                     if (state !== 'Logged In' && authType === 1) { //process MG2 data profile
                                         userData = CnnXt.Storage.GetUserData();
@@ -12420,13 +13945,13 @@ var ConnextAction = function ($) {
                                             if (userData.OwnedSubscriptions) {
                                                 fullName = userData.OwnedSubscriptions[0].FullName;
                                             } else if (userData.Subscriptions) {
-                                                fullName = userData.Subscriptions[0].FirstName + ' ' + userData.Subscriptions[0].LastName;
+                                                fullName = userData.Subscriptions.OwnedSubscriptions[0].FirstName + ' ' + userData.Subscriptions.OwnedSubscriptions[0].LastName;
                                             }
                                             return fullName || fallbackName;
                                         } else return fallbackName;
                                     } else {
                                         if (authType === 2) { // process Janrain data
-                                            userData = $.parseJSON(CnnXt.Storage.GetJanrainUser());
+                                            userData = CnnXt.Storage.GetJanrainUser();
                                             if (userData) {
                                                 return userData.displayName || fallbackName;
                                             } else return fallbackName;
@@ -12449,8 +13974,8 @@ var ConnextAction = function ($) {
                                     }
                                 }
                             } else return fallbackName;
-                        } catch (e) {
-                            console.error(fnName, "EXCEPTION", e);
+                        } catch (ex) {
+                            LOGGER.exception(NAME, fnName, ex);
                             return fallbackName;
                         }
                 }
@@ -12461,12 +13986,11 @@ var ConnextAction = function ($) {
             CnnXt.Utils.AddQueryParamsToAllLinks($html);
 
             return $html[0].outerHTML; // returning html regardless.
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
             return html; // returning html regardless.
         }
     };
-
 
     var initListeners = function () {
         $('body').on('click', '[data-mg2-action="click"]', commonClickHandler);
@@ -12516,23 +14040,60 @@ var ConnextAction = function ($) {
         CnnXt.Event.fire("onButtonClick", event);
     };
 
+    function actionInPendingExecutionTime(action) {
+        var fnName = 'actionInPendingExecutionTime';
+
+        try {
+            var repeatableActionData = CnnXt.Storage.GetTimeRepeatableActionData(action),
+                now = new Date(),
+                inPendingExecution = false;
+
+            if (repeatableActionData && repeatableActionData.date) {
+                inPendingExecution = (now < new Date(repeatableActionData.date));
+            }
+
+            return inPendingExecution
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return false;
+        } 
+    }
+
+    function actionLimitIsExceeded(action) {
+        var fnName = 'actionLimitIsExceeded';
+
+        try {
+            var repeatableActionData = CnnXt.Storage.GetTimeRepeatableActionData(action),
+                limitIsExceeded = false;
+
+            if (repeatableActionData && repeatableActionData.count) {
+                if (action.When && action.When.Time && action.When.Time.RepeatableConv){
+                    limitIsExceeded = (repeatableActionData.count >= action.When.Time.RepeatableConv);
+                } else {
+                    limitIsExceeded = false;
+                }
+            }
+
+            return limitIsExceeded;
+
+        } catch (ex){
+            LOGGER.exception(NAME, fnName, ex);
+            return false;
+        }
+    }
+
     //#endregion HELPERS
 
     return {
         init: function () {
             LOGGER = CnnXt.Logger;
-            LOGGER.debug(NAME, "Action.Init");
+            LOGGER.debug(NAME, "Initializing Action Module...");
             initListeners();
         },
-        ProcessActions: function (actions) {
-            return processActions(actions);
-        },
-        IntegrateProduct: function () {
-            integrateProduct();
-        },
-        SetTimedAction: function (action) {
-            setTimedAction(action);
-        }
+        ProcessActions: processActions,
+        IntegrateProduct: integrateProduct,
+        ActionInPendingExecutionTime: actionInPendingExecutionTime,
+        ActionLimitIsExceeded: actionLimitIsExceeded
     };
 
 };
@@ -12561,13 +14122,14 @@ var ConnextWhitelist = function ($) {
     var processSuccessfulIpRequest = function(data, config) {
         if (data && data.ip) {
             USER_IP = data.ip;
+            WHITELIST_SET = [];
 
             if (config && config.WhitelistSets) {
                 config.WhitelistSets.forEach(function (set) {
                     if (set && _.isArray(set.IPs)) {
                         set.IPs.forEach(function (allowedIP) {
-                            if (!WHITELIST_SET && compareIPs(USER_IP, allowedIP.IP)) {
-                                WHITELIST_SET = set;
+                            if (compareIPs(USER_IP, allowedIP.IP)) {
+                                WHITELIST_SET.push(set);
                             }
                         });
                     }
@@ -12575,10 +14137,10 @@ var ConnextWhitelist = function ($) {
             }
         }
 
-        if (!WHITELIST_SET) {
+        if (!WHITELIST_SET.length) {
             determinePinTemplate(WHITELIST_SET);
         } else {
-            if (!WHITELIST_SET.CodesAreNotRequired) {
+            if (!WHITELIST_SET[0].CodesAreNotRequired) {
                 determinePinTemplate(WHITELIST_SET);
             } else {
                 CnnXt.Event.fire('onAccessGranted', { message: "Success! Now you have full access", status: 200 });
@@ -12612,13 +14174,13 @@ var ConnextWhitelist = function ($) {
 
                         processSuccessfulIpRequest(data, config);
                     })
-                    .error(function () {
-                        LOGGER.error(NAME, fnName, 'error', data);
+                    .fail(function (data) {
+                        LOGGER.debug(NAME, fnName, 'error', data);
                         determinePinTemplate(WHITELIST_SET);
                     });
             }
         });
-    }
+    };
 
     function compareIPs(userIP, allowedIP) {
         var fnName = 'compareIPs';
@@ -12633,13 +14195,13 @@ var ConnextWhitelist = function ($) {
             var isIP = false,
                 isCIDR = false;
 
-            if (IP_AND_CIDR_REGEX.test(allowedIP)) {
+            if (IP_AND_CIDR_REGEX.test(allowedIP)){
                 if (!~allowedIP.indexOf('/')) {
                     isIP = true;
                 } else {
                     isCIDR = true;
                 }
-            }
+            } 
 
             if (isIP) {
                 return userIP === allowedIP;
@@ -12661,28 +14223,38 @@ var ConnextWhitelist = function ($) {
         var infoboxcookie = CnnXt.Storage.GetWhitelistInfoboxCookie();
         var needHidePinTemplate = CnnXt.Storage.GetNeedHidePinTemplateCookie();
 
-        if (!needHidePinTemplate && whiteListSet) {
-            if (whiteListSet.InfoBoxHtml && infoboxcookie) {
-
-                $('body').append(whiteListSet.InfoBoxHtml);
+        if (!needHidePinTemplate && whiteListSet && whiteListSet.length) {
+            if (whiteListSet[0].InfoBoxHtml && infoboxcookie) {
                 $tpl = $('.Mg2-pin-infobox');
+
+                if (!$tpl || !$tpl.length) {
+                    $('body').append(whiteListSet[0].InfoBoxHtml);
+                    $tpl = $('.Mg2-pin-infobox');
+                }
+
                 var someAttemptsLeft = checkPinAttempts();
                 if (!someAttemptsLeft) {
                     noPinAttemptsLeft($tpl);
                 }
+
                 $tpl.show();
                 fireShowEvent();
                 TEMPLATE_CLOSED = false;
                 CnnXt.ConnextContinueProcessing(configuration);
 
-            } else if (whiteListSet.ModalHtml && !infoboxcookie) {
-
-                $('body').append(whiteListSet.ModalHtml);
+            } else if (whiteListSet[0].ModalHtml && !infoboxcookie) {
                 $tpl = $('.Mg2-pin-modal');
+
+                if (!$tpl || !$tpl.length) {
+                    $('body').append(whiteListSet[0].ModalHtml);
+                    $tpl = $('.Mg2-pin-modal');
+                }
+
                 var someAttemptsLeft = checkPinAttempts();
                 if (!someAttemptsLeft) {
                     noPinAttemptsLeft($tpl);
                 }
+
                 $tpl.on("show.bs.modal", function (e) {
                     fireShowEvent();
                     TEMPLATE_CLOSED = false;
@@ -12698,7 +14270,6 @@ var ConnextWhitelist = function ($) {
         } else {
             CnnXt.ConnextContinueProcessing(configuration);
         }
-
     };
 
     var checkPinAttempts = function () {
@@ -12708,14 +14279,16 @@ var ConnextWhitelist = function ($) {
             someAttemptsLeft = false;
         }
         return someAttemptsLeft;
-    }
+    };
 
     var noPinAttemptsLeft = function ($tpl) {
         var $messageEl = $tpl.find('.Mg2-pin__message');
+
         $messageEl
-            .text('You exceeded maximum amount of times. You will be allowed to try again in 15 minutes.')
+            .text('You exceeded maximum amount of attempts. You will be allowed to try again in 15 minutes.')
             .addClass('Mg2-pin__message_error')
             .show();
+
         $tpl.find('.Mg2-pin__input').hide();
         $tpl.find('.Mg2-pin__button').hide();
     }
@@ -12744,8 +14317,8 @@ var ConnextWhitelist = function ($) {
             } else {
                 $passwordEl.addClass('Mg2-pin__input_error');
                 $messageEl.text('Please enter code')
-                    .addClass('Mg2-pin__message_error')
-                    .show();
+                .addClass('Mg2-pin__message_error')
+                .show();
             }
         });
 
@@ -12753,10 +14326,9 @@ var ConnextWhitelist = function ($) {
             .on('keydown', function (e) {
                 if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                     $pinModal.closeEvent = CLOSE_TRIGGER.EscButton;
-
+                    
                 }
             })
-
             .on("hidden", function (e) {
                 CnnXt.Storage.SetWhitelistInfoboxCookie(true);
                 if ($pinModal.closeEvent == null || $pinModal.closeEvent == undefined) {
@@ -12765,7 +14337,9 @@ var ConnextWhitelist = function ($) {
                     fireCloseEvent(CLOSE_TRIGGER.EscButton);
                 }
 
-                CnnXt.ConnextContinueProcessing(configuration);
+                if (!CnnXt.Storage.GetWhitelistSetIdCookie()) {
+                    CnnXt.ConnextContinueProcessing(configuration);
+                }
             })
             .on('click', '[data-dismiss]', function (e) {
                 if ($(this).hasClass('proceed-without-pin')) {
@@ -12776,10 +14350,9 @@ var ConnextWhitelist = function ($) {
             });
 
         $pinInfoBox
-
             .on('click', '[data-dismiss]', function (e) {
                 e.preventDefault();
-                $pinInfoBox.addClass("hide");
+                $pinInfoBox.hide();
                 fireCloseEvent(CLOSE_TRIGGER.CloseButton);
             })
             .on('click', '.proceed-without-pin', function (e) {
@@ -12787,14 +14360,29 @@ var ConnextWhitelist = function ($) {
             });
 
         function checkMg2Pin(pin, $messageEl, $passwordEl) {
-            var url = CnnXt.GetOptions().api + "api/whitelist/check" + "?code=" + encodeURIComponent(pin) + "&setId=" + WHITELIST_SET.id + "&ip=" + USER_IP;
+            var url = CnnXt.GetOptions().api + "api/whitelist/check";
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: { Pin: pin, WhitelistSetId: WHITELIST_SET.id, UserIP: USER_IP } });
+            var Ids = [];
+
+            for (var i = 0; i < WHITELIST_SET.length; i++) {
+                Ids.push( WHITELIST_SET[i].id )
+            }
+
+            var payload = {
+                code: pin,
+                SetIds: Ids,
+                Ip: USER_IP
+            };
+
+            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: { Pin: pin, WhitelistSetId: Ids, UserIP: USER_IP } });
 
             $.ajax({
-                method: "GET",
-                url: url
+                method: "POST",
+                url: url,
+                data: payload
             }).done(function (response) {
+                LOGGER.debug(NAME, 'Check PIN', 'Success', response);
+
                 CnnXt.Storage.SetWhitelistSetIdCookie({ Id: response.WhitelistSetId, Expiration: response.expires },
                     new Date(response.expires));
                 mg2PinSuccess($messageEl, { message: "Success! Now you have full access", status: 200 });
@@ -12804,8 +14392,9 @@ var ConnextWhitelist = function ($) {
                     ConfigCode: CnnXt.GetOptions().configCode,
                     SiteCode: CnnXt.GetOptions().siteCode,
                     SettingsKey: CnnXt.GetOptions().settingsKey,
-                    ViewData: CnnXt.Campaign.GetLocalViewData()
+                    ViewData: CnnXt.Storage.GetLocalViewData()
                 };
+
                 if (CnnXt.User.getMasterId()) {
                     data.masterId = CnnXt.User.getMasterId();
                 }
@@ -12814,6 +14403,9 @@ var ConnextWhitelist = function ($) {
             }).fail(function (response) {
                 var errorMessage = response.responseText ? JSON.parse(response.responseText).Message : response.statusText;
                 var errorCode = response.responseText ? JSON.parse(response.responseText).ErrorCode : '';
+
+                LOGGER.debug(NAME, 'Check PIN', 'Success', response);
+
                 mg2PinFail($messageEl, { message: errorMessage, status: errorCode }, $passwordEl);
             });
         }
@@ -12827,7 +14419,8 @@ var ConnextWhitelist = function ($) {
             setTimeout(function () {
                 $('.Mg2-pin-modal').connextmodal("hide");
                 $('.Mg2-pin-infobox').hide();
-                CnnXt.Run();
+
+                CnnXt.CloseTemplates(CnnXt.IntegrateProduct);
             }, 1000);
 
             CnnXt.Event.fire('onAccessGranted', params);
@@ -12882,97 +14475,117 @@ var ConnextWhitelist = function ($) {
         init: function (options) {
             LOGGER = CnnXt.Logger;
             CnnXt.Storage.UpdateWhitelistSetCookieName();
+
+            // Remove PinAtempts Cookie
+
+
             CnnXt.Storage.UpdateWhitelistInfoboxCookieName();
             CnnXt.Storage.UpdateNeedHidePinTemplateCookieName();
-            LOGGER.debug(NAME, "Whitelist.Init");
+            LOGGER.debug(NAME, "Initializing Whitelist Module...");
         },
         checkClientIp: checkClientIp
     };
 };
 var ConnextAppInsights = function ($) {
 
+    var LOGGER = {
+        debug: $.noop,
+        warn: $.noop,
+        exception: $.noop
+    };
+    var NAME = 'AppInsights';
     var userId = null;
     var init = function (userId, masterId) {
+        LOGGER = CnnXt.Logger;
 
-        var appInsights = window.appInsights || function (config) {
-            function i(config) {
-                t[config] = function () {
-                    var i = arguments;
-                    t.queue.push(function () {
-                        t[config].apply(t, i);
-                        if (t.context) {
-                            //userId = t.context.user.id;
-                        }
-                    });
+        try {
+            LOGGER.debug(NAME, 'Initializing AppInsights Module...');
+            var appInsights = window.appInsights || function (config) {
+                function i(config) {
+                    t[config] = function () {
+                        var i = arguments;
+                        t.queue = t.queue || [];
+                        t.queue.push(function () {
+                            t[config].apply(t, i);
+                            if (t.context) {
+                                //userId = t.context.user.id;
+                            }
+                        });
+                    }
                 }
-            }
-            var t = {
-                    config: config
-                },
-                u = document,
-                e = window,
-                o = "script",
-                s = "AuthenticatedUserContext",
-                h = "start",
-                c = "stop",
-                l = "Track",
-                a = l + "Event",
-                v = l + "Page",
-                y = u.createElement(o),
-                r, f;
-            y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js";
-            u.getElementsByTagName(o)[0].parentNode.appendChild(y);
-            try {
-                t.cookie = u.cookie;
-            } catch (p) { }
-            for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;) i("track" + r.pop());
-            return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"),
+                var t = {
+                        config: config
+                    },
+                    u = document,
+                    e = window,
+                    o = "script",
+                    s = "AuthenticatedUserContext",
+                    h = "start",
+                    c = "stop",
+                    l = "Track",
+                    a = l + "Event",
+                    v = l + "Page",
+                    y = u.createElement(o),
+                    r, f;
+                y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js";
+                u.getElementsByTagName(o)[0].parentNode.appendChild(y);
+                try {
+                    t.cookie = u.cookie;
+                } catch (p) { }
+                for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;) i("track" + r.pop());
+                return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"),
                 config.disableExceptionTracking ||
                 (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o) {
                     var s = f && f(config, i, u, e, o);
                     return s !== !0 && t["_" + r](config, i, u, e, o), s;
                 }), t;
-        }({
-            instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment],
-            disableExceptionTracking: true,
-            appUserId: userId,
-            accountId: masterId
-        });
-        window.appInsights = appInsights;
-        if (!appInsights.queue) {
-            appInsights.queue = [];
-        }
-        appInsights.queue.push(function () {
-            appInsights.context.addTelemetryInitializer(function (envelope) {
-                var telemetryItem = envelope.data.baseData;
-                if (envelope.data.baseType === 'RemoteDependencyData') {
-                    return telemetryItem.target === 'freegeoip.net'
-                        || telemetryItem.data.indexOf('connext') !== -1
-                        || telemetryItem.target.indexOf('auth0') !== -1;
-                }
+            }({
+                instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment],
+                disableExceptionTracking: true,
+                appUserId: userId,
+                accountId: masterId
             });
-        });
-        appInsights.setAuthenticatedUserContext(userId, masterId);
+            window.appInsights = appInsights;
 
-        appInsights.trackPageView();
+            appInsights.queue.push(function () {
+                appInsights.context.addTelemetryInitializer(function (envelope) {
+                    var telemetryItem = envelope.data.baseData;
+                    if (envelope.data.baseType === 'RemoteDependencyData') {
+                        return telemetryItem.target === 'freegeoip.net'
+                            || telemetryItem.data.indexOf('connext') !== -1
+                            || telemetryItem.target.indexOf('auth0') !== -1;
+                    }
+                });
+            });
+            appInsights.setAuthenticatedUserContext(userId, masterId);
 
-    }
+            appInsights.trackPageView();
 
-    var trackEvent = function (name, data) {
-        try {
-            var appInsightsData = getEventDataByName(name, data);
-            appInsights.trackEvent(name, appInsightsData);
         }
         catch (e) {
-            if (CnnXt.GetOptions().debug) {
-                console.warn("track Application insights error");
-            }
+            LOGGER.warn(NAME, 'Error of app insights initialization', e);
+        }
+
+    };
+
+    var trackEvent = function (name, data) {
+        var fnName = 'trackEvent';
+
+        try {
+            var appInsightsData = getEventDataByName(name, data);
+
+            LOGGER.debug(NAME, fnName, 'Event name: ', name, 'App Insights data', appInsightsData);
+
+            appInsights.trackEvent(name, appInsightsData);
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex)
         }
     }
 
     var getAppInsightsData = function (additionalData) {
         var config = CnnXt.Storage.GetLocalConfiguration(),
-            conversation = CnnXt.Storage.GetCurrentConverstaion(),
+            conversation = CnnXt.Storage.GetCurrentConversation(),
             metaData = CnnXt.Utils.GetUserMeta(),
             userData = CnnXt.Storage.GetUserData(),
             meter = CnnXt.Storage.GetMeter();
@@ -13024,65 +14637,76 @@ var ConnextAppInsights = function ($) {
             stk: CnnXt.GetOptions().settingsKey //settings key 
         };
         switch (name) {
-        case "onDynamicMeterFound":
-            data.dmn = eventData;  //dynamic meter name
-            break;
-        case "onCampaignFound":
-            data.cmn = eventData.Name; //campaign name,
-            data.cmid = eventData.id; //campaign id
-            break;
-        case "onMeterLevelSet":
-            data.mlm = eventData.method; //dynamic meter method (default or dynamic)
-            data.ml = eventData.level; //meter level id (1,2,3)
-            data.rid = eventData.rule ? eventData.rule.id : null; //passed rule id. isn't empty if method is dynamic
-            data.rn = eventData.rule ? eventData.rule.Name : null; //passed rule name. isn't empty if method is dynamic
-            break;
-        case "onConversationDetermined":
-            data.cnvid = eventData.id; //convo id
-            data.cnvn = eventData.Name; //convo name
-            data.ml = eventData.MeterLevelId; //meter level
-            data.vws = eventData.Props.views; //current views
-            data.artlft = eventData.Props.ArticleLeft; //current articles  left
-            break;
-        case "onAuthorized":
-        case "onHasAccess":
-        case "onHasAccessNotEntitled":
-        case "onHasNoActiveSubscription":
-            data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
-            data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
-            data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
-            break;
-        case "onLoggedIn":
-            data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
-            data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
-            data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
-            data.us = CnnXt.Storage.GetUserState(); //current status of user
-            break;
-        case "onActionShown":
-            data.actid = eventData.id //action id
-            data.actn = eventData.Name;  //action name 
-            data.actt = eventData.ActionTypeId;  //action type
-            data.usdfdt = eventData.UserDefinedData; // user defined data
-            data.artc = eventData.ArticlesViewed; //viewed articles count
-            break;
-        case "onActionClosed":
-            data.actid = eventData.id //action id
-            data.actn = eventData.Name;  //action name 
-            data.actt = eventData.ActionTypeId;  //action type
-            data.usdfdt = eventData.UserDefinedData; // user defined data
-            data.artc = eventData.ArticlesViewed; //viewed articles count
-            data.clev = eventData.closeEvent; // close event 
-            break;
-        case "onButtonClick":
-            data.udfat = eventData.UserDefinedDataAttr;  // user defined attribut
-            data.actid = innerdata.Action ? innerdata.Action.id : null; //action id
-            data.actn = innerdata.Action ? innerdata.Action.Name : null; //action name
-            data.actt = innerdata.Action ? innerdata.Action.ActionTypeId : null; //action type
-            data.btnhtml = eventData.ButtonHTML || ''; //button html
-            break;
-        case "onFinish":
-            data = getAppInsightsData(innerdata);
-            break;
+            case "onDynamicMeterFound":
+                data.dmn = eventData;  //dynamic meter name
+                break;
+            case "onCampaignFound":
+                data.cmn = eventData.Name; //campaign name,
+                data.cmid = eventData.id; //campaign id
+                break;
+            case "onMeterLevelSet":
+                data.mlm = eventData.method; //dynamic meter method (default or dynamic)
+                data.ml = eventData.level; //meter level id (1,2,3)
+                data.rid = eventData.rule ? eventData.rule.id : null; //passed rule id. isn't empty if method is dynamic
+                data.rn = eventData.rule ? eventData.rule.Name : null; //passed rule name. isn't empty if method is dynamic
+                break;
+            case "onConversationDetermined":
+                data.cnvid = eventData.id; //convo id
+                data.cnvn = eventData.Name; //convo name
+                data.ml = eventData.MeterLevelId; //meter level
+                data.vws = eventData.Props.views; //current views
+                data.artlft = eventData.Props.ArticleLeft; //current articles  left
+                break;
+            case "onLoginShown":
+                data.lgmdid = (eventData) ? eventData.LoginModalId : null;
+                break;
+            case "onLoginClosed":
+                data.lgmdid = (eventData) ? eventData.LoginModalId: null;
+                data.clev = (eventData) ? eventData.closeEvent : null;
+                break;
+            case "onLoginError":
+                data.errmsg = (eventData) ? eventData.ErrorMessage : '';
+                break;
+            case "onAuthorized":
+            case "onHasAccess":
+            case "onHasAccessNotEntitled":
+            case "onHasNoActiveSubscription":
+            case "onLoginSuccess":
+                data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
+                data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // encrypted customer registration id
+                data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
+                break;
+            case "onLoggedIn":
+                data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
+                data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // encrypted customer registration id
+                data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
+                data.us = CnnXt.Storage.GetUserState(); //current status of user
+                break;
+            case "onActionShown":
+                data.actid = eventData.id //action id
+                data.actn = eventData.Name;  //action name
+                data.actt = eventData.ActionTypeId;  //action type
+                data.usdfdt = eventData.UserDefinedData; // user defined data
+                data.artc = eventData.ArticlesViewed; //viewed articles count
+                break;
+            case "onActionClosed":
+                data.actid = eventData.id //action id
+                data.actn = eventData.Name;  //action name
+                data.actt = eventData.ActionTypeId;  //action type
+                data.usdfdt = eventData.UserDefinedData; // user defined data
+                data.artc = eventData.ArticlesViewed; //viewed articles count
+                data.clev = eventData.closeEvent; // close event
+                break;
+            case "onButtonClick":
+                data.udfat = eventData.UserDefinedDataAttr;  // user defined attribut
+                data.actid = innerdata.Action ? innerdata.Action.id : null; //action id
+                data.actn = innerdata.Action ? innerdata.Action.Name : null; //action name
+                data.actt = innerdata.Action ? innerdata.Action.ActionTypeId : null; //action type
+                data.btnhtml = eventData.ButtonHTML || ''; //button html
+                break;
+            case "onFinish":
+                data = getAppInsightsData(innerdata);
+                break;
         }
         return data;
     }
@@ -13155,7 +14779,8 @@ var ConnextActivation = function ($) {
                 AccountNumber: '[data-connext-input="AccountNumber"]:visible',
                 ZipCode: '[data-connext-input="ZipCode"]:visible',
                 HouseNumber: '[data-connext-input="HouseNumber"]:visible',
-                PhoneNumber: '[data-connext-input="PhoneNumber"]:visible'
+                PhoneNumber: '[data-connext-input="PhoneNumber"]:visible',
+                ConfirmationNumber: '[data-connext-input="ConfirmationNumber"]'
             },
             Links: '[redirect="true"]',
             CloseButton: '[data-connext-role="close"]',
@@ -13177,6 +14802,7 @@ var ConnextActivation = function ($) {
             emailAndPassRequired: 'Please enter email and password. ',
             fieldsRequired: 'Please fill out all the required fields. ',
             invalidCredits: "There was an error with your E-Mail/Password combination. Please try again. ",
+            generalAjaxError: 'Sorry, there\'s a server problem or a problem with the network. ',
             noSubscriptions: "Subscriptions not found. ",
             requiredEmail: "Email is required. ",
             requiredPassword: "Password is required. ",
@@ -13188,7 +14814,8 @@ var ConnextActivation = function ($) {
             ActivateByAccountNumber: "ActivateByAccountNumber",
             ActivateByZipCodeAndHouseNumber: "ActivateByZipCodeAndHouseNumber",
             ActivateByZipCodeAndPhoneNumber: "ActivateByZipCodeAndPhoneNumber",
-            ActivateBySubscriptionId: "ActivateBySubscriptionId"
+            ActivateBySubscriptionId: "ActivateBySubscriptionId",
+            ActivateByConfirmationNumber: "ActivateByConfirmationNumber"
         },
         STEPS_WIDTH = {
             Authenticate: 420,
@@ -13201,24 +14828,32 @@ var ConnextActivation = function ($) {
 
     //#region public functions
     var run = function (options) {
+        var fnName = 'run';
+
+        LOGGER.debug(NAME, fnName, 'Run activation flow');
 
         if (IsActivationFlowRunning && !(options && options.runAfterSuccessfulLogin)) {
+            LOGGER.debug(NAME, fnName, 'Activation flow has already run... Breake!');
             return;
         }
 
-        var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
-
         calculateCurrentStep();
 
-        if (CURRENT_STEP == STEPS.Activate && activationUrlParams.subscriptionNumber) {
-            autoLinkingBySubscriptionId(activationUrlParams.subscriptionNumber);
+        if (checkAvailabilityToAutoLinking()) {
+            syncUser().always(doAutoLinking);
         } else {
             if (CURRENT_STEP == null) {
                 return false;
             }
 
             IsActivationFlowRunning = true;
+
             hideInactiveSteps();
+
+            if (CURRENT_STEP == STEPS.Activate) {
+                syncUser();
+            }
+
             showLinksByUserStatus();
 
             if (CURRENT_STEP == STEPS.Authenticate) {
@@ -13237,7 +14872,7 @@ var ConnextActivation = function ($) {
         if (window.janrain) {
             janrain.capture.ui.modal.open();
         } else {
-            console.error("No janrain global object found...");
+            LOGGER.warn("No janrain global object found!");
         }
     }
 
@@ -13246,6 +14881,8 @@ var ConnextActivation = function ($) {
     }
 
     var calculateCurrentStep = function () {
+        var fnName = 'calculateCurrentStep';
+
         var userState = Connext.Storage.GetUserState();
 
         if (userState == null) {
@@ -13255,7 +14892,7 @@ var ConnextActivation = function ($) {
         if (userState == USER_STATES.NotLoggedIn) {
             CURRENT_STEP = STEPS.Authenticate;
             $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH.Authenticate);
-            $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Authenticate).css("margin-left", "-" + STEPS_WIDTH.Authenticate/2 + "px");
+            $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Authenticate).css("margin-left", "-" + STEPS_WIDTH.Authenticate / 2 + "px");
         } else if (userState == USER_STATES.Subscribed) {
             CURRENT_STEP = null; //don't need to show any template
             IsActivationFlowRunning = false;
@@ -13264,9 +14901,15 @@ var ConnextActivation = function ($) {
             $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH.Activate);
             $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Activate).css("margin-left", "-" + STEPS_WIDTH.Activate / 2 + "px");
         }
+
+        LOGGER.debug(NAME, fnName, 'current step', CURRENT_STEP);
     }
 
     var hideInactiveSteps = function () {
+        var fnName = 'hideInactiveSteps';
+
+        LOGGER.debug(NAME, fnName);
+
         var $steps = $ACTIVATION_MODAL.find('[' + UI_SELECTORS.Step + ']');
 
         $steps.each(function (index, step) {
@@ -13289,39 +14932,47 @@ var ConnextActivation = function ($) {
             CnnXt.Run()
             CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
         }
-    
+
         hideInactiveSteps();
 
         if (afterAuth && CURRENT_STEP == STEPS.Activate) {
-            var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+            CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
 
-            if (activationUrlParams.subscriptionNumber) {
+            if (checkAvailabilityToAutoLinking()) {
                 hideTemplate();
-                autoLinkingBySubscriptionId(activationUrlParams.subscriptionNumber);
+                syncUser().always(doAutoLinking);
             } else {
-                CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
                 CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
-            }  
+                syncUser();
+            }
         }
     }
 
     var showLinksByUserStatus = function () {
+        var fnName = 'showLinksByUserStatus';
+
         var $subscribeLink = $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.SubscribeLink),
             $upgradeLink = $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.UpgradeLink),
             userState = Connext.Storage.GetUserState();
 
         if (userState == USER_STATES.SubscribedNotEntitled) {
+            LOGGER.debug(NAME, fnName, 'Open upgrade link', userState);
             $subscribeLink.hide();
             $upgradeLink.show();
         } else {
+            LOGGER.debug(NAME, fnName, 'Open subscribe link', userState);
             $upgradeLink.hide();
             $subscribeLink.show();
         }
     }
 
     var showActivationTemplate = function () {
+        var fnName = 'showActivationTemplate';
+
         var options = CnnXt.GetOptions(),
             modalOptions;
+
+        LOGGER.debug(NAME, fnName, options)
 
         if (!options.silentmode && ACTIVATE_SETTINGS.IsActivationOnly) {
             $ACTIVATION_MODAL.find('.connext-actflow-close-wrapper, [data-connext-role="close"]').remove();
@@ -13411,12 +15062,19 @@ var ConnextActivation = function ($) {
     }
 
     var processActivationUrlParams = function () {
+        var fnName = 'processActivationUrlParams';
+
         var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+        LOGGER.debug(NAME, fnName, activationUrlParams);
 
         if (CURRENT_STEP == STEPS.Authenticate) {
             if (activationUrlParams.email) {
                 $ACTIVATION_MODAL.find(UI_SELECTORS.Inputs.AllEmails).val(activationUrlParams.email);
             }
+        }
+        if (activationUrlParams.confirmationNumber) {
+            $ACTIVATION_MODAL.find(UI_SELECTORS.Inputs.ConfirmationNumber).val(activationUrlParams.confirmationNumber);
         }
 
         var $links = $ACTIVATION_MODAL.find(UI_SELECTORS.Links);
@@ -13464,11 +15122,9 @@ var ConnextActivation = function ($) {
         return CnnXt.API.GetUserByEmailAndPassword({
             payload: payload,
             onSuccess: function (data) {
-                LOGGER.debug(NAME, fnName, "onSuccess", data);
                 successLogin(data, 'onSuccess', payload);
             },
             onError: function (error) {
-                LOGGER.debug(NAME, fnName, "onError", error);
                 showHideErrorMessage(UI_SELECTORS.ErrorMessages.LoginSubstep, ERROR_MESSAGES.invalidCredits);
             }
         });
@@ -13486,119 +15142,179 @@ var ConnextActivation = function ($) {
         return CnnXt.API.CreateUser({
             payload: payload,
             onSuccess: function (data) {
-                LOGGER.debug(NAME, fnName, "onSuccess", data);
-                if (data.Success || data.CustomerRegistrationId) {
-                    login(formData);
-                } else {
-
-                }
+                login(formData);
             },
-            onError: function (err) {
-                var errorMessage = '',
-                    parsedError,
-                    parsedErrMsg;
-
-                LOGGER.debug(NAME, fnName, "onError", err);
-
-                try {
-                    parsedError = $.parseJSON(err.responseText);
-                    parsedErrMsg = $.parseJSON(parsedError.Message);
-
-                    if ($.isArray(parsedErrMsg.Errors)) {
-                        parsedErrMsg.Errors.forEach(function (msg) {
-                            if (_.isString(msg)) {
-                                errorMessage += msg + ' ';
-                            } else {
-                                errorMessage += msg.Message + ' ';
-                            }
-                        });
-                    } else {
-                        errorMessage += parsedErrMsg.Message;
-                    }
-                } catch (ex) {
-                    LOGGER.error(NAME, fnName, "EXCEPTION", ex);
-                }
-
+            onError: function (error) {
+                var errorMessage = CnnXt.Utils.GetErrorMessageFromAPIResponse(error, ERROR_MESSAGES.generalAjaxError);
                 showHideErrorMessage(UI_SELECTORS.ErrorMessages.RegistrationSubStep, errorMessage);
             }
         });
     }
 
     var successLogin = function (data, payload) {
-        data.Email = payload.email;
-        data.AuthSystem = 'MG2';
-        CnnXt.User.processSuccessfulLogin("Form", data);
-        checkingResize();
-        checkCurrentStep(true);
-        showLinksByUserStatus();
+        var fnName = 'successLogin';
+
+        try {
+            data.Email = payload.email;
+            data.AuthSystem = 'MG2';
+            CnnXt.User.processSuccessfulLogin("Form", data);
+            checkingResize();
+            checkCurrentStep(true);
+            showLinksByUserStatus();
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
+
+    var syncUser = function () {
+        var fnName = 'syncUser';
+
+        try {
+            var config = CnnXt.Storage.GetLocalConfiguration();
+
+            if (config && config.Site.RegistrationTypeId !== CnnXt.Common.AuthSystem.MG2) {
+                var payload = {
+                    CustomRegId: CnnXt.Utils.GetUserAuthData().CustomRegId
+                }
+
+                return CnnXt.API.SyncUser({
+                    payload: payload,
+                });
+            } else {
+                return $.Deferred().resolve();
+            }
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return $.Deferred().reject();
+        }
     }
 
     var activate = function (formData) {
         var fnName = 'activate';
 
-        var apiName = formData.SearchOption,
-            userData = CnnXt.Storage.GetUserData();
-
         var payload = formData;
 
-        payload.customRegId = (userData && userData.MasterId) ? userData.MasterId : null;
-        payload.autoLink = false;
+        LOGGER.debug(NAME, fnName, payload.SearchOption, payload);
 
-        CnnXt.Event.fire('onActivationLinkStepSubmitted', {
-            ActivationSettings: ACTIVATE_SETTINGS,
-            Payload: payload,
-            ActivateBy: payload.SearchOption
-        });
-
-        LOGGER.debug(NAME, fnName, payload);
-
-        return CnnXt.API[apiName]({
-            payload: payload,
-            onSuccess: function (response) {
-                checkAccessAfterLinking(response, payload);
-            },
-            onError: function (error) {
-                errorLinking(error, payload.SearchOption, payload.autoLink);
-            }
-        });
+        return linkAccount(payload);
     }
 
-    var autoLinkingBySubscriptionId = function (subscriptionId) {
-        var fnName = "autoLinkingBySubscriptionId";
-        var userData = CnnXt.Storage.GetUserData(),
-            customRegId = (userData && userData.MasterId) ? userData.MasterId : null,
-            searchOption = SEARCHOPTIONS.ActivateBySubscriptionId,
-            payload = {
-                customRegId: customRegId,
-                SubscriptionId: subscriptionId,
-                autoLink: true
-            };
+    var checkAvailabilityToAutoLinking = function () {
+        var fnName = 'checkAvailabilityToAutoLinking';
 
-        CnnXt.Event.fire('onActivationLinkStepSubmitted', {
-            ActivationSettings: ACTIVATE_SETTINGS,
-            Payload: payload,
-            ActivateBy: searchOption
-        });
+        try {
+            var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
 
-        return CnnXt.API.LinkingBySubscription({
-            payload: payload,
-            onSuccess: function (response) {
-                checkAccessAfterLinking(response, payload);
-            },
-            onError: function (error) {
-                errorLinking(error, searchOption, payload.autoLink);
+            if (CURRENT_STEP != STEPS.Activate) {
+                return false;
             }
-        });
+
+            if (activationUrlParams.accountNumber && activationUrlParams.lastName) {
+                return true;
+            }
+
+            if (activationUrlParams.confirmationNumber && activationUrlParams.lastName) {
+                return true;
+            }
+
+            return false;
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
     }
 
-    function checkAccessAfterLinking(response, payload) {
+    var doAutoLinking = function () {
+        var fnName = 'doAutoLinking';
+
+        try {
+            var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+            if (activationUrlParams.accountNumber && activationUrlParams.lastName) {
+                LOGGER.debug(NAME, fnName, 'We have account number and last name in the url params. So we do auto linking', activationUrlParams);
+                autoLinkingByAccountNumber(activationUrlParams.accountNumber, activationUrlParams.lastName);
+            } else if (activationUrlParams.confirmationNumber && activationUrlParams.lastName) {
+                LOGGER.debug(NAME, fnName, 'We have confirmation number and last name in the url params. So we do auto linking', activationUrlParams);
+                autoLinkingByConfirmationNumber(activationUrlParams.confirmationNumber, activationUrlParams.lastName);
+            }
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
+
+    var autoLinkingByConfirmationNumber = function (confirmationNumber, lastName) {
+        var fnName = "autoLinkingByConfirmationNumber";
+
+        LOGGER.debug(NAME, fnName, confirmationNumber, lastName);
+
+        var payload = {
+            ConfirmationNumber: confirmationNumber,
+            LastName: lastName,
+            SearchOption: SEARCHOPTIONS.ActivateByConfirmationNumber,
+            autoLink: true
+        }
+
+        linkAccount(payload);
+    }
+
+    var autoLinkingByAccountNumber = function (accountNumber, lastName) {
+        var fnName = "autoLinkingByAccountNumber";
+
+        LOGGER.debug(NAME, fnName, accountNumber, lastName);
+
+        var payload = {
+            AccountNumber: accountNumber,
+            LastName: lastName,
+            SearchOption: SEARCHOPTIONS.ActivateByAccountNumber,
+            autoLink: true
+        }
+
+        linkAccount(payload);
+    }
+
+    var linkAccount = function (payload) {
+        var fnName = 'linkAccount';
+
+        try {
+            var apiName = payload.SearchOption,
+                authData = CnnXt.Utils.GetUserAuthData();
+
+            payload.CustomRegId = authData.CustomRegId;
+            payload.Mode = authData.Mode;
+
+            CnnXt.Event.fire('onActivationLinkStepSubmitted', {
+                ActivationSettings: ACTIVATE_SETTINGS,
+                Payload: payload,
+                ActivateBy: payload.SearchOption
+            });
+
+            LOGGER.debug(NAME, fnName, payload.SearchOption, payload);
+
+            return CnnXt.API[apiName]({
+                payload: payload,
+                onSuccess: function (response) {
+                    checkAccessAfterLinking(response, payload);
+                },
+                onError: function (error) {
+                    errorLinking(error, payload.SearchOption, payload.autoLink);
+                }
+            });
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
+
+    var checkAccessAfterLinking = function (response, payload) {
         var fnName = 'checkAccessAfterLinking';
 
         LOGGER.debug(NAME, fnName, response);
 
         if (_.isString(response)) {
             try {
-                response = $.parseJSON(response);
+                response = JSON.parse(response);
             } catch (ex) {
                 errorLinking(response, payload.SearchOption, payload.autoLink);
             }
@@ -13608,26 +15324,25 @@ var ConnextActivation = function ($) {
             errorLinking(response, payload.SearchOption, payload.autoLink);
         } else {
             checkDigitalAccess().then(function () {
-                successLinking(response, payload.SearchOption);
+                successLinking(response, payload.SearchOption, payload.autoLink);
             }, function (digitalAccessResult) {
                 errorLinking(response, payload.SearchOption, payload.autoLink, digitalAccessResult);
             });
         }
     }
 
-    var checkDigitalAccess = function (masterId) {
+    var checkDigitalAccess = function () {
         var fnName = 'checkDigitalAccess';
 
         var defer = $.Deferred(),
-            userData = CnnXt.Storage.GetUserData();
-
-        masterId = masterId || ((userData && userData.MasterId) ? userData.MasterId : null);
+            authData = CnnXt.Utils.GetUserAuthData();
 
         var payload = {
-            masterId: masterId
+            masterId: authData.MasterId,
+            mode: authData.Mode
         }
 
-        LOGGER.debug(NAME, fnName, 'MasterId', masterId);
+        LOGGER.debug(NAME, fnName, 'payload', payload);
 
         CnnXt.API.CheckDigitalAccess({
             payload: payload,
@@ -13635,20 +15350,25 @@ var ConnextActivation = function ($) {
                 if (response) {
                     //if status code 400
                     if (_.isString(response)) {
-                        var result = JSON.parse(response);
+                        try {
+                            var result = JSON.parse(response);
 
-                        if (result && _.isArray(result.Errors)) {
-                            if (_.findWhere(result.Errors, { Code: 400 })) {
-                                defer.reject();
+                            if (result && _.isArray(result.Errors)) {
+                                if (_.findWhere(result.Errors, { Code: 400 })) {
+                                    defer.reject();
+                                }
                             }
+                        } catch (ex) {
+                            LOGGER.debug(NAME, fnName, 'Parse error', response);
+                            defer.reject();
                         }
                     }
 
                     //check CEP response
-                    if (_.isString(response.AccessLevel)){
+                    if (_.isString(response.AccessLevel)) {
                         if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Premium) {
                             defer.resolve();
-                        } 
+                        }
 
                         if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Upgrade) {
                             defer.reject({ needUpgrade: true });
@@ -13660,12 +15380,12 @@ var ConnextActivation = function ($) {
                     }
 
                     //check Legacy response
-                    if (_.isObject(response.AccessLevel)){
+                    if (_.isObject(response.AccessLevel)) {
                         if (response.AccessLevel.IsPremium) {
                             defer.resolve();
-                        } 
+                        }
 
-                        if (response.AccessLevel.IsUpgrade){
+                        if (response.AccessLevel.IsUpgrade) {
                             defer.reject({ needUpgrade: true });
                         }
 
@@ -13691,9 +15411,9 @@ var ConnextActivation = function ($) {
 
     var successLinking = function (response, searchOption, autoLink) {
         IsActivationFlowRunning = false;
-        CnnXt.Storage.SetUserState(null);
         CURRENT_STEP = STEPS.Success;
         if (autoLink) {
+            //runAfterLinking();
             showActivationTemplate();
         }
         $('.connext-actflow-close-wrapper .closebtn').attr('data-mg2-action', 'connextRun');
@@ -13714,12 +15434,17 @@ var ConnextActivation = function ($) {
             ActivateBy: searchOption
         });
 
+        if (AUTHSYSTEM != 'MG2') {
+            CnnXt.Storage.SetUserData(null);
+        }
+        CnnXt.Storage.SetUserState(null);
     }
 
     var errorLinking = function (response, searchOption, autoLink, digitalAccess) {
         CURRENT_STEP = STEPS.Fail;
 
         if (autoLink) {
+            //runAfterLinking();
             showActivationTemplate();
         }
 
@@ -13771,7 +15496,7 @@ var ConnextActivation = function ($) {
     var showHideErrorMessage = function (selector, errorMessage) {
         var $errorMessageContainer = $(selector);
 
-        if (($errorMessageContainer).lenght == 0) {
+        if (($errorMessageContainer).length == 0) {
             return false;
         }
 
@@ -13787,6 +15512,7 @@ var ConnextActivation = function ($) {
         if (AUTHSYSTEM != 'MG2') {
             CnnXt.Storage.SetUserData(null);
         }
+        CnnXt.Storage.SetUserState(null);
         CnnXt.Run();
     }
 
@@ -13825,7 +15551,7 @@ var ConnextActivation = function ($) {
             .on("click", UI_SELECTORS.Run, runActivationFlow);
     }
 
-   
+
 
     function backToActivateStep(e) {
         e.preventDefault();
@@ -13842,7 +15568,7 @@ var ConnextActivation = function ($) {
         CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
     }
 
-  
+
 
     function closedExternalAuthSystem(e) {
         IsActivationFlowRunning = false;
@@ -13852,6 +15578,7 @@ var ConnextActivation = function ($) {
 
     function okGreate() {
         $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.CloseButton;
+
         //runAfterLinking();
     }
 
@@ -13873,23 +15600,32 @@ var ConnextActivation = function ($) {
     return {
         init: function (settings) {
             //settings.ActivationFormName, settings.ActivationFormHtml
-            ACTIVATE_SETTINGS = settings;
-            AddUiListeners();
-            USER_STATES = CnnXt.Common.USER_STATES;
-            $ACTIVATION_MODAL = $(ACTIVATE_SETTINGS.ActivationFormHtml);
+            var fnName = 'initialization';
+            try {
+                LOGGER = CnnXt.Logger;
+                ACTIVATE_SETTINGS = settings;
+                AddUiListeners();
+                USER_STATES = CnnXt.Common.USER_STATES;
 
-            AUTHSYSTEM = CnnXt.Common.RegistrationTypes[CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId];
+                //fix for jQuery jquery-2.0.0b2.  It is not allow before HTML
+                if (ACTIVATE_SETTINGS.ActivationFormHtml && ACTIVATE_SETTINGS.ActivationFormHtml) {
+                    ACTIVATE_SETTINGS.ActivationFormHtml = ACTIVATE_SETTINGS.ActivationFormHtml.trim();
+                }
+                $ACTIVATION_MODAL = $(ACTIVATE_SETTINGS.ActivationFormHtml);
 
-            LOGGER = CnnXt.Logger;
-            LOGGER.debug(NAME, "Activation.Init");
-            calculateCurrentStep();
+                AUTHSYSTEM =
+                    CnnXt.Common.RegistrationTypes[CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId];
+
+
+                LOGGER.debug(NAME, "Initializing Activation Module...");
+                calculateCurrentStep();
+            } catch (e) {
+                LOGGER.warn(NAME, fnName, 'ERROR OF INITIALIZATION ACTIVATION FLOW', e);
+            }
         },
         Run: function (options) {
             if (ACTIVATE_SETTINGS.IsActivationOnly) {
                 CnnXt.User.CheckAccess().always(function () {
-                    if (options && options.silentmode) {
-                        return;
-                    }
                     run(options);
                 });
             } else {
@@ -13903,13 +15639,12 @@ var ConnextActivation = function ($) {
     };
 };
 var CnnXt = function ($) {
-    var VERSION = '1.12';
+    var VERSION = '1.14';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
     var PROCESSTIME = {}; //holds properties for testing application speed.
     var isProcessed = false;
-    var isInitFinished = false;
     var OPTIONS; //global OPTIONS variable. This will be merge/extended between default options and passed in options.
     var DEFAULT_OPTIONS = {
         debug: false,
@@ -13923,27 +15658,37 @@ var CnnXt = function ($) {
         },
         authSettings: null,
         loadType: "ajax",//this is how a new article is loaded. If this is set to 'ajax' then we need to remove all html that this plugin added to the dom so there isn't duplicates.
-        BatchCount: 5
+        BatchCount: 5,
+        ViewsUpdateFromServerPeriod: 24, //in hours
+        ConversationPromiseTimeout: 5000,   //in milliseconds
+        DynamicMeterPromiseTimeout: 5000    //in milliseconds
     };
     var IS_CONNEXT_INITIALIZED = false;
     var S3_DATA;
     var RUN_TIMEOUT;
     var FIRST_RUN_EXECUTED = false;
     var defaultRunOffsetTime = 5000;
+    var IS_INIT_FINISHED = false;
 
     var init = function () {
-        /// <summary>Instantite the plugin.</summary>
-        /// <param>Nothing</param>
-        /// <returns>Nothing</returns>
         try {
             var fnName = "init";
+
             LOGGER = CnnXt.Logger;
-            LOGGER.debug(fnName, "Initializing CnnXt...");
+
+            //check if we have jquery.
+            if (!window.jQuery) {
+                throw CnnXt.Common.ERROR.NO_JQUERY;
+            }
+
+            CnnXt.Logger.setDebug(OPTIONS.debug);
+
+            LOGGER.debug(NAME, "Initializing ConneXt...");
             //we use config code in upper case
             OPTIONS.configCode = OPTIONS.configCode.toUpperCase();
             //if CnnXt has been initialized already - don't initialize it again
             if (IS_CONNEXT_INITIALIZED) {
-                LOGGER.debug(fnName, "Connext has already initialized, cancel initializing");
+                //LOGGER.debug(fnName, "Connext has already initialized, cancel initializing");
                 CnnXt.Run();
             } else {
                 PROCESSTIME.PluginStartTime = new Date();
@@ -13951,26 +15696,56 @@ var CnnXt = function ($) {
                 getZipCode(checkRequirements);
                 IS_CONNEXT_INITIALIZED = true;
             }
-        } catch (e) {
-            console.log("Core.Init <<EXCEPTION>>", e);
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         }
-
     };
 
     function initAdBlockElement() {
+        var fnName = 'initAdBlockElement';
+        LOGGER.debug(NAME, fnName, "Adding html element for check Ad blocker");
+
         var testAd = document.createElement("div");
         testAd.innerHTML = "&nbsp;";
         testAd.className = "adsbox";
         testAd.id = "TestAdBlock";
         testAd.style.position = "absolute";
-        testAd.style.bottom = '0';
+        testAd.style.bottom = "0px";
         testAd.style.zIndex = "-1";
         document.body.appendChild(testAd);
+
+        var testImg = document.createElement("IMG");
+        var id = "06db9294";
+        testImg.id = id;
+        testImg.style.width = "100px";
+        testImg.style.height = "100px";
+        testImg.style.top = "-1000px";
+        testImg.style.left = "-1000px";
+        testImg.style.position = "absolute";
+        document.body.appendChild(testImg);
+        var src = "http://asset.pagefair.com/adimages/textlink-ads.jpg";
+        testImg.src = src;
+
+        var testScript = document.createElement("SCRIPT");
+        var d = "295f89b1";
+        testScript.id = d;
+        testScript.type = "text/javascript";
+        document.getElementsByTagName("head")[0].appendChild(testScript);
+        var scriptSrc = "http://d1wa9546y9kg0n.cloudfront.net/index.js";
+        testScript.src = scriptSrc;
+        testScript.onload = function () {
+            testScript.className = 'adstestloaded';
+        };
     }
 
     var closeAllTemplates = function (callback) {
         var fnName = "closeAllTemplates";
-        LOGGER.debug(fnName, "Close all Connext Templates");
+
+        LOGGER.debug(NAME, fnName, "Close all ConneXt Templates");
 
         if ($('.Mg2-connext.paywall.flittz:visible').length > 0 && OPTIONS.integrateFlittz) {
             var e = {};
@@ -13993,7 +15768,7 @@ var CnnXt = function ($) {
 
                     listeners--;
 
-                    if (callback && listeners === 0) {
+                    if (_.isFunction(callback) && listeners === 0) {
                         callback();
                     }
                 });
@@ -14002,21 +15777,25 @@ var CnnXt = function ($) {
             });
 
         } else {
-            if (callback) {
+            if (_.isFunction(callback)) {
                 callback();
             }
         }
+
+        LOGGER.debug(NAME, fnName, "All ConneXt Templates have been closed.");
     };
 
     var IntegrateProduct = function () {
         var fnName = "IntegrateProduct";
-        LOGGER.debug(fnName, "Show article content");
+
+        LOGGER.debug(NAME, fnName, "Show the article content");
+
         $(".blurry-text").removeClass("blurry-text");  //delete blur class
         $(".trimmed-text").removeClass("trimmed-text");     //show trimmed text
         CnnXt.Action.IntegrateProduct();
     };
 
-    var proccessSuccessfulZipCodeRequest = function (data, callback) {
+    var proccessSuccessfulZipCodeRequest = function(data, callback) {
         if (data.ip) {
             CnnXt.Utils.SetIP(data.ip);
         }
@@ -14035,20 +15814,20 @@ var CnnXt = function ($) {
     var getZipCode = function (callback) {
         var fnName = "getZipCode";
 
-        function setZipCode(zipCode) {
-            if (zipCode.split(' ').length == 2) {
-                zipCode = zipCode.split(' ')[0];
-            }
-            $.jStorage.set(CnnXt.Common.StorageKeys.customZip, zipCode);
-        }
+        LOGGER.debug(NAME, fnName, 'Getting a zip code');
 
         try {
-            LOGGER.debug(NAME, fnName);
-            if ($.jStorage.get(CnnXt.Common.StorageKeys.customZip)) {
+            var storedZipCode = $.jStorage.get(CnnXt.Common.StorageKeys.customZip);
+
+            if (storedZipCode) {
+                LOGGER.debug(NAME, fnName, 'We have zip code in the local storage', storedZipCode);
+
                 if (_.isFunction(callback)) {
                     callback();
                 }
             } else {
+                LOGGER.debug(NAME, fnName, 'Calculate a zip code by IP');
+
                 $.ajax({
                     url: CnnXt.Common.IPInfo,
                     type: "GET",
@@ -14059,11 +15838,11 @@ var CnnXt = function ($) {
                         LOGGER.debug(NAME, fnName, 'IPInfo call failed. Calling API to get info');
 
                         CnnXt.API.GetClientIpInfo()
-                            .done(function (data) {
+                            .done(function(data) {
                                 proccessSuccessfulZipCodeRequest(data, callback);
                             })
-                            .error(function () {
-                                LOGGER.error(NAME, fnName, "We set zipcode by default as 00000");
+                            .fail(function () {
+                                LOGGER.debug(NAME, fnName, "We set zipcode by default as 00000");
 
                                 CnnXt.Storage.SetCalculatedZipCode("00000");
 
@@ -14074,26 +15853,33 @@ var CnnXt = function ($) {
                     }
                 });
             }
-        } catch (e) {
-            LOGGER.exception(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, 'We set zipcode by default as 00000', ex);
+
+            CnnXt.Storage.SetCalculatedZipCode("00000");
+
+            if (_.isFunction(callback)) {
+                callback();
+            }
         }
     };
 
     var checkRequirements = function () {
-        /// <summary>Checks for required user init settings as well as any required libraries.</summary>
-        /// <param>None</param>
-        /// <returns>None</returns>
         var fnName = "checkRequirements";
+
+        LOGGER.debug(NAME, fnName, 'Checking requirements...', OPTIONS);
+
         try {
-            LOGGER.debug(NAME, fnName);
-
-            //check if we have jquery.
-            if (!window.jQuery) {
-                throw "Jquery not loaded";
-            }
-
             //we have jquery so extend options.
             OPTIONS = $.extend(true, DEFAULT_OPTIONS, OPTIONS);
+
+            if (!OPTIONS.siteCode) {
+                throw CnnXt.Common.ERROR.NO_SITE_CODE;
+            }
+
+            if (!OPTIONS.configCode) {
+                throw CnnXt.Common.ERROR.NO_CONFIG_CODE;
+            }
 
             //if we intergrated with flittz 
             if (OPTIONS.integrateFlittz) {
@@ -14102,10 +15888,13 @@ var CnnXt = function ($) {
 
             //check run settings
             if (OPTIONS.runSettings) {
-                if (OPTIONS.runSettings.runPromise && _.isFunction(OPTIONS.runSettings.runPromise.then)) {
-                    //In case if promise is defined on Options object, plugin should automatically start on silent mode
-                    OPTIONS.silentmode = true;
+                LOGGER.debug(NAME, fnName, 'Run settings have been found', OPTIONS.runSettings);
 
+                OPTIONS.silentmode = true;
+
+                LOGGER.debug(NAME, fnName, 'If we have run settings - we set up silent mode in true', OPTIONS);
+
+                if (OPTIONS.runSettings.runPromise && _.isFunction(OPTIONS.runSettings.runPromise.then)) {
                     OPTIONS.runSettings.hasValidPromise = true;
 
                     if (!_.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
@@ -14118,21 +15907,20 @@ var CnnXt = function ($) {
                 } else {
                     OPTIONS.runSettings.hasValidPromise = false;
 
-                    console.warn('No or invalid promise object in \'runSettings\'');
+                    LOGGER.debug(NAME, fnName, 'No or invalid promise object in the \'runSettings\'');
                 }
 
                 if (!_.isNumber(OPTIONS.runSettings.runOffset)) {
+                    LOGGER.debug(NAME, fnName, 'We have not run offset, so we set the \'runSettings.runOffset\' by default', defaultRunOffsetTime);
                     OPTIONS.runSettings.runOffset = defaultRunOffsetTime;
                 }
             }
 
-            //set loglevel
-            LOGGER.setDebug(OPTIONS.debug);
-
-            //init Utils
             CnnXt.Utils.init();
 
             var deviceType = CnnXt.Utils.GetUserMeta().deviceType;
+
+            LOGGER.debug(NAME, fnName, 'Device type is', deviceType);
 
             if (deviceType == 'Mobile') {
                 $('body').addClass('mobile');
@@ -14152,8 +15940,11 @@ var CnnXt = function ($) {
             //if we are debugging then create debug panel, we do this here before checking other requirements because we can use the 'onCriticalError' event to populate the note section of this panel so the user knows of any errors.
             if (OPTIONS.debug) {
                 //we are debugging, so add the debug details panel
+                LOGGER.debug(NAME, fnName, 'We are working in the debug mode');
 
                 CnnXt.Utils.CreateDebugDetailPanel();
+
+                LOGGER.debug(NAME, fnName, 'Override the options on custom');
 
                 var siteCode = CnnXt.Storage.GetSiteCode();
                 var configCode = CnnXt.Storage.GetConfigCode();
@@ -14169,34 +15960,29 @@ var CnnXt = function ($) {
                 }
             }
 
-
-            //check if we have a SiteCode
-            if (!OPTIONS.siteCode) {
-                throw "No Site Code"
-            }
-
-            if (!OPTIONS.configCode) {
-                throw "No Config Code"
-            }
-
             setDefaults();
-
-            //if (!OPTIONS.silentmode) {
-            //    setDefaults();
-            //}
 
             if (OPTIONS.runSettings) {
                 setupRunSettings();
             }
 
-        } catch (e) {
-            LOGGER.exception(NAME, fnName, e);
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, 'The settings exception', ex);
+            }
         }
     };
 
     var reInit = function () {
+        var fnName = 'reInit';
+
+        LOGGER.debug(NAME, fnName, 'First init: ', !isProcessed);
+
         CnnXt.CloseTemplates(function () {
             CnnXt.IntegrateProduct();
+
             if (isProcessed) {
                 var configuration = CnnXt.Storage.GetLocalConfiguration();
                 // for supporting the old auto-QA configs
@@ -14208,18 +15994,17 @@ var CnnXt = function ($) {
                 setDefaults();
             }
         });
-
     };
 
     var setDefaults = function () {
-        /// <summary>Set default options based on specific attributes/properties.</summary>
-        /// <param>None</param>
-        /// <returns>None</returns>
         var fnName = "setDefaults";
+
+        LOGGER.debug(NAME, fnName, 'Setup environment and main modules');
+
         try {
-            LOGGER.debug(NAME, fnName);
             if (OPTIONS.environment == null) {
                 var hostname = location.hostname;
+
                 for (var i = 0; i < CnnXt.Common.Environments.length; i++) {
                     if (hostname.indexOf(CnnXt.Common.Environments[i]) >= 0) {
                         OPTIONS.environment = CnnXt.Common.Environments[i];
@@ -14227,6 +16012,7 @@ var CnnXt = function ($) {
                     }
                 }
             }
+
             if (OPTIONS.environment == null) {
                 OPTIONS.environment = "prod";
             }
@@ -14234,26 +16020,23 @@ var CnnXt = function ($) {
             //set API server options based on Common.APIUrl object.
             OPTIONS.api = CnnXt.Common.APIUrl[OPTIONS.environment];
 
+            LOGGER.debug(NAME, fnName, 'OPTIONS.API', OPTIONS.api);
 
-            //init API
             CnnXt.API.init(OPTIONS);
-
-            //init Storage
             CnnXt.Storage.init();
-
-            //init Events
             CnnXt.Event.init(OPTIONS);
             CnnXt.Event.fire("onInit", null);
 
-            ////init AppInsights
+            //init AppInsights
             //CnnXt.AppInsights.init();
 
-            LOGGER.debug('OPTIONS.API', OPTIONS.api);
             //if (!CnnXt.Storage.GetGuid()) {
             //    CnnXt.Storage.SetGuid(CnnXt.Utils.GenerateGuid());
             //}
+
             Fprinting().init()
                 .done(function (id) {
+                    LOGGER.debug(NAME, fnName, 'Fprinting is done', id);
                     OPTIONS.deviceId = id;
                 })
                 .always(function () {
@@ -14266,28 +16049,30 @@ var CnnXt = function ($) {
                         //init AppInsights
                         CnnXt.AppInsights.init(OPTIONS.deviceId, masterId);
                     } catch (e) {
+                        CnnXt.AppInsights.init();
                         LOGGER.exception(NAME, fnName, e);
                     }
 
+
                     defineConfiguration();
-                    CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext,
-                        CnnXt.Utils.GetUserMeta());
+                    CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext, CnnXt.Utils.GetUserMeta());
                     CnnXt.Utils.HangleMatherTool();
                 });
 
-
-        } catch (e) {
-            LOGGER.exception(NAME, fnName, e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var setupRunSettings = function () {
         var fnName = "setupRunSettings";
 
-        LOGGER.debug(NAME, fnName, "OPTIONS.runSettings", OPTIONS.runSettings);
+        LOGGER.debug(NAME, fnName, "Setup run settings", OPTIONS.runSettings);
 
         try {
             if (OPTIONS.runSettings.hasValidPromise) {
+                LOGGER.debug(NAME, fnName, "Setup run settings promise");
+
                 OPTIONS.runSettings.runPromise.then(function (result) {
                     if (!FIRST_RUN_EXECUTED) {
                         OPTIONS.runSettings.onRunPromiseResolved(result);
@@ -14296,6 +16081,8 @@ var CnnXt = function ($) {
 
                     clearTimeout(RUN_TIMEOUT);
 
+                    LOGGER.debug(NAME, fnName, "Promise has been resolved", result);
+
                 }, function (result) {
                     if (!FIRST_RUN_EXECUTED) {
                         OPTIONS.runSettings.onRunPromiseRejected(result);
@@ -14303,142 +16090,136 @@ var CnnXt = function ($) {
                     }
 
                     clearTimeout(RUN_TIMEOUT);
+
+                    LOGGER.debug(NAME, fnName, "Promise has been rejected", result);
                 });
+
+                LOGGER.debug(NAME, fnName, "Promise has been setup", OPTIONS.runSettings);
             }
+
+            LOGGER.debug(NAME, fnName, "Setup run settings timeout");
 
             RUN_TIMEOUT = setTimeout(function () {
                 if (!FIRST_RUN_EXECUTED) {
                     CnnXt.Run();
                 }
+
+                LOGGER.debug(NAME, fnName, "Timeout has been expired");
             }, OPTIONS.runSettings.runOffset);
 
         } catch (ex) {
-            LOGGER.exception(NAME, fnName, ex);
+            LOGGER.exception(NAME, fnName, 'Setup run settings', ex);
         }
     }
 
     var defineConfiguration = function () {
         var fnName = "defineConfiguration";
-        try {
-            CnnXt.API.GetLastPublishDateS3()
-                .done(function (data) {
-                    LOGGER.debug(NAME, fnName, "CnnXt.API.GetLastPublishDateS3.Done", data);
-                    try {
-                        S3_DATA = $.parseJSON(data);
-                        //temporary convert object keys to upper case
-                        S3_DATA = CnnXt.Utils.ConvertObjectKeysToUpperCase(S3_DATA);
-                        //
-                        //if config code is found in config codes list - we get configuration, otherwise we don't get configuration
-                        if (S3_DATA[OPTIONS.configCode]) {
-                            //getConfigSettings (will check for local settings first and if none exist will attempt to get settings from database).
-                            //we use deferred object since we might be making an async ajax call to get data and we need to wait for that to finish.
-                            getConfiguration()
-                                .done(function (configuration) {
-                                    try {
-                                        //this returns ConfigSettings regardless if it is from server or from local settings.
-                                        fnName = "setDefaults.defineConfiguration.getConfiguration() <<DONE>>";
-                                        LOGGER.debug(NAME, fnName, "configuration", configuration);
-                                        isInitFinished = true;
-                                        if (configuration) {
-                                            LOGGER.debug(NAME, fnName, "CONFIGURATION FOUND", configuration);
-                                            //merge configuration settings with default settings (in case any required options are for some reason not set in DB)
-                                            configuration.Settings =
-                                                $.extend(true, OPTIONS.configSettings, configuration.Settings);
-                                            //add the configuration.Site object to a Settings.Site object. (Site object will have things like 'RegistrationTypeId', CSSTheme (not used now, but could be used to dynamically load CSS file based on theme).
-                                            configuration.Settings.Site = configuration.Site;
 
-                                            if (configuration.Settings.LastPublishDate !=
-                                                CnnXt.Storage.GetLastPublishDate()) {
-                                                applyGlobalPublishSettings();
-                                                CnnXt.Storage.SetLastPublishDate(configuration.Settings
-                                                    .LastPublishDate);
-                                            }
-                                            CONFIGURATION = configuration;
+        LOGGER.debug(NAME, fnName, 'Defining ConneXt configuration...');
 
-                                            CnnXt.Storage.SetLocalConfiguration(CONFIGURATION);
+        CnnXt.API.GetLastPublishDateS3()
+            .done(function (data) {
+                try {
+                    S3_DATA = JSON.parse(data);
+                    //temporary convert object keys to upper case
+                    S3_DATA = CnnXt.Utils.ConvertObjectKeysToUpperCase(S3_DATA);
 
-                                            CnnXt.Event.fire('onDebugNote', 'Init is done!');
+                    LOGGER.debug(NAME, fnName, 'S3_DATA is parsed', S3_DATA);
+                } catch (ex) {
+                    LOGGER.exception(NAME, fnName, 'S3_DATA Parse', ex);
+                }
 
-                                            if (!OPTIONS.silentmode || configuration.Settings.UseActivationFlow) {
-                                                processConfiguration(configuration);
-                                            }
+                //if config code is found in config codes list - we get configuration, otherwise we don't get configuration
+                if (S3_DATA[OPTIONS.configCode]) {
+                    //getConfigSettings (will check for local settings first and if none exist will attempt to get settings from database).
+                    //we use deferred object since we might be making an async ajax call to get data and we need to wait for that to finish.
+                    LOGGER.debug(NAME, fnName, 'Configuration code is found in the publish file');
 
-                                        } else {
-                                            LOGGER.error(NAME, fnName, "No Config Settings Found");
-                                            CnnXt.Event.fire("onNoConfigSettingFound", "No Config Settings Found");
-                                        }
-                                    } catch (e) {
-                                        LOGGER.exception(NAME, fnName, 'getConfiguration.done <<EXCEPTION>>', e);
+                    getConfiguration()
+                        .done(function (configuration) {
+                            try {
+                                IS_INIT_FINISHED = true;
+
+                                if (configuration) {
+                                    LOGGER.debug(NAME, fnName, "CONFIGURATION WAS FOUND", configuration);
+                                    //merge configuration settings with default settings (in case any required options are for some reason not set in DB)
+                                    configuration.Settings = $.extend(true, OPTIONS.configSettings, configuration.Settings);
+                                    //add the configuration.Site object to a Settings.Site object. (Site object will have things like 'RegistrationTypeId', CSSTheme (not used now, but could be used to dynamically load CSS file based on theme).
+                                    configuration.Settings.Site = configuration.Site;
+
+                                    CONFIGURATION = configuration;
+
+                                    CnnXt.Storage.SetLocalConfiguration(CONFIGURATION);
+
+                                    CnnXt.Event.fire('onDebugNote', 'Init is done!');
+
+                                    if (!OPTIONS.silentmode || configuration.Settings.UseActivationFlow) {
+                                        processConfiguration(configuration);
+                                    } else {
+                                        LOGGER.debug(NAME, fnName, "ConneXt was ranned in the silent mode, so we stop a process here");
                                     }
-                                })
-                                .fail(function (err) {
-                                    isInitFinished = true;
-                                    LOGGER.error(NAME,
-                                        fnName,
-                                        "No Config Settings Found",
-                                        "Error getting Config Settings",
-                                        err);
-                                    CnnXt.Event.fire("onNoConfigSettingFound", "No Config Settings Found", err);
-                                });
 
-                        } else {
-                            LOGGER.warn(NAME, fnName, 'CONFIGURATION CODE IS NOT FOUND IN PUBLISH FILE');
-                            CnnXt.Event.fire("onDebugNote", "Configuration code is not found in publish file.");
-                        }
-                    } catch (e) {
-                        LOGGER.exception(NAME, fnName, 'GetLastPublishDateS3.done <<EXCEPTION>>', e);
-                    }
-                }).fail(function (data) {
-                    LOGGER.error(NAME, fnName, "CnnXt.API.GetLastPublishDateS3.Fail", data);
-                });
-        } catch (e) {
-            LOGGER.exception(NAME, fnName, e);
-        }
+                                } else {
+                                    LOGGER.warn("No Config Settings Found");
+                                    CnnXt.Event.fire("onDebugNote", "No Config Settings Found.");
+                                }
+                            } catch (ex) {
+                                LOGGER.exception(NAME, fnName, ex);
+                            }
+                        })
+                        .fail(function (error) {
+                            IS_INIT_FINISHED = true;
+                            LOGGER.warn("Error getting Config Settings. No Config Settings Found");
+                            CnnXt.Event.fire("onDebugNote", "Error getting Config Settings. No Config Settings Found");
+                        });
+
+                } else {
+                    IS_INIT_FINISHED = true;
+                    LOGGER.warn('Configuration code is not found in the publish file');
+                    CnnXt.Event.fire("onDebugNote", "Configuration code is not found in the publish file.");
+                }
+            });
     };
 
     var getConfiguration = function () {
-        /// <summary>Gets the current configuration. This handles checking for locally stored settings and/or getting settings from API. Either way if config settings are avaiable they will be returned. </summary>
-        /// <param>None</param>
-        /// <returns>deferred object based on response.</returns>
         var fnName = "getConfiguration";
 
-        //create deferred object
-        var deferred = $.Deferred();
-        //IMPORTANT: All success paths to getting configuration settings should call deferred.resolve and pass in the configSettings, regardless of how we got them.
+        LOGGER.debug(NAME, fnName, 'Getting configuration...');
+
         try {
-            //gets locally stored ConfigSettings
-            //var configuration = CnnXt.Storage.GetLocalConfiguration();
+            var deferred = $.Deferred();
             var configuration = CnnXt.Storage.GetLocalConfiguration();
             var expired = new Date();
             expired.setMonth(expired.getMonth() + 1);
             expired = new Date(expired);
-
-            LOGGER.debug(NAME, fnName, "localConfiguration", configuration);
 
             if (configuration) {
                 //we have a locally stored configuration object
                 LOGGER.debug(NAME, fnName, 'Found Local Configuration', configuration);
                 CnnXt.API.meta.config.isExistsInLocalStorage = true;
                 //we need to check if we have a 'LastPublishDate' cookie.
-                var storedLastPublishDate = CnnXt.Storage.GetLastPublishDate();
+                var storedLastPublishDate = CnnXt.Storage.GetLastPublishDate(),
+                    customTime = CnnXt.Utils.ParseCustomDate($.jStorage.get('CustomTime')),
+                    normalizedLastPubDate = new Date(storedLastPublishDate);
 
                 CnnXt.API.meta.config.localPublishDate = storedLastPublishDate;
-                LOGGER.debug(NAME, fnName, "No 'storedLastPublishDate', getting LastPublishDate from S3");
 
+                //we got data back from S3. This data will be a json string with key/vals of ConfigCode: 'LastPublishDate'.
+                //we must first parse this into a json object (the 'data' arg is really just a json string).
                 var s3DataConfigLastPublishDate = S3_DATA[OPTIONS.configCode];
-
                 var isConfigOld = isConfigurationOld(S3_DATA, configuration.Settings.LastPublishDate);
 
                 if (isConfigOld) {
                     //config data is old, so we need to get new data from the DB
                     CnnXt.API.meta.reason = CnnXt.Common.DownloadConfigReasons.oldConfig;
-                    //fire note for debug panel
+
+                    LOGGER.debug(NAME, fnName, 'Stored configuration is old', configuration);
                     CnnXt.Event.fire("onDebugNote", "Current config is old.");
 
                     //TODO: this is bad because we call this function here and below when we don't have a localStorage config. There are small differences, but we should create one function that handles both scenarios.
                     getConfigurationFromServer()
                         .done(function (newConfiguration) {
-                            LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", newConfiguration);
+                            LOGGER.debug(NAME, fnName, "A new configuration from server", newConfiguration);
 
                             //we now have a new (processed) configuration object.  We need to merge the current locally stored configuration with the one from the server.
                             //this will take the newConfiguration and save it locally and merge any existing saved conversations with new data from the newConfiguration Object, while preserving appropriate data.
@@ -14449,49 +16230,53 @@ var CnnXt = function ($) {
                             if (_.isObject(s3DataConfigLastPublishDate)) {
                                 if (s3DataConfigLastPublishDate.Reset) {
                                     CnnXt.Storage.ResetConversationViews(null, newConfiguration.Settings.UseParentDomain);
+                                    CnnXt.Storage.RemoveTimeRepeatableActionData();
                                     CnnXt.Storage.RemoveWhitelistSetIdCookie();
                                     CnnXt.Storage.RemoveWhitelistInfoboxCookie();
                                     CnnXt.Storage.RemoveNeedHidePinTemplateCookie();
+                                    CnnXt.Storage.SetCurrentConversations({});
+                                    CnnXt.Storage.SetCurrentConversation(null);
+                                    CnnXt.Storage.ResetPinAttemptsCookie();
                                 }
                             }
 
                             deferred.resolve(newConfiguration);
 
-                        }).fail(function (err) {
-                            console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
-
-                            deferred.reject(err);
+                        }).fail(function (error) {
+                            LOGGER.debug(NAME, fnName, "getConfigurationFromServer", error);
+                            deferred.reject(error);
                         });
 
                 } else {
                     //configData is not old, so we set the lastPublishDate cookie, so we no longer check if config data is old (for this session).
                     CnnXt.Storage.SetLastPublishDate(configuration.Settings.LastPublishDate, expired);
+
+                    LOGGER.debug(NAME, fnName, "Stored configuration is not old", configuration);
+
                     //we resolve with the locally stored configuration.
                     deferred.resolve(configuration);
                 }
-
-                LOGGER.debug(NAME, fnName, "isConfigOld", isConfigOld);
             } else {
                 CnnXt.API.meta.config.isExistsInLocalStorage = false;
                 CnnXt.API.meta.reason = CnnXt.Common.DownloadConfigReasons.noLocalConfig;
                 getConfigurationFromServer()
                     .done(function (configuration) {
-                        LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", configuration);
+                        LOGGER.debug(NAME, fnName, "A new configuration from server", configuration);
 
                         storeConfigurationFromServer(configuration, expired);
 
                         deferred.resolve(configuration);
 
-                    }).fail(function (err) {
-                        console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
+                    }).fail(function (error) {
+                        LOGGER.debug(NAME, fnName, "getConfigurationFromServer", error);
 
-                        deferred.reject(err);
+                        deferred.reject(error);
                     });
             }
 
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
-            deferred.reject(e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            deferred.reject(ex);
         }
 
         return deferred.promise();
@@ -14509,6 +16294,8 @@ var CnnXt = function ($) {
     var storeConfigurationFromServer = function (configuration, expired) {
         var fnName = 'storeConfigurationFromServer';
 
+        LOGGER.debug(NAME, fnName, 'Get configuration from server', arguments);
+
         try {
             $.jStorage.deleteKey(CnnXt.Common.StorageKeys.conversations.current);
 
@@ -14517,14 +16304,18 @@ var CnnXt = function ($) {
             CnnXt.Storage.SetLocalConfiguration(configuration);
             CnnXt.Storage.SetLastPublishDate(configuration.Settings.LastPublishDate, expired);
         } catch (ex) {
-            console.error(NAME, fnName, "EXCEPTION", ex);
+            LOGGER.exception(NAME, fnName, ex);
         }
     }
 
     var overrideRegistrationType = function (configuration) {
+        var fnName = 'overrideRegistrationType';
+
         var registrationType = CnnXt.Storage.GetRegistrationType();
 
-        if (registrationType.Id && registrationType.IsOverride) {
+        if (registrationType && registrationType.Id && registrationType.IsOverride) {
+            LOGGER.debug(NAME, fnName, 'Override registration type on', registrationType);
+
             configuration.Site.RegistrationTypeId = registrationType.Id;
         } else {
             $('#OverrideAuthType').prop('checked', false);
@@ -14534,14 +16325,18 @@ var CnnXt = function ($) {
 
     //#endregion INIT Functions
 
-    //#region MAIN FUNCTIONS
+
+    //#region Process Configuration
+
     var processConfiguration = function (configuration) {
         var fnName = "processConfiguration";
 
-        try {
-            LOGGER.debug(NAME, fnName);
+        LOGGER.debug(NAME, fnName, arguments);
 
+        try {
             if (configuration.Settings.Active) {
+                LOGGER.debug(NAME, fnName, 'Configuration is active');
+
                 if (configuration.Settings.UseActivationFlow) {
                     if (!isProcessed) {
                         CnnXt.User.init(configuration.Settings);
@@ -14568,64 +16363,51 @@ var CnnXt = function ($) {
                     processUsualConfiguration(configuration);
                 }
             } else {
-                LOGGER.warn(NAME, fnName, 'CONFIGURATION IS INACTIVE');
-                CnnXt.Event.fire("onDebugNote", "Configuration is inactive.");
+                LOGGER.warn('Configuration is inactive');
+                CnnXt.Event.fire("onDebugNote", "Configuration is inactive");
             }
 
-        } catch (ex) {
-            console.log("Core.Init <<EXCEPTION>>", ex);
+        } catch (ex){
+            LOGGER.exception(NAME, fnName, ex);
         }
     };
 
     var processUsualConfiguration = function (configuration) {
         var fnName = "processUsualConfiguration";
 
+        LOGGER.debug(NAME, fnName, 'Processing usual configuration', arguments);
+
         try {
             isProcessed = true;
-            LOGGER.debug(NAME, fnName);
-
+           
             if (!configuration) {
                 configuration = CONFIGURATION;
             }
 
             PROCESSTIME.StartProcessingTime = new Date(); //sets start time for processing info (not dependent on getting data from API).
 
-            if (configuration.Site.SiteTheme.ThemeUrl && (configuration.Site.SiteTheme.ThemeUrl !== "default")) {
-                var env = CnnXt.Common.CSSPluginUrl[OPTIONS.environment];
-                if ($("#themeLink").length == 0) {
+            appendSiteTheme(configuration.Site);
 
-
-                    if ($("body > link").length == 0)
-                        $("body").append('<link href="" id ="themeLink" rel="stylesheet" type="text/css">');
-                    else {
-                        $('<link href="" id ="themeLink" rel="stylesheet" type="text/css">').insertAfter($("body > link").last());
-                    }
-                }
-                $("#themeLink").attr("href", env + configuration.Site.SiteTheme.ThemeUrl);
-            } else if (configuration.Site.SiteTheme.ThemeUrl && configuration.Site.SiteTheme.ThemeUrl == "default") {
-                $("#themeLink").remove();
-            }
             CnnXt.Event.fire("onDynamicMeterFound", configuration.DynamicMeter.Name);
             //fireEvent that Campaign was found.
             CnnXt.Event.fire("onCampaignFound", configuration.Campaign);
+            // CnnXt.Storage.CheckOldCookies();  // clear cookies 1.9- versions, migrate data from cookie 1.10 version if need
 
-            $.when(CnnXt.Storage.CheckCookie())
+            CnnXt.CookieMigration.Migrate();  // clear cookies 1.9- versions, migrate data from cookie 1.10 version if need
+            
+            $.when(CnnXt.Storage.CheckViewCookies())
                 .then(function () {
                     CnnXt.User.CheckAccess()
-                        .done(function (data) {
-                            LOGGER.debug(NAME, fnName, "User.CheckAccess.Done", data);
-                        })
-                        .fail(function () {
-                            LOGGER.debug(NAME, fnName, "User.CheckAccess.Fail");
-                        })
                         .always(function () { //this is always fired, regardless if the user was authenticated. For now we only use this for the 'UserAuthTiming', but could use this for other things.
                             if (!CnnXt.Storage.GetWhitelistSetIdCookie()) {
                                 CnnXt.Whitelist.checkClientIp(configuration);
-                            } else {
-                                connextFinishProcessing();
                             }
+                            //else {
+                            //    connextContinueProcessing(configuration);
+                            //}
 
                             var UserAuthTime = CnnXt.User.GetAuthTiming();
+
                             LOGGER.debug(NAME, fnName, "User.CheckAccess.Always", "UserAuthTime", UserAuthTime);
                             var EndTime = new Date().getMilliseconds();
                             var ProcessingTime = EndTime - PROCESSTIME.StartProcessingTime.getMilliseconds();
@@ -14635,60 +16417,84 @@ var CnnXt = function ($) {
                         });
                 });
 
-        } catch (e) {
-            console.log("Core.Init <<EXCEPTION>>", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
     }
 
     var processActivationOnlyConfiguration = function (configuration) {
         var fnName = "processActivationOnlyConfiguration";
 
-        try {
-            LOGGER.debug(NAME, fnName);
+        LOGGER.debug(NAME, fnName, 'Processing activation only configuration', configuration);
 
-            CnnXt.Activation.Run(OPTIONS);
+        try {
+            if (!OPTIONS.silentmode || isProcessed) {
+                CnnXt.Activation.Run();
+            }
 
             isProcessed = true;
 
         } catch (ex) {
-            console.log("Core.Init <<EXCEPTION>>", ex);
+            LOGGER.exception(NAME, fnName, ex);
         }
     }
 
-    //#endregion MAIN FUNCTIONS
+    var appendSiteTheme = function (site) {
+        var fnName = 'appendSiteTheme';
 
-    //#region EVENT LISTENERS
+        LOGGER.debug(NAME, fnName, 'Append site theme', site);
 
+        var $themeLink = $("#themeLink");
 
-    //#endregion EVENT LISTENERS
+        if (site.SiteTheme.ThemeUrl && (site.SiteTheme.ThemeUrl !== "default")) {
+            var env = CnnXt.Common.CSSPluginUrl[OPTIONS.environment];
+            if ($themeLink.length == 0) {
+                if ($("body > link").length == 0)
+                    $("body").append('<link href="" id ="themeLink" rel="stylesheet" type="text/css">');
+                else {
+                    $('<link href="" id ="themeLink" rel="stylesheet" type="text/css">').insertAfter($("body > link").last());
+                }
+            }
+            $themeLink.attr("href", env + site.SiteTheme.ThemeUrl);
+        } else if (site.SiteTheme.ThemeUrl && site.SiteTheme.ThemeUrl === "default") {
+            $themeLink.remove();
+        }
+    }
+
+    //#endregion Process Configuration
+
 
     //#region WEBSERVICE CALLS
 
     var connextContinueProcessing = function (configuration) {
         var fnName = "connextContinueProcessing";
+
+        LOGGER.debug(NAME, fnName, "Continue processing ConneXt...", configuration);
+
         var meterLevel;
-        if (!CnnXt.Storage.GetWhitelistSetIdCookie()) {
-            CnnXt.MeterCalculation.CalculateMeterLevel(configuration.DynamicMeter.Rules)
-                .done(function (rule) {
-                    LOGGER.debug(NAME, fnName, "Determined meter level", rule);
-                    meterLevel = rule.MeterLevelId;
-                    CnnXt.Event.fire("onMeterLevelSet", { method: "Dynamic", level: meterLevel, rule: rule });
-                })
-                .fail(function () {
-                    LOGGER.warn(NAME, fnName, "Failed to determined Meter Level...using default");
-                    meterLevel = configuration.Settings.DefaultMeterLevel;
-                    CnnXt.Event.fire("onMeterLevelSet", { method: "Default", level: meterLevel });
-                }).always(function () { //this will always be called, so this is where we check if a User has access and if we should process a campaign (we only process a campaign if a user does not have access...this will change in v1.1)
-                    LOGGER.info(NAME, fnName, "METER CALCULATION --- ALWAYS CALLED", meterLevel);
-                    OPTIONS.currentMeterLevel = meterLevel;
-                    CnnXt.Campaign.ProcessCampaign(CnnXt.Common.MeterLevels[meterLevel], configuration.Campaign);
-                    connextFinishProcessing();
-                });
-        }
+
+        CnnXt.MeterCalculation.CalculateMeterLevel(configuration.DynamicMeter.Rules)
+            .done(function (rule) {
+                meterLevel = rule.MeterLevelId;
+                LOGGER.debug(NAME, fnName, "Determined meter level", meterLevel, rule);
+                CnnXt.Event.fire("onMeterLevelSet", { method: "Dynamic", level: meterLevel, rule: rule });
+            })
+            .fail(function () {
+                meterLevel = configuration.Settings.DefaultMeterLevel;
+                LOGGER.debug(NAME, fnName, "Failed to determined Meter Level... using default", meterLevel);
+                CnnXt.Event.fire("onMeterLevelSet", { method: "Default", level: meterLevel });
+            }).always(function () { //this will always be called, so this is where we check if a User has access and if we should process a campaign (we only process a campaign if a user does not have access...this will change in v1.1)
+                LOGGER.debug(NAME, fnName, "METER CALCULATION --- ALWAYS CALLED", meterLevel);
+                OPTIONS.currentMeterLevel = meterLevel;
+                CnnXt.Campaign.ProcessCampaign(CnnXt.Common.MeterLevels[meterLevel], configuration.Campaign);
+                connextFinishProcessing();
+            });
     }
 
     var getConfigurationFromServer = function (opts) {
         var fnName = "getConfigurationFromServer";
+
+        LOGGER.debug(NAME, fnName, opts);
 
         var deferred = $.Deferred();
 
@@ -14696,24 +16502,20 @@ var CnnXt = function ($) {
             CnnXt.API.GetConfiguration({
                 payload: { siteCode: OPTIONS.siteCode, configCode: OPTIONS.configCode },
                 onSuccess: function (data) {
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                     //we got results from the server, we need to process them to create a friendlier json object.
                     var processedConfiguration = CnnXt.Utils.ProcessConfiguration(data);
-                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "processedConfiguration", processedConfiguration);
                     deferred.resolve(processedConfiguration);
                 },
                 onNull: function () {
-                    LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
-                    deferred.reject("Configuration Not Found");
+                    deferred.reject("Configuration is not found");
                 },
-                onError: function (err) {
-                    LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
-                    deferred.reject("Error Getting Configuration Data");
+                onError: function (error) {
+                    deferred.reject("Error getting configuration data");
                 }
             });
 
-        } catch (e) {
-            console.error(NAME, fnName, "<<EXCEPTION>>", e);
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
         }
 
         return deferred.promise();
@@ -14729,14 +16531,13 @@ var CnnXt = function ($) {
         /// <param name="configurationSettings" type="String">LastPublishDate string from configuration</param>
         /// <returns type="Boolean">Returns bool depending if LastPublishDate from configuration is older or newer than the s3Data date with the current ConfigCode.</returns>
         var fnName = "isConfigurationOld";
-        try {
-            //LOGGER.debug(pName, fnName);
 
+        LOGGER.debug(NAME, fnName, "s3Data", s3Data, "OPTIONS.configCode", OPTIONS.configCode, 'configurationLastPublishDate', configurationLastPublishDate);
+
+        try {
             //make sure s3Data is an object
             if (_.isObject(s3Data)) {
                 //is an object, check if we have a property in this Object for the current 'configCode'
-
-                LOGGER.debug(NAME, fnName, "s3Data", s3Data, "OPTIONS.configCode", OPTIONS.configCode);
 
                 //gets the last publish date from s3Data based on the current OPTIONS.configCode (we'll check if this actually exists below).
                 var s3DataConfigLastPublishDate;
@@ -14752,7 +16553,7 @@ var CnnXt = function ($) {
                     var serverLastPublishDate,
                         localLastPublishDate;
                     if (_.isObject(s3DataConfigLastPublishDate)) {
-                        LOGGER.log(NAME, fnName, '.json file has a configCode property and its an object', s3DataConfigLastPublishDate);
+                        LOGGER.debug(NAME, fnName, '.json file has a configCode property and its an object', s3DataConfigLastPublishDate);
                         //we have a property from s3Data based on the currentConfigCode, so we need to handle Reset property to reset Article views.
 
                         //set 'moment' object so we can compare with moment
@@ -14772,7 +16573,7 @@ var CnnXt = function ($) {
                             return false;
                         }
                     } else {
-                        LOGGER.log(NAME, fnName, '.json file has a property same as this configCode', s3DataConfigLastPublishDate);
+                        LOGGER.debug(NAME, fnName, '.json file has a property same as this configCode', s3DataConfigLastPublishDate);
                         //we have a property from s3Data based on the currentConfigCode, so we need to test it against the current configurationLastPublishDate.
 
                         //set 'moment' object so we can compare with moment
@@ -14793,49 +16594,45 @@ var CnnXt = function ($) {
                         }
                     }
 
-
                 } else {
                     CnnXt.API.meta.config.publisfDate = null;
                     CnnXt.API.meta.config.ex = 's3Data does not have the current configCode as a key ' + OPTIONS.configCode;
                     CnnXt.API.meta.reason = CnnXt.Common.DownloadConfigReasons.noConfigCodeinPublish;
-                    throw "s3Data does not have the current configCode as a key";
+                    throw CnnXt.Common.ERROR.CONFIG_HAS_NOT_PUBLISHED;
                 }
 
             } else {
                 CnnXt.API.meta.config.publisfDate = null;
                 CnnXt.API.meta.config.ex = 's3Data is not an object';
                 CnnXt.API.meta.reason = CnnXt.Common.DownloadConfigReasons.parsePublishFailed;
-                throw "s3Data is not an object";
+                throw CnnXt.Common.ERROR.S3DATA_IS_INVALID;
             }
-        } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+        } catch (ex) {
+            if (ex.custom) {
+                LOGGER.warn(ex.message);
+            } else {
+                LOGGER.exception(NAME, fnName, ex);
+            }
             //for all error we return true, which means the current data is old. This will force us getting new data from the server (we will still do a merge of this data, but it's safer to get new data and merge it when we have an error. Otherwise if this is because of a bug, we might never get new configuration data from the DB).
             return true;
         }
     };
-    //var processViews = function(data) {
-    //    if (data["Views"]) {
-    //        $.each(Object.keys(data["Views"]),
-    //            function(k, v) {
-    //                var conversationId = v;
-    //                var articles = data["Views"][v];
-    //                CnnXt.Storage.SetViewedArticles(articles, conversationId);
-    //            });
-    //    }
-    //};
 
     var connextFinishProcessing = function () {
 
         // send view data 
-        if (CnnXt.Campaign.GetCurrentConversationViewCount() !== 1
-            && CnnXt.Campaign.GetCurrentConversationViewCount() % CnnXt.GetOptions().BatchCount === 0) {
+        if (!CnnXt.Storage.GetWhitelistSetIdCookie() && (
+            CnnXt.Campaign.GetCurrentConversationViewCount() > 1
+                && CnnXt.Campaign.GetCurrentConversationViewCount() % CnnXt.GetOptions().BatchCount === 0
+            || CnnXt.Storage.GetCurrenDynamicMeterViewCount() > 1
+                && CnnXt.Storage.GetCurrenDynamicMeterViewCount() % CnnXt.GetOptions().BatchCount === 0)) {
 
             var data = {
                 UserId: CnnXt.GetOptions().deviceId,
                 ConfigCode: CnnXt.GetOptions().configCode,
                 SiteCode: CnnXt.GetOptions().siteCode,
                 SettingsKey: CnnXt.GetOptions().settingsKey,
-                ViewData: CnnXt.Campaign.GetLocalViewData()
+                ViewData: CnnXt.Storage.GetLocalViewData()
             };
             if (CnnXt.User.getMasterId()) {
                 var id = CnnXt.User.getMasterId();
@@ -14847,10 +16644,12 @@ var CnnXt = function ($) {
         CnnXt.Event.fire("onFinish");
     };
 
-    var run = function () {
-        CnnXt.CloseTemplates(function () {
+    var run = function() {
+        CnnXt.CloseTemplates(function() {
             CnnXt.IntegrateProduct();
-            if (isInitFinished) {
+            
+
+            if (IS_INIT_FINISHED) {
                 FIRST_RUN_EXECUTED = true;
                 clearTimeout(RUN_TIMEOUT);
                 var configuration = CnnXt.Storage.GetLocalConfiguration();
@@ -14864,8 +16663,7 @@ var CnnXt = function ($) {
                 setTimeout(run, 100);
             }
         });
-    }
-
+    };
 
 
     //#endregion HELPER FUNCTIONS
@@ -14885,39 +16683,35 @@ var CnnXt = function ($) {
                 GetVersion: CnnXt.GetVersion,
                 GetCurrentVersion: CnnXt.GetCurrentVersion,
                 GetOptions: CnnXt.GetOptions,
+                StartTracing: CnnXt.Logger.startTracing.bind(CnnXt.Logger),
+                StopTracing: CnnXt.Logger.stopTracing.bind(CnnXt.Logger),
+                GetSessionLogs: CnnXt.Logger.getSessionLogs,
                 Storage: {
+                    GetCurrentConversationViewCount: CnnXt.Storage.GetCurrentConversationViewCount,
+                    GetCurrenDynamicMeterViewCount: CnnXt.Storage.GetCurrenDynamicMeterViewCount,
                     GetLastPublishDate: CnnXt.Storage.GetLastPublishDate,
-                    GetSiteCode: function () { return CnnXt.Storage.GetLocalConfiguration().Site.SiteCode },
+                    GetSiteCode: function() { return CnnXt.Storage.GetLocalConfiguration().Site.SiteCode },
                     GetConfigCode: function () { return CnnXt.Storage.GetLocalConfiguration().Settings.Code },
                     GetLocalConfiguration: CnnXt.Storage.GetLocalConfiguration,
                     GetCurrentConversations: CnnXt.Storage.GetCurrentConversations,
-                    GetCurrentConversation: CnnXt.Storage.GetCurrentConverstaion,
-                    GetCurrentMeterLevel: function () {
-                        var conversation = CnnXt.Storage.GetCurrentConverstaion();
+                    GetCurrentConversation: CnnXt.Storage.GetCurrentConversation,
+                    GetCurrentMeterLevel: function () { return OPTIONS.currentMeterLevel },
+                    GetCampaignData: CnnXt.Storage.GetCampaignData,
+                    // GetRegistrationType: CnnXt.Storage.GetRegistrationType,
+                    GetRegistrationType: function() {
+                        return CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId;
+                    },
+                    GetViewedArticles: function () {
+                        var conversation = CnnXt.Storage.GetCurrentConversation();
 
                         if (conversation) {
-                            return conversation.MeterLevelId;
+                            return CnnXt.Storage.GetViewedArticles(conversation.id);
                         } else {
-                            return undefined;
+                            return [];
                         }
                     },
-                    GetCampaignData: CnnXt.Storage.GetCampaignData,
-                    GetRegistrationType: CnnXt.Storage.GetRegistrationType,
-
-                    //deprecated 12.11.2017. approved with Dael
-                    //GetViewedArticles: function () {
-                    //    var conversation = CnnXt.Storage.GetCurrentConverstaion();
-
-                    //    if (conversation) {
-                    //        return CnnXt.Storage.GetViewedArticles(conversation.id);
-                    //    } else {
-                    //        return [];
-                    //    }
-                    //},
-
-                    GetCurrentConversationArticlesCount: CnnXt.Campaign.GetCurrentConversationViewCount,
-                    GetArticlesLeft: function () {
-                        var conversation = CnnXt.Storage.GetCurrentConverstaion();
+                    GetArticlesLeft: function() {
+                        var conversation = CnnXt.Storage.GetCurrentConversation();
 
                         if (conversation) {
                             return conversation.Props.ArticleLeft;
@@ -14927,15 +16721,16 @@ var CnnXt = function ($) {
                     },
                     GetUserState: CnnXt.Storage.GetUserState,
                     GetUserZipCodes: CnnXt.Storage.GetUserZipCodes,
+                    GetActualZipCodes: CnnXt.Storage.GetActualZipCodes,
                     GetJanrainUser: CnnXt.Storage.GetJanrainUser,
                     GetUserData: CnnXt.Storage.GetUserData,
                     GetUserProfile: CnnXt.Storage.GetUserProfile,
-                    GetConnextPaywallCookie: CnnXt.Storage.GetConnextPaywallCookie
-                },
-                Common: {
-                    USER_STATES: CnnXt.Common.USER_STATES
+                    GetConnextPaywallCookie: CnnXt.Storage.GetConnextPaywallCookie,
+                    ClearUser: CnnXt.Storage.ClearUser
                 }
             }
+
+            LOGGER.debug(NAME, 'Init', 'Connext object has been created');
 
             return Connext;
         },
@@ -14961,7 +16756,6 @@ var CnnXt = function ($) {
             CnnXt.Event.fire("onRun");
 
             run();
-
         },
         ReInit: reInit,
         GetVersion: function () { return VERSION },
@@ -14969,22 +16763,12 @@ var CnnXt = function ($) {
             return 'Version: ' + window.connextVersion + ', Build: ' + window.connextBuild;
         },
         GetOptions: function () { return OPTIONS; },
-        //
-        //Below are the main public methods the client will be calling, they simply route to the appropriate js class/method.
-        //
         ShowContent: function () { //let's client show the hidden article text.
             CnnXt.Action.ShowContent();
         },
-        fire: function (evt, data) {
-            //this is the main public method the client will use to fire events inside of ConneXt.  
-            //the 'evt' param will route to an appropriate method inside of ConneXt and pass in the 'data' param.
-            //for example, a client would call mg2Connext.fire('onLogin', {uuid: 1234, fname: 'aaa', lname: 'bbb'}); And we would process the logging in of a user with the passed in data object.
-        },
-        EventCompleted: function (event) {
-            CnnXt.Campaign.EventCompleted(event);
-        },
         ConnextContinueProcessing: connextContinueProcessing,
-        DisplayName: ConnextCommon().DisplayName
+        DisplayName: ConnextCommon().DisplayName,
+        CookieMigration: CookieMigration($)
     };
 
 }(jQuery);
