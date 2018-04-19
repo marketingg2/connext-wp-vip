@@ -10,6 +10,7 @@
         settingsKey: WP_CXT.settingsKey,
         environment: WP_CXT.environment,
         attr: WP_CXT.attr,
+        silentmode: (WP_CXT.silentMode === 'false') ? false : true,
       });
     }
 
