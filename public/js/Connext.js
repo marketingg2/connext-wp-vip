@@ -1,11 +1,3 @@
-
- window.connextVersion = "1.10"
-
- window.connextBuild = "23618"
-
- /* Version: 1.10 */ 
-
- /* Build: 23618 */ 
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -4649,8 +4641,8 @@ var ConnextCommon = function () {
             stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.10/themes/",
             demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.10/themes/",
             test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.10/themes/',
-            prod: "https://cdn.mg2connext.com/prod/1.6/themes/",
-            preprod: "https://cdn.mg2connext.com/preprod/1.6/themes/"
+            prod: "https://cdn.mg2connext.com/prod/1.10/themes/",
+            preprod: "https://cdn.mg2connext.com/preprod/1.10/themes/"
         },
         APIUrl: {
             localhost: "http://localhost:34550/",
@@ -4792,12 +4784,11 @@ var ConnextEvents = function ($) {
 
     //#region GLOBALS
     var NAME = "Events";
-
+    const exludedEvents = ["onDynamicMeterFound", "onCampaignFound", "onHasAccess", "onHasAccessNotEntitled", "onHasNoActiveSubscription", "onAuthorized","onDebugNote"];
     var OPTIONS;
 
     //local reference to CnnXt.Logger
     var LOGGER;
-    var MG2ACCOUNTDATA;
 
     //not sure if there is a better way to do this, but this holds refernces to functions we should fire on certain events. (since the passed in 'event' on 'fire' is just a string we can't check if that string is a function.
     //NOTE: DEFAULT_FUNCTIONS are only fired when debug=true, since these are mainly used for Logging or updating the Debug Details panel. (This check is handled in the 'fire' function, so we don't need to check this again within any of the default functions).
@@ -4959,19 +4950,6 @@ var ConnextEvents = function ($) {
             }
 
             CnnXt.Storage.SetMeter(e.EventData);
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
-    }
-
-    function onHasAccessToken(e) {
-        var fnName = "onHasAccessToken";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onHasAccessToken function.', e);
-                onDebugNote(e.EventData);
-            }
         } catch (ex) {
             console.error(fnName, 'EXCEPTION', ex);
         }
@@ -5258,7 +5236,8 @@ var ConnextEvents = function ($) {
                     var customEvent = new CustomEvent(event, { detail: eventResult });
                     document.dispatchEvent(customEvent);
 
-                    if(event !== 'onDebugNote'){
+                    if(exludedEvents.indexOf(event) === -1)
+                    {
                         CnnXt.AppInsights.trackEvent(event, eventResult);
                     }
 
@@ -6765,7 +6744,7 @@ var ConnextStorage = function ($) {
             setCookie(oldCookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.CookieExpireDate), userCurDomain);
         }
 
-        if (articleCookie || articleCookie == "{}") {
+        if (articleCookie) {
             parsedViews = JSON.parse(articleCookie);
         } else {
             if (oldCookie) {
@@ -6854,7 +6833,7 @@ var ConnextStorage = function ($) {
     };
 
     var getCurrentConversationViewCount = function (id) {
-        if (!CnnXt.Storage.GetCurrentConverstaion())
+        if (!CnnXt.Storage.GetCurrentConverstaion() && !id)
             return null;
         var convoId = id;
         if (convoId == null) {
@@ -6897,11 +6876,41 @@ var ConnextStorage = function ($) {
             conversation.Props.views = 0;
             CnnXt.Storage.SetViewedArticles([], conversation.id);
             resetViews(conversation.id, useParentDomain);
+            resetRepeatablesInConversation(conversation);
         } else {
             setLocalStorage(CnnXt.Common.StorageKeys.viewedArticles, {});
             resetViews(null, useParentDomain);
+            clearRepeatablesData();
         }
     };
+
+    var resetRepeatablesInConversation = function(conversation) {
+        var fnName = 'ClearRepeatablesInConversation';
+
+        try {
+            var repeatables = getLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv);
+            if (repeatables && conversation && conversation.Actions) {
+                conversation.Actions.forEach(function(action) {
+                    if (action.id && repeatables[action.id]) {
+                        repeatables[action.id] = 0;
+                    }
+                });
+                setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, repeatables);
+            }
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    };
+
+    var clearRepeatablesData = function () {
+        var fnName = 'ResetRepeatablesData';
+
+        try {
+            setLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv, {});
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+        }
+    }
     //#endregion
 
 
@@ -7318,7 +7327,7 @@ var ConnextAPI = function ($) {
             {
                 stringMeta = JSON.stringify(args.options.meta);
             }
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
             //TODO: THIS IS VERY IMPORTANT....
@@ -7383,7 +7392,7 @@ var ConnextAPI = function ($) {
             url += "?email=" + args.options.email + "&emailPreferenceId=" + args.options.id;
             LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options });
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
             //TODO: THIS IS VERY IMPORTANT....
@@ -7391,7 +7400,13 @@ var ConnextAPI = function ($) {
             //      We need to find a way to enable this Authentication when calling the API via Postman or 3rd party source, but not require the API-Key when calling from the Connext Plugin since we do not want to store Token values in JS.
             //      I would think we would need some sort of checking based on the source header and if that domain matches a list of domains/tokens.
             return $.ajax({
-                headers: { 'Site-Code': 'MNG', 'Access-Control-Allow-Origin': '*', 'Environment': CnnXt.GetOptions().environment, 'settingsKey': 'lang', 'Version': CnnXt.GetVersion(), 'Source-System': 'Plugin' },
+                headers: {
+                    'Site-Code': 'MNG', 'Access-Control-Allow-Origin': '*',
+                    'Environment': CnnXt.GetOptions().environment,
+                    'settingsKey': CnnXt.GetOptions().settingsKey,
+                    'Version': CnnXt.GetVersion(),
+                    'Source-System': 'Plugin'
+                },
                 url: url,
                 type: "GET",
                 dataType: "json",
@@ -7443,7 +7458,7 @@ var ConnextAPI = function ($) {
         };
         var url = API_URL + ROUTES["ClearServerCache"](payload);
 
-        CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: payload });
+        //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: payload });
 
         return $.ajax({
             //crossDomain: true,
@@ -7581,8 +7596,8 @@ var ConnextAPI = function ($) {
                     data.masterId = id;
                 }
 
-                CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall,
-                    { ApiUrl: API_URL + ROUTES.viewsData, ApiPayload: data });
+                //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall,
+                //    { ApiUrl: API_URL + ROUTES.viewsData, ApiPayload: data });
 
                 return $.ajax({
                     url: API_URL + ROUTES.viewsData,
@@ -7610,7 +7625,7 @@ var ConnextAPI = function ($) {
                 SettingsKey: CnnXt.GetOptions().settingsKey
             };
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData });
 
             return $.ajax({
                 url: API_URL + ROUTES.viewsData,
@@ -7627,7 +7642,7 @@ var ConnextAPI = function ($) {
                 SettingsKey: CnnXt.GetOptions().settingsKey
             };
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.DeleteViewsByUserId });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.DeleteViewsByUserId });
 
             return $.ajax({
                 url: API_URL + ROUTES.DeleteViewsByUserId(data),
@@ -7645,7 +7660,7 @@ var ConnextAPI = function ($) {
                 Meta.publishFile.url = jsonURL;
                 //return $.ajax since it is a deferred object and we use that in the calling CnnXt.Core function.
 
-                CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: jsonURL });
+                //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: jsonURL });
 
                 return $.ajax({
                     crossDomain: true,
@@ -7938,12 +7953,13 @@ var ConnextUser = function ($) {
 
                     if (AUTH_TYPE.MG2) {
                         //this is MG2 Auth type, show MG2 Login Modal.
-                        $(UI.LoginModal).addClass("in");
-                        $(UI.LoginModal).attr("id", "mg2-login-modal");
-                        var loginModal = $(UI.LoginModal).connextmodal({ backdrop: "true" });
-                        $(UI.LoginModal).css("display", "block");
-                        $("[data-display-type=modal]").resize();
-                        $(loginModal).on('hidden.bs.modal', function (e) {
+                        var $loginModal = $(UI.LoginModal);
+                        $loginModal.addClass("in");
+                        $loginModal.attr("id", "mg2-login-modal");
+                        $loginModal.connextmodal({ backdrop: "true" });
+                        $loginModal.css("display", "block");
+                        $loginModal.resize();
+                        $loginModal.on('hidden.bs.modal', function (e) {
                             window.CnnXt.Event.fire("onActionClosed", e);
                         });
 
@@ -9733,12 +9749,13 @@ var ConnextCampaign = function ($) {
                     //reset old conversation after expire - RETURN this in the future releases
                     //CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
 
+                    CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
+                    CnnXt.Event.fire("onDebugNote", "Conversation Expire: " + CURRENT_CONVERSATION.Props.expiredReason);
+
                     CURRENT_CONVERSATION = getNextConversation();
 
                     if (CURRENT_CONVERSATION) {
                         setDefaultConversationProps();
-                        CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
-                        CnnXt.Event.fire("onDebugNote", "Conversation Expire: " + CURRENT_CONVERSATION.Props.expiredReason);
                         return CURRENT_CONVERSATION;
                     } else {
                         return storedConversation;
@@ -11681,13 +11698,14 @@ var ConnextAppInsights = function ($) {
             accountId: masterId
         });
         window.appInsights = appInsights;
-
+        if (!appInsights.queue) {
+            appInsights.queue = [];
+        }
         appInsights.queue.push(function () {
             appInsights.context.addTelemetryInitializer(function (envelope) {
                 var telemetryItem = envelope.data.baseData;
                 if (envelope.data.baseType === 'RemoteDependencyData') {
-                    return telemetryItem.target === 'freegeoip.net'
-                        || telemetryItem.data.indexOf('connext') !== -1
+                    return telemetryItem.data.indexOf('connext') !== -1
                         || telemetryItem.target.indexOf('auth0') !== -1;
                 }
             });
@@ -11699,9 +11717,15 @@ var ConnextAppInsights = function ($) {
     }
 
     var trackEvent = function (name, data) {
-        var appInsightsData = getEventDataByName(name, data);
-
-        appInsights.trackEvent(name, appInsightsData);
+        try {
+            var appInsightsData = getEventDataByName(name, data);
+            appInsights.trackEvent(name, appInsightsData);
+        }
+        catch (e) {
+            if (CnnXt.GetOptions().debug) {
+                console.warn("track Application insights error");
+            }
+        }
     }
 
     var getAppInsightsData = function (additionalData) {
@@ -11832,7 +11856,7 @@ var ConnextAppInsights = function ($) {
     }
 }
 var CnnXt = function ($) {
-    var VERSION = '1.10.6';
+    var VERSION = '1.10.10';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
@@ -11854,7 +11878,7 @@ var CnnXt = function ($) {
         BatchCount: 5
     };
     var IS_CONNEXT_INITIALIZED = false;
-    var S3_DATA;
+    var S3_DATA;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     var RUN_TIMEOUT;
     var FIRST_RUN_EXECUTED = false;
     var defaultRunOffsetTime = 5000;
@@ -12167,15 +12191,14 @@ var CnnXt = function ($) {
                         //init AppInsights
                         CnnXt.AppInsights.init(OPTIONS.deviceId, masterId);
                     } catch (e) {
-                        CnnXt.AppInsights.init();
                         LOGGER.exception(NAME, fnName, e);
                     }
 
 
 
                     defineConfiguration();
-                    CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext,
-                        CnnXt.Utils.GetUserMeta());
+                    //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext,
+                    //    CnnXt.Utils.GetUserMeta());
                     CnnXt.Utils.HangleMatherTool();
                 });
 
@@ -12348,6 +12371,8 @@ var CnnXt = function ($) {
                             if (_.isObject(s3DataConfigLastPublishDate)) {
                                 if (s3DataConfigLastPublishDate.Reset && storedLastPublishDate != newConfiguration.Settings.LastPublishDate) {
                                     CnnXt.Storage.ResetConversationViews(null, newConfiguration.Settings.UseParentDomain);
+                                    CnnXt.Storage.SetCurrentConverstaion(null);
+                                    CnnXt.Storage.SetCurrentConversations({});
                                 }
                             }
                             CnnXt.Storage.SetLocalConfiguration(newConfiguration);
@@ -12699,17 +12724,10 @@ var CnnXt = function ($) {
                     GetLocalConfiguration: CnnXt.Storage.GetLocalConfiguration,
                     GetCurrentConversations: CnnXt.Storage.GetCurrentConversations,
                     GetCurrentConversation: CnnXt.Storage.GetCurrentConverstaion,
-                    GetCurrentMeterLevel: function () {
-                        var conversation = CnnXt.Storage.GetCurrentConverstaion();
-
-                        if (conversation) {
-                            return conversation.MeterLevelId;
-                        } else {
-                            return undefined;
-                        }
-                    },
+                    GetCurrentMeterLevel: function () { return Connext.GetOptions().currentMeterLevel; },
                     GetCampaignData: CnnXt.Storage.GetCampaignData,
                     GetRegistrationType: CnnXt.Storage.GetRegistrationType,
+                    GetActualZipCodes: CnnXt.Storage.GetActualZipCodes,
 
                     //deprecated 12.11.2017. approved with Dael
                     //GetViewedArticles: function () {

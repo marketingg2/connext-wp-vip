@@ -33,7 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'WP_CXT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WP_CXT_URL', plugin_dir_url( __FILE__ ) );
 define( 'WP_CXT_BASENAME', plugin_basename( __FILE__ ) );
-define( 'WP_CXT_VERSION', '1.10.4' );
+define( 'WP_CXT_VERSION', '1.10.10' );
 
 /**
  * The core plugin class that is used to define internationalization,
