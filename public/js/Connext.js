@@ -1,3 +1,11 @@
+/*
+* Version: 1.12.4 
+* Build: V.1.12.4-20180505.1 
+*/ 
+
+ window.connextVersion = "1.12.4"
+
+ window.connextBuild = "V.1.12.4-20180505.1"
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -4341,12 +4349,12 @@ var Fprinting = function ($) {
         cookieName: 'anonDeviceId',
         expireDays: 36500,
         //optionsToSkip: ['language', 'resolution', 'adblock', 'do_not_track', 'indexed_db'],
-        optionsWithCustomLogic : {
+        optionsWithCustomLogic: {
             user_agent: removeVersionFromUserAgent
         }
     }
 
-    function init () {
+    function init() {
         var deferred = jQuery.Deferred();
         var id = getCookie(defaultSettings.cookieName);
 
@@ -4357,7 +4365,7 @@ var Fprinting = function ($) {
                     excludeLanguage: true,
                     excludeScreenResolution: true,
                     excludeAdBlock: true,
-                    excludeDoNotTrack : true,
+                    excludeDoNotTrack: true,
                     preprocessor: function (key, value) {
                         //if (defaultSettings.optionsToSkip.indexOf(key) > -1) {
                         //    return 'skiped';
@@ -4407,7 +4415,7 @@ var Fprinting = function ($) {
         return "";
     };
 
-    function saveId (id) {
+    function saveId(id) {
         setCookie(defaultSettings.cookieName, id);
     };
 
@@ -4512,7 +4520,7 @@ var Fprinting = function ($) {
             Tablet: device.tablet(),
             Desktop: device.desktop()
         }
-    } 
+    }
 
     function generateGuid() {
         function s4() {
@@ -4572,9 +4580,9 @@ var ConnextLogger = function ($) {
             }
 
             var strOutput = strPreface + arrStrs.join(" => ");
-            
+
             if (arrObjs.length > 0) {
-                
+
                 console[logType](strOutput, arrObjs);
             } else {
                 console[logType](strOutput);
@@ -4586,31 +4594,40 @@ var ConnextLogger = function ($) {
 
     }
 
+    var IsDebuggingFunc = function () {
+        return isDebugging || localStorage.tellMeYourSecrets == 'sure';
+    }
+
     return {
         debug: function () {
-            var args = arguments;
-            //only call log if we are debugging
-            if (isDebugging) {
-                log("log", "Connext >>>> DEBUG <<<<< ", args);
-                
+            if (IsDebuggingFunc()) {
+                log("log", "Connext >>>> DEBUG <<<<< ", arguments);
             }
         },
         log: function () {
-            log("log", "Connext >>>> LOG <<<<< ", arguments);
+            if (IsDebuggingFunc()) {
+                log("log", "Connext >>>> LOG <<<<< ", arguments);
+            }
         },
         info: function () {
-            log("info", "Connext >>>> INFO <<<<< ", arguments);
+            if (IsDebuggingFunc()) {
+                log("info", "Connext >>>> INFO <<<<< ", arguments);
+            }
         },
         warn: function () {
             log("warn", "Connext >>>> WARN <<<<< ", arguments);
         },
         error: function () {
-            //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
-            log("exception", "MG2Connext >>>> ERROR <<<<< ", arguments);
+            if (IsDebuggingFunc()) {
+                //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
+                log("exception", "MG2Connext >>>> ERROR <<<<< ", arguments);
+            }
         },
         exception: function () {
-            //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
-            log("error", "MG2Connext >>>> EXCEPTION <<<<< ", arguments);
+            if (IsDebuggingFunc()) {
+                //TODO: For some reason FireBug is outputing the console.log() function along with passed in string, not sure why. It's no big deal since actual error is still shown first, but should look into a fix.
+                log("error", "MG2Connext >>>> EXCEPTION <<<<< ", arguments);
+            }
         },
         setDebug: function (_isDebugging) {
             isDebugging = _isDebugging;
@@ -4649,12 +4666,14 @@ var ConnextCommon = function () {
             //localhost: "https://dev-connext-api.azurewebsites.net/",
             dev: "https://dev-connext-api.azurewebsites.net/",
             test: "https://test-connext-api.azurewebsites.net/",
-            //stage: "http://localhost:34550/",
-            stage: 'https://stage-connext-api.azurewebsites.net/',
+            //stage: 'https://stage-connext-api.azurewebsites.net/',
+            //stage: 'https://stage-newsday-proxy-connext.azurewebsites.net/',
+            stage: 'https://stage-mng-proxy-connext.azurewebsites.net/',
             test20: 'https://test20-connext-api.azurewebsites.net/',
             demo: 'https://demo-connext-api.azurewebsites.net/',
             preprod: 'https://preprod-connext-api.azurewebsites.net/',
-            prod: 'https://api.mg2connext.com/'
+            //prod: 'https://api.mg2connext.com/'
+            prod: 'https://mng-api.mg2connext.com/'
         },
         APPInsightKeys: {
             localhost: "a57959cf-5e4d-4ab3-8a3e-d17f7e2a8bf8",
@@ -4694,14 +4713,16 @@ var ConnextCommon = function () {
             igmRegID: 'igmRegID',
             igmContent: 'igmContent',
             connext_user_Id: 'connext_anonymousUserId',
-            WhitelistSetId: "WhitelistSetId",
+            WhitelistSet: "WhitelistSet",
             WhitelistInfobox: "WhitelistInfobox",
+            NeedHidePinTemplate: "NeedHidePinTemplate",
             connext_user_profile: "connext_user_profile",
             connext_user_data: "connext_user_data",
             connext_paywallFired: "connext_paywallFired",
             connext_auth_type: 'connext_auth_type',
             connext_viewstructure: 'connext_viewstructure',
             connext_userLastUpdateDate: 'connext_userLastUpdateDate',
+           // connext_returnUrl: 'c_desturl',
             device_postfix: '_device'
         },
         MeterLevels: {
@@ -4714,12 +4735,13 @@ var ConnextCommon = function () {
             6: "Register",
             11: "CustomAction",
             27: "UserState",
-            32: "JSVar"
+            32: "JSVar",
+            38: "Activate"
 
         },
         ActionOptionMap: { //this maps action option values to this parent name...this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
-            Who: [5, 6, 14, 16, 17, 18, 19, 21, 23, 24, 25, 12], //ActionOption classes for WHO
-            What: [2, 7, 13, 20, 15, 22, 26], //ActionOption classes for WHO
+            Who: [5, 6, 14, 16, 17, 18, 19, 21, 23, 24, 25, 12, 27, 28, 29], //ActionOption classes for WHO
+            What: [2, 7, 13, 20, 15, 22, 26], //ActionOption classes for WHAT
             When: [8, 9, 10] //ActionOption classes for WHEN
         },
         WhenClassMap: { //this maps the when options based on ClassId....this is a temp fix until we get EF in the API to return the parentOptionName instead of just the ID.
@@ -4735,10 +4757,14 @@ var ConnextCommon = function () {
             "Equals": "==",
             "Not Equal": "!=",
             "Not Equals": "!=",
-            "More Then": ">",
-            "Less Then": ">",
-            "More Or Equal Then": ">=",
-            "Less Or Equal Then": "<="
+            "More Than": ">",
+            "Less Than": ">",
+            "More Or Equal Than": ">=",
+            "Less Or Equal Than": "<=",
+            "Yes": "true",
+            "No": "false",
+            "More Than Or Equals To": ">=",
+            "Less Than Or Equals To": "<="
         },
         ERROR: {
             NO_CONFIG: {
@@ -4767,12 +4793,38 @@ var ConnextCommon = function () {
             1: 'MG2',
             2: 'Janrain',
             3: 'GUP',
-            4: 'Auth0'
+            4: 'Auth0',
+            5: 'Custom'
         },
         DigitalAccessLevels: {
             Premium: 'PREMIUM',
             Upgrade: 'UPGRADE',
             Purchase: 'PURCHASE'
+        },
+        USER_STATES: {
+            NotLoggedIn: "Logged Out",
+            LoggedIn: "Logged In",
+            NoActiveSubscription: "No Active Subscription",
+            SubscribedNotEntitled: "Subscribed Not Entitled",
+            Subscribed: "Subscribed"
+        },
+        ValidationPatterns: {
+            email: /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
+            atLeast1Letter1Number: /(?=.*[a-zA-Z])(?=.*[\d])/,
+            atLeast1Letter: /(?=.*[a-zA-Z])/,
+            atLeast1CapitalLetter: /(?=.*[a-zA-Z])/,
+            atLeast1LowerCaseLetter: /(?=.*[a-z])/,
+            atLeast1UpperCaseLetter: /(?=.*[A-Z])/,
+            atLeast1SpecialCharacter: /(?=.*[!@#$%^&*])/,
+            atLeast1Number: /(?=.*[\d])/
+        },
+        TimeTypeMap: {
+            "m": "minutes",
+            "h": "hours",
+            "d": "days",
+            "w": "weeks",
+            "M": "months",
+            "Y": "years"
         },
         DisplayName: 'ConneXt',
         InfinityDate: '9999-01-01',
@@ -4784,12 +4836,14 @@ var ConnextEvents = function ($) {
 
     //#region GLOBALS
     var NAME = "Events";
-
+    const exludedEvents = ["onDynamicMeterFound", "onCampaignFound", "onHasAccess", "onHasAccessNotEntitled", "onHasNoActiveSubscription", "onAuthorized","onDebugNote"];
     var OPTIONS;
 
     //local reference to CnnXt.Logger
     var LOGGER;
     var MG2ACCOUNTDATA;
+    var MeterLevel = null, MeterLevelMethod = null;
+
 
     //not sure if there is a better way to do this, but this holds refernces to functions we should fire on certain events. (since the passed in 'event' on 'fire' is just a string we can't check if that string is a function.
     //NOTE: DEFAULT_FUNCTIONS are only fired when debug=true, since these are mainly used for Logging or updating the Debug Details panel. (This check is handled in the 'fire' function, so we don't need to check this again within any of the default functions).
@@ -4813,19 +4867,34 @@ var ConnextEvents = function ($) {
         "onActionClosed": onActionClosed,
         "onInit": onInit,
         "onButtonClick": onButtonClick,
-        "onAccessTemplateShown": onAccessTemplateShown,
-        "onAccessTemplateClosed": onAccessTemplateClosed,
         "onRun": onRun,
         "onFinish": onFinish,
-
-        //FLITTZ
+        //Getting Access Flow
+        "onAccessTemplateShown": onAccessTemplateShown,
+        "onAccessTemplateClosed": onAccessTemplateClosed,
+        "onAccessGranted": onAccessGranted,
+        "onAccessDenied": onAccessDenied,
+        //Flittz Flow
         "onFlittzPaywallShown": onFlittzPaywallShown,
         "onFlittzPaywallClosed": onFlittzPaywallClosed,
-        "onFlittzButtonClick": onFlittzButtonClick
-
+        "onFlittzButtonClick": onFlittzButtonClick,
+        //Activation Flow
+        "onActivationFormShown": onActivationFormShown,
+        "onActivationLoginStepShown": onActivationLoginStepShown,
+        "onActivationLoginStepClosed": onActivationLoginStepClosed, 
+        "onActivationLinkStepShown": onActivationLinkStepShown,
+        "onActivationLinkStepClosed": onActivationLinkStepClosed,
+        "onActivationLinkStepSubmitted": onActivationLinkStepSubmitted,
+        "onActivationLinkSuccessStepShown": onActivationLinkSuccessStepShown,
+        "onActivationLinkSuccessStepClosed": onActivationLinkSuccessStepClosed,
+        "onActivationLinkErrorStepShown": onActivationLinkErrorStepShown,
+        "onActivationLinkErrorStepClosed": onActivationLinkErrorStepClosed,
+        "onActivationFormClosed": onActivationFormClosed,
+        //Newsday
+        "onNewsdayButtonClick": onNewsdayButtonClick
     };
 
-    var NOTES = []; //(only used in debugging) - Holds array of messages from Events fired from the plugin. This array is displayed in the 'Notes' section of the Debug Details. It let's a user know major events and their results without having to dig through the console. Array is parsed using NOTES.join('<BR />') so they are displayed on separate lines within the Notes section (easier and faster than using UL and add LI's).
+    var NOTES = []; //(only used in debugging) - Holds array of messages from Events fired from the plugin. This array is displayed in the 'Notes' section of the Debug Details. It let's a user know major events and their results without having to dig through the LOGGER. Array is parsed using NOTES.join('<BR />') so they are displayed on separate lines within the Notes section (easier and faster than using UL and add LI's).
 
     //#endregion - Globals
 
@@ -4838,7 +4907,7 @@ var ConnextEvents = function ($) {
             LOGGER.debug(NAME, fnName, "Initializing Events...");
 
         } catch (ex) {
-            console.error(fnName, ex);
+            LOGGER.error(fnName, ex);
         }
     }
     //#endregion INIT Functions
@@ -4852,7 +4921,7 @@ var ConnextEvents = function ($) {
             NOTES.push(note);
             $("#ddNote").html(note);
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -4863,7 +4932,7 @@ var ConnextEvents = function ($) {
             LOGGER.debug("Fire Default onInit function.", e);
 
         } catch (e) {
-            console.error(fnName, 'EXCEPTION', e);
+            LOGGER.error(fnName, 'EXCEPTION', e);
         }
     }
 
@@ -4871,7 +4940,7 @@ var ConnextEvents = function ($) {
         var fnName = "onFlittzPaywallShown";
 
         try {
-            e.EventData.conversation = CnnXt.Storage.GetCurrentConverstaion();
+            e.EventData.conversation = CnnXt.Storage.GetCurrentConversation();
             e.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
             e.EventData.hasFlittz = OPTIONS.integrateFlittz;
 
@@ -4879,7 +4948,7 @@ var ConnextEvents = function ($) {
 
             LOGGER.debug("Flittz paywall shown", e);
         } catch (ex) {
-            console.error(NAME, fnName, "EXCEPTION", ex);
+            LOGGER.error(NAME, fnName, "EXCEPTION", ex);
         }
     }
 
@@ -4887,7 +4956,7 @@ var ConnextEvents = function ($) {
         var fnName = "onFlittzPaywallClosed";
 
         try {
-            e.EventData.conversation = CnnXt.Storage.GetCurrentConverstaion();
+            e.EventData.conversation = CnnXt.Storage.GetCurrentConversation();
             e.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
             e.EventData.hasFlittz = OPTIONS.integrateFlittz;
 
@@ -4895,7 +4964,7 @@ var ConnextEvents = function ($) {
 
             LOGGER.debug("Flittz paywall closed", e);
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -4903,7 +4972,7 @@ var ConnextEvents = function ($) {
         var fnName = "onFlittzButtonClick";
 
         try {
-            e.EventData.conversation = CnnXt.Storage.GetCurrentConverstaion();
+            e.EventData.conversation = CnnXt.Storage.GetCurrentConversation();
             e.EventData.viewCount = CnnXt.Campaign.GetCurrentConversationViewCount();
             e.EventData.hasFlittz = OPTIONS.integrateFlittz;
 
@@ -4912,7 +4981,7 @@ var ConnextEvents = function ($) {
             LOGGER.debug("Click on Flittz button", e);
 
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -4926,7 +4995,7 @@ var ConnextEvents = function ($) {
                 $('#ddNote').html(e.EventData.message);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -4937,7 +5006,7 @@ var ConnextEvents = function ($) {
             LOGGER.debug("Fire Default onDynamicMeterFound function.", e);
             $("#ddMeterSet").html(e.EventData);
         } catch (ex) {
-            console.error(NAME, fnName, "EXCEPTION", ex);
+            LOGGER.error(NAME, fnName, "EXCEPTION", ex);
         }
     }
 
@@ -4952,20 +5021,7 @@ var ConnextEvents = function ($) {
 
             CnnXt.Storage.SetMeter(e.EventData);
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
-        }
-    }
-
-    function onHasAccessToken(e) {
-        var fnName = "onHasAccessToken";
-
-        try {
-            if (CnnXt.GetOptions().debug) {
-                LOGGER.debug('Fire Default onHasAccessToken function.', e);
-                onDebugNote(e.EventData);
-            }
-        } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -4982,7 +5038,7 @@ var ConnextEvents = function ($) {
             }
             //$('#ddMeterLevel').html(CnnXt.Common.MeterLevels[e.level] + ' (' + e.method + ')');
         } catch (e) {
-            console.error(fnName, 'EXCEPTION', e);
+            LOGGER.error(fnName, 'EXCEPTION', e);
         }
     }
 
@@ -4995,7 +5051,7 @@ var ConnextEvents = function ($) {
                 onDebugNote(e.EventData);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5009,7 +5065,7 @@ var ConnextEvents = function ($) {
                 onDebugNote(e.EventData);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5022,7 +5078,7 @@ var ConnextEvents = function ($) {
                 onDebugNote(e.EventData);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5035,7 +5091,7 @@ var ConnextEvents = function ($) {
                 onDebugNote(e.EventData);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5048,7 +5104,7 @@ var ConnextEvents = function ($) {
                 onDebugNote(e.EventData);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5061,7 +5117,7 @@ var ConnextEvents = function ($) {
                 $('#ddCampaign').html(e.EventData.Name);
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5081,7 +5137,7 @@ var ConnextEvents = function ($) {
                 }
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5104,7 +5160,7 @@ var ConnextEvents = function ($) {
             CnnXt.Action.actionStartTime = Date.now();
 
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5117,9 +5173,13 @@ var ConnextEvents = function ($) {
                 CnnXt.Action.actionEndTime = Date.now();
                 var difference = CnnXt.Action.actionEndTime - CnnXt.Action.actionStartTime;
                 $("#ddViewTime")[0].textContent = difference + 'ms';
+
+                if (e && e.EventData && e.EventData.When && e.EventData.When.Time) {
+                    CnnXt.Action.SetTimedAction(e.EventData);
+                }
             }
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5127,10 +5187,17 @@ var ConnextEvents = function ($) {
         var fnName = "onButtonClick";
 
         try {
-
             LOGGER.debug("Fire Default onButtonClick", e);
+
+            //CnnXt.Storage.RemoveReturnUrlCookie();
+            //var buttonHtml = e.EventData.ButtonHTML;
+            //var returnUrlRegExp = /\?returnUrl=([^"]+)"/;
+            //var returnUrl = returnUrlRegExp.exec(buttonHtml);
+            //if (returnUrl && returnUrl[1]) {
+            //    CnnXt.Storage.SetReturnUrlCookie(returnUrl[1]);
+            //}
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5140,7 +5207,7 @@ var ConnextEvents = function ($) {
         try {
             LOGGER.debug("Fire Default onAccessTemplateShown", event);
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5150,7 +5217,145 @@ var ConnextEvents = function ($) {
         try {
             LOGGER.debug("Fire Default onAccessTemplateClosed", event);
         } catch (ex) {
-            console.error(fnName, 'EXCEPTION', ex);
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onAccessGranted(event) {
+        var fnName = "onAccessGranted";
+
+        try {
+            LOGGER.debug("Fire Default onAccessGranted", event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onAccessDenied(event) {
+        var fnName = "onAccessDenied";
+
+        try {
+            LOGGER.debug("Fire Default onAccessDenied", event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationFormShown(event) {
+        var fnName = "onActivationFormShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLoginStepShown(event) {
+        var fnName = "onActivationLoginStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLoginStepClosed(event) {
+        var fnName = "onActivationLoginStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkStepShown(event) {
+        var fnName = "onActivationLinkStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkStepClosed(event) {
+        var fnName = "onActivationLinkStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    } 
+
+    function onActivationLinkStepSubmitted(event) {
+        var fnName = "onActivationLinkStepSubmitted";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkSuccessStepShown(event) {
+        var fnName = "onActivationLinkSuccessStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkSuccessStepClosed(event) {
+        var fnName = "onActivationLinkSuccessStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkErrorStepShown(event) {
+        var fnName = "onActivationLinkErrorStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkErrorStepClosed(event) {
+        var fnName = "onActivationLinkErrorStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onNewsdayButtonClick(event) {
+        LOGGER.debug("Fire Default onNewsdayButtonClick", event);
+
+        if (window.setDestUrl && _.isFunction(window.setDestUrl)) {
+            window.setDestUrl();
+        }
+    }
+
+    function onActivationFormClosed(event) {
+        var fnName = "onActivationFormClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            LOGGER.error(fnName, 'EXCEPTION', ex);
         }
     }
 
@@ -5160,8 +5365,9 @@ var ConnextEvents = function ($) {
 
 
     function onFinish() {
-        LOGGER.debug("Fire Default onRun", event);
+        LOGGER.debug("Fire Default onFinish", event);
     }
+
 
     //#endregion PLUGIN EVENTS
 
@@ -5179,7 +5385,10 @@ var ConnextEvents = function ($) {
                 var eventResult = {
                     EventData: data
                 };
-
+                if (event == "onMeterLevelSet") {
+                    MeterLevel = data.level;
+                    MeterLevelMethod = data.method;
+                }
 
                 var registrationTypeId = null;
                 var AUTHSYSTEM = null;
@@ -5188,26 +5397,32 @@ var ConnextEvents = function ($) {
                     AUTHSYSTEM = CnnXt.Common.RegistrationTypes[registrationTypeId];
                 }
                
+                if (event == 'onLoggedIn') {
+                    AUTHSYSTEM = data.AuthSystem ? data.AuthSystem : '';
+                    MG2ACCOUNTDATA = data.MG2AccountData ? data.MG2AccountData : '';
+                }
+
                 eventResult.AuthSystem = AUTHSYSTEM;
                 eventResult.AuthProfile = CnnXt.Storage.GetUserProfile();
-                eventResult.MG2AccountData = Connext.Storage.GetUserData();
+                eventResult.MG2AccountData = MG2ACCOUNTDATA;
 
                 var action;
 
-                var currentConversation = CnnXt.Storage.GetCurrentConverstaion();
+                var currentConversation = CnnXt.Storage.GetCurrentConversation();
 
                 if (currentConversation) {
                     if (data && (data.actionId || data.id)) {
                         action = (data.actionId) ? _.findWhere(currentConversation.Actions, { id: data.actionId })
-                                                 : _.findWhere(currentConversation.Actions, { id: data.id });
+                                               : _.findWhere(currentConversation.Actions, { id: data.id });
                     }
                     eventResult.Config = CnnXt.Storage.GetLocalConfiguration();
                     eventResult.Action = action;
                     eventResult.Conversation = currentConversation;
                     eventResult.CampaignName = eventResult.Config.Campaign.Name;
                     eventResult.CampaignId = currentConversation.CampaignId;
-                    eventResult.MeterLevel = CnnXt.Common.MeterLevels[currentConversation.MeterLevelId];
-                    eventResult.MeterLevelId = currentConversation.MeterLevelId;
+                    eventResult.MeterLevel = CnnXt.Common.MeterLevels[MeterLevel];
+                    eventResult.MeterLevelId = MeterLevel;
+                    eventResult.MeterLevelMethod = MeterLevelMethod;
                 }
 
                 if (_.isObject(eventResult.EventData)) {
@@ -5244,13 +5459,14 @@ var ConnextEvents = function ($) {
                             OPTIONS[event](eventResult);
                         }
                     } catch (e) {
-                        console.error(fnName, 'on', 'EXCEPTION', e);
+                        LOGGER.error(fnName, 'on', 'EXCEPTION', e);
                     }
                     //send native custom event (this uses in wordpress)
                     var customEvent = new CustomEvent(event, { detail: eventResult });
                     document.dispatchEvent(customEvent);
 
-                    if(event !== 'onDebugNote'){
+                    if(exludedEvents.indexOf(event) === -1)
+                    {
                         CnnXt.AppInsights.trackEvent(event, eventResult);
                     }
 
@@ -5282,10 +5498,8 @@ var ConnextUtils = function ($) {
     //region FUNCTIONS
 
     var processConfiguration = function (data) {
-        /// <summary>This process a configuration into a friendlier JSON object by grouping conversations by meter level and grouping optionv values by class</summary>
-        /// <param name="data" type="Object">Configuration object from API</param>
-        /// <returns type="Object">Processed Configuration object</returns>
         var fnName = "processConfiguration";
+
         try {
             LOGGER.debug(NAME, fnName, "starting to process...");
             curSite = data.Site;
@@ -5293,8 +5507,22 @@ var ConnextUtils = function ($) {
             var configuration = {};
 
             //create settings property with only relevant  keys
-            configuration["Settings"] = _.pick(data, "AccessRules", "Active", "Code", "DefaultMeterLevel", "CampaignId", "DynamicMeterId", "Name", "LastPublishDate", "Settings", "UseParentDomain");
-            CnnXt.Event.fire("onDynamicMeterFound", data.DynamicMeter.Name);
+            configuration["Settings"] = _.pick(data,
+                "AccessRules", "Active", "Code", "DefaultMeterLevel",
+                "CampaignId", "DynamicMeterId", "Name", "LastPublishDate",
+                "Settings", "UseParentDomain", "ActivationTemplate", "DefaultProduct",
+                "ReturnUrl", "UseActivationFlow");
+
+            if (data.DynamicMeter) {
+                CnnXt.Event.fire("onDynamicMeterFound", data.DynamicMeter.Name);
+
+                data.DynamicMeter.Rules = _.sortBy(data.DynamicMeter.Rules, function (obj) {
+                    return obj.Priority;
+                });
+
+                configuration["DynamicMeter"] = processDynamicMeter(data.DynamicMeter);
+            }
+
             //check if we have a LastPublishDate;
             if (configuration.Settings) {
                 configuration.Settings = checkForLastPublishDate(configuration.Settings);
@@ -5303,22 +5531,18 @@ var ConnextUtils = function ($) {
             //set 'Site' specific settings, no need to process, just assign entire Site object.
             configuration["Site"] = data.Site;
 
-            //process the campaign data (group/organize all conversations and conversation actions).
-            configuration["Campaign"] = processCampaignData(data.Campaign);
-            //we don't need to process this object, except to make sure the rules are ordered correctly.
-            data.DynamicMeter.Rules = _.sortBy(data.DynamicMeter.Rules, function (obj) {
-                return obj.Priority;
-            });
-            configuration["DynamicMeter"] = processDynamicMeter(data.DynamicMeter);
-
+            if (data.Campaign) {
+                //process the campaign data (group/organize all conversations and conversation actions).
+                configuration["Campaign"] = processCampaignData(data.Campaign);
+            }
+            
             configuration["WhitelistSets"] = data["WhitelistSets"];
 
             LOGGER.debug(NAME, fnName, "done processing configuration", configuration);
-            //configuration["Views"] = data["Views"];       
 
             return configuration;
         } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+            LOGGER.log(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5336,7 +5560,7 @@ var ConnextUtils = function ($) {
 
             return configurationSettings;
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             return configurationSettings; //even if error, return original configurationSettings no matter what.
         }
     };
@@ -5354,12 +5578,11 @@ var ConnextUtils = function ($) {
 
             processedCampaign.Conversations = processConversationData(processedCampaign.Conversations);
 
-
             LOGGER.debug(NAME, fnName, "processedCampaign", processedCampaign);
             return processedCampaign;
 
         } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+            LOGGER.log(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5398,9 +5621,8 @@ var ConnextUtils = function ($) {
                 });
 
                 var processedGroup = {};
-
                 $.each(groupedOptions, function (key, val) {
-                    console.info("GROUPEDOPTIONS.EACH", key, val);
+                    LOGGER.info("GROUPEDOPTIONS.EACH", key, val);
                     var optionObj = {};
 
                     $.each(val, function (k, v) {
@@ -5420,8 +5642,8 @@ var ConnextUtils = function ($) {
                 val.Actions = processConversationActions(val.Actions);
 
             });
-
-
+            //sort conversations by Order value
+            conversations = _.sortBy(conversations, "Order");
             //group conversations by MeterLevelId
             var groupedConversationsByMeterLevel = _.groupBy(conversations, "MeterLevelId");
 
@@ -5434,7 +5656,7 @@ var ConnextUtils = function ($) {
             return groupedConversationsByMeterLevel;
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5490,7 +5712,7 @@ var ConnextUtils = function ($) {
             return _.sortBy(actions, "Order");
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5538,7 +5760,7 @@ var ConnextUtils = function ($) {
             return who;
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5549,18 +5771,58 @@ var ConnextUtils = function ($) {
         /// <returns type="Object">Proccessed 'What' object</returns>
         var fnName = "processWhatOptions";
         try {
-            //LOGGER.debug(NAME, fnName, 'options', options);
-            var what = {}; //empty object to assign properties to based on options
+            var what = {},
+                userDeviceType = CnnXt.Utils.getDeviceType(),
+                optionsGroupedByDeviceType = _.groupBy(options, 'CriteriaInstanceNumber'),
+                optionsForDeviceType = {},
+                commonOptions = [];
 
-            $.each(options, function (key, val) {
-                //LOGGER.debug(NAME, fnName, '---WHAT OPTIONS -- ..... EACH', val);
-                what[val.ActionOption.DisplayName] = val.Value;
+            $.each(optionsGroupedByDeviceType, function (instance, deviceTypeOptions) {
+                var deviceTypeOption;
+ 
+                deviceTypeOptions.forEach(function (option) {
+                    if (option.ActionOption.Name == 'TemplateDeviceSettings') {
+                        deviceTypeOption = option;
+                    }
+
+                    if (instance == 1) {//first instance has all necessary actions
+                        if (option.ActionOption.Name == 'ActionType') {
+                            commonOptions.push(option)
+                        }
+
+                        if (option.ActionOption.Name == 'UserDefinedData') {
+                            commonOptions.push(option)
+                        }
+                    }
+                });
+
+                if (!deviceTypeOption) {
+                    optionsForDeviceType['Default'] = deviceTypeOptions;
+                } else {
+                    optionsForDeviceType[deviceTypeOption.Value] = deviceTypeOptions;
+                }
+            });
+
+            if (optionsForDeviceType[userDeviceType]) {
+                optionsForDeviceType[userDeviceType].forEach(function (option) {
+                    what[option.ActionOption.DisplayName] = option.Value;
+                });
+            } else {
+                if (optionsForDeviceType['Default']) {
+                    optionsForDeviceType['Default'].forEach(function (option) {
+                        what[option.ActionOption.DisplayName] = option.Value;
+                    });
+                }
+            }
+
+            commonOptions.forEach(function (option) {
+                what[option.ActionOption.DisplayName] = option.Value;
             });
 
             return what;
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5582,11 +5844,13 @@ var ConnextUtils = function ($) {
 
             });
             //since these when 'options' are all the same 'type' we assign the when object with a property based on the WhenClassMap and the first object in the options array OptionClassId (not ideal, needs updated).
-            when[CnnXt.Common.WhenClassMap[options[0].ActionOption.ClassId]] = whenOptions;
+            if (options && options.length) {
+                when[CnnXt.Common.WhenClassMap[options[0].ActionOption.ClassId]] = whenOptions;
+            }
             return when;
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5647,7 +5911,7 @@ var ConnextUtils = function ($) {
             return dynamicmeter;
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5708,7 +5972,7 @@ var ConnextUtils = function ($) {
             CnnXt.Storage.SetCurrentConversations(newCurrentConversations);
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5808,11 +6072,11 @@ var ConnextUtils = function ($) {
                 });
 
             } catch (err) {
-                console.error(NAME, fnName, "CreateDebugDetailPanel");
+                LOGGER.error(NAME, fnName, "CreateDebugDetailPanel");
             }
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5838,7 +6102,7 @@ var ConnextUtils = function ($) {
             $panel.toggleClass("opened");
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5850,13 +6114,15 @@ var ConnextUtils = function ($) {
         try {
             e.preventDefault();
             LOGGER.debug(NAME, fnName, "clearAllSettings");
-            CnnXt.Storage.ClearConfigSettings();
-            CnnXt.API.ClearServerCache();
-            CnnXt.Storage.ResetConversationViews(CnnXt.Storage.GetCurrentConverstaion());
-            CnnXt.API.DeleteViewsByUserId();
-            CnnXt.Storage.SetRegistrationType({});
+            if (CnnXt.Storage.GetLocalConfiguration()) {
+                CnnXt.API.DeleteViewsByUserId();
+                CnnXt.API.ClearServerCache();
+                CnnXt.Storage.ResetConversationViews(CnnXt.Storage.GetCurrentConversation(), CnnXt.GetOptions().configSettings.UseParentDomain);
+                CnnXt.Storage.SetRegistrationType({});
+                CnnXt.Storage.ClearConfigSettings();
+            }
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5889,7 +6155,7 @@ var ConnextUtils = function ($) {
 
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -5905,7 +6171,7 @@ var ConnextUtils = function ($) {
     }
 
 
-    var fillUserMeta = function () {
+    var fillUserMeta = function() {
         var find,
             userAgent;
 
@@ -5918,97 +6184,107 @@ var ConnextUtils = function ($) {
         // Main functions
         // --------------
 
-        device.ios = function () {
+        device.ios = function() {
             return device.iphone() || device.ipod() || device.ipad();
         };
 
-        device.iphone = function () {
+        device.iphone = function() {
             return !device.windows() && find("iphone");
         };
 
-        device.ipod = function () {
+        device.ipod = function() {
             return find("ipod");
         };
 
-        device.ipad = function () {
+        device.ipad = function() {
             return find("ipad");
         };
 
-        device.android = function () {
+        device.android = function() {
             return !device.windows() && find("android");
         };
 
-        device.androidPhone = function () {
+        device.androidPhone = function() {
             return device.android() && find("mobile");
         };
 
-        device.androidTablet = function () {
+        device.androidTablet = function() {
             return device.android() && !find("mobile");
         };
 
-        device.blackberry = function () {
+        device.blackberry = function() {
             return find("blackberry") || find("bb10") || find("rim");
         };
 
-        device.blackberryPhone = function () {
+        device.blackberryPhone = function() {
             return device.blackberry() && !find("tablet");
         };
 
-        device.blackberryTablet = function () {
+        device.blackberryTablet = function() {
             return device.blackberry() && find("tablet");
         };
 
-        device.windows = function () {
+        device.windows = function() {
             return find("windows");
         };
 
-        device.windowsPhone = function () {
+        device.windowsPhone = function() {
             return device.windows() && find("phone");
         };
 
-        device.windowsTablet = function () {
+        device.windowsTablet = function() {
             return device.windows() && (find("touch") && !device.windowsPhone());
         };
 
-        device.fxos = function () {
+        device.fxos = function() {
             return (find("(mobile;") || find("(tablet;")) && find("; rv:");
         };
 
-        device.fxosPhone = function () {
+        device.fxosPhone = function() {
             return device.fxos() && find("mobile");
         };
 
-        device.fxosTablet = function () {
+        device.fxosTablet = function() {
             return device.fxos() && find("tablet");
         };
 
-        device.meego = function () {
+        device.meego = function() {
             return find("meego");
         };
 
-        device.cordova = function () {
+        device.cordova = function() {
             return window.cordova && location.protocol === "file:";
         };
 
-        device.nodeWebkit = function () {
+        device.nodeWebkit = function() {
             return typeof window.process === "object";
         };
 
-        device.mobile = function () {
-            return device.androidPhone() || device.iphone() || device.ipod() || device.windowsPhone() || device.blackberryPhone() || device.fxosPhone() || device.meego();
+        device.mobile = function() {
+            return device.androidPhone() ||
+                device.iphone() ||
+                device.ipod() ||
+                device.windowsPhone() ||
+                device.blackberryPhone() ||
+                device.fxosPhone() ||
+                device.meego();
         };
 
-        device.tablet = function () {
-            return device.ipad() || device.androidTablet() || device.blackberryTablet() || device.windowsTablet() || device.fxosTablet();
+        device.tablet = function() {
+            return device.ipad() ||
+                device.androidTablet() ||
+                device.blackberryTablet() ||
+                device.windowsTablet() ||
+                device.fxosTablet();
         };
 
-        device.desktop = function () {
+        device.desktop = function() {
             return !device.tablet() && !device.mobile();
         };
 
 
         // Simple UA string search
-        find = function (needle) {
+        find = function(needle) {
             return userAgent.indexOf(needle) !== -1;
         };
 
@@ -6034,28 +6310,76 @@ var ConnextUtils = function ($) {
         }
         if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
             userMeta.Browser = "Opera";
-        }
-        else if (navigator.userAgent.indexOf("Chrome") != -1) {
+        } else if (navigator.userAgent.indexOf("Chrome") != -1) {
             userMeta.Browser = "Chrome";
-        }
-        else if (navigator.userAgent.indexOf("Safari") != -1) {
+        } else if (navigator.userAgent.indexOf("Safari") != -1) {
             userMeta.Browser = "Safari";
-        }
-        else if (navigator.userAgent.indexOf("Firefox") != -1) {
+        } else if (navigator.userAgent.indexOf("Firefox") != -1) {
             userMeta.Browser = "Firefox";
-        }
-        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) //IF IE > 10
+        } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) //IF IE > 10
         {
             userMeta.Browser = "IE";
-        }
-        else {
+        } else {
             userMeta.Browser = "unknown";
         }
         userMeta.URL = window.location.href;
-    }
+    };
 
     //#endregion HELPERS
+    //HELPER FUNCTION FOR CIDR CALCULARION
+    function ipToIp32(ip) {
+        var ip32 = false;
+        if (typeof ip === 'string') {
+            var matches = ip.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+            if (matches) {
+                var ipBytes = [];
+                for (var index = 1; index < matches.length; index++) {
+                    var ipByte = parseInt(matches[index]);
+                    if ((ipByte >= 0) && (ipByte <= 255)) {
+                        ipBytes.push(ipByte);
+                    }
+                }
+                if (ipBytes.length === 4) {
+                    ip32 = bytesToInt32(ipBytes);
+                }
+            }
+        }
+        return ip32;
+    }
 
+    function ip32ToIp(ip32) {
+        var ip = false;
+        if ((typeof ip32 === 'number') && isFinite(ip32)) {
+            ip = int32ToBytes(ip32 & 0xFFFFFFFF).join('.');
+        }
+        return ip;
+    }
+
+    function int32ToBytes(int32) {
+        return [(int32 >>> 24) & 0xFF, (int32 >>> 16) & 0xFF, (int32 >>> 8) & 0xFF, (int32 >>> 0) & 0xFF];
+    }
+
+    function bytesToInt32(bytes) {
+        return (((((bytes[0] * 256) + bytes[1]) * 256) + bytes[2]) * 256) + bytes[3];
+    }
+
+    function buildMask(size) {
+        return size ? -1 << (32 - size) : 0;
+    }
+    //END FUNCTION FOR CIDR CALCULARION
+
+    function applyMask(ip32, mask) {
+        // Unfortunately, cannot simply use:
+        // return ip32 & mask;
+        // since JavaScript bitwise operations deal with 32-bit *signed* integers...
+        var ipBytes = int32ToBytes(ip32);
+        var maskBytes = int32ToBytes(mask);
+        var maskedBytes = [];
+        for (var index = 0; index < ipBytes.length; index++) {
+            maskedBytes.push(ipBytes[index] & maskBytes[index]);
+        }
+        return bytesToInt32(maskedBytes);
+    }
 
     return {
         init: function () {
@@ -6075,7 +6399,7 @@ var ConnextUtils = function ($) {
                     return new Date();
                 }
             } catch (e) {
-                console.error(NAME, "Now", e);
+                LOGGER.error(NAME, "Now", e);
             }
         },
         ProcessConfiguration:
@@ -6087,10 +6411,6 @@ var ConnextUtils = function ($) {
         },
         CreateDebugDetailPanel: function () {
             handleDebugDetails();
-        },
-        AddParameterToURL: function (_url, param) {
-            _url += (_url.split("?")[1] ? "&" : "?") + param;
-            return _url;
         },
         GetUrlParam: function (paramName) {
             var searchString = window.location.search.substring(1),
@@ -6106,6 +6426,67 @@ var ConnextUtils = function ($) {
             }
             return null;
         },
+        GetQueryStringParams: function (paramsNames) {
+            var queryStringSegments = window.location.search.slice(1).split('&'),
+                result = {},
+                isSerchFromArray = false,
+                necessaryParams = {};
+
+            if (_.isArray(paramsNames)) {
+                isSerchFromArray = true;
+
+                paramsNames.forEach(function (name) {
+                    necessaryParams[name] = true;
+                });
+            }
+
+            for (var i = queryStringSegments.length - 1; i >= 0; i--) {
+                var segment = [];
+
+                if (queryStringSegments[i]) {
+                    segment = queryStringSegments[i].split('=');
+
+                    if (isSerchFromArray) {
+                        if (necessaryParams[segment[0]]) {
+                            try {
+                                result[segment[0]] = decodeURIComponent(segment.slice(1).join('='));
+                            } catch (e) {
+                                result[segment[0]] = '';
+                            }
+                        }
+                    } else {
+                        try {
+                            result[segment[0]] = decodeURIComponent(segment.slice(1).join('='));
+                        } catch (e) {
+                            result[segment[0]] = '';
+                        }
+                    }
+                }
+            };
+
+            return result;
+        },
+        GetActivationUrlParams: function () {
+            return CnnXt.Utils.GetQueryStringParams(['email', 'subscriptionNumber', 'productCode', 'returnUrl']);
+        },
+        GetProductCode: function () {
+            var options = CnnXt.GetOptions(),
+                configSettings = (CnnXt.Storage.GetLocalConfiguration() || {}).Settings,
+                activationUrlParams = CnnXt.Utils.GetActivationUrlParams(),
+                productCode = null;
+
+                productCode = activationUrlParams.productCode;
+
+            if (!productCode) {
+                productCode = options.productCode;
+            }
+
+            if (!productCode) {
+                productCode = (configSettings) ? configSettings.DefaultProduct : null;
+            }
+
+            return productCode;
+        },        
         ParseCustomDate: function (input, format) {
             format = format || "dd.mm.yyyy"; // some default format'
             if (!input) return new Date();
@@ -6140,7 +6521,7 @@ var ConnextUtils = function ($) {
                 LOGGER.debug(NAME, "GetHiddenFormFieldValue", "hidValue", hidValue);
                 return hidValue; //$(selector).val();
             } catch (e) {
-                console.error(NAME, "GetHiddenFormFieldValue", e);
+                LOGGER.error(NAME, "GetHiddenFormFieldValue", e);
                 return ""; //we return empty string on error so any checks that call this function can still be evaluated.
             }
         },
@@ -6185,7 +6566,7 @@ var ConnextUtils = function ($) {
                 }
 
             } catch (e) {
-                console.error(NAME, null, "EXCEPTION", e);
+                LOGGER.error(NAME, null, "EXCEPTION", e);
                 return qualifier; //if we fail, return original qualifier.
             }
         },
@@ -6344,19 +6725,43 @@ var ConnextUtils = function ($) {
             }
             return name;
         },
-        AddParameterToURL: function (_url, param) {
-            _url = _url.replace(/#$/, '');
-            _url += (_url.split("?")[1] ? "&" : "?") + param;
-            return _url;
+        AddParameterToURL: function (url, paramName, param) {
+            var segment = paramName + '=' + param;
+
+            url = url.replace(/#$/, '');
+            url += (url.split("?")[1] ? "&" : "?") + segment;
+
+            return url;
         },
         AddReturnUrlParamToLink: function (link) {
-            //add clearUserState parameter to clear user state from cash to get fresh user state after redirect back
-            var resultLink = link;
-            if (link.indexOf('returnUrl=') == -1) {
-                var returnUrl = CnnXt.Utils.AddParameterToURL(window.location.href.split('?')[0], 'clearUserState=true');
-                resultLink = CnnXt.Utils.AddParameterToURL(link, 'returnUrl=' + returnUrl);
+            if (!~link.indexOf('returnUrl=')) {
+                var returnUrl = CnnXt.Utils.GetReturnUrl();
+
+                //add clearUserState parameter to clear user state from cash to get fresh user state after redirect back
+                returnUrl = CnnXt.Utils.AddParameterToURL(returnUrl, 'clearUserState', true);
+
+                link = CnnXt.Utils.AddParameterToURL(link, 'returnUrl', returnUrl);
             }
-            return resultLink;
+
+            return link;
+        },
+        GetReturnUrl: function () {
+            var configSettings = (CnnXt.Storage.GetLocalConfiguration() || {}).Settings,
+                returnUrl = '';
+
+            if (!returnUrl) {
+                returnUrl = CnnXt.Utils.GetQueryStringParams(['returnUrl']).returnUrl;
+            }
+
+            if (!returnUrl) {
+                returnUrl = configSettings.ReturnUrl;
+            }
+
+            if (!returnUrl) {
+                returnUrl = window.location.href.split('?')[0];
+            }
+
+            return returnUrl;
         },
         getUrlParam: function (urlParam) {
 
@@ -6373,6 +6778,18 @@ var ConnextUtils = function ($) {
                 }
             });
             return paramValue;
+        },
+        AddQueryParamsToAllLinks: function ($html) {
+            var $links = $html.find("[href]:not([data-dismiss])");
+
+            $links.each(function (index, link) {
+                var $link = $(link),
+                    href = $link.attr("href");
+
+                href = CnnXt.Utils.AddReturnUrlParamToLink(href);
+
+                $link.attr("href", href);
+            });
         },
         getSubdomains: function () {
 
@@ -6476,7 +6893,7 @@ var ConnextUtils = function ($) {
         ShapeUserData: function (data) {
             if (!data)
                 return {};
-            if (data.DigitalAccess && _.isString(data.DigitalAccess.AccessLevel)) {
+            if (data.DigitalAccess && _.isString(data.DigitalAccess.AccessLevel)){
                 data.DigitalAccess.AccessLevel = {
                     IsPremium: data.DigitalAccess.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Premium,
                     IsUpgrade: data.DigitalAccess.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Upgrade,
@@ -6500,6 +6917,63 @@ var ConnextUtils = function ($) {
             }
 
             return data;
+        },
+        GetTimeByType: function (value, type) {
+            var now = moment(),
+                endDate = new Date(value);
+            return moment(endDate).diff(now, CnnXt.Common.TimeTypeMap[type]);
+        },
+        IPWithinRangeCIDR: function (ip, cidr) {
+            var IPsRangeByCIDR = CnnXt.Utils.GetIPsRangeByCIDR(cidr);
+
+            var lowerBound = IPsRangeByCIDR[0],
+                upperBound = IPsRangeByCIDR[1];
+
+            // Put all IPs into one array for iterating and split all into their own 
+            // array of segments
+            var ips = [ip.split('.'), lowerBound.split('.'), upperBound.split('.')];
+
+            // Convert all IPs to ints
+            for (var i = 0; i < ips.length; i++) {
+
+                // Typecast all segments of all ips to ints
+                for (var j = 0; j < ips[i].length; j++) {
+                    ips[i][j] = parseInt(ips[i][j]);
+                }
+
+                // Bit shift each segment to make it easier to compare
+                ips[i] =
+                    (ips[i][0] << 24) +
+                    (ips[i][1] << 16) +
+                    (ips[i][2] << 8) +
+                    (ips[i][3]);
+            }
+
+            // Do comparisons
+            if (ips[0] >= ips[1] && ips[0] <= ips[2]) return true;
+
+            return false;
+        },
+        GetIPsRangeByCIDR: function (cidr) {
+            var ips = false;
+
+            if (typeof cidr === 'string') {
+                var matches = cidr.match(/^(\d+\.\d+\.\d+\.\d+)\/(\d+)$/);
+
+                if (matches) {
+                    var ip32 = ipToIp32(matches[1]);
+                    var prefixSize = parseInt(matches[2]);
+
+                    if ((typeof ip32 === 'number') && (prefixSize >= 0) && (prefixSize <= 32)) {
+                        var mask = buildMask(prefixSize);
+                        var start = applyMask(ip32, mask);
+
+                        ips = [ip32ToIp(start), ip32ToIp(start - mask - 1)];
+                    }
+                }
+            }
+
+            return ips;
         }
     };
 
@@ -6511,7 +6985,7 @@ var ConnextStorage = function ($) {
     var name = "STORAGE";
 
     //create local reference to CnnXt.Logger
-    var logger;
+    var LOGGER;
 
     var METER;
 
@@ -6579,7 +7053,7 @@ var ConnextStorage = function ($) {
         /// <returns>None</returns>
         var fnName = "getCookie";
         try {
-            logger.debug(name, fnName, key, "CnnXt.Common.StorageKeys[key] || key", CnnXt.Common.StorageKeys[key] || key);
+            LOGGER.debug(name, fnName, key, "CnnXt.Common.StorageKeys[key] || key", CnnXt.Common.StorageKeys[key] || key);
             return Cookies.get(CnnXt.Common.StorageKeys[key] || key);
         } catch (e) {
             console.log(name, fnName, "EXCEPTION", e);
@@ -6601,11 +7075,25 @@ var ConnextStorage = function ($) {
     }
 
     var addListners = function () {
+        var fnName = 'janrain status changed';
         listenStorageChange("janrainCaptureToken",
             function () {
                 CnnXt.Storage.SetUserState(null);
                 CnnXt.Storage.SetUserZipCodes(null);
-                CnnXt.Run();
+                if (CnnXt.Activation.IsActivationFlowRunning()) {
+                    CnnXt.User.CheckAccess()
+                        .done(function (data) {
+                            LOGGER.debug(fnName, "User.CheckAccess.Done", data);
+                        })
+                        .fail(function () {
+                            LOGGER.debug(fnName, "User.CheckAccess.Fail");
+                        })
+                        .always(function () {
+                            CnnXt.Activation.Run({ runAfterSuccessfulLogin: true });
+                        });
+                } else {
+                    CnnXt.Run();
+                }
             });
     };
 
@@ -6615,7 +7103,7 @@ var ConnextStorage = function ($) {
         /// <returns>None</returns>
         var fnName = 'setCookie';
         try {
-            logger.debug(name, fnName);
+            LOGGER.debug(name, fnName);
             var domains = window.location.host.split('.');
             var curdomain = window.location.host;
             if (curdomain.indexOf('localhost') > -1) {
@@ -6626,7 +7114,7 @@ var ConnextStorage = function ($) {
             }
             if (expiration) {
                 //will be an expiration. 
-                logger.debug(name, fnName, 'HasExpiration', 'key', key, 'expiration', expiration);
+                LOGGER.debug(name, fnName, 'HasExpiration', 'key', key, 'expiration', expiration);
                 return Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { expires: expiration, domain: curdomain });
             } else {
                 //this is a session cookie.
@@ -6643,7 +7131,7 @@ var ConnextStorage = function ($) {
         /// <returns>None</returns>
         var fnName = "removeCookie";
         try {
-            logger.debug(name, fnName);
+            LOGGER.debug(name, fnName);
 
             var domains = window.location.host.split(".");
             var curdomain = window.location.host;
@@ -6685,12 +7173,14 @@ var ConnextStorage = function ($) {
                 parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] = parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] ?
                     parsedViews[convId + CnnXt.Common.StorageKeys.device_postfix] + 1 : 1;
 
+                removeCookie(cookieName);
                 setCookie(cookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.InfinityDate), userCurDomain);
             } catch (ex) {
             }
         } else {
             var views = {};
             views[convId] = 1;
+            removeCookie(cookieName);
             setCookie(cookieName, JSON.stringify(views), new Date(CnnXt.Common.InfinityDate), userCurDomain);
         }
     };
@@ -6704,33 +7194,60 @@ var ConnextStorage = function ($) {
             CnnXt.API.GetViewData()
                 .done(function (successData) {
                     if (successData) {
-                        //var viewData = successData.ViewData;
-                        var views = JSON.parse(successData).filter(function (item) {
-                            return item.ViewCount;
-                        });
-                        parsedViews = {};
-                        if (views.length) {
-                            views.forEach(function (item) {
-                                parsedViews[item.Id] = item.ViewCount;
-                                parsedViews[item.Id + CnnXt.Common.StorageKeys.device_postfix] = item.DeviceViewCount;
-                            });
+                        ////var viewData = successData.ViewData;
+                        //var views = JSON.parse(successData).filter(function (item) {
+                        //    return item.ViewCount;
+                        //})[0];
+                        //parserViews = {};
+                        //parserViews[views.Id] = views.ViewCount;
+                        //setCookie(data.cookieName,
+                        //    JSON.stringify(parserViews),
+                        //    new Date('9999-01-01'),
+                        //    data.userCurDomain);
+                        //var configuration = getLocalStorage("configuration");
+                        //var conversations = configuration.Campaign.Conversations;
+                        //for (key in conversations) {
+                        //    conversations[key].forEach(function (conversation) {
+                        //        if (conversation.id == views.Id) {
+                        //            conversation.Props.Date.started = views.StartDate;
+                        //        }
+                        //    });
+                        //}
+                        //CnnXt.Storage.SetLocalConfiguration(configuration);
+
+                        //================
+                        if (successData.AllowedIpSet) {
+                            CnnXt.Storage.SetWhitelistSetIdCookie({ Id: successData.AllowedIpSet.Id, Expiration: successData.AllowedIpSet.Expiration }, 
+                                new Date(successData.AllowedIpSet.Expiration));
                         }
+                        parsedViews = {};
+                        var localConfig = Connext.Storage.GetLocalConfiguration();
+                        var configConversations = localConfig.Campaign.Conversations;
+                        for(meterLevelKey in CnnXt.Common.MeterLevels) {
+                            var meterLevel = CnnXt.Common.MeterLevels[meterLevelKey];
+                            if (successData[meterLevel] && successData[meterLevel].Conversations) {
+                                var conversations = successData[meterLevel].Conversations;
+                                conversations.forEach(function(conversation) {
+                                    if (conversation.Id && conversation.ViewCount) {
+                                        parsedViews[conversation.Id] = conversation.ViewCount;
+                                        parsedViews[conversation.Id + CnnXt.Common.StorageKeys.device_postfix] = conversation.DeviceViewCount;
+                                    }
+                                    if (configConversations && configConversations[meterLevel]) {
+                                        configConversations[meterLevel].forEach(function(configConversation) {
+                                            if (configConversation.id == conversation.Id) {
+                                                configConversation.Props.Date.started = conversation.StartDate;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                        localConfig.Campaign.Conversations = configConversations;
                         setCookie(data.cookieName,
                             JSON.stringify(parsedViews),
                             new Date(CnnXt.Common.InfinityDate),
                             data.userCurDomain);
-                        var configuration = getLocalStorage("configuration");
-                        var conversations = configuration.Campaign.Conversations;
-                        for (key in conversations) {
-                            conversations[key].forEach(function (conversation) {
-                                var item = _.findWhere(views, { Id: conversation.id });
-                                if (item) {
-                                    conversation.Props.views = item.ViewCount;
-                                    conversation.Props.Date.started = item.StartDate;
-                                }
-                            });
-                        }
-                        CnnXt.Storage.SetLocalConfiguration(configuration);
+                        CnnXt.Storage.SetLocalConfiguration(localConfig);
                     }
                     deferred.resolve();
                 }).fail(function (error) {
@@ -6746,7 +7263,7 @@ var ConnextStorage = function ($) {
     var getViewsData = function () {
         var userCurDomain = !CnnXt.GetOptions().configSettings.UseParentDomain;
         var cookieName = CnnXt.Utils.GetViewedArticlesCookiesName();
-        var oldCookieName = CnnXt.Utils.GetViewedArticlesCookiesOLDName();
+        var oldCookieName = CnnXt.Utils.GetViewedArticlesCookiesOLDName(); 
         var parsedViews;
 
         var articleCookie = getCookie(cookieName);
@@ -6757,7 +7274,7 @@ var ConnextStorage = function ($) {
             setCookie(oldCookieName, JSON.stringify(parsedViews), new Date(CnnXt.Common.CookieExpireDate), userCurDomain);
         }
 
-        if (articleCookie || articleCookie == "{}") {
+        if (articleCookie) {
             parsedViews = JSON.parse(articleCookie);
         } else {
             if (oldCookie) {
@@ -6778,8 +7295,8 @@ var ConnextStorage = function ($) {
     var getArticleCookie = function (convId) {
         var data = getViewsData();
         var parsedViews = data.parsedViews;
-        for (key in parsedViews) {
-            if (key == convId) {
+        for(key in parsedViews) {
+            if(key == convId){
                 return parsedViews[key];
             }
         }
@@ -6846,11 +7363,11 @@ var ConnextStorage = function ($) {
     };
 
     var getCurrentConversationViewCount = function (id) {
-        if (!CnnXt.Storage.GetCurrentConverstaion())
+        if (!CnnXt.Storage.GetCurrentConversation() && !id)
             return null;
         var convoId = id;
         if (convoId == null) {
-            convoId = CnnXt.Storage.GetCurrentConverstaion().id;
+            convoId = CnnXt.Storage.GetCurrentConversation().id;
         }
         var cookieName = CnnXt.Utils.GetViewedArticlesCookiesName();
         var articleCookie = getCookie(cookieName);
@@ -6924,8 +7441,8 @@ var ConnextStorage = function ($) {
 
     return {
         init: function () {
-            logger = CnnXt.Logger; //assign local reference to CnnXt.Logger
-            logger.debug(name, "Init");
+            LOGGER = CnnXt.Logger; //assign local reference to CnnXt.Logger
+            LOGGER.debug(name, "Init");
             addListners();
         },
         GetLocalConfiguration: function () {
@@ -6944,11 +7461,25 @@ var ConnextStorage = function ($) {
         GetUserZipCodes: function () {
             return getLocalStorage(CnnXt.Common.StorageKeys.user.zipCodes);
         },
+        SetCalculatedZipCode: function (zipCode) {
+            var fnName = 'SetCalculatedZipCode';
+
+            try {
+                if (zipCode.split(' ').length == 2) {
+                    zipCode = zipCode.split(' ')[0];
+                }
+
+                $.jStorage.set(CnnXt.Common.StorageKeys.customZip, zipCode);
+            } catch (ex) {
+                LOGGER.debug(NAME, fnName, ex);
+            }
+        },
         SetUserZipCodes: function (codes) {
             return setLocalStorage(CnnXt.Common.StorageKeys.user.zipCodes, codes);
         },
         GetActualZipCodes: function () {
-            var userZipCodes;
+            var userState = CnnXt.Storage.GetUserState(),
+                userZipCodes;
 
             if (CnnXt.User.isUserHasHighState()) {
                 userZipCodes = getLocalStorage(CnnXt.Common.StorageKeys.user.zipCodes) || [];
@@ -6960,8 +7491,13 @@ var ConnextStorage = function ($) {
         },
         GetLastPublishDate: function () {
             return getCookie(CnnXt.Utils.GetCookieName("lastPublishDate"));
-        },  
+        },
         SetLastPublishDate: function (data, expired) {
+            if (!expired) {
+                expired = new Date();
+                expired.setMonth(expired.getMonth() + 1);
+                expired = new Date(expired);
+            }
             var userCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
             return setCookie(CnnXt.Utils.GetCookieName("lastPublishDate"), data, expired, userCurDomain);
         },
@@ -6974,7 +7510,7 @@ var ConnextStorage = function ($) {
             return setLocalStorage(CnnXt.Common.StorageKeys.conversations.current, curConvos);
         },
         GetCampaignData: function () {
-            return getLocalStorage(CnnXt.Common.StorageKeys.configuration).Campaign;
+            return getLocalStorage(CnnXt.Common.StorageKeys.configuration) ? getLocalStorage(CnnXt.Common.StorageKeys.configuration).Campaign : null;
         },
         GetCurrentConversationViewCount: getCurrentConversationViewCount,
         GetViewedArticles: getViewedArticles,
@@ -7007,14 +7543,13 @@ var ConnextStorage = function ($) {
 
         ClearConfigSettings: function () {
             try {
-                CnnXt.Storage.SetViewedArticles([], CnnXt.Storage.GetCurrentConverstaion().id);
+                CnnXt.Storage.SetViewedArticles([], CnnXt.Storage.GetCurrentConversation().id);
             }
             catch (e) { }
 
             removeLocalStorage(CnnXt.Common.StorageKeys.conversations.current);
             removeLocalStorage(CnnXt.Common.StorageKeys.conversations.previous);
             removeLocalStorage(CnnXt.Common.StorageKeys.viewedArticles);
-            removeLocalStorage(CnnXt.Common.StorageKeys.configuration);
             removeLocalStorage(CnnXt.Common.StorageKeys.configurationSiteCode);
             removeLocalStorage(CnnXt.Common.StorageKeys.configurationConfigCode);
             removeLocalStorage(CnnXt.Common.StorageKeys.configurationIsCustom);
@@ -7025,6 +7560,8 @@ var ConnextStorage = function ($) {
             removeLocalStorage(CnnXt.Common.StorageKeys.customZip);
             removeLocalStorage(CnnXt.Common.StorageKeys.repeatablesInConv);
             localStorage.removeItem('_matherAnonId');
+            //last step - remove local configuration
+            removeLocalStorage(CnnXt.Common.StorageKeys.configuration);
         },
         ClearUser: function () {
             //this clears all user related  cookies
@@ -7061,13 +7598,13 @@ var ConnextStorage = function ($) {
         },
         GetAccessToken: function () {
             //TODO: Use some sort of encryption to encrypte access token and then use that to decode.
-            logger.debug(name, "GetAccessToken", CnnXt.Common.StorageKeys.accessToken);
+            LOGGER.debug(name, "GetAccessToken", CnnXt.Common.StorageKeys.accessToken);
             return getCookie("accessToken");
         },
-        GetCurrentConverstaion: function () {
+        GetCurrentConversation: function () {
             return getLocalStorage("CurrentConversation");
         },
-        SetCurrentConverstaion: function (e) {
+        SetCurrentConversation: function (e) {
             setLocalStorage("CurrentConversation", e);
         },
         SetUserToken: function (token) {
@@ -7108,26 +7645,35 @@ var ConnextStorage = function ($) {
             return getCookie("userMasterId");
         },
         GetWhitelistInfoboxCookie: function () {
-            return getCookie("WhitelistInfobox");
+            return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox));
         },
         SetWhitelistInfoboxCookie: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 30);
-            return setCookie("WhitelistInfobox", value, expire);
+            return setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox), value, expire);
+        },
+        RemoveWhitelistInfoboxCookie: function () {
+            return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistInfobox));
         },
         GetNeedHidePinTemplateCookie: function () {
-            return getCookie("NeedHidePinTemplate");
+            return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate));
         },
         SetNeedHidePinTemplateCookie: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 1);
-            return setCookie("NeedHidePinTemplate", value, expire);
+            return setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate), value, expire);
+        },
+        RemoveNeedHidePinTemplateCookie: function () {
+            return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.NeedHidePinTemplate));;
         },
         GetWhitelistSetIdCookie: function () {
-            return getCookie("WhitelistSetId");
+            return getCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet));
         },
         SetWhitelistSetIdCookie: function (value, expiration) {
-            return setCookie("WhitelistSetId", value, expiration);
+            return setCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet), value, expiration);
+        },
+        RemoveWhitelistSetIdCookie: function () {
+            return removeCookie(CnnXt.Utils.GetCookieName(CnnXt.Common.StorageKeys.WhitelistSet));
         },
         GetJanrainUser: function () {
             var profileData = localStorage.getItem(CnnXt.Common.StorageKeys.janrainUserProfile);
@@ -7206,6 +7752,15 @@ var ConnextStorage = function ($) {
         GetAccountDataExpirationCookie: function () {
             return Cookies.get("Connext_AccountDataExpirationCookie");
         },
+        //SetReturnUrlCookie: function(value) {
+        //    return setCookie(CnnXt.Common.StorageKeys.connext_returnUrl, value);
+        //},
+        //GetReturnUrlCookie: function () {
+        //    return Cookies.get(CnnXt.Common.StorageKeys.connext_returnUrl);
+        //},
+        //RemoveReturnUrlCookie: function () {
+        //    return removeCookie(CnnXt.Common.StorageKeys.connext_returnUrl);
+        //},
         WrongPin: function () {
             var value = CnnXt.Storage.GetPinAttempts();
             if (value) {
@@ -7243,6 +7798,58 @@ var ConnextStorage = function ($) {
         },
         GetMeter: function () {
             return METER;
+        },
+        UpdateWhitelistSetCookieName: function () {
+            var fnName = 'UpdateWhitelistSetCookieName';
+            try {
+
+                var oldCookieName = CnnXt.Common.StorageKeys.WhitelistSet;
+                var newCookieName = CnnXt.Utils.GetCookieName(oldCookieName);
+
+                if (getCookie(newCookieName) == undefined && getCookie(oldCookieName) != undefined) {
+                    var whitelistSet = JSON.parse(getCookie(oldCookieName));
+                    if (whitelistSet.Id && whitelistSet.Expiration) {
+                        CnnXt.Storage.SetWhitelistSetIdCookie(
+                            { Id: whitelistSet.Id, Expiration: whitelistSet.Expiration }, new Date(whitelistSet.Expiration));
+                        removeCookie(oldCookieName);
+                    }
+                }
+
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
+        },
+        UpdateWhitelistInfoboxCookieName: function () {
+            var fnName = 'UpdateWhitelistSetCookieName';
+            try {
+
+                var oldCookieName = CnnXt.Common.StorageKeys.WhitelistInfobox;
+                var newCookieName = CnnXt.Utils.GetCookieName(oldCookieName);
+
+                if (getCookie(newCookieName) == undefined && getCookie(oldCookieName) != undefined) {
+                    CnnXt.Storage.SetWhitelistInfoboxCookie(true);
+                    removeCookie(oldCookieName);
+                }
+
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
+        },
+        UpdateNeedHidePinTemplateCookieName: function () {
+            var fnName = 'UpdateNeedHidePinTemplateCookieName';
+            try {
+
+                var oldCookieName = CnnXt.Common.StorageKeys.NeedHidePinTemplate;
+                var newCookieName = CnnXt.Utils.GetCookieName(oldCookieName);
+
+                if (getCookie(newCookieName) == undefined && getCookie(oldCookieName) != undefined) {
+                    CnnXt.Storage.SetNeedHidePinTemplateCookie(true);
+                    removeCookie(oldCookieName);
+                }
+
+            } catch (ex) {
+                LOGGER.exception(NAME, fnName, ex);
+            }
         }
     }
 };
@@ -7260,19 +7867,27 @@ var ConnextAPI = function ($) {
     var API_URL;
     var BASE_API_ROUTE = "api/";
 
-    
+
     var ROUTES = { //this holds the routes for the different api calls.  We use this in the universal 'Get' method and use the 'args' parameters to set the full api URL.
-        GetConfiguration: _.template("configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>"),
-        GetUserByEmailAndPassword: _.template("user/email/<%= email %>/password/<%= password %>"),
+        GetConfiguration: _.template("configuration/siteCode/<%= siteCode %>/configCode/<%= configCode %>?publishDate=<%= publishDate %>"),
+        GetUserByEmailAndPassword: _.template("user?email=<%= email %>&password=<%= password %>"),
         GetUserByMasterId: _.template("user/id/<%= id %>"),
         GetUserByToken: _.template("user/token/<%= token %>"),
         EmailPreferences: "user/emailPreference",
         GetUserLastUpdateDate: _.template("user/getLastUpdateDate?masterId=<%=masterId%>"),
         CheckAccess: _.template("checkAccess/<%= masterId %>"),
         GetUserByEncryptedMasterId: _.template("user/encryptedMasterId?encryptedMasterId=<%= encryptedMasterId %>"),
-        ClearServerCache: _.template("clear/siteCode/<%=siteCode%>/configCode/<%=siteCode%>"),
+        ClearServerCache: _.template("clear/siteCode/<%=siteCode%>/configCode/<%=configCode%>"),
         viewsData: "views",
-        DeleteViewsByUserId: _.template("views/user/delete?siteCode=<%=SiteCode%>&configCode=<%=ConfigCode%>&userId=<%=UserId%>&masterId=<%=MasterId%>&settingsKey=<%=SettingsKey%>")
+        DeleteViewsByUserId: _.template("views/user/delete?siteCode=<%=SiteCode%>&configCode=<%=ConfigCode%>&userId=<%=UserId%>&masterId=<%=MasterId%>&settingsKey=<%=SettingsKey%>"),
+        CreateUser: _.template("user/create?email=<%=email%>&password=<%= password %>"),
+        ActivateByAccountNumber: _.template("user/Activate/customRegId/<%= customRegId %>/LastName/<%= LastName %>/accountNumber/<%= AccountNumber %>"),
+        ActivateByZipCodeAndHouseNumber: _.template("user/Activate/customRegId/<%= customRegId %>/LastName/<%= LastName %>/ZipCode/<%= ZipCode %>/HouseNumber/<%= HouseNumber %>"),
+        ActivateByZipCodeAndPhoneNumber: _.template("user/Activate/customRegId/<%= customRegId %>/LastName/<%= LastName %>/ZipCode/<%= ZipCode %>/Phone/<%= PhoneNumber %>"),
+        LinkingBySubscription: _.template("user/Activate/customRegId/<%= customRegId %>/Subscription/<%= SubscriptionId %>"),
+        GetDictionaryValue: _.template("dictionary/<%= ValueName %>"),
+        GetClientIpInfo: "utils/ipInfo",
+        CheckDigitalAccess: _.template("user/masterId/<%= masterId %>/DigitalAccess")
     };
 
 
@@ -7310,17 +7925,30 @@ var ConnextAPI = function ($) {
             {
                 stringMeta = JSON.stringify(args.options.meta);
             }
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
             //TODO: THIS IS VERY IMPORTANT....
             //      Right now we are adding in the 'siteCode' as a header and on the API we are disabling the AuthenticationHandler filter to check if the SiteCode and API-Key match the ones in the API web.config.  
             //      We need to find a way to enable this Authentication when calling the API via Postman or 3rd party source, but not require the API-Key when calling from the Connext Plugin since we do not want to store Token values in JS.
             //      I would think we would need some sort of checking based on the source header and if that domain matches a list of domains/tokens.
+
             return $.ajax({
                 //crossDomain: true,
                 //contentType: "application/json; charset=utf-8",
-                headers: { 'Site-Code': OPTIONS.siteCode, 'x-test': 'test', 'Access-Control-Allow-Origin': '*', 'Environment': CnnXt.GetOptions().environment, 'settingsKey': CnnXt.GetOptions().settingsKey, 'attr': CnnXt.GetOptions().attr, 'metaData': stringMeta, 'Version': CnnXt.GetVersion(), 'Source-System': 'Plugin' },
+                headers: {
+                    'Site-Code': OPTIONS.siteCode,
+                    'Paper-Code': CnnXt.GetOptions().paperCode,
+                    'Product-Code': CnnXt.Utils.GetProductCode(),
+                    'x-test': 'test',
+                    'Access-Control-Allow-Origin': '*',
+                    'Environment': CnnXt.GetOptions().environment,
+                    'settingsKey': CnnXt.GetOptions().settingsKey,
+                    'attr': CnnXt.GetOptions().attr,
+                    'metaData': stringMeta,
+                    'Version': CnnXt.GetVersion(),
+                    'Source-System': 'Plugin'
+                },
                 url: url,
                 type: "GET",
                 dataType: "json",
@@ -7356,12 +7984,94 @@ var ConnextAPI = function ($) {
                 }
             });
         } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+            LOGGER.log(NAME, fnName, "EXCEPTION", e);
             if (_.isFunction(args.options.onError)) {
                 args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
             }
         }
     };
+
+    var Post = function (args) {
+        /// <summary>Universal call to API. Handles parsing returned data and calling provided callbacks.</summary>
+        /// <param name="" type=""></param>
+        /// <returns>Deferred $.ajax</returns>
+        var fnName = "Post";
+        try {
+
+            //creates url based on the passed method option from routes object and then calls this function with the payload passed in (the routes object is an underscore template so the passed in payload will be parsed to create the correct url
+            var url = API_URL + ROUTES[args.method](args.options.payload);
+            LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
+            var stringMeta = "";
+            if (args.options.meta) {
+                stringMeta = JSON.stringify(args.options.meta);
+            }
+           // CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options.payload });
+
+            //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
+            //TODO: THIS IS VERY IMPORTANT....
+            //      Right now we are adding in the 'siteCode' as a header and on the API we are disabling the AuthenticationHandler filter to check if the SiteCode and API-Key match the ones in the API web.config.  
+            //      We need to find a way to enable this Authentication when calling the API via Postman or 3rd party source, but not require the API-Key when calling from the Connext Plugin since we do not want to store Token values in JS.
+            //      I would think we would need some sort of checking based on the source header and if that domain matches a list of domains/tokens.
+            return $.ajax({
+                //crossDomain: true,
+                //contentType: "application/json; charset=utf-8",
+                headers: {
+                    'Site-Code': OPTIONS.siteCode,
+                    'Paper-Code': CnnXt.GetOptions().paperCode,
+                    'Product-Code': CnnXt.Utils.GetProductCode(),
+                    'Config-Code': CnnXt.Storage.GetLocalConfiguration().Settings.Code,
+                    'x-test': 'test',
+                    'Access-Control-Allow-Origin': '*',
+                    'Environment': CnnXt.GetOptions().environment,
+                    'settingsKey': CnnXt.GetOptions().settingsKey,
+                    'attr': CnnXt.GetOptions().attr,
+                    'metaData': stringMeta,
+                    'Version': CnnXt.GetVersion(),
+                    'Source-System': 'Plugin'
+                },
+                url: url,
+                type: "POST",
+                data: args.options.payload,
+                dataType: "json",
+                success: function (data, textStatus, xhr) {
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
+                    try {
+
+                        if (!data || xhr.status == 204) {
+                            //empty results or returned a 204 'No Content', call onNull
+                            if (_.isFunction(args.options.onNull)) {
+                                args.options.onNull();
+                            }
+                        } else {
+                            //we have a return object
+                            if (_.isFunction(args.options.onSuccess)) {
+                                args.options.onSuccess(data);
+                            }
+                        }
+                    } catch (e) {
+                        LOGGER.exception(fnName, e);
+                    };
+                },
+                error: function (err) {
+                    LOGGER.error(fnName, "Ajax.Error", err);
+                    if (_.isFunction(args.options.onError)) {
+                        args.options.onError(err); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
+                    }
+                },
+                complete: function () {
+                    if (_.isFunction(args.options.onComplete)) {
+                        args.options.onComplete(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
+                    }
+                }
+            });
+        } catch (e) {
+            LOGGER.log(NAME, fnName, "EXCEPTION", e);
+            if (_.isFunction(args.options.onError)) {
+                args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
+            }
+        }
+    };
+
 
     var GetNewsletters = function (args) {
         /// <summary>Universal call to API. Handles parsing returned data and calling provided callbacks.</summary>
@@ -7375,7 +8085,7 @@ var ConnextAPI = function ($) {
             url += "?email=" + args.options.email + "&emailPreferenceId=" + args.options.id;
             LOGGER.debug(NAME, fnName, 'calling...', url, 'OPTIONS', OPTIONS);
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: args.options });
 
             //return $.ajax object in case we want to use this as a deferred object. We still process any callbacks in the opts argument in case we don't use the $.deferred object.
             //TODO: THIS IS VERY IMPORTANT....
@@ -7383,7 +8093,13 @@ var ConnextAPI = function ($) {
             //      We need to find a way to enable this Authentication when calling the API via Postman or 3rd party source, but not require the API-Key when calling from the Connext Plugin since we do not want to store Token values in JS.
             //      I would think we would need some sort of checking based on the source header and if that domain matches a list of domains/tokens.
             return $.ajax({
-                headers: { 'Site-Code': 'MNG', 'Access-Control-Allow-Origin': '*', 'Environment': CnnXt.GetOptions().environment, 'settingsKey': 'lang', 'Version': CnnXt.GetVersion(), 'Source-System': 'Plugin' },
+                headers: {
+                    'Site-Code': 'MNG', 'Access-Control-Allow-Origin': '*',
+                    'Environment': CnnXt.GetOptions().environment,
+                    'settingsKey': CnnXt.GetOptions().settingsKey,
+                    'Version': CnnXt.GetVersion(),
+                    'Source-System': 'Plugin'
+                },
                 url: url,
                 type: "GET",
                 dataType: "json",
@@ -7420,7 +8136,7 @@ var ConnextAPI = function ($) {
                 }
             });
         } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+            LOGGER.log(NAME, fnName, "EXCEPTION", e);
             if (_.isFunction(args.options.onError)) {
                 args.options.onError(); //for now just calling, since we probably don't need any data with this since it will be handled in either success or error callbacks above.
             }
@@ -7435,7 +8151,7 @@ var ConnextAPI = function ($) {
         };
         var url = API_URL + ROUTES["ClearServerCache"](payload);
 
-        CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: payload });
+        //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: payload });
 
         return $.ajax({
             //crossDomain: true,
@@ -7455,7 +8171,7 @@ var ConnextAPI = function ($) {
     }
 
     //#endregion API CALLS
-    
+
     return {
         init: function (options) {
             LOGGER = CnnXt.Logger; //assign local reference to CnnXt.LOGGER
@@ -7473,6 +8189,14 @@ var ConnextAPI = function ($) {
             return Get({ method: 'GetConfiguration', options: opts });
         },
         GetUserByEmailAndPassword: function (opts) {
+            if (opts && opts.payload) {
+                if (opts.payload.email) {
+                    opts.payload.email = encodeURIComponent(opts.payload.email);
+                }
+                if (opts.payload.password) {
+                    opts.payload.password = encodeURIComponent(opts.payload.password);
+                }
+            }
             return Get({ method: "GetUserByEmailAndPassword", options: opts });
         },
         ClearServerCache: function() {
@@ -7484,107 +8208,57 @@ var ConnextAPI = function ($) {
         GetUserByMasterId: function (opts) {
             return Get({ method: "GetUserByMasterId", options: opts });
         },
-        GetUserLastUpdateDate: function(opts) {
+        GetUserLastUpdateDate: function (opts) {
             return Get({ method: "GetUserLastUpdateDate", options: opts });
         },
         GetUserByEncryptedMasterId: function (opts) {
             return Get({ method: "GetUserByEncryptedMasterId", options: opts });
         },
-        /*SendViewData: function() {
-            var userData = {
-                    UserId: CnnXt.AppInsights.getUserId(),
-                    ConfigCode: CnnXt.GetOptions().configCode,
-                    SiteCode: CnnXt.GetOptions().siteCode,
-                    SettingsKey: CnnXt.GetOptions().settingsKey,
-                    URL: CnnXt.Utils.GetUrl(),
-                    URLHash: MD5(CnnXt.Utils.GetUrl()),
-                    DeviceType: CnnXt.Utils.getDeviceType(),
-                    IP: CnnXt.Utils.GetIP(),
-                    ZipCodes: CnnXt.Storage.GetActualZipCodes().join(','),
-                    CurrentViewCount: CnnXt.Campaign.GetCurrentConversationViewCount(),
-                    MeterLevel: CnnXt.Storage.GetCurrentConverstaion().MeterLevelId,
-                    PluginVersion: CnnXt.GetVersion(),
-                    ConversationName: CnnXt.Storage.GetCurrentConverstaion().Name,
-                    ConversationId: CnnXt.Storage.GetCurrentConverstaion().id,
-                    DynamicMeterName: CnnXt.Storage.GetLocalConfiguration().DynamicMeter.Name,
-                    DynamicMeterId: CnnXt.Storage.GetLocalConfiguration().DynamicMeter.id,
-                    CampaignName: CnnXt.Storage.GetLocalConfiguration().Campaign.Name,
-                    CampaignId: CnnXt.Storage.GetLocalConfiguration().Campaign.id,
-                    OS: CnnXt.Utils.GetUserMeta().OS,
-                    Browser: CnnXt.Utils.GetUserMeta().Browser,
-                    ConnextUserState: CnnXt.User.getUserState(),
-                    //masterId: CnnXt.User.getMasterId()
+        CreateUser: function (opts) {
+            if (opts && opts.payload) {
+                if (opts.payload.email) {
+                    opts.payload.email = encodeURIComponent(opts.payload.email);
+                }
+                if (opts.payload.password) {
+                    opts.payload.password = encodeURIComponent(opts.payload.password);
+                }
             }
-            var data = {
-                userData: userData,
-                masterId: 'qwerty'
-            }
+            return Post({ method: "CreateUser", options: opts });
+        },
+        ActivateByAccountNumber: function (opts) {
+            return Post({ method: "ActivateByAccountNumber", options: opts });
+        },
+        ActivateByZipCodeAndHouseNumber: function (opts) {
+            return Post({ method: "ActivateByZipCodeAndHouseNumber", options: opts });
+        },
+        ActivateByZipCodeAndPhoneNumber: function (opts) {
+            return Post({ method: "ActivateByZipCodeAndPhoneNumber", options: opts });
+        },
+        LinkingBySubscription: function (opts) {
+            return Post({ method: "LinkingBySubscription", options: opts });
+        },
+        SendViewData: function (data) {
+            var fnName = 'SendViewData';
+
+           // CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData, ApiPayload: data });
 
             return $.ajax({
-                url: API_URL + 'collectdata',
+                url: API_URL + ROUTES.viewsData,
+                headers: {
+                    'Environment': CnnXt.GetOptions().environment
+                },
                 type: "POST",
-                //contentType: 'application/json; charset=utf-8',
                 data: data,
                 dataType: "json",
                 success: function (data, textStatus, xhr) {
-                    LOGGER.debug(NAME, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
+                    LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
                 },
                 error: function (err) {
+                    LOGGER.error(fnName, "Ajax.Error", err);
                 },
                 complete: function () {
                 }
             });
-        },*/
-        SendViewData: function() {
-            var fnName = 'SendViewData';
-
-            try {
-
-                var conversationData = [];
-                var conversations = CnnXt.Storage.GetLocalConfiguration().Campaign.Conversations;
-                for (key in conversations) {
-                    conversations[key].forEach(function(conversation) {
-                        var views = CnnXt.Storage.GetDeviceViews(conversation.id);
-                        conversationData.push({
-                            Id: conversation.id,
-                            ViewCount: views,
-                            StartDate: conversation.Props.Date.started
-                        });
-                    });
-                }
-                var data = {
-                    UserId: CnnXt.GetOptions().deviceId,
-                    ConfigCode: CnnXt.GetOptions().configCode,
-                    SiteCode: CnnXt.GetOptions().siteCode,
-                    SettingsKey: CnnXt.GetOptions().settingsKey,
-                    ViewData: JSON.stringify(conversationData)
-                };
-                if (CnnXt.User.getMasterId()) {
-                    var id = CnnXt.User.getMasterId();
-                    id = decodeURIComponent(id);
-                    data.masterId = id;
-                }
-
-                CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall,
-                    { ApiUrl: API_URL + ROUTES.viewsData, ApiPayload: data });
-
-                return $.ajax({
-                    url: API_URL + ROUTES.viewsData,
-                    type: "POST",
-                    data: data,
-                    dataType: "json",
-                    success: function(data, textStatus, xhr) {
-                        LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "textStatus", textStatus, "data", data, "xhr", xhr);
-                    },
-                    error: function(err) {
-                        LOGGER.error(fnName, "Ajax.Error", err);
-                    },
-                    complete: function() {
-                    }
-                });
-            } catch (e) {
-                console.error(NAME, fnName, "EXCEPTION", e);
-            }
         },
         GetViewData: function() {
             var data = {
@@ -7594,10 +8268,13 @@ var ConnextAPI = function ($) {
                 SettingsKey: CnnXt.GetOptions().settingsKey
             };
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.viewsData });
 
             return $.ajax({
                 url: API_URL + ROUTES.viewsData,
+                headers: {
+                    'Environment': CnnXt.GetOptions().environment
+                },
                 type: "GET",
                 data: data
             });
@@ -7611,7 +8288,7 @@ var ConnextAPI = function ($) {
                 SettingsKey: CnnXt.GetOptions().settingsKey
             };
 
-            CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.DeleteViewsByUserId });
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: API_URL + ROUTES.DeleteViewsByUserId });
 
             return $.ajax({
                 url: API_URL + ROUTES.DeleteViewsByUserId(data),
@@ -7629,7 +8306,7 @@ var ConnextAPI = function ($) {
                 Meta.publishFile.url = jsonURL;
                 //return $.ajax since it is a deferred object and we use that in the calling CnnXt.Core function.
 
-                CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: jsonURL });
+                //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: jsonURL });
 
                 return $.ajax({
                     crossDomain: true,
@@ -7653,7 +8330,7 @@ var ConnextAPI = function ($) {
                     }
                 });
             } catch (e) {
-                console.error(NAME, fnName, '<<EXCEPTION>>', e);
+                LOGGER.error(NAME, fnName, '<<EXCEPTION>>', e);
                 Meta.reason = CnnXt.Common.DownloadConfigReasons.getPublishFailed;
                 Meta.publishFile.ex = e;
                 //deferred.reject(e);
@@ -7661,6 +8338,23 @@ var ConnextAPI = function ($) {
         },
         NewsletterSubscribe: function (opts) {
             return GetNewsletters({ method: "NewsletterSubscribe", options: opts });
+        },
+        GetProductCode: function () {
+            var payload = {
+                ValueName: 'productCode'
+            }
+
+            return Get({ method: "GetDictionaryValue", options: { payload: payload } });
+        },
+        GetClientIpInfo: function () {
+            var url = CnnXt.Common.APIUrl[CnnXt.GetOptions().environment] + BASE_API_ROUTE + ROUTES.GetClientIpInfo;
+            return $.ajax({
+                url: url,
+                type: "GET"
+            });
+        },
+        CheckDigitalAccess: function (opts) {
+            return Get({ method: "CheckDigitalAccess", options: opts });
         }
     }
 };
@@ -7680,17 +8374,10 @@ var ConnextUser = function ($) {
     var AUTH_TIMING = {};// this holds timeing tests for authentication. We set start/end times when we call 3rd party authentications to use in the 'Debug Details' panel.  This let's us show why/if we have long processing times (if they are caused by waiting on the authentication from a 3rd party).
     var FORM_SUBMIT_LOADER, FORM_ALERT; //references to the login loader and alert.
     var JANRAIN_LOADED; //var that is checked/updated when janrain is loaded.
-    var USER_STATES = {
-        NotLoggedIn: "Logged Out",
-        LoggedIn: "Logged In",
-        NoActiveSubscription: "No Active Subscription",
-        SubscribedNotEntitled: "Subscribed Not Entitled",
-        Subscribed: "Subscribed"
-    };
+    var USER_STATES;
     var GUP_SETTINGS;
-    var USER_STATE = USER_STATES.NotLoggedIn;
+    var USER_STATE;
     var TIMEOUT;
-    var lock;
     var masterId;
     var USER_DATA = {};
     var incorrectCreditsMessage = "UserName or Password invalid. Please try again or click on the Forgot/Reset Password link to update your password, or create an account if you have never registered an email address with us.";
@@ -7734,6 +8421,7 @@ var ConnextUser = function ($) {
         LogoutButton: "[data-mg2-action=logout]",
         SubscribeButton: '[data-mg2-action="submit"]',
         SubmitZipCode: '[data-mg2-action="Zipcode"]',
+        ConnextRun:'[data-mg2-action="connextRun"]',
         OpenNewsletterWidget: '[data-mg2-action="openNewsletterWidget"]',
         LoginModal: '<div data-mg2-alert="login" data-template-id="23" data-display-type="modal" data-width="400" id="mg2-login-modal"  tabindex="-1" class="Mg2-connext modal fade in"><div class="modal-body picker-bg"><i class="fa fa-times closebtn" data-dismiss="modal" aria-label="Close" aria-hidden="true"></i><form><h1 class="x-editable-text text-center h3">LOGIN</h1><p class="x-editable-text text-center m-b-2" >to save access to articles or get newsletters, allerts or recomendations — all for free</p><label class="textColor4 x-editable-text" >E-mail</label><input type="email" data-mg2-input="Email" class="text" name="email" value=""   data-mg2-input="Email" /><label class="textColor4 x-editable-text">Password</label><input type="password" data-mg2-input="Password" class="text" name="password" value=""  data-mg2-input="Password" /><a href="" data-mg2-submit="login" class="input submit x-editable-text" title="Login">Login</a></form></div></div>',
         CheckAccessPopup: '<div class="Mg2-connext modal fade in" id="CheckAccessPopup" data-display-type="modal" data-width="300" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-body">We noticed that your access status has changed. Page will be reloaded based on your new access permissions</div><div class="modal-footer text-center"><button type="button" id="ConnextRunBtn" class="btn btn-default" data-dismiss="modal">OK</button></div></div></div></div>'
@@ -7772,12 +8460,12 @@ var ConnextUser = function ($) {
                         href = $this.attr("href"),
                         email = $this.parents(".Mg2-connext").find('[data-mg2-input="Email"]').val();
 
-                    href = CnnXt.Utils.AddParameterToURL(href, "email=" + email);
+                    href = CnnXt.Utils.AddParameterToURL(href, "email", email);
                     $this.attr("href", href);
                     window.location.href = href;
 
                 } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
             });
 
@@ -7791,7 +8479,7 @@ var ConnextUser = function ($) {
                         href = $this.attr("href"),
                         zip = $this.parents(".Mg2-connext").find('[data-mg2-input="Zipcode"]').val();
 
-                    href = CnnXt.Utils.AddParameterToURL(href, "zipcode=" + zip);
+                    href = CnnXt.Utils.AddParameterToURL(href, "zipcode", zip);
                     $this.attr("href", href);
                     if ($this[0].hasAttribute("target")) {
                         window.open(href, "_blank");
@@ -7799,10 +8487,16 @@ var ConnextUser = function ($) {
                         window.location.href = href;
                     }
                 } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
             });
-
+            //$("body").on("click", UI.ConnextRun, function(e) {
+            //    e.preventDefault();
+            //    var fnName = UI.ConnextRun + ".CLICK";
+            //    LOGGER.debug(NAME, fnName);
+            //    CnnXt.Storage.SetUserState(null);
+            //    CnnXt.Run();
+            //});
             $("body").on("click", UI.OpenNewsletterWidget, function (e) {
                 e.preventDefault();
                 var fnName = UI.OpenNewsletterWidget + ".CLICK";
@@ -7833,7 +8527,7 @@ var ConnextUser = function ($) {
 
                     mg2WidgetAPI.openNewsletter(params);
                 } catch (ex) {
-                    console.error(Name, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
             });
 
@@ -7847,7 +8541,7 @@ var ConnextUser = function ($) {
                         href = $this.attr("href"),
                         email = $this.parents(".Mg2-connext").find('[data-mg2-input="Email"]').val();
                     href = CnnXt.Utils.AddReturnUrlParamToLink(href);
-                    href = CnnXt.Utils.AddParameterToURL(href, "email=" + email);
+                    href = CnnXt.Utils.AddParameterToURL(href, "email", email);
                     $this.attr("href", href);
                     if ($this[0].hasAttribute("target")) {
                         window.open(href, "_blank");
@@ -7855,7 +8549,7 @@ var ConnextUser = function ($) {
                         window.location.href = href;
                     }
                 } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
             });
 
@@ -7882,7 +8576,7 @@ var ConnextUser = function ($) {
                         JanrainAuthenticate($("[data-mg2-input=Username]:visible").val(), $("[data-mg2-input=Password]:visible").val());
                     }
                 } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
 
             });
@@ -7902,11 +8596,11 @@ var ConnextUser = function ($) {
                         $('#capture_signIn_traditionalSignIn_password').val(password);
                         $('#capture_signIn_traditionalSignIn_signInButton').click();
 
-                    } else console.error("No janrain global object found...");
+                    } else LOGGER.error("No janrain global object found...");
 
 
                 } catch (e) {
-                    console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                    LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
                 }
 
             });
@@ -7916,24 +8610,22 @@ var ConnextUser = function ($) {
                 e.preventDefault();
                 var fnName = UI.ActionShowLogin + ".Click";
                 try {
-                    //LOGGER.debug(NAME, fnName);
-
                     LOGGER.debug(NAME, fnName, "IS_LOGGED_IN", IS_LOGGED_IN);
 
                     if (AUTH_TYPE.MG2) {
                         //this is MG2 Auth type, show MG2 Login Modal.
-                        $(UI.LoginModal).addClass("in");
-                        $(UI.LoginModal).attr("id", "mg2-login-modal");
-                        var loginModal = $(UI.LoginModal).connextmodal({ backdrop: "true" });
-                        $(UI.LoginModal).css("display", "block");
-                        $("[data-display-type=modal]").resize();
-                        $(loginModal).on('hidden.bs.modal', function (e) {
-                            window.CnnXt.Event.fire("onActionClosed", e);
-                        });
+                        var $loginModal = $(UI.LoginModal);
 
-                        ////FOR TESTING, auto add values.
-                        //$(UI.InputUsername).val('rmsmola+2222@gmail.com');
-                        //$(UI.InputPassword).val('testing123');
+                        $loginModal.addClass("in");
+                        $loginModal.attr("id", "mg2-login-modal");
+                        $loginModal.css("display", "block");
+                        CnnXt.Utils.AddQueryParamsToAllLinks($loginModal);
+                        $loginModal.connextmodal({ backdrop: "true" });
+                        $loginModal.resize();
+
+                        $loginModal.on('hidden.bs.modal', function (e) {
+                            CnnXt.Event.fire("onActionClosed", e);
+                        });
 
                     } else if (AUTH_TYPE.GUP) {
                         //this is a GUP AuthType, so show GUP popup modal
@@ -7941,21 +8633,21 @@ var ConnextUser = function ($) {
                     } else if (AUTH_TYPE.Janrain) {
                         if (window.janrain) {
                             janrain.capture.ui.modal.open();
-                        } else console.error("No janrain global object found...");
+                        } else LOGGER.error("No janrain global object found...");
                     }
                     else if (AUTH_TYPE.Auth0) {
                         if (Auth0Lock) {
                             showAuth0Login();
-                        } else console.error("No Auth0 global object found...");
+                        } else LOGGER.error("No Auth0 global object found...");
                     }
                     window.CnnXt.Event.fire("onActionShown", e);
                 } catch (err) {
-                    console.error(NAME, fnName, "Exception", err);
+                    LOGGER.error(NAME, fnName, "Exception", err);
                 }
             });
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
         }
 
     };
@@ -7990,22 +8682,38 @@ var ConnextUser = function ($) {
                 lock.on("authenticated", function (authResult) {
                     lock.getUserInfo(authResult.accessToken, function (error, profile) {
                         if (error) {
-                            console.error('showAuth0Login', '', "<<EXCEPTION>>", error);
+                            LOGGER.error('showAuth0Login', '', "<<EXCEPTION>>", error);
                             CnnXt.Storage.SetUserProfile('');
                             return;
                         }
                         CnnXt.Storage.SetUserProfile(profile);
-                        CnnXt.Run();
+                        if (CnnXt.Activation.IsActivationFlowRunning()) {
+                            CnnXt.User.CheckAccess()
+                                .done(function (data) {
+                                    LOGGER.debug(NAME, fnName, "User.CheckAccess.Done", data);
+                                })
+                                .fail(function () {
+                                    LOGGER.debug(NAME, fnName, "User.CheckAccess.Fail");
+                                })
+                                .always(function () {
+                                    CnnXt.Activation.Run({ runAfterSuccessfulLogin: true });
+                                });
+                        } else {
+                            CnnXt.Run();
+                        }
                     });
                 });
-
+            } else if (OPTIONS.Site.RegistrationTypeId == 5) {
+                LOGGER.debug(NAME, fnName, "IsCustomAuth");
+                //Registration type Custom
+                AUTH_TYPE[CnnXt.Common.RegistrationTypes[5]] = true;
             } else {
                 throw "Unknown Registration Type";
             }
             registerEventlisteners();
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
     //#endregion INIT Functions
@@ -8020,8 +8728,9 @@ var ConnextUser = function ($) {
 
         var deferred = $.Deferred();
         var lastUpdateDateDeferred = $.Deferred();
+        var customAuthTypeDeferred = $.Deferred();
 
-        if (USER_DATA && USER_DATA.MasterId) {
+        if (!AUTH_TYPE.Custom && USER_DATA && USER_DATA.MasterId) {
             CnnXt.API.GetUserLastUpdateDate({
                 payload: { masterId: USER_DATA.MasterId },
                 onSuccess: function (data) {
@@ -8068,120 +8777,173 @@ var ConnextUser = function ($) {
                 }
             }
 
-            if (USER_STATE != null && USER_STATE != undefined && !AUTH_TYPE.Auth0) {
+            if (AUTH_TYPE.Custom) {
+                try {
+                    Connext.GetOptions().authSettings.CalculateAuthStatusFunc()
+                        .done(function (data) {
+                            if (_.values(USER_STATES).indexOf(data) == -1) {
+                                throw "Unknown user state";
+                            }
+                            USER_STATE = data;
+                            CnnXt.Storage.SetUserState(USER_STATE);
+                            CnnXt.Storage.SetAccountDataExpirationCookie(true);
+                            if (USER_STATE != USER_STATES.NotLoggedIn && !CnnXt.Storage.GetUserProfile()) {
+                                Connext.GetOptions().authSettings.GetAuthProfileFunc()
+                                    .done(function(authProfile) {
+                                        try {
+                                            CnnXt.Storage.SetUserProfile(authProfile);
 
-                if (AUTH_TYPE.Janrain) {
-                    if (!window.localStorage.getItem("janrainCaptureToken")) {
-                        USER_STATE = USER_STATES.NotLoggedIn;
-                        CnnXt.Storage.SetUserState(USER_STATE);
-                    }
-                }
+                                            var userDataObj = {};
+                                            if (authProfile.MasterId) {
+                                                userDataObj.MasterId = authProfile.MasterId;
+                                                masterId = authProfile.MasterId;
+                                            } else {
+                                                LOGGER.debug(NAME, fnName, "authProfile.MasterId is undefined");
+                                            }
+                                            if (authProfile.DisplayName) {
+                                                userDataObj.DisplayName = authProfile.DisplayName;
+                                            } else {
+                                                LOGGER.debug(NAME, fnName, "authProfile.DisplayName is undefined");
+                                            }
+                                            if (Object.getOwnPropertyNames(userDataObj).length > 0) {
+                                                CnnXt.Storage.SetUserData(userDataObj);
+                                            }
 
-                if (USER_STATE == USER_STATES.NotLoggedIn) {
-                    CnnXt.Storage.ClearUser();
+                                            customAuthTypeDeferred.resolve();
+                                        } catch (ex) {
+                                            LOGGER.warn(NAME, fnName, "EXCEPTION", ex);
+                                            CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
+                                            customAuthTypeDeferred.resolve();
+                                        }
+                                    })
+                                    .fail(function(error) {
+                                        LOGGER.debug(NAME, fnName, "customAuth.GetAuthProfileFunc.fail (error)", error);
+                                        CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
+                                        customAuthTypeDeferred.resolve();
+                                    });
+                            } else {
+                                customAuthTypeDeferred.resolve();
+                            }
+                        })
+                        .fail(function(error) {
+                            LOGGER.debug(NAME, fnName, "customAuth.GetAuthProfileFunc.fail (error)", error);
+                            CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
+                            customAuthTypeDeferred.resolve();
+                        });
+                } catch (ex) {
+                    LOGGER.warn(NAME, fnName, "EXCEPTION", ex);
                     CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
-                } else {
-                    USER_DATA = CnnXt.Storage.GetUserData();
-                    $(UI.ActionShowLogin).hide();
-                    $(UI.LogoutButton).show();
-                    if (USER_STATE == USER_STATES.LoggedIn) {
-                        deferred.reject("onAuthorized");
-                    } else if (isUserHasHighState()) {
-                        var eventName = getEventNameForHighUserState();
-                        deferred.reject(eventName);
-                    }
+                    customAuthTypeDeferred.resolve();
                 }
-
-                if (USER_STATE != null) {
-                    deferred.resolve(true);
-                }
+            } else {
+                customAuthTypeDeferred.resolve();
             }
 
-            if (USER_STATE == null || USER_STATE == undefined || AUTH_TYPE.GUP || AUTH_TYPE.Auth0) {
-                try {
-                    //this is called on page load to check if the user has access. Depending the the AUTH_TYPE we will use different methods to determing if this user currently has access.
-                    AUTH_TIMING.Start = new Date(); //set start time for determining access (used for Debug Details Panel)
-                    USER_STATE = USER_STATES.NotLoggedIn;
-                    CnnXt.Storage.SetUserState(USER_STATE);
-                    CnnXt.Storage.SetAccountDataExpirationCookie(true);
-                    getUserData()
-                        .done(function (result) {
-                            LOGGER.debug(NAME, fnName, "getUserData.done -- result", result);
-                            if (!result) {
-                                throw "No User Data Result";
+            customAuthTypeDeferred.promise().then(function() {
+                if (USER_STATE != null && USER_STATE != undefined && !AUTH_TYPE.Auth0) {
+
+                    if (AUTH_TYPE.Janrain) {
+                        if (!window.localStorage.getItem("janrainCaptureToken")) {
+                            USER_STATE = USER_STATES.NotLoggedIn;
+                            CnnXt.Storage.SetUserState(USER_STATE);
+                        } else {
+                            if (USER_STATE == USER_STATES.NotLoggedIn) {
+                                USER_STATE = null;
                             }
-                            masterId = result;
-                            if (AUTH_TYPE.MG2) {
-                                CnnXt.API.GetUserByEncryptedMasterId({
-                                    payload: { encryptedMasterId: result },
-                                    onSuccess: function (data) {
-                                        data.MasterId = masterId;
-                                        if (AUTH_TYPE.Auth0) {
-                                            data.AuthSystem = "Auth0";
-                                        } else if (AUTH_TYPE.GUP) {
-                                            data.AuthSystem = "GUP";
+                        }
+                    }
+
+                    if (USER_STATE == USER_STATES.NotLoggedIn) {
+                        //CnnXt.Event.fire("onNotAuthorized", USER_STATE);
+                        CnnXt.Storage.ClearUser();
+                        CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
+                        deferred.reject("onNotAuthorized");
+                    } else {
+                        USER_DATA = CnnXt.Storage.GetUserData();
+                        $(UI.ActionShowLogin).hide();
+                        $(UI.LogoutButton).show();
+                        if (USER_STATE == USER_STATES.LoggedIn) {
+                            var AuthSystem;
+
+                            if (AUTH_TYPE.Janrain) {
+                                AuthSystem = "Janrain";
+                            } else if (AUTH_TYPE.MG2) {
+                                AuthSystem = "MG2";
+                            } else if (AUTH_TYPE.GUP) {
+                                AuthSystem = "GUP";
+                            } else if (AUTH_TYPE.Custom) {
+                                AuthSystem = "Custom";
+                            }
+
+                            //CnnXt.Event.fire("onAuthorized", { "UserState": USER_STATE, "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile() });
+                            //CnnXt.Event.fire("onLoggedIn", { "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile(), "AuthSystem": AuthSystem });
+                            deferred.reject("onAuthorized");
+
+                        } else if (isUserHasHighState()) {
+                            var eventName = getEventNameForHighUserState();
+                            //CnnXt.Event.fire(eventName, USER_STATE);
+                            deferred.reject(eventName);
+                        }
+                    }
+                    if (USER_STATE != null) {
+                        deferred.resolve(true);
+                    }
+                }
+
+                if (!AUTH_TYPE.Custom && (USER_STATE == null || USER_STATE == undefined || AUTH_TYPE.GUP || AUTH_TYPE.Auth0)) {
+                    try {
+                        //this is called on page load to check if the user has access. Depending the the AUTH_TYPE we will use different methods to determing if this user currently has access.
+                        AUTH_TIMING.Start = new Date(); //set start time for determining access (used for Debug Details Panel)
+                        USER_STATE = USER_STATES.NotLoggedIn;
+                        CnnXt.Storage.SetUserState(USER_STATE);
+                        CnnXt.Storage.SetAccountDataExpirationCookie(true);
+                        getUserData()
+                            .done(function (result) {
+                                LOGGER.debug(NAME, fnName, "getUserData.done -- result", result);
+                                if (!result) {
+                                    throw "No User Data Result";
+                                }
+                                masterId = result;
+                                if (AUTH_TYPE.MG2) {
+                                    CnnXt.API.GetUserByEncryptedMasterId({
+                                        payload: { encryptedMasterId: result },
+                                        onSuccess: function (data) {
+
+                                            if (AUTH_TYPE.Auth0) {
+                                                data.AuthSystem = "Auth0";
+                                            } else if (AUTH_TYPE.GUP) {
+                                                data.AuthSystem = "GUP";
+                                            }
+
+                                            LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                                            processSuccessfulLogin("MasterId", data);
+                                            AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                            deferred.resolve(true);
+                                            $(UI.ActionShowLogin).hide();
+                                            $(UI.LogoutButton).show();
+
+                                        },
+                                        onNull: function () {
+                                            LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
+                                            AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                            deferred.reject("GetUserByMasterId.onNull");
+                                            //CnnXt.Event.fire("onAuthorized", USER_STATE);
+                                        },
+                                        onError: function (err) {
+                                            LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                                            AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                            deferred.reject("GetUserMasterId.onError");
+                                            //CnnXt.Event.fire("onAuthorized", USER_STATE);
                                         }
-
-                                        LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
-                                        processSuccessfulLogin("MasterId", data);
-                                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                        deferred.resolve(true);
-                                        $(UI.ActionShowLogin).hide();
-                                        $(UI.LogoutButton).show();
-
-                                    },
-                                    onNull: function () {
-                                        LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
-                                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                        deferred.reject("GetUserByMasterId.onNull");
-                                        //CnnXt.Event.fire("onAuthorized", USER_STATE);
-                                    },
-                                    onError: function (err) {
-                                        LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
-                                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                        deferred.reject("GetUserMasterId.onError");
-                                        //CnnXt.Event.fire("onAuthorized", USER_STATE);
-                                    }
-                                });
-                            } else if (AUTH_TYPE.Janrain) {
-                                CnnXt.API.GetUserByMasterId({
-                                    payload: { id: result },
-                                    onSuccess: function (data) {
-                                        LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
-
-                                        data.AuthSystem = "Janrain";
-
-                                        processSuccessfulLogin("externalId", data);
-                                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                        deferred.resolve(true);
-                                    },
-                                    onNull: function () {
-                                        LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
-                                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                        deferred.reject("GetUserByToken.onNull");
-                                    },
-                                    onError: function (err) {
-                                        LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
-                                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                        deferred.reject("GetUserByToken.onError");
-                                    }
-
-                                });
-                            }
-                            else if (AUTH_TYPE.Auth0) {
-                                USER_STATE = USER_STATES.LoggedIn;
-                                CnnXt.Storage.SetUserState(USER_STATE);
-                                if (CnnXt.Storage.GetUserData()) {
-                                    processSuccessfulLogin("externalId", CnnXt.Storage.GetUserData());
-                                    deferred.resolve(true);
-                                } else {
+                                    });
+                                } else if (AUTH_TYPE.Janrain) {
                                     CnnXt.API.GetUserByMasterId({
                                         payload: { id: result },
                                         onSuccess: function (data) {
-
-                                            data.AuthSystem = "Auth0";
-
                                             LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+
+                                            data.AuthSystem = "Janrain";
+
                                             processSuccessfulLogin("externalId", data);
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
                                             deferred.resolve(true);
@@ -8189,38 +8951,70 @@ var ConnextUser = function ($) {
                                         onNull: function () {
                                             LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                            deferred.reject("GetUserByExternalId.onNull");
+                                            deferred.reject("GetUserByToken.onNull");
                                         },
                                         onError: function (err) {
                                             LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
                                             AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                                            deferred.reject("GetUserByExternalId.onError");
+                                            deferred.reject("GetUserByToken.onError");
                                         }
+
                                     });
                                 }
-                            } else if (AUTH_TYPE.GUP) {
-                                //GUP Auth
-                                var gupUserHasAccess = AuthenticateGupUser(result);
-                                AUTH_TIMING.Done = new Date();
-                                LOGGER.debug(NAME, fnName, "getUserData.done -- gupUserHasAccess", gupUserHasAccess);
-                                deferred.resolve(true);
-                                LOGGER.debug(NAME, fnName, "getUserData.done", "Has GUP Data", result);
-                            } else {
-                                CnnXt.Event.fire("onCriticalError",
-                                    { 'function': "getUserData.done", 'error': "Unknown Registration Type" });
-                            }
-                        })
-                        .fail(function (err) {
-                            LOGGER.debug(NAME, fnName, "getUserData.fail -- err", err);
-                            AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                            deferred.reject(err);
-                        });
-                } catch (e) {
-                    console.error(NAME, fnName, "EXCEPTION", e);
-                    AUTH_TIMING.Done = new Date(); //set Done for performance testing.
-                    deferred.reject();
+                                else if (AUTH_TYPE.Auth0) {
+                                    USER_STATE = USER_STATES.LoggedIn;
+                                    CnnXt.Storage.SetUserState(USER_STATE);
+                                    if (CnnXt.Storage.GetUserData()) {
+                                        processSuccessfulLogin("externalId", CnnXt.Storage.GetUserData());
+                                        deferred.resolve(true);
+                                    } else {
+                                        CnnXt.API.GetUserByMasterId({
+                                            payload: { id: result },
+                                            onSuccess: function (data) {
+
+                                                data.AuthSystem = "Auth0";
+
+                                                LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
+                                                processSuccessfulLogin("externalId", data);
+                                                AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                                deferred.resolve(true);
+                                            },
+                                            onNull: function () {
+                                                LOGGER.debug(NAME, fnName, "<< NO RESULTS >>");
+                                                AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                                deferred.reject("GetUserByExternalId.onNull");
+                                            },
+                                            onError: function (err) {
+                                                LOGGER.debug(NAME, fnName, "<< ERROR >>", "err", err);
+                                                AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                                deferred.reject("GetUserByExternalId.onError");
+                                            }
+                                        });
+                                    }
+                                } else if (AUTH_TYPE.GUP) {
+                                    //GUP Auth
+                                    var gupUserHasAccess = AuthenticateGupUser(result);
+                                    AUTH_TIMING.Done = new Date();
+                                    LOGGER.debug(NAME, fnName, "getUserData.done -- gupUserHasAccess", gupUserHasAccess);
+                                    deferred.resolve(true);
+                                    LOGGER.debug(NAME, fnName, "getUserData.done", "Has GUP Data", result);
+                                } else {
+                                    CnnXt.Event.fire("onCriticalError",
+                                        { 'function': "getUserData.done", 'error': "Unknown Registration Type" });
+                                }
+                            })
+                            .fail(function (err) {
+                                LOGGER.debug(NAME, fnName, "getUserData.fail -- err", err);
+                                AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                                deferred.reject(err);
+                            });
+                    } catch (e) {
+                        LOGGER.error(NAME, fnName, "EXCEPTION", e);
+                        AUTH_TIMING.Done = new Date(); //set Done for performance testing.
+                        deferred.reject();
+                    }
                 }
-            }
+            });
         });
 
         return deferred.promise();
@@ -8235,9 +9029,17 @@ var ConnextUser = function ($) {
 
         try {
             USER_STATE = USER_STATES.LoggedIn;
-            USER_DATA = CnnXt.Utils.ShapeUserData(data);
 
+            USER_DATA = CnnXt.Utils.ShapeUserData(data);
+            var localData = CnnXt.Storage.GetUserData();
+            if (localData && USER_DATA) { //Merge local user data with response
+                USER_DATA.IgmContent = USER_DATA.IgmContent ? USER_DATA.IgmContent : localData.IgmContent;
+                USER_DATA.IgmRegID = USER_DATA.IgmRegID ? USER_DATA.IgmRegID : localData.IgmRegID;
+                USER_DATA.MasterId = USER_DATA.MasterId ? USER_DATA.MasterId : localData.MasterId;
+                USER_DATA.UserToken = USER_DATA.UserToken ? USER_DATA.UserToken : localData.UserToken;
+            }
             CnnXt.Storage.SetUserData(USER_DATA);
+            CnnXt.Storage.SetAccountDataExpirationCookie(true);
 
             //CnnXt.Event.fire("onLoggedIn", { "MG2AccountData": USER_DATA, "AuthProfile": CnnXt.Storage.GetUserProfile(), "AuthSystem": USER_DATA.AuthSystem });
 
@@ -8245,7 +9047,8 @@ var ConnextUser = function ($) {
 
             HandleUiLoggedInStatus(true);
 
-            if (!USER_DATA.Subscriptions || USER_DATA.Subscriptions == null) {
+            if ((!USER_DATA.Subscriptions || USER_DATA.Subscriptions == null) ||
+                (USER_DATA.Subscriptions && !_.values(USER_DATA.Subscriptions).length && USER_DATA.Subscriptions.OwnedSubscriptions == null)) {
                 NOTIFICATION.show("NoSubscriptionData");
                 //CnnXt.Event.fire("onAuthorized", { "UserState": USER_STATE, "MG2AccountData": USER_DATA });
             } else {
@@ -8253,11 +9056,20 @@ var ConnextUser = function ($) {
                 if (!_.isObject(USER_DATA.Subscriptions)) {
                     USER_DATA.Subscriptions = $.parseJSON(USER_DATA.Subscriptions);
                 }
-                var zipCodes = _.map(USER_DATA.Subscriptions, function (subscription) {
-                    return (subscription.BillingAddress && subscription.BillingAddress.ZipCode)
-                        ? subscription.BillingAddress.ZipCode
-                        : subscription.PostalCode;
-                });
+                var zipCodes = null;
+                if (USER_DATA.Subscriptions.OwnedSubscriptions) {
+                    zipCodes = _.map(USER_DATA.Subscriptions.OwnedSubscriptions, function (subscription) {
+                        return (subscription.BillingAddress && subscription.BillingAddress.ZipCode)
+                            ? subscription.BillingAddress.ZipCode
+                            : subscription.DeliveryAddress ? subscription.DeliveryAddress.ZipCode : null;
+                    });
+                } else {
+                    zipCodes = _.map(USER_DATA.Subscriptions, function (subscription) {
+                        return (subscription.BillingAddress && subscription.BillingAddress.ZipCode)
+                            ? subscription.BillingAddress.ZipCode
+                            : subscription.PostalCode;
+                    });
+                }
                 CnnXt.Storage.SetUserZipCodes(zipCodes);
                 $("#ddZipCode").html(zipCodes.toString());
             }
@@ -8307,23 +9119,30 @@ var ConnextUser = function ($) {
                         }
                     }
                 }
-            } else {
-                //CnnXt.Event.fire("onAuthorized", USER_STATE);
+            }
+            var data = {
+                UserId: Fprinting().getDeviceId(),
+                ConfigCode: CnnXt.GetOptions().configCode,
+                SiteCode: CnnXt.GetOptions().siteCode,
+                SettingsKey: CnnXt.GetOptions().settingsKey,
+                ViewData: CnnXt.Campaign.GetLocalViewData()
+            };
+            if (CnnXt.User.getMasterId()) {
+                data.masterId = CnnXt.User.getMasterId();
             }
 
             CnnXt.Storage.SetUserState(USER_STATE);
-            CnnXt.API.SendViewData();
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var defineUserState = function (data) {
         var fnName = "defineUserState";
         try {
-            if (!_.isEmpty(data.DigitalAccess.Errors)) {
+            if (!data.DigitalAccess || !_.isEmpty(data.DigitalAccess.Errors)) {
                 USER_STATE = USER_STATES.LoggedIn;
-            } else if (!data.Subscriptions || data.Subscriptions.lenght == 0) {
+            } else if (!data.Subscriptions || data.Subscriptions.length == 0) {
                 USER_STATE = USER_STATES.LoggedIn;
             } else if (data.DigitalAccess.AccessLevel.IsPremium) {
                 USER_STATE = USER_STATES.Subscribed;
@@ -8339,18 +9158,22 @@ var ConnextUser = function ($) {
 
     var isUserHasHighState = function () {
         var highState = false;
-        switch (USER_STATE) {
-            case USER_STATES.Subscribed:
-            case USER_STATES.SubscribedNotEntitled:
-            case USER_STATES.NoActiveSubscription:
-                highState = true;
-                break;
+
+        if (USER_STATES) {
+            switch (USER_STATE) {
+                case USER_STATES.Subscribed:
+                case USER_STATES.SubscribedNotEntitled:
+                case USER_STATES.NoActiveSubscription:
+                    highState = true;
+                    break;
+            }
         }
+        
         return highState;
     }
 
     var getEventNameForHighUserState = function () {
-        var eventName = 'onNotAuthorized';
+        var eventName = "onNotAuthorized";
         switch (USER_STATE) {
             case USER_STATES.LoggedIn:
                 eventName = 'onAuthorized';
@@ -8403,6 +9226,7 @@ var ConnextUser = function ($) {
 
                         if (janrainProfile.uuid) {
                             USER_STATE = USER_STATES.LoggedIn;
+                            CnnXt.Storage.SetUserState(USER_STATE);
                             deferred.resolve(janrainProfile.uuid);
                             //deferred.resolve({ type: 'janrain', value: janrainProfile.uuid });
                         } else {
@@ -8478,7 +9302,7 @@ var ConnextUser = function ($) {
             return deferred.promise();
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
 
     };
@@ -8494,7 +9318,7 @@ var ConnextUser = function ($) {
             CnnXt.Storage.SetUserState(USER_STATES.NotLoggedIn);
             CnnXt.Run();
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -8524,7 +9348,7 @@ var ConnextUser = function ($) {
                 return false;
             }
         } catch (e) {
-            console.log(NAME, fnName, "EXCEPTION", e);
+            LOGGER.log(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -8558,7 +9382,7 @@ var ConnextUser = function ($) {
             });
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -8638,7 +9462,7 @@ var ConnextUser = function ($) {
                 ////deferred.reject();
             }
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             USER_STATE = USER_STATES.NotLoggedIn;
             CnnXt.Storage.SetUserState(USER_STATE);
             return false;
@@ -8671,7 +9495,7 @@ var ConnextUser = function ($) {
 
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -8779,7 +9603,6 @@ var ConnextUser = function ($) {
                                         errorMessage = incorrectCreditsMessage;
                                     }
                                 }
-
                             } else {
                                 errorMessage = err.responseJSON.Message;
                                 var json = JSON.parse(err.responseJSON.Message);
@@ -8790,10 +9613,6 @@ var ConnextUser = function ($) {
                                     }
                                 }
                             }
-
-
-
-
                         }
                         catch (e) {
                             LOGGER.debug(NAME, fnName, "Error of parse response JSON");
@@ -8810,7 +9629,7 @@ var ConnextUser = function ($) {
 
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -8848,7 +9667,7 @@ var ConnextUser = function ($) {
                 CnnXt.Storage.SetUserState(null);
             }
         } catch (e) {
-            console.error(NAME, fnName, 'EXCEPTION', e);
+            LOGGER.error(NAME, fnName, 'EXCEPTION', e);
         }
     };
     //#endregion AJAX CALLS
@@ -8858,6 +9677,8 @@ var ConnextUser = function ($) {
         init: function (options) {
             LOGGER = CnnXt.Logger;
             OPTIONS = (options) ? options : {}; //if not options set to blank object
+            USER_STATES = CnnXt.Common.USER_STATES;
+            USER_STATE = USER_STATES.NotLoggedIn;
             init();
             if (OPTIONS.Site.RegistrationTypeId == 3) {
                 GUP_SETTINGS = {
@@ -8926,9 +9747,10 @@ var ConnextUser = function ($) {
                 return CnnXt.Storage.GetUserData().IgmRegID ? CnnXt.Storage.GetUserData().IgmRegID : CnnXt.Storage.GetUserData().MasterId;
             return null;
         },
-        isUserHasHighState: isUserHasHighState
+        isUserHasHighState: isUserHasHighState,
+        processSuccessfulLogin: processSuccessfulLogin,
+        showAuth0Login: showAuth0Login,
     };
-
 };
 
 var ConnextMeterCalculation = function ($) {
@@ -8949,7 +9771,8 @@ var ConnextMeterCalculation = function ($) {
         "JSVar": evalJsVar,
         "Meta": evalMeta,
         "UserState": evalUserState,
-        "AdBlock": evalAdBlock
+        "AdBlock": evalAdBlock,
+        "URLMask": evalUrlMask
     }
 
     //this will hold the cached results when we are determing segment values.  Once a 'Segment Type' is determined we set it's value here, then on subsqeunt checks to this type we will return the cached value instead of determining this value again.
@@ -9037,7 +9860,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             deferred.reject(e);
         }
 
@@ -9074,7 +9897,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             deferred.reject(false);
         }
 
@@ -9118,7 +9941,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             deferred.reject();
         }
 
@@ -9156,7 +9979,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             deferred.reject(false);
         }
 
@@ -9188,7 +10011,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             deferred.reject(false);
         }
 
@@ -9267,7 +10090,7 @@ var ConnextMeterCalculation = function ($) {
                     return item.trim().toLowerCase();
                 });
                 if (segment.Options.Qualifier == "Contains" ||
-                    segment.Options.Qualifier == "Doesn't contain") {
+                    segment.Options.Qualifier == "Does Not Contain") {
                     if (jsValue.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
                         isPassed = segment.Options.Qualifier == "Contains";
                     } else {
@@ -9282,9 +10105,9 @@ var ConnextMeterCalculation = function ($) {
                 }
 
                 if (segment.Options.Qualifier == "Contains" ||
-                    segment.Options.Qualifier == "Doesn't contain") {
+                    segment.Options.Qualifier == "Does Not Contain") {
                     if (jsValue == undefined) {
-                        isPassed = segment.Options.Qualifier == "Doesn't contain";
+                        isPassed = segment.Options.Qualifier == "Does Not Contain";
                     } else {
                         var delimiter, array;
                         delimiter = segment.Options.Delimiter ? new RegExp(segment.Options.Delimiter.replace(/space/g, '/\s'), 'g') : /[ ,;]/g;
@@ -9293,7 +10116,7 @@ var ConnextMeterCalculation = function ($) {
                         if (array.indexOf(segment.Options.Val.toLowerCase()) >= 0) {
                             isPassed = segment.Options.Qualifier == "Contains";
                         } else {
-                            isPassed = segment.Options.Qualifier == "Doesn't contain";
+                            isPassed = segment.Options.Qualifier == "Does Not Contain";
                         }
                     }
                 } else {
@@ -9316,7 +10139,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             //return false;
             //_CB(false);
             deferred.reject();
@@ -9359,7 +10182,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             //return false;
             //_CB(false);
             deferred.reject(false);
@@ -9384,12 +10207,54 @@ var ConnextMeterCalculation = function ($) {
                 deferred.reject(false);
             }
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             deferred.reject(false);
         }
 
 
         return deferred.promise();
+    }
+
+    function evalUrlMask(segment) {
+
+        /// <summary>This checks URL mask on qualifier and value of a segment.</summary>
+        /// <param type="Object" name="segment">Segment object to test against.</param>
+        /// <returns type="DeferredPromise"></returns>
+        var fnName = "evalUrlMask";
+
+        //create deferred object
+        var deferred = $.Deferred();
+
+        try {
+
+            LOGGER.debug(NAME, fnName, "-- Testing ---");
+
+            var isPassed = false,
+                hrefFormatted = window.location.href.replace(/#$/, ''),
+                criteriaHrefFormatted = segment.Options.Val.replace(/\*$/, '');
+
+            if (~hrefFormatted.indexOf(criteriaHrefFormatted) && segment.Options.Qualifier == 'Equals') {
+                isPassed = true;
+            } else if (!~hrefFormatted.indexOf(criteriaHrefFormatted) && segment.Options.Qualifier == 'Not Equals') {
+                isPassed = true;
+            } else {
+                isPassed = false;
+            }
+
+            if (isPassed) {
+                deferred.resolve();
+            } else {
+                deferred.reject();
+            }
+
+        } catch (e) {
+            LOGGER.error(NAME, fnName, e);
+            deferred.reject(false);
+        }
+
+        //return deferred promise
+        return deferred.promise();
+
     }
 
     function evalMeta(segment) {
@@ -9435,7 +10300,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             //return false;
             //_CB(false);
             deferred.reject(false);
@@ -9497,7 +10362,7 @@ var ConnextMeterCalculation = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, e);
+            LOGGER.error(NAME, fnName, e);
             return false;
         }
     }
@@ -9562,7 +10427,8 @@ var ConnextCampaign = function ($) {
 
             CURRENT_CONVERSATION = getCurrentConversation(meterLevel);
             if (!CURRENT_CONVERSATION) {
-                CnnXt.Storage.SetCurrentConverstaion(null);
+                CnnXt.Storage.SetCurrentConversation(null);
+                processFakeConversation();
                 //TODO: maybe add event firing here so we can update the 'Note' section on the debug panel letting user know that now conversation was found.
                 //throw "No Conversation Found To Process"
                 throw CnnXt.Common.ERROR.NO_CONVO_FOUND;
@@ -9574,8 +10440,9 @@ var ConnextCampaign = function ($) {
 
             }
 
+
         } catch (e) {
-            console.warn(NAME, fnName, "EXCEPTION", e);
+            LOGGER.warn(NAME, fnName, "EXCEPTION", e);
             CnnXt.Event.fire("onCriticalError", e);
         }
 
@@ -9584,6 +10451,11 @@ var ConnextCampaign = function ($) {
     //#endregion CAMPAIGN FUNCTIONS
 
     //#region CONVERSATION FUNCTIONS
+
+    var processFakeConversation = function() {
+        CnnXt.Storage.UpdateViewedArticles(-1);
+        $('#ddCurrentConversationArticleViews').html(CnnXt.Storage.GetCurrentConversationViewCount(-1));
+    }
 
     var processConversation = function () {
         /// <summary>We have done all our checks and have a valid conversation, so process it.</summary>
@@ -9599,17 +10471,19 @@ var ConnextCampaign = function ($) {
             updateArticleViewCount(CnnXt.Storage.GetCurrentConversationViewCount(CURRENT_CONVERSATION.id));
 
             //we have a current conversation (either stored or a new conversation). Fire onConversationDetermined event and Proccess it.
-            CnnXt.Storage.SetCurrentConverstaion(CURRENT_CONVERSATION);
+            CnnXt.Storage.SetCurrentConversation(CURRENT_CONVERSATION);
 
             //we now need to determine which actions within this conversation should be fired.
             var actions = determineConversationActions(),
                 validActions = determineConversationActions(true);
 
             calculateArticleLeft(validActions);
-            CnnXt.Storage.SetCurrentConverstaion(CURRENT_CONVERSATION);
-
+            CnnXt.Storage.SetCurrentConversation(CURRENT_CONVERSATION);
+ 
             //we fire onConversationDetermined after the handleArticleView function because this even will update our Demo Debug details 'view' html.
             CnnXt.Event.fire("onConversationDetermined", CURRENT_CONVERSATION);
+
+            proccessActivationFlow(CURRENT_CONVERSATION);
 
             if (actions.length > 0) {
                 //we have at least one action to execute.
@@ -9623,10 +10497,67 @@ var ConnextCampaign = function ($) {
                 LOGGER.warn(NAME, fnName, "No 'Actions' to execute.");
             }
 
+            //if (CnnXt.Campaign.GetCurrentConversationViewCount() !== 1
+            //        && CnnXt.Campaign.GetCurrentConversationViewCount() % CnnXt.GetOptions().BatchCount === 0) {
+
+            //    var data = {
+            //        UserId: CnnXt.GetOptions().deviceId,
+            //        ConfigCode: CnnXt.GetOptions().configCode,
+            //        SiteCode: CnnXt.GetOptions().siteCode,
+            //        SettingsKey: CnnXt.GetOptions().settingsKey,
+            //        ViewData: getLocalViewData()
+            //    };
+            //    if (CnnXt.User.getMasterId()) {
+            //        var id = CnnXt.User.getMasterId();
+            //        id = decodeURIComponent(id);
+            //        data.masterId = id;
+            //    }
+            //    CnnXt.API.SendViewData(data);
+            //}
+
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
+
+    var getLocalViewData = function () {
+        var data = {};
+        data.AllowedIpSet = CnnXt.Storage.GetWhitelistSetIdCookie()
+            ? JSON.parse(CnnXt.Storage.GetWhitelistSetIdCookie())
+            : undefined;
+        var localConfig = CnnXt.Storage.GetLocalConfiguration();
+
+        if (localConfig.Campaign && localConfig.Campaign.Conversations) {
+            var conversations = localConfig.Campaign.Conversations;
+            for (convo in conversations) {
+                data[convo] = {};
+                data[convo].ActiveConversationId = CnnXt.Storage.GetCurrentConversations()[convo] != null ? CnnXt.Storage.GetCurrentConversations()[convo].id : null;
+                data[convo].ArticleCount = CnnXt.Storage.GetCurrentConversations()[convo] != null ? CnnXt.Storage.GetViews(CnnXt.Storage.GetCurrentConversations()[convo].id ) : null;
+                data[convo].Conversations = [];
+                conversations[convo].forEach(function (conversation) {
+                    var views = CnnXt.Storage.GetDeviceViews(conversation.id);
+                    data[convo].Conversations.push({ Id: conversation.id, ViewCount: views, StartDate: conversation.Props.Date.started });
+                });
+                if (CnnXt.Storage.GetDeviceViews(-1)) {
+                    data[convo].Conversations.push({
+                        Id: -1,
+                        ViewCount: CnnXt.Storage.GetDeviceViews(-1),
+                        StartDate: null
+                    });
+                }
+            }
+        }
+        return data;
+    }
+    var proccessActivationFlow = function(convo) {
+        if (!convo || !convo.Options || !convo.Options.Expirations || !convo.Options.Expirations.Activate) {
+            return false;
+        }
+            
+        var activateSettings = convo.Options.Expirations.Activate;
+
+        CnnXt.Activation.init(activateSettings);
+    }
 
     var calculateArticleLeft = function (validActions) {
         var lastArticleNumber = 99999;
@@ -9721,13 +10652,14 @@ var ConnextCampaign = function ($) {
 
                     if (CURRENT_CONVERSATION) {
                         setDefaultConversationProps();
-                        CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
+                        CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain );
                         CnnXt.Event.fire("onDebugNote", "Conversation Expire: " + CURRENT_CONVERSATION.Props.expiredReason);
                         return CURRENT_CONVERSATION;
                     } else {
                         return storedConversation;
                     }
 
+                    
                 }
 
             } else {
@@ -9756,10 +10688,10 @@ var ConnextCampaign = function ($) {
                         //reset old conversation after expire - RETURN this in the future releases
                         //CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
 
-                        CURRENT_CONVO = getNextConversation();
+                        var CURRENT_CONVO = getNextConversation();
 
                         if (CURRENT_CONVO) {
-                            CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION);
+                            CnnXt.Storage.ResetConversationViews(CURRENT_CONVERSATION, Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain);
                             return CURRENT_CONVO;
                         }
                     }
@@ -9776,7 +10708,7 @@ var ConnextCampaign = function ($) {
             LOGGER.debug(NAME, fnName, "NO RETURN FIRED, USING CATCH ALL");
             return false;
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -9918,7 +10850,7 @@ var ConnextCampaign = function ($) {
             //just as a catch all return true so we process this conversation (any reasons for expiration will call return false, so this will only be called if it is valid).
             return true;
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             return true;
         }
     };
@@ -9938,7 +10870,7 @@ var ConnextCampaign = function ($) {
             //for now return false.
             return CURRENT_CONVERSATION;
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10196,6 +11128,31 @@ var ConnextCampaign = function ($) {
                             });
                         }
 
+                        if (who.URLMaskCriteria && actionPassed == true) {
+                            //We have a 'UrlCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
+                            who.URLMaskCriteria.forEach(function (criteria) {
+                                if (actionPassed) {
+                                    LOGGER.debug(NAME, fnName, "Checking UrlCriteria", criteria);
+
+                                    var href = window.location.href,
+                                        // protocol = window.location.protocol,
+                                        hrefFormatted = href.replace(/#$/, ''),
+                                        hrefLength = hrefFormatted.length,
+                                        criteriaHrefFormatted = criteria.Value.replace(/\*$/, ''),
+                                        valLength = criteriaHrefFormatted.length;
+
+                                    if (hrefFormatted.indexOf(criteriaHrefFormatted) == 0 && hrefLength > valLength && criteria.Qualifier == '==') {
+                                        //keep actionPassed in true state
+                                    } else if (hrefFormatted.indexOf(criteriaHrefFormatted) != 0 && criteria.Qualifier == '!=') {
+                                        //keep actionPassed in true state
+                                    } else {
+                                        //this failed, so set actionPassed to false;
+                                        actionPassed = false;
+                                    }
+                                }
+                            });
+                        }
+
                         if (who.SubDomainCriteria && actionPassed == true) {
                             //We have a 'SubDomainCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
 
@@ -10287,6 +11244,66 @@ var ConnextCampaign = function ($) {
                             });
                         }
 
+                        if (who.EZPayCriteria && actionPassed == true) {
+                            //We have a 'EZPayCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
+                            who.EZPayCriteria.forEach(function (criteria) {
+                                if (actionPassed) {
+                                    LOGGER.debug(NAME, fnName, "Checking EZPayCriteria", criteria);
+                                    var userState = CnnXt.User.getUserState(),
+                                        userData;
+
+                                    if (userState !== 'Logged Out') {
+                                        userData = CnnXt.Storage.GetUserData();
+                                        if (userData && userData.Subscriptions) {
+                                            var subscription = userData.Subscriptions[0];
+                                            if (subscription.IsEZPay.toString() != criteria.Value) {
+                                                actionPassed = false;
+                                            }
+                                        } else {
+                                            actionPassed = false;
+                                        }
+                                    } else {
+                                        actionPassed = false;
+                                    }
+                                }
+                            });
+                        }
+
+                        if (who.ExpireDateCriteria && actionPassed == true) {
+                            //We have a 'ExpireDateCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
+                            who.ExpireDateCriteria.forEach(function (criteria) {
+                                if (actionPassed) {
+                                    LOGGER.debug(NAME, fnName, "Checking ExpireDateCriteria", criteria);
+                                    var userState = CnnXt.User.getUserState(),
+                                        userData;
+
+                                    if (userState !== 'Logged Out') {
+                                        userData = CnnXt.Storage.GetUserData();
+                                        if (userData && userData.Subscriptions) {
+                                            var subscription = userData.Subscriptions[0];
+
+                                            if (subscription.ExpirationDate) {
+                                                var diff = CnnXt.Utils.GetTimeByType(subscription.ExpirationDate, criteria["Expire Date Type"]);
+                                                if (!CnnXt.Utils.JSEvaluate(
+                                                        diff,
+                                                        criteria.Qualifier,
+                                                        criteria.Value,
+                                                        "ExpireDateCriteria",
+                                                        "integer")) {
+
+                                                    actionPassed = false;
+                                                }
+                                            }
+                                        } else {
+                                            actionPassed = false;
+                                        }
+                                    } else {
+                                        actionPassed = false;
+                                    }
+                                }
+                            });
+                        }
+
                         if (who.AdBlockCriteria && actionPassed == true) {
                             //We have a 'AdBlockCriteria' criteria(s) and 'actionPassed' is still true so we need to check this.
 
@@ -10313,7 +11330,7 @@ var ConnextCampaign = function ($) {
 
                     } catch (ex) {
                         actionPassed = false;
-                        console.error(NAME, fnName, "EXCEPTION", ex);
+                        LOGGER.error(NAME, fnName, "EXCEPTION", ex);
                     }
 
                     //we are done with this action check
@@ -10339,7 +11356,7 @@ var ConnextCampaign = function ($) {
             return actions;
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
     //#endregion ACTION FUNCTIONS
@@ -10373,7 +11390,7 @@ var ConnextCampaign = function ($) {
             //LOGGER.debug(NAME, fnName, 'allConversations', allConversations);
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -10387,7 +11404,7 @@ var ConnextCampaign = function ($) {
             LOGGER.debug(NAME, fnName, "meterLevel", meterlevel);
             return CnnXt.Storage.GetCampaignData().Conversations[meterlevel];
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             return false;
         }
     };
@@ -10408,7 +11425,7 @@ var ConnextCampaign = function ($) {
             //$.jStorage.set(CnnXt.Common.StorageKeys.conversations.current, allcurrentConversations);
             //CnnXt.Storage.GetCurrentConversations()[METER_LEVEL];
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10444,7 +11461,7 @@ var ConnextCampaign = function ($) {
             //we've updated necessary properties, save this conversation
             saveCurrentConversation();
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10468,7 +11485,7 @@ var ConnextCampaign = function ($) {
             //save changes.
             saveCurrentConversation();
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10491,7 +11508,7 @@ var ConnextCampaign = function ($) {
             try {
                 return CURRENT_CONVERSATION.Props;
             } catch (e) {
-                console.error(NAME, "GetCurrentConversationProps.Exception", e);
+                LOGGER.error(NAME, "GetCurrentConversationProps.Exception", e);
                 return null;
             }
             //return getCurrentConversationViewCount();
@@ -10508,9 +11525,12 @@ var ConnextCampaign = function ($) {
                 //LOGGER.debug(NAME, fnName, 'event', event);
 
             } catch (e) {
-                console.error(NAME, fnName, "<<EXCEPTION>>", e);
+                LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
             }
 
+        },
+        GetLocalViewData: function() {
+            return getLocalViewData();
         }
         //,
         //SaveCurrentConversation: function () {
@@ -10559,30 +11579,15 @@ var ConnextAction = function ($) {
                 LOGGER.debug(NAME, fnName, "Actions.EACH", key, action);
                 if (action.What.Html) {
                     //if action have Promise criteria
-                    if (_.isObject(action.Who.PromiseCriteria)) {
-                        //promise is undefined - don't show action
-                        try {
-                            var obj = eval(action.Who.PromiseCriteria.Name);
-                            //convert object to promise (Promise.resolve)  and set up callback (.then)
-                            LOGGER.debug(NAME, fnName, "promise object found");
-                            var promise = Promise.resolve(obj);
-                            promise.then(function (val) {
-                                if (CnnXt.Utils
-                                    .JSEvaluate(val,
-                                    action.Who.PromiseCriteria.Qualifier,
-                                    action.Who.PromiseCriteria.Value.toLowerCase(),
-                                    "Promise")) {
-                                    setupAction(action);
-                                }
-                            });
-                        }
-                        catch (e) {
-                            // error of eval  - promise is or undefined null - don't show action
-                            LOGGER.debug(NAME, fnName, "Promise object is null or undefined");
-                            return false;
-                        }
-                    }
-                    else {
+                    if (_.isArray(action.Who.PromiseCriteria)) {
+                        LOGGER.debug(NAME, fnName, "promises array found");
+                        resolvePromiseCriterias(action.Who.PromiseCriteria).then(function () {
+                            LOGGER.debug(NAME, fnName, "Promise Criterias Resolved");
+                            setupAction(action);
+                        }, function () {
+                            LOGGER.debug(NAME, fnName, "Promise Criterias Rejected");
+                        });
+                    } else {
                         setupAction(action);
                     }
                 } else {
@@ -10591,10 +11596,56 @@ var ConnextAction = function ($) {
             });
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
+    var resolvePromiseCriterias = function (promiseCriterias) {
+        var fnName = 'resolvePromiseCriterias';
+
+        var criteriaResult = $.Deferred();
+
+        try {
+            var promises = [];
+
+            promiseCriterias.forEach(function (criteria) {
+                promises.push(eval(criteria.Name));
+            });
+
+            $.when.apply($, promises).then(function () {
+                //if all primises don't have values
+                if (arguments.length == 0) {
+                    arguments = [];
+                    arguments.push(null);
+                }
+                Array.prototype.forEach.call(arguments,
+                        function(result, index) {
+                            var criteria = promiseCriterias[index];
+
+                            if (!CnnXt.Utils.JSEvaluate(
+                                result ? result.toString().toLowerCase() : result,
+                                criteria.Qualifier,
+                                criteria.Value.toLowerCase(),
+                                "Promise")) {
+
+                                criteriaResult.reject();
+                            }
+                        });
+                
+
+                criteriaResult.resolve();
+            }, function () {
+                criteriaResult.reject();
+            });
+
+        } catch (ex) {
+            // error of eval  - promise is or undefined null - don't show action
+            LOGGER.debug(NAME, fnName, "Promise object is null or undefined");
+            criteriaResult.reject();
+        }
+
+        return criteriaResult.promise();
+    }
 
     var setupAction = function (action) {
         /// <summary>handles setting up the action based on type (adds to DOM, configures etc....)</summary>
@@ -10607,10 +11658,11 @@ var ConnextAction = function ($) {
             var actionHtml = action.What.Html.trim(); //set html from action.What.Html prop.
             actionHtml = handleDynamicHtml(actionHtml);
             actionHtml = $(actionHtml).prop("id", DEFAULT_ACTION_ID + action.id);
-            console.info("ACTION HTML", actionHtml);
+            LOGGER.info("ACTION HTML", actionHtml);
             $(actionHtml).addClass("hide");
             $(actionHtml).prepend('<style id="' + action.id + '-mg2style' + '"' + '>' + actionCSS + '</style>');
-            
+            action.inProgress = false;
+
             if ($("#themeLink").length == 0) {
                 $("body").append(actionHtml);
             } else {
@@ -10620,7 +11672,7 @@ var ConnextAction = function ($) {
             registerActionEvents(action);
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10635,6 +11687,7 @@ var ConnextAction = function ($) {
                 hideContent(action);
             }
 
+            action.closeEvent = null;
             var $action = $("#" + DEFAULT_ACTION_ID + action.id);
 
             $action.removeClass("hide");
@@ -10669,23 +11722,26 @@ var ConnextAction = function ($) {
                     $(".connext-modal-backdrop.fade.in").removeClass("transparent");
                 }
 
-                $($action).on('keydown', function (e) {
+                $($action).one('keydown', function (e) {
                     if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                         action.closeEvent = CLOSE_CASES.EscButton;
+                        //  action.isMultipleTimeRepeatable = false;
                     }
                 })
-                        .on("hidden", function (e) {
+                    .one("hidden", function (e) {
+                        if (action.isMultipleTimeRepeatable) {
                             if (action.closeEvent == null || action.closeEvent == undefined) {
 
                                 action.closeEvent = CLOSE_CASES.ClickOutside;
                                 action.actionDom = $action;
                                 CnnXt.Event.fire("onActionClosed", action);
-                            } else if (action.closeEvent === CLOSE_CASES.EscButton) {
+                            } else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
                                 action.actionDom = $action;
                                 CnnXt.Event.fire("onActionClosed", action);
                             }
-                        });
-            
+                        }
+                        action.isMultipleTimeRepeatable = false;
+                    });
             }
 
             var parentWidth;
@@ -10731,7 +11787,8 @@ var ConnextAction = function ($) {
                     $action.addClass("in");
 
                     if (action.What["NotClosable_paywall"] == "True" || action.What["NotClosable_paywall"] == "true") {
-                        $action.connextmodal({ backdrop: "static", keyboard:false });
+                        $action.find('.closebtn').attr('data-dismiss', 'notclosablepaywall');//make paywall not closable within closing button
+                        $action.connextmodal({ backdrop: "static", keyboard: false });
                     } else {
                         $action.connextmodal({ backdrop: "true" });
                     }
@@ -10744,26 +11801,30 @@ var ConnextAction = function ($) {
 
                     $action.resize();
                     $action.css("display", "block");
-                    
+
                     $($action)
-                        .on('keydown', function (e) {
+                        .one('keydown', function (e) {
                             if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                                 action.closeEvent = CLOSE_CASES.EscButton;
+                                // action.isMultipleTimeRepeatable = false;
                             }
                         })
-                        .on("hidden", function (e) {
-                            if (action.closeEvent == null || action.closeEvent == undefined) {
-                                if (action.What["NotClosable_paywall"] == "True" || action.What["NotClosable_paywall"] == "true") {
-                                    return false;
-                                }
+                        .one("hidden", function (e) {
+                            if (action.isMultipleTimeRepeatable) {
+                                if (action.closeEvent == null || action.closeEvent == undefined) {
+                                    if (action.What["NotClosable_paywall"] == "True" || action.What["NotClosable_paywall"] == "true") {
+                                        return false;
+                                    }
 
-                                action.closeEvent = CLOSE_CASES.ClickOutside;
-                                action.actionDom = $action;
-                                CnnXt.Event.fire("onActionClosed", action);
-                            } else if (action.closeEvent === CLOSE_CASES.EscButton) {
-                                action.actionDom = $action;
-                                CnnXt.Event.fire("onActionClosed", action);
+                                    action.closeEvent = CLOSE_CASES.ClickOutside;
+                                    action.actionDom = $action;
+                                    CnnXt.Event.fire("onActionClosed", action);
+                                } else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
+                                    action.actionDom = $action;
+                                    CnnXt.Event.fire("onActionClosed", action);
+                                }
                             }
+                            action.isMultipleTimeRepeatable = false;
                         });
                 } else if (displayType == "banner") {
                     //set bannerLocation to stored value if it exists, if not set it to top (we do this in case there are template not stored correctly...really just needed since templates were created before option to place them was introduced in Admin).
@@ -10846,7 +11907,7 @@ var ConnextAction = function ($) {
                     }
                 }
                 catch (e) {
-                    console.error(NAME, fnName, "Custom JS Call exception", e);
+                    LOGGER.error(NAME, fnName, "Custom JS Call exception", e);
                 }
             }
             if (action.What.Type == ACTION_TYPE.Newsletter) {
@@ -10882,41 +11943,93 @@ var ConnextAction = function ($) {
                     $action.css("display", "block");
 
                     $($action)
-                        .on('keydown', function (e) {
+                        .one('keydown', function (e) {
                             if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
                                 action.closeEvent = CLOSE_CASES.EscButton;
+                                // action.isMultipleTimeRepeatable = false;
                             }
                         })
-                        .on("hidden", function () {
-                            if (action.closeEvent == null || action.closeEvent == undefined) {
-                                action.closeEvent = CLOSE_CASES.ClickOutside;
-                                action.actionDom = $action;
-                                CnnXt.Event.fire("onActionClosed", action);
+                        .one("hidden", function () {
+                            if (action.isMultipleTimeRepeatable) {
+                                if (action.closeEvent == null || action.closeEvent == undefined) {
+                                    action.closeEvent = CLOSE_CASES.ClickOutside;
+                                    action.actionDom = $action;
+                                    CnnXt.Event.fire("onActionClosed", action);
+                                }
+                                else if (action.closeEvent === CLOSE_CASES.EscButton || action.closeEvent === CLOSE_CASES.CloseButton) {
+                                    action.actionDom = $action;
+                                    CnnXt.Event.fire("onActionClosed", action);
+                                }
                             }
-                            else if (action.closeEvent === CLOSE_CASES.EscButton) {
-                                action.actionDom = $action;
-                                CnnXt.Event.fire("onActionClosed", action);
-                            }
+                            action.isMultipleTimeRepeatable = false;
                         });
                 }
             }
 
             var id = $action.attr("id");
-            $("#" + id + " [data-dismiss=banner], #" + id + " [data-dismiss=info-box], #" + id + " [data-dismiss=inline], #" + id + "  [data-dismiss=modal]").on("click", function () {
-                var $btn = $(this);
-                action.closeEvent = CLOSE_CASES.CloseButton;
-                $btn.closest(".Mg2-connext").addClass("hide");
-                //fire close event & calculate total show time
-                action.actionDom = $action;
-                CnnXt.Event.fire("onActionClosed", action);
+
+            $("#" + id + " [data-dismiss=banner], #"
+                + id + " [data-dismiss=info-box], #"
+                + id + " [data-dismiss=inline], #"
+                + id + "  [data-dismiss=modal]")
+                .one("click", function (e) {
+                    e.preventDefault();
+                    var $btn = $(this),
+                        href = $btn.attr('href');
+
+                    
+                    if (href == "#" || !href) {
+                        action.closeEvent = CLOSE_CASES.CloseButton;
+                        $btn.closest(".Mg2-connext").addClass("hide");
+                        //fire close event & calculate total show time
+                        action.actionDom = $action;
+                        if (action.isMultipleTimeRepeatable) {
+                            if (!$(action.What.Html).hasClass('modal')) {
+                                CnnXt.Event.fire("onActionClosed", action);
+                                action.isMultipleTimeRepeatable = false;
+                            }
+                            
+                        }
+                        
+                    } else {
+                        if ($btn[0].hasAttribute("target")) {
+                            window.open(href, "_blank");
+                        } else {
+                            window.location.href = href;
+                        }
+                        CnnXt.Event.fire("onButtonClick", action);
+                    }
+                });
+            $("#" + id + " [data-dismiss=notclosablepaywall]").one('click', function (e) {
+                e.preventDefault();
+                var $btn = $(this),
+                    href = $btn.attr('href');
+                if (href == "#" || !href) {
+                    return false;
+                } else {
+                    if ($btn[0].hasAttribute("target")) {
+                        window.open(href, "_blank");
+                    } else {
+                        window.location.href = href;
+                    }
+                    CnnXt.Event.fire("onButtonClick", action);
+                }
             });
 
             action.actionDom = $action;
 
             //fire show event & save start time
-            CnnXt.Event.fire("onActionShown", action);
+            if (!action.isMultipleTimeRepeatable) { // || !$action.is(':visible')
+                CnnXt.Event.fire("onActionShown", action);
+            }
+            if (!action.isMultipleTimeRepeatable && action.When.Time.Repeatable > 1) {//  && action.ActionTypeId == 2
+                action.isMultipleTimeRepeatable = true;
+            }
+            if (action.When.Time.Repeatable == 1) {
+                action.isMultipleTimeRepeatable = true;
+            }
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10951,32 +12064,61 @@ var ConnextAction = function ($) {
             }
 
             if (action.When && action.When.Time) {
+                action.count = 0;
                 setTimedAction(action);
             } else if (action.When && action.When.Hover) {
                 setHoverEvent(action);
             } else if (action.When && action.When.EOS) {
                 SetEosEvent(action);
             } else {
-                console.log(NAME, fnName, "NO ACTION TO REGISTER", action);
+                LOGGER.debug(NAME, fnName, "NO ACTION TO REGISTER", action);
             }
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
     var setTimedAction = function (action) {
-        /// <summary>Sets action based on a time delay.</summary>
-        /// <param name="action" type="Object">Action object.</param>
-        /// <returns>None</returns>
         var fnName = "setTimedAction";
         try {
-            //LOGGER.debug(pName, fnName);
-            setTimeout(function () { //set execute action function with this action delay.
-                executeAction(action);
-            }, action.When.Time.Delay);
+            var repeatable = CnnXt.Storage.GetRepeatablesInConv(action.id);
+
+            if (!action.When.Time.Repeatable) {
+                action.When.Time.Repeatable = 1;
+            }
+
+            if (!action.When.Time.RepeatableConv) {
+                action.When.Time.RepeatableConv = 1;
+            }
+
+            if (action.When.Time.Repeatable > action.count && action.When.Time.RepeatableConv > repeatable) {
+                setTimeout(function () {
+                    executeAction(action);
+                    action.count++;
+                    CnnXt.Storage.UpdateRepeatablesInConv(action.id);
+                },
+                    action.When.Time.Delay);
+            }
+
+            //var interval = setInterval(function () {
+            //    var repeatable = CnnXt.Storage.GetRepeatablesInConv(action.id);
+
+            //    if (action.When.Time.Repeatable > action.count && action.When.Time.RepeatableConv > repeatable) {
+            //        if (!action.inProgress) {
+            //            action.inProgress = true;
+            //            executeAction(action);
+            //            action.count++;
+            //            CnnXt.Storage.UpdateRepeatablesInConv(action.id);
+            //        } 
+            //    } else {
+            //        clearInterval(interval);
+            //    }
+
+            //}, action.When.Time.Delay);
+
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -10984,7 +12126,7 @@ var ConnextAction = function ($) {
         /// <summary>Sets action based on an element on the screen.</summary>
         /// <param name="action" type="Object">Action object.</param>
         /// <returns>None</returns>
-        var fnName = "setTimedAction";
+        var fnName = "SetEosEvent";
         try {
 
             action.count = 0;
@@ -11006,11 +12148,11 @@ var ConnextAction = function ($) {
                         var repeatable = CnnXt.Storage.GetRepeatablesInConv(action.id);
                         if ($(actionElem).is(":not(:visible)")) {
                             if (action.When.EOS.Repeatable > action.count && action.When.EOS.RepeatableConv > repeatable) {
-                                if (!action.inProggress) {
-                                    action.inProggress = true;
+                                if (!action.inProgress) {
+                                    action.inProgress = true;
                                     executeAction(action);
                                     action.count++;
-                                    action.inProggress = false;
+                                    action.inProgress = false;
                                     CnnXt.Storage.UpdateRepeatablesInConv(action.id);
 
                                 }
@@ -11026,7 +12168,7 @@ var ConnextAction = function ($) {
                 });
             }, action.When.EOS.Delay);
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
 
@@ -11036,7 +12178,7 @@ var ConnextAction = function ($) {
         /// <summary>Sets action based on a hover.</summary>
         /// <param name="action" type="Object">Action object.</param>
         /// <returns>None</returns>
-        var fnName = "setTimedAction";
+        var fnName = "setHoverEvent";
         try {
             //LOGGER.debug(pName, fnName);
 
@@ -11081,7 +12223,7 @@ var ConnextAction = function ($) {
             }, delay);
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
     //#endregion ACTION TRIGGER FUNCTIONS
@@ -11107,8 +12249,12 @@ var ConnextAction = function ($) {
             var allowedCharactersCount = action.What.PrevChars;
             var currentCharacterPosition = 0;
             var parent = $(CONTENT_SELECTOR)[0];
+            var $originalContent = $(CONTENT_SELECTOR).clone();
+            $originalContent.find(".Mg2-connext[data-display-type=inline]").remove();
+            $originalContent.find(".Mg2-connext[data-display-type=info-box]").remove();
+            $originalContent.find(".Mg2-connext[data-display-type=banner]").remove();
+            ORIGINAL_CONTENT = $originalContent[0].innerHTML;
             var childs = parent.childNodes;
-            ORIGINAL_CONTENT = parent.innerHTML;
             if (MASKING_METHOD) {
                 calculateTagText(parent, childs);
             }
@@ -11199,7 +12345,7 @@ var ConnextAction = function ($) {
             }
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             throw { name: 'HideContentExeption', message: 'Cannot hide content!' };
         }
     };
@@ -11233,7 +12379,7 @@ var ConnextAction = function ($) {
             $(CONTENT_SELECTOR).html(ORIGINAL_CONTENT);
 
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
         }
     };
     var getDaysToExpire = function (currentConv) {
@@ -11246,6 +12392,16 @@ var ConnextAction = function ($) {
 
         return (diff <= 0) ? 'less than 1' : diff;
     };
+
+    function getArticleCost ()  {
+        var fnName = 'getArticleCost',
+            ARTICLE_COST_STORAGE_NAME = 'ArticleCost';
+
+        LOGGER.debug(NAME, fnName);
+
+        return sessionStorage.getItem(ARTICLE_COST_STORAGE_NAME)
+    }
+
     var handleDynamicHtml = function (html) {
         /// <summary>Takes html and replaces any dynamic {{ }} templating with appropriate values. </summary>
         /// <param name="html" type="String">html string to process templating against.</param>
@@ -11262,6 +12418,8 @@ var ConnextAction = function ($) {
                 currentConversation = CnnXt.Campaign.GetCurrentConversation();
 
             var FixedHtml = html.replace(regEx, function (match) {
+                var fnName = "FixedHtml";
+                var fallbackName = 'User';
                 //Right now we are only handling the FreeViewsLeft template, need to add additional template types (PaywallLimitTerm - (Day, Week, Month etc...)...)
                 switch (match) {
                     case "{{FreeViewsLeft}}":
@@ -11274,19 +12432,71 @@ var ConnextAction = function ($) {
                         return currentConversationProps.views;
                     case "{{ExpireTimeLeft}}":
                         return getDaysToExpire(currentConversation);
+                    case "{{ArticleCost}}":
+                        LOGGER.debug(NAME, fnName, 'Replace ArticleCost to', getArticleCost());
+                        return getArticleCost() ? getArticleCost() : '';
+                    case "{{UserFullName}}":
+                        try {
+
+                            var state = CnnXt.Storage.GetUserState(),
+                                authType = CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId,
+                                userData;
+
+                            if (state) {
+                                if (state == 'Logged Out') {
+                                    return fallbackName;
+                                }
+                                if (state !== 'Logged Out') {
+                                    if (state !== 'Logged In' && authType === 1) { //process MG2 data profile
+                                        userData = CnnXt.Storage.GetUserData();
+                                        if (userData) {
+                                            var fullName = null;
+                                            if (userData.OwnedSubscriptions) {
+                                                fullName = userData.OwnedSubscriptions[0].FullName;
+                                            } else if (userData.Subscriptions) {
+                                                fullName = userData.Subscriptions[0].FirstName + ' ' + userData.Subscriptions[0].LastName;
+                                            }
+                                            return fullName || fallbackName;
+                                        } else return fallbackName;
+                                    } else {
+                                        if (authType === 2) { // process Janrain data
+                                            userData = CnnXt.Storage.GetJanrainUser();
+                                            if (userData) {
+                                                return userData.displayName || fallbackName;
+                                            } else return fallbackName;
+                                        }
+                                        if (authType === 3) { // process GUP data
+
+                                        }
+                                        if (authType === 4) { // process Auth0 data
+                                            userData = CnnXt.Storage.GetUserProfile();
+                                            if (userData) {
+                                                return userData.name || userData.nickname || fallbackName;
+                                            } else return fallbackName;
+                                        }
+                                        if (authType === 5) {
+                                            userData = CnnXt.Storage.GetUserData();
+                                            if (userData) {
+                                                return userData.DisplayName;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else return fallbackName;
+                        } catch (e) {
+                            LOGGER.error(fnName, "EXCEPTION", e);
+                            return fallbackName;
+                        }
                 }
             });
+
             var $html = $(FixedHtml);
-            var hrefs = $html.find("[href]:not([data-dismiss])");
-            $.each(hrefs,
-                function (key, value) {
-                    var href = $(value).attr("href");
-                    href = CnnXt.Utils.AddReturnUrlParamToLink(href);
-                    $(value).attr("href", href);
-                });
+
+            CnnXt.Utils.AddQueryParamsToAllLinks($html);
+
             return $html[0].outerHTML; // returning html regardless.
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             return html; // returning html regardless.
         }
     };
@@ -11295,12 +12505,14 @@ var ConnextAction = function ($) {
     var initListeners = function () {
         $('body').on('click', '[data-mg2-action="click"]', commonClickHandler);
 
-        $("body").on('click', '[data-mg2-action="login"], [data-mg2-action="submit"], [data-mg2-action="Zipcode"], [data-mg2-action="openNewsletterWidget"]',
+        $("body").on('click', '[data-mg2-action="login"], [data-mg2-action="connextRun"], [data-mg2-action="submit"], [data-mg2-action="Zipcode"], [data-mg2-action="openNewsletterWidget"],[data-mg2-action="activation"]',
             function (event) {
                 event.preventDefault();
 
-                commonClickHandler(event)
+                commonClickHandler(event);
             });
+
+        $('body').on('click', '[data-mg2-action="click-Newsday"]', newsdayClickHadler);
     };
 
     function commonClickHandler(event) {
@@ -11318,7 +12530,25 @@ var ConnextAction = function ($) {
         }
 
         CnnXt.Event.fire("onButtonClick", event);
-    }
+    };
+
+    function newsdayClickHadler(event) {
+        var $target = $(event.target),
+            parents = $target.parents('.Mg2-connext'),
+            elementId,
+            actionId;
+
+        if (parents.length) {
+            elementId = $(parents[0]).attr('id');
+            if (elementId) {
+                actionId = parseInt(elementId.split('-')[1]);
+                event.actionId = actionId;
+            }
+        }
+
+        CnnXt.Event.fire("onNewsdayButtonClick", event);
+        CnnXt.Event.fire("onButtonClick", event);
+    };
 
     //#endregion HELPERS
 
@@ -11333,6 +12563,9 @@ var ConnextAction = function ($) {
         },
         IntegrateProduct: function () {
             integrateProduct();
+        },
+        SetTimedAction: function (action) {
+            setTimedAction(action);
         }
     };
 
@@ -11348,6 +12581,7 @@ var ConnextWhitelist = function ($) {
     var CLOSE_TRIGGER = {
         CloseButton: "closeButton",
         ClickOutside: "clickOutside",
+        AccessGranted: "accessGranted",
         EscButton: "escButton"
     };
 
@@ -11358,34 +12592,103 @@ var ConnextWhitelist = function ($) {
 
     var wrongPinStatus = 100;
 
-    var checkClientIp = function (config) {
-        configuration = config;
+    var processSuccessfulIpRequest = function(data, config) {
+        if (data && data.ip) {
+            USER_IP = data.ip;
 
-        $.ajax({
-            url: CnnXt.Common.IPInfo,
-            type: "GET",
-            success: function (data) {
-                if (data && data.ip) {
-                    USER_IP = data.ip;
-
-                    if (config && config.WhitelistSets) {
-                        config.WhitelistSets.forEach(function (set) {
-                            if (set.IPs) {
-                                if (_.find(set.IPs, function (item) { return item.IP == USER_IP }) != null) {
-                                    WHITELIST_SET = set;
-                                    return;
-                                }
+            if (config && config.WhitelistSets) {
+                config.WhitelistSets.forEach(function (set) {
+                    if (set && _.isArray(set.IPs)) {
+                        set.IPs.forEach(function (allowedIP) {
+                            if (!WHITELIST_SET && compareIPs(USER_IP, allowedIP.IP)) {
+                                WHITELIST_SET = set;
                             }
                         });
                     }
-                }
+                });
+            }
+        }
+
+        if (!WHITELIST_SET) {
+            determinePinTemplate(WHITELIST_SET);
+        } else {
+            if (!WHITELIST_SET.CodesAreNotRequired) {
                 determinePinTemplate(WHITELIST_SET);
+            } else {
+                CnnXt.Event.fire('onAccessGranted', { message: "Success! Now you have full access", status: 200 });
+            }
+        }
+    };
+
+    var checkClientIp = function (config) {
+        var fnName = 'checkClientIp';
+
+        LOGGER.debug(NAME, fnName, 'Check client IP');
+
+        configuration = config;
+
+        //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: CnnXt.Common.IPInfo, ApiPayload: {} });
+
+        return $.ajax({
+            url: CnnXt.Common.IPInfo,
+            type: "GET",
+            success: function (data) {
+                LOGGER.debug(NAME, fnName, 'success', data);
+
+                processSuccessfulIpRequest(data, config);
             },
             error: function () {
-                console.log("IPERROR, ERROR DEFINING IP");
-                determinePinTemplate(WHITELIST_SET);
+                LOGGER.debug(NAME, fnName, 'IPInfo call failed. Calling API to get info');
+
+                CnnXt.API.GetClientIpInfo()
+                    .done(function (data) {
+                        LOGGER.debug(NAME, fnName, 'success', data);
+
+                        processSuccessfulIpRequest(data, config);
+                    })
+                    .fail(function (err) {
+                        LOGGER.error(NAME, fnName, 'error', err);
+                        determinePinTemplate(WHITELIST_SET);
+                    });
             }
         });
+    }
+
+    function compareIPs(userIP, allowedIP) {
+        var fnName = 'compareIPs';
+
+        try {
+            var IP_AND_CIDR_REGEX = /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$/;
+
+            if (!userIP || !allowedIP) {
+                return false;
+            }
+
+            var isIP = false,
+                isCIDR = false;
+
+            if (IP_AND_CIDR_REGEX.test(allowedIP)) {
+                if (!~allowedIP.indexOf('/')) {
+                    isIP = true;
+                } else {
+                    isCIDR = true;
+                }
+            }
+
+            if (isIP) {
+                return userIP === allowedIP;
+            }
+
+            if (isCIDR) {
+                return CnnXt.Utils.IPWithinRangeCIDR(userIP, allowedIP);
+            }
+
+            return false;
+
+        } catch (ex) {
+            LOGGER.exception(NAME, fnName, ex);
+            return false;
+        }
     }
 
     function determinePinTemplate(whiteListSet) {
@@ -11475,36 +12778,10 @@ var ConnextWhitelist = function ($) {
             } else {
                 $passwordEl.addClass('Mg2-pin__input_error');
                 $messageEl.text('Please enter code')
-                .addClass('Mg2-pin__message_error')
-                .show();
+                    .addClass('Mg2-pin__message_error')
+                    .show();
             }
         });
-
-        $pinModal
-     .on('keydown', function (e) {
-         if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
-             $pinModal.closeEvent = CLOSE_TRIGGER.EscButton;
-
-         }
-     })
-
-     .on("hidden", function (e) {
-         CnnXt.Storage.SetWhitelistInfoboxCookie(true);
-         if ($pinModal.closeEvent == null || $pinModal.closeEvent == undefined) {
-             fireCloseEvent(CLOSE_TRIGGER.ClickOutside);
-         } else if ($pinModal.closeEvent == CLOSE_TRIGGER.EscButton) {
-             fireCloseEvent(CLOSE_TRIGGER.EscButton);
-         }
-
-         CnnXt.ConnextContinueProcessing(configuration);
-     })
-     .on('click', '[data-dismiss]', function (e) {
-         if ($(this).hasClass('proceed-without-pin')) {
-             CnnXt.Storage.SetNeedHidePinTemplateCookie(true);
-         }
-         $pinModal.closeEvent = CLOSE_TRIGGER.CloseButton;
-         fireCloseEvent(CLOSE_TRIGGER.CloseButton);
-     });
 
         $pinModal
             .on('keydown', function (e) {
@@ -11528,12 +12805,14 @@ var ConnextWhitelist = function ($) {
                 if ($(this).hasClass('proceed-without-pin')) {
                     CnnXt.Storage.SetNeedHidePinTemplateCookie(true);
                 }
-
+                $pinModal.closeEvent = CLOSE_TRIGGER.CloseButton;
                 fireCloseEvent(CLOSE_TRIGGER.CloseButton);
             });
 
         $pinInfoBox
+
             .on('click', '[data-dismiss]', function (e) {
+                e.preventDefault();
                 $pinInfoBox.addClass("hide");
                 fireCloseEvent(CLOSE_TRIGGER.CloseButton);
             })
@@ -11542,13 +12821,31 @@ var ConnextWhitelist = function ($) {
             });
 
         function checkMg2Pin(pin, $messageEl, $passwordEl) {
+            var url = CnnXt.GetOptions().api + "api/whitelist/check" + "?code=" + encodeURIComponent(pin) + "&setId=" + WHITELIST_SET.id + "&ip=" + USER_IP;
+
+            //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.APICall, { ApiUrl: url, ApiPayload: { Pin: pin, WhitelistSetId: WHITELIST_SET.id, UserIP: USER_IP } });
+
             $.ajax({
                 method: "GET",
-                url: CnnXt.GetOptions().api + "api/whitelist/check" + "?code=" + encodeURIComponent(pin) + "&setId=" + WHITELIST_SET.id + "&ip=" + USER_IP
-            }).success(function (response) {
-                CnnXt.Storage.SetWhitelistSetIdCookie(response.WhitelistSetId, new Date(response.expires));
-                mg2PinSuccess($messageEl, { message: "Success! Now you have full access" });
-            }).error(function (response) {
+                url: url
+            }).done(function (response) {
+                CnnXt.Storage.SetWhitelistSetIdCookie({ Id: response.WhitelistSetId, Expiration: response.expires },
+                    new Date(response.expires));
+                mg2PinSuccess($messageEl, { message: "Success! Now you have full access", status: 200 });
+
+                var data = {
+                    UserId: Fprinting().getDeviceId(),
+                    ConfigCode: CnnXt.GetOptions().configCode,
+                    SiteCode: CnnXt.GetOptions().siteCode,
+                    SettingsKey: CnnXt.GetOptions().settingsKey,
+                    ViewData: CnnXt.Campaign.GetLocalViewData()
+                };
+                if (CnnXt.User.getMasterId()) {
+                    data.masterId = CnnXt.User.getMasterId();
+                }
+
+                CnnXt.API.SendViewData(data);
+            }).fail(function (response) {
                 var errorMessage = response.responseText ? JSON.parse(response.responseText).Message : response.statusText;
                 var errorCode = response.responseText ? JSON.parse(response.responseText).ErrorCode : '';
                 mg2PinFail($messageEl, { message: errorMessage, status: errorCode }, $passwordEl);
@@ -11563,19 +12860,27 @@ var ConnextWhitelist = function ($) {
 
             setTimeout(function () {
                 $('.Mg2-pin-modal').connextmodal("hide");
+                $('.Mg2-pin-infobox').hide();
                 CnnXt.Run();
             }, 1000);
+
+            CnnXt.Event.fire('onAccessGranted', params);
+            fireCloseEvent(CLOSE_TRIGGER.AccessGranted);
         };
 
         function mg2PinFail($messageEl, params, $passwordEl) {
             if (params.status == wrongPinStatus) {
                 CnnXt.Storage.WrongPin();
             }
+
             $messageEl
                 .text(params.message)
                 .addClass('Mg2-pin__message_error')
                 .show();
+
             $passwordEl.val('');
+
+            CnnXt.Event.fire('onAccessDenied', params);
         };
     }
 
@@ -11610,40 +12915,97 @@ var ConnextWhitelist = function ($) {
     return {
         init: function (options) {
             LOGGER = CnnXt.Logger;
+            CnnXt.Storage.UpdateWhitelistSetCookieName();
+            CnnXt.Storage.UpdateWhitelistInfoboxCookieName();
+            CnnXt.Storage.UpdateNeedHidePinTemplateCookieName();
             LOGGER.debug(NAME, "Whitelist.Init");
         },
         checkClientIp: checkClientIp
     };
 };
 var ConnextAppInsights = function ($) {
-
+    var LOGGER;
     var userId = null;
-    var init = function () {
-
+    var init = function (userId, masterId) {
+        LOGGER = CnnXt.Logger;
         var appInsights = window.appInsights || function (config) {
-            function i(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i); if (t.context) { userId = t.context.user.id; } }) } }
-            var t = { config: config }, u = document, e = window, o = "script", s = "AuthenticatedUserContext", h = "start", c = "stop", l = "Track", a = l + "Event", v = l + "Page",
-                y = u.createElement(o), r, f; y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(y);
-            try { t.cookie = u.cookie } catch (p) { } for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;)i("track" + r.pop());
-            return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"), config.disableExceptionTracking || (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o)
-            { var s = f && f(config, i, u, e, o); return s !== !0 && t["_" + r](config, i, u, e, o), s }), t
+            function i(config) {
+                t[config] = function () {
+                    var i = arguments;
+                    t.queue.push(function () {
+                        t[config].apply(t, i);
+                        if (t.context) {
+                            //userId = t.context.user.id;
+                        }
+                    });
+                }
+            }
+            var t = {
+                    config: config
+                },
+                u = document,
+                e = window,
+                o = "script",
+                s = "AuthenticatedUserContext",
+                h = "start",
+                c = "stop",
+                l = "Track",
+                a = l + "Event",
+                v = l + "Page",
+                y = u.createElement(o),
+                r, f;
+            y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js";
+            u.getElementsByTagName(o)[0].parentNode.appendChild(y);
+            try {
+                t.cookie = u.cookie;
+            } catch (p) { }
+            for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;) i("track" + r.pop());
+            return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"),
+                config.disableExceptionTracking ||
+                (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o) {
+                    var s = f && f(config, i, u, e, o);
+                    return s !== !0 && t["_" + r](config, i, u, e, o), s;
+                }), t;
         }({
-            instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment]
+            instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment],
+            disableExceptionTracking: true,
+            appUserId: userId,
+            accountId: masterId
         });
-
         window.appInsights = appInsights;
+        if (!appInsights.queue) {
+            appInsights.queue = [];
+        }
+        appInsights.queue.push(function () {
+            appInsights.context.addTelemetryInitializer(function (envelope) {
+                var telemetryItem = envelope.data.baseData;
+                if (envelope.data.baseType === 'RemoteDependencyData') {
+                    return telemetryItem.data.indexOf('connext') !== -1
+                        || telemetryItem.target.indexOf('auth0') !== -1;
+                }
+            });
+        });
+        appInsights.setAuthenticatedUserContext(userId, masterId);
+
         appInsights.trackPageView();
+
     }
 
     var trackEvent = function (name, data) {
-        var appInsightsData = getEventDataByName(name, data);
-
-        appInsights.trackEvent(name, appInsightsData);
+        try {
+            var appInsightsData = getEventDataByName(name, data);
+            appInsights.trackEvent(name, appInsightsData);
+        }
+        catch (e) {
+            if (CnnXt.GetOptions().debug) {
+                LOGGER.error("track Application insights error");
+            }
+        }
     }
 
     var getAppInsightsData = function (additionalData) {
         var config = CnnXt.Storage.GetLocalConfiguration(),
-            conversation = CnnXt.Storage.GetCurrentConverstaion(),
+            conversation = CnnXt.Storage.GetCurrentConversation(),
             metaData = CnnXt.Utils.GetUserMeta(),
             userData = CnnXt.Storage.GetUserData(),
             meter = CnnXt.Storage.GetMeter();
@@ -11686,8 +13048,6 @@ var ConnextAppInsights = function ($) {
 
         return appInsightsData;
     }
-
-
     var getEventDataByName = function (name, innerdata) {
         var eventData = innerdata.EventData;
         var config = CnnXt.Storage.GetLocalConfiguration();
@@ -11697,68 +13057,69 @@ var ConnextAppInsights = function ($) {
             stk: CnnXt.GetOptions().settingsKey //settings key 
         };
         switch (name) {
-            case "onDynamicMeterFound":
-                data.dmn = eventData;  //dynamic meter name
-                break;
-            case "onCampaignFound":
-                data.cmn = eventData.Name; //campaign name,
-                data.cmid = eventData.id; //campaign id
-                break;
-            case "onMeterLevelSet":
-                data.mlm = eventData.method; //dynamic meter method (default or dynamic)
-                data.ml = eventData.level; //meter level id (1,2,3)
-                data.rid = eventData.rule ? eventData.rule.id : null; //passed rule id. isn't empty if method is dynamic
-                data.rn = eventData.rule ? eventData.rule.Name : null; //passed rule name. isn't empty if method is dynamic
-                break;
-            case "onConversationDetermined":
-                data.cnvid = eventData.id; //convo id
-                data.cnvn = eventData.Name; //convo name
-                data.ml = eventData.MeterLevelId; //meter level
-                data.vws = eventData.Props.views; //current views
-                data.artlft = eventData.Props.ArticleLeft; //current articles  left
-                break;
-            case "onAuthorized":
-            case "onHasAccess":
-            case "onHasAccessNotEntitled":
-            case "onHasNoActiveSubscription":
-                data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
-                data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
-                data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
-                break;
-            case "onLoggedIn":
-                data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
-                data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
-                data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
-                data.us = CnnXt.Storage.GetUserState(); //current status of user
-                break;
-            case "onActionShown":
-                data.actid = eventData.id //action id
-                data.actn = eventData.Name;  //action name 
-                data.actt = eventData.ActionTypeId;  //action type
-                data.usdfdt = eventData.UserDefinedData; // user defined data
-                data.artc = eventData.ArticlesViewed; //viewed articles count
-                break;
-            case "onActionClosed":
-                data.actid = eventData.id; //action id
-                data.actn = eventData.Name;  //action name 
-                data.actt = eventData.ActionTypeId;  //action type
-                data.usdfdt = eventData.UserDefinedData; // user defined data
-                data.artc = eventData.ArticlesViewed; //viewed articles count
-                data.clev = eventData.closeEvent; // close event 
-                break;
-            case "onButtonClick":
-                data.udfat = eventData.UserDefinedDataAttr;  // user defined attribut
-                data.actid = innerdata.Action ? innerdata.Action.id : null; //action id
-                data.actn = innerdata.Action ? innerdata.Action.Name : null; //action name
-                data.actt = innerdata.Action ? innerdata.Action.ActionTypeId : null; //action type
-                data.btnhtml = eventData.ButtonHTML || ''; //button html
-                break;
-            case "onFinish":
-                data = getAppInsightsData(innerdata);
-                break;
+        case "onDynamicMeterFound":
+            data.dmn = eventData;  //dynamic meter name
+            break;
+        case "onCampaignFound":
+            data.cmn = eventData.Name; //campaign name,
+            data.cmid = eventData.id; //campaign id
+            break;
+        case "onMeterLevelSet":
+            data.mlm = eventData.method; //dynamic meter method (default or dynamic)
+            data.ml = eventData.level; //meter level id (1,2,3)
+            data.rid = eventData.rule ? eventData.rule.id : null; //passed rule id. isn't empty if method is dynamic
+            data.rn = eventData.rule ? eventData.rule.Name : null; //passed rule name. isn't empty if method is dynamic
+            break;
+        case "onConversationDetermined":
+            data.cnvid = eventData.id; //convo id
+            data.cnvn = eventData.Name; //convo name
+            data.ml = eventData.MeterLevelId; //meter level
+            data.vws = eventData.Props.views; //current views
+            data.artlft = eventData.Props.ArticleLeft; //current articles  left
+            break;
+        case "onAuthorized":
+        case "onHasAccess":
+        case "onHasAccessNotEntitled":
+        case "onHasNoActiveSubscription":
+            data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
+            data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
+            data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
+            break;
+        case "onLoggedIn":
+            data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
+            data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
+            data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
+            data.us = CnnXt.Storage.GetUserState(); //current status of user
+            break;
+        case "onActionShown":
+            data.actid = eventData.id //action id
+            data.actn = eventData.Name;  //action name 
+            data.actt = eventData.ActionTypeId;  //action type
+            data.usdfdt = eventData.UserDefinedData; // user defined data
+            data.artc = eventData.ArticlesViewed; //viewed articles count
+            break;
+        case "onActionClosed":
+            data.actid = eventData.id //action id
+            data.actn = eventData.Name;  //action name 
+            data.actt = eventData.ActionTypeId;  //action type
+            data.usdfdt = eventData.UserDefinedData; // user defined data
+            data.artc = eventData.ArticlesViewed; //viewed articles count
+            data.clev = eventData.closeEvent; // close event 
+            break;
+        case "onButtonClick":
+            data.udfat = eventData.UserDefinedDataAttr;  // user defined attribut
+            data.actid = innerdata.Action ? innerdata.Action.id : null; //action id
+            data.actn = innerdata.Action ? innerdata.Action.Name : null; //action name
+            data.actt = innerdata.Action ? innerdata.Action.ActionTypeId : null; //action type
+            data.btnhtml = eventData.ButtonHTML || ''; //button html
+            break;
+        case "onFinish":
+            data = getAppInsightsData(innerdata);
+            break;
         }
         return data;
     }
+
 
     return {
         init: init,
@@ -11768,13 +13129,820 @@ var ConnextAppInsights = function ($) {
         }
     }
 }
+var ConnextActivation = function ($) {
+    //#region GLOBALS
+    var NAME = "Activation", //base name for logging.
+        LOGGER,
+        IsActivationFlowRunning = false,
+        $ACTIVATION_MODAL,
+        ISUIListenersAdded = false,
+        ACTIVATE_SETTINGS = '',
+        USER_STATES,
+        CLOSE_CASES = {
+            CloseButton: "closeButton",
+            CloseSpan: "closeSpan",
+            ClickOutside: "clickOutside",
+            EscButton: "escButton",
+            MoveToActivate: "moveToLinkStep",
+            MoveToSuccess: "moveToSuccessStep",
+            MoveToFail: "moveToErrorStep"
+        },
+        STEPS = {
+            Authenticate: "Authenticate",
+            Activate: "Activate",
+            Success: "Success",
+            Fail: "Fail"
+        },
+        AUTHSYSTEM,
+        CURRENT_STEP,
+        UI_SELECTORS = {
+            Modal: '[data-connext-dynamic-size]',
+            Step: 'data-connext-template-step',
+            Steps: {
+                Authenticate: '[data-connext-template-step="Authenticate"]',
+                Activate: '[data-connext-template-step="Activate"]'
+            },
+            SubStep: 'data-connext-template-substep',
+            SubSteps: {
+                Login: '[data-connext-template-substep="Login"]',
+                Registration: '[data-connext-template-substep="Registration"]',
+                SubscribeLink: '[data-connext-template-substep="SubscribeLink"]',
+                UpgradeLink: '[data-connext-template-substep="UpgradeLink"]',
+                ActivateForm: '[data-connext-template-substep="ActivateForm"]',
+                SuccessActivation: '[data-connext-template-substep="Success"]',
+                FailActivation: '[data-connext-template-substep="Fail"]'
+            },
+            Run: '[data-mg2-action="activation"]',
+            Buttons: {
+                ConnextRun: '[data-mg2-action="connextRun"]:visible',
+                BackStep: '[data-mg2-acton="backStep"]:visible'
+            },
+            Inputs: {
+                common: '[data-connext-input]',
+                visible: '[data-connext-input]:visible',
+                Email: '[data-connext-input="Email"]:visible',
+                AllEmails: '[data-connext-input="Email"]',
+                Password: '[data-connext-input="Password"]:visible',
+                SearchOptions: '[data-connext-input="SearchOption"]:visible',
+                LastName: '[data-connext-input="LastName"]:visible',
+                AccountNumber: '[data-connext-input="AccountNumber"]:visible',
+                ZipCode: '[data-connext-input="ZipCode"]:visible',
+                HouseNumber: '[data-connext-input="HouseNumber"]:visible',
+                PhoneNumber: '[data-connext-input="PhoneNumber"]:visible'
+            },
+            Links: '[redirect="true"]',
+            CloseButton: '[data-connext-role="close"]',
+            ErrorMessages: {
+                LoginSubstep: '[data-connext-template-substep="LoginFormError"]',
+                RegistrationSubStep: '[data-connext-template-substep="RegistrationFormError"]',
+                Activation: '[data-connext-template-substep="ActivateFormError"]'
+            },
+            AuthSystems: {
+                Janrain: '.janrain-close-modal',
+                Auth0: '.auth0-lock-close-button'
+            }
+        },
+        SUCCESS_MESSAGES = {
+            Linked: 'Your account has been linked successfully. '
+        },
+        ERROR_MESSAGES = {
+            emailInUse: "There is already an account associated with this email address. Please enter a new email address. ",
+            emailAndPassRequired: 'Please enter email and password. ',
+            fieldsRequired: 'Please fill out all the required fields. ',
+            invalidCredits: "There was an error with your E-Mail/Password combination. Please try again. ",
+            noSubscriptions: "Subscriptions not found. ",
+            requiredEmail: "Email is required. ",
+            requiredPassword: "Password is required. ",
+            linkingFailed: "I\'m sorry, an error occurred and we can\'t complete this process.  Please contact customer service for assistance. ",
+            digitalAccessNeedUpgrade: "I\'m sorry, your subscription does not give you access to this content. Please <a data-connext-link='Upgrade' redirect='true'>upgrade</a> to get access. ",
+            digitalAccessNeedPurchase: "I\'m sorry, your subscription does not give you access to this content. Please <a data-connext-link='Subscribe' redirect='true'>subscribe</a> to get access. "
+        },
+        SEARCHOPTIONS = {
+            ActivateByAccountNumber: "ActivateByAccountNumber",
+            ActivateByZipCodeAndHouseNumber: "ActivateByZipCodeAndHouseNumber",
+            ActivateByZipCodeAndPhoneNumber: "ActivateByZipCodeAndPhoneNumber",
+            ActivateBySubscriptionId: "ActivateBySubscriptionId"
+        },
+        STEPS_WIDTH = {
+            Authenticate: 420,
+            Activate: 672
+        };
+
+
+    //#endregion
+
+
+    //#region public functions
+    var run = function (options) {
+
+        if (IsActivationFlowRunning && !(options && options.runAfterSuccessfulLogin)) {
+            return;
+        }
+
+        var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+        calculateCurrentStep();
+
+        if (CURRENT_STEP == STEPS.Activate && activationUrlParams.subscriptionNumber) {
+            autoLinkingBySubscriptionId(activationUrlParams.subscriptionNumber);
+        } else {
+            if (CURRENT_STEP == null) {
+                return false;
+            }
+
+            IsActivationFlowRunning = true;
+            hideInactiveSteps();
+            showLinksByUserStatus();
+
+            if (CURRENT_STEP == STEPS.Authenticate) {
+                LoginFunctions[AUTHSYSTEM]();
+            } else {
+                showActivationTemplate();
+            }
+        }
+    }
+
+    //#endregion
+
+    //#region private functions
+
+    var showJanrainLogin = function () {
+        if (window.janrain) {
+            janrain.capture.ui.modal.open();
+        } else {
+            LOGGER.error("No janrain global object found...");
+        }
+    }
+
+    var showAuth0Login = function () {
+        CnnXt.User.showAuth0Login();
+    }
+
+    var calculateCurrentStep = function () {
+        var userState = Connext.Storage.GetUserState();
+
+        if (userState == null) {
+            userState = USER_STATES.NotLoggedIn;
+        }
+
+        if (userState == USER_STATES.NotLoggedIn) {
+            CURRENT_STEP = STEPS.Authenticate;
+            $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH.Authenticate);
+            $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Authenticate).css("margin-left", "-" + STEPS_WIDTH.Authenticate/2 + "px");
+        } else if (userState == USER_STATES.Subscribed) {
+            CURRENT_STEP = null; //don't need to show any template
+            IsActivationFlowRunning = false;
+        } else {
+            CURRENT_STEP = STEPS.Activate;
+            $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH.Activate);
+            $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Activate).css("margin-left", "-" + STEPS_WIDTH.Activate / 2 + "px");
+        }
+    }
+
+    var hideInactiveSteps = function () {
+        var $steps = $ACTIVATION_MODAL.find('[' + UI_SELECTORS.Step + ']');
+
+        $steps.each(function (index, step) {
+            var $step = $(step);
+
+            if ($step.attr(UI_SELECTORS.Step) == CURRENT_STEP) {
+                $step.show();
+            } else {
+                $step.hide();
+            }
+        });
+    }
+
+    var checkCurrentStep = function (afterAuth) {
+        calculateCurrentStep();
+
+        if (CURRENT_STEP == null && !afterAuth) {
+            hideTemplate();
+        } else if (CURRENT_STEP == null && afterAuth) {
+            CnnXt.Run()
+            CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
+        }
+    
+        hideInactiveSteps();
+
+        if (afterAuth && CURRENT_STEP == STEPS.Activate) {
+            var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+            if (activationUrlParams.subscriptionNumber) {
+                hideTemplate();
+                autoLinkingBySubscriptionId(activationUrlParams.subscriptionNumber);
+            } else {
+                CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
+                CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+            }  
+        }
+    }
+
+    var showLinksByUserStatus = function () {
+        var $subscribeLink = $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.SubscribeLink),
+            $upgradeLink = $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.UpgradeLink),
+            userState = Connext.Storage.GetUserState();
+
+        if (userState == USER_STATES.SubscribedNotEntitled) {
+            $subscribeLink.hide();
+            $upgradeLink.show();
+        } else {
+            $upgradeLink.hide();
+            $subscribeLink.show();
+        }
+    }
+
+    var showActivationTemplate = function () {
+        var options = CnnXt.GetOptions(),
+            modalOptions;
+
+        if (!options.silentmode && ACTIVATE_SETTINGS.IsActivationOnly) {
+            $ACTIVATION_MODAL.find('.connext-actflow-close-wrapper, [data-connext-role="close"]').remove();
+            modalOptions = { backdrop: "static", keyboard: false };
+        } else {
+            modalOptions = { backdrop: "true" };
+        }
+
+        $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH[CURRENT_STEP]).css("margin-left", "-" + STEPS_WIDTH[CURRENT_STEP] / 2 + "px");
+        $ACTIVATION_MODAL.addClass("in").show();
+        $ACTIVATION_MODAL.connextmodal(modalOptions);
+        $ACTIVATION_MODAL.resize();
+
+        CnnXt.Event.fire('onActivationFormShown', { ActivationSettings: ACTIVATE_SETTINGS });
+
+        $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.SuccessActivation).hide();
+        $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.FailActivation).hide();
+
+        if (CURRENT_STEP == STEPS.Authenticate) {
+            CnnXt.Event.fire('onActivationLoginStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+        } else if (CURRENT_STEP == STEPS.Activate) {
+            $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.ActivateForm).show();
+            CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+        }
+
+        processActivationUrlParams();
+
+        $ACTIVATION_MODAL.closeEvent = null;
+
+        $ACTIVATION_MODAL
+            .find('[data-connext-role="close"]')
+            .on('click', function (e) {
+                var $btn = $(this),
+                    href = $btn.attr('href');
+
+                if (href && href !== "#") {
+                    if ($btn[0].hasAttribute("target")) {
+                        window.open(href, "_blank");
+                    } else {
+                        window.location.href = href;
+                    }
+                }
+
+                $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.CloseButton;
+            });
+
+        $ACTIVATION_MODAL
+            .on('keyup', function (e) {
+                if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
+                    $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.EscButton;
+                    IsActivationFlowRunning = false;
+                }
+            })
+            .one("hidden", function (e) {
+                IsActivationFlowRunning = false;
+
+                if (!$ACTIVATION_MODAL.closeEvent) {
+                    $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.ClickOutside;
+                }
+
+                var eventData = {
+                    ActivationSettings: ACTIVATE_SETTINGS,
+                    closeEvent: $ACTIVATION_MODAL.closeEvent
+                }
+
+                if (CURRENT_STEP == STEPS.Authenticate) {
+                    CnnXt.Event.fire('onActivationLoginStepClosed', eventData);
+                }
+
+                if (CURRENT_STEP == STEPS.Activate) {
+                    CnnXt.Event.fire('onActivationLinkStepClosed', eventData);
+                }
+
+                if (CURRENT_STEP == STEPS.Success) {
+                    eventData.ActivateStatus = 'success';
+                    CnnXt.Event.fire('onActivationLinkSuccessStepClosed', eventData);
+                    runAfterLinking();
+                }
+
+                if (CURRENT_STEP == STEPS.Fail) {
+                    eventData.ActivateStatus = 'error';
+                    CnnXt.Event.fire('onActivationLinkErrorStepClosed', eventData);
+                }
+
+                CnnXt.Event.fire('onActivationFormClosed', eventData);
+            });
+    }
+
+    var processActivationUrlParams = function () {
+        var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+        if (CURRENT_STEP == STEPS.Authenticate) {
+            if (activationUrlParams.email) {
+                $ACTIVATION_MODAL.find(UI_SELECTORS.Inputs.AllEmails).val(activationUrlParams.email);
+            }
+        }
+
+        var $links = $ACTIVATION_MODAL.find(UI_SELECTORS.Links);
+
+        $links.each(function (index, link) {
+            var $link = $(link),
+                href = $link.attr("href");
+
+            href = CnnXt.Utils.AddReturnUrlParamToLink(href);
+
+            if ($link.attr('data-connext-link') == "Upgrade") {
+                var productCode = CnnXt.Utils.GetProductCode();
+
+                if (!productCode) {
+                    CnnXt.API.GetProductCode().then(function (responce) {
+                        href = CnnXt.Utils.AddParameterToURL(href, 'product', responce);
+                        $link.attr("href", href);
+                    }, function (error) {
+                        $link.attr("href", href);
+                    });
+                } else {
+                    href = CnnXt.Utils.AddParameterToURL(href, 'product', productCode);
+                    $link.attr("href", href);
+                }
+            } else {
+                $link.attr("href", href);
+            }
+        });
+    }
+
+    var hideTemplate = function () {
+        $ACTIVATION_MODAL.connextmodal('toggle');
+    }
+
+    var login = function (formData) {
+        var fnName = 'login';
+
+        var payload = {
+            email: formData.Email,
+            password: formData.Password
+        }
+
+        showHideErrorMessage(UI_SELECTORS.ErrorMessages.LoginSubstep, false);
+
+        return CnnXt.API.GetUserByEmailAndPassword({
+            payload: payload,
+            onSuccess: function (data) {
+                LOGGER.debug(NAME, fnName, "onSuccess", data);
+                successLogin(data, 'onSuccess', payload);
+            },
+            onError: function (error) {
+                LOGGER.debug(NAME, fnName, "onError", error);
+                showHideErrorMessage(UI_SELECTORS.ErrorMessages.LoginSubstep, ERROR_MESSAGES.invalidCredits);
+            }
+        });
+    }
+
+    var register = function (formData) {
+        var fnName = 'register';
+
+        var payload = {
+            email: formData.Email,
+            password: formData.Password,
+            DisplayName: formData.DisplayName
+        }
+
+        return CnnXt.API.CreateUser({
+            payload: payload,
+            onSuccess: function (data) {
+                LOGGER.debug(NAME, fnName, "onSuccess", data);
+                if (data.Success || data.CustomerRegistrationId) {
+                    login(formData);
+                } else {
+
+                }
+            },
+            onError: function (err) {
+                var errorMessage = '',
+                    parsedError,
+                    parsedErrMsg;
+
+                LOGGER.debug(NAME, fnName, "onError", err);
+
+                try {
+                    parsedError = $.parseJSON(err.responseText);
+                    parsedErrMsg = $.parseJSON(parsedError.Message);
+
+                    if ($.isArray(parsedErrMsg.Errors)) {
+                        parsedErrMsg.Errors.forEach(function (msg) {
+                            if (_.isString(msg)) {
+                                errorMessage += msg + ' ';
+                            } else {
+                                errorMessage += msg.Message + ' ';
+                            }
+                        });
+                    } else {
+                        errorMessage += parsedErrMsg.Message;
+                    }
+                } catch (ex) {
+                    LOGGER.error(NAME, fnName, "EXCEPTION", ex);
+                }
+
+                showHideErrorMessage(UI_SELECTORS.ErrorMessages.RegistrationSubStep, errorMessage);
+            }
+        });
+    }
+
+    var successLogin = function (data, payload) {
+        data.Email = payload.email;
+        data.AuthSystem = 'MG2';
+        CnnXt.User.processSuccessfulLogin("Form", data);
+        checkingResize();
+        checkCurrentStep(true);
+        showLinksByUserStatus();
+    }
+
+    var activate = function (formData) {
+        var fnName = 'activate';
+
+        var apiName = formData.SearchOption,
+            userData = CnnXt.Storage.GetUserData();
+
+        var payload = formData;
+
+        payload.customRegId = (userData && userData.MasterId) ? userData.MasterId : null;
+        payload.autoLink = false;
+
+        CnnXt.Event.fire('onActivationLinkStepSubmitted', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Payload: payload,
+            ActivateBy: payload.SearchOption
+        });
+
+        LOGGER.debug(NAME, fnName, payload);
+
+        return CnnXt.API[apiName]({
+            payload: payload,
+            onSuccess: function (response) {
+                checkAccessAfterLinking(response, payload);
+            },
+            onError: function (error) {
+                errorLinking(error, payload.SearchOption, payload.autoLink);
+            }
+        });
+    }
+
+    var autoLinkingBySubscriptionId = function (subscriptionId) {
+        var fnName = "autoLinkingBySubscriptionId";
+        var userData = CnnXt.Storage.GetUserData(),
+            customRegId = (userData && userData.MasterId) ? userData.MasterId : null,
+            searchOption = SEARCHOPTIONS.ActivateBySubscriptionId,
+            payload = {
+                customRegId: customRegId,
+                SubscriptionId: subscriptionId,
+                autoLink: true
+            };
+
+        CnnXt.Event.fire('onActivationLinkStepSubmitted', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Payload: payload,
+            ActivateBy: searchOption
+        });
+
+        return CnnXt.API.LinkingBySubscription({
+            payload: payload,
+            onSuccess: function (response) {
+                checkAccessAfterLinking(response, payload);
+            },
+            onError: function (error) {
+                errorLinking(error, searchOption, payload.autoLink);
+            }
+        });
+    }
+
+    function checkAccessAfterLinking(response, payload) {
+        var fnName = 'checkAccessAfterLinking';
+
+        LOGGER.debug(NAME, fnName, response);
+
+        if (_.isString(response)) {
+            try {
+                response = $.parseJSON(response);
+            } catch (ex) {
+                errorLinking(response, payload.SearchOption, payload.autoLink);
+            }
+        }
+
+        if (response.errorCode || !response.Success) {
+            errorLinking(response, payload.SearchOption, payload.autoLink);
+        } else {
+            checkDigitalAccess().then(function () {
+                successLinking(response, payload.SearchOption);
+            }, function (digitalAccessResult) {
+                errorLinking(response, payload.SearchOption, payload.autoLink, digitalAccessResult);
+            });
+        }
+    }
+
+    var checkDigitalAccess = function (masterId) {
+        var fnName = 'checkDigitalAccess';
+
+        var defer = $.Deferred(),
+            userData = CnnXt.Storage.GetUserData();
+
+        masterId = masterId || ((userData && userData.MasterId) ? userData.MasterId : null);
+
+        var payload = {
+            masterId: masterId
+        }
+
+        LOGGER.debug(NAME, fnName, 'MasterId', masterId);
+
+        CnnXt.API.CheckDigitalAccess({
+            payload: payload,
+            onSuccess: function (response) {
+                if (response) {
+                    //if status code 400
+                    if (_.isString(response)) {
+                        var result = JSON.parse(response);
+
+                        if (result && _.isArray(result.Errors)) {
+                            if (_.findWhere(result.Errors, { Code: 400 })) {
+                                defer.reject();
+                            }
+                        }
+                    }
+
+                    //check CEP response
+                    if (_.isString(response.AccessLevel)){
+                        if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Premium) {
+                            defer.resolve();
+                        } 
+
+                        if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Upgrade) {
+                            defer.reject({ needUpgrade: true });
+                        }
+
+                        if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Purchase) {
+                            defer.reject({ needPurchase: true });
+                        }
+                    }
+
+                    //check Legacy response
+                    if (_.isObject(response.AccessLevel)){
+                        if (response.AccessLevel.IsPremium) {
+                            defer.resolve();
+                        } 
+
+                        if (response.AccessLevel.IsUpgrade){
+                            defer.reject({ needUpgrade: true });
+                        }
+
+                        if (response.AccessLevel.IsPurchase) {
+                            defer.reject({ needPurchase: true });
+                        }
+                    }
+                }
+
+                //if no resolves - call to reject
+                defer.reject();
+            },
+            onNull: function () {
+                defer.reject();
+            },
+            onError: function (error) {
+                defer.reject();
+            }
+        });
+
+        return defer.promise();
+    }
+
+    var successLinking = function (response, searchOption, autoLink) {
+        IsActivationFlowRunning = false;
+        CnnXt.Storage.SetUserState(null);
+        CURRENT_STEP = STEPS.Success;
+        if (autoLink) {
+            showActivationTemplate();
+        }
+        $('.connext-actflow-close-wrapper .closebtn').attr('data-mg2-action', 'connextRun');
+
+        $(UI_SELECTORS.SubSteps.ActivateForm).hide();
+        $(UI_SELECTORS.Steps.Activate).show();
+        $(UI_SELECTORS.Steps.Authenticate).hide();
+        $(UI_SELECTORS.SubSteps.SuccessActivation).show();
+
+        CnnXt.Event.fire('onActivationLinkStepClosed', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            closeEvent: CLOSE_CASES.MoveToSuccess
+        });
+
+        CnnXt.Event.fire('onActivationLinkSuccessStepShown', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Response: response,
+            ActivateBy: searchOption
+        });
+
+    }
+
+    var errorLinking = function (response, searchOption, autoLink, digitalAccess) {
+        CURRENT_STEP = STEPS.Fail;
+
+        if (autoLink) {
+            showActivationTemplate();
+        }
+
+        $(UI_SELECTORS.SubSteps.ActivateForm).hide();
+        $(UI_SELECTORS.Steps.Activate).show();
+        $(UI_SELECTORS.Steps.Authenticate).hide();
+        $(UI_SELECTORS.SubSteps.FailActivation).show();
+
+        var message = '';
+
+        if (digitalAccess && digitalAccess.needUpgrade) {
+            message = ERROR_MESSAGES.digitalAccessNeedUpgrade;
+        } else if (digitalAccess && digitalAccess.needPurchase) {
+            message = ERROR_MESSAGES.digitalAccessNeedPurchase;
+        } else {
+            message = ERROR_MESSAGES.linkingFailed;
+        }
+
+        $(UI_SELECTORS.SubSteps.FailActivation).find('[data-connext-role="linkingErrorMessage"] span').html(message);
+
+        if (digitalAccess && digitalAccess.needUpgrade) {
+            var upgradeLink = $(UI_SELECTORS.SubSteps.UpgradeLink).find('[data-connext-link="Upgrade"]').attr('href');
+            var $accessUpgradeLink = $(UI_SELECTORS.SubSteps.FailActivation).find('[data-connext-link="Upgrade"]');
+
+            $accessUpgradeLink.attr('href', upgradeLink);
+        }
+
+        if (digitalAccess && digitalAccess.needPurchase) {
+            var subscribeLink = $(UI_SELECTORS.SubSteps.SubscribeLink).find('[data-connext-link="Subscribe"]').attr('href');
+            var $accessSubscribeLink = $(UI_SELECTORS.SubSteps.FailActivation).find('[data-connext-link="Subscribe"]');
+
+            $accessSubscribeLink.attr('href', subscribeLink);
+        }
+
+        CURRENT_STEP = STEPS.Fail;
+
+        CnnXt.Event.fire('onActivationLinkStepClosed', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            closeEvent: CLOSE_CASES.MoveToFail
+        });
+
+        CnnXt.Event.fire('onActivationLinkErrorStepShown', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Response: response,
+            ActivateBy: searchOption
+        });
+    }
+
+    var showHideErrorMessage = function (selector, errorMessage) {
+        var $errorMessageContainer = $(selector);
+
+        if (($errorMessageContainer).length == 0) {
+            return false;
+        }
+
+        if (errorMessage) {
+            $errorMessageContainer.text(errorMessage);
+            $errorMessageContainer.show();
+        } else {
+            $errorMessageContainer.hide();
+        }
+    }
+
+    var runAfterLinking = function () {
+        if (AUTHSYSTEM != 'MG2') {
+            CnnXt.Storage.SetUserData(null);
+        }
+        CnnXt.Run();
+    }
+
+    var LoginFunctions = {
+        MG2: showActivationTemplate,
+        Auth0: showAuth0Login,
+        Janrain: showJanrainLogin
+    }
+
+
+    function runActivationFlow(e) {
+        e.preventDefault();
+        run();
+    }
+
+    var AddUiListeners = function () {
+        if (ISUIListenersAdded)
+            return;
+        ISUIListenersAdded = true;
+        $("body")
+            .off("click", UI_SELECTORS.Buttons.BackStep, backToActivateStep)
+            .on("click", UI_SELECTORS.Buttons.BackStep, backToActivateStep);
+        $("body")
+            .off("click", UI_SELECTORS.AuthSystems.Auth0, closedExternalAuthSystem)
+            .on("click", UI_SELECTORS.AuthSystems.Auth0, closedExternalAuthSystem);
+
+        $("body")
+            .off("click", UI_SELECTORS.AuthSystems.Janrain, closedExternalAuthSystem)
+            .on("click", UI_SELECTORS.AuthSystems.Janrain, closedExternalAuthSystem);
+        $("body")
+            .off("click", UI_SELECTORS.Buttons.ConnextRun, okGreate)
+            .on("click", UI_SELECTORS.Buttons.ConnextRun, okGreate);
+
+        $("body")
+            .off("click", UI_SELECTORS.Run, runActivationFlow)
+            .on("click", UI_SELECTORS.Run, runActivationFlow);
+    }
+
+   
+
+    function backToActivateStep(e) {
+        e.preventDefault();
+        $(UI_SELECTORS.SubSteps.FailActivation).hide();
+        $(UI_SELECTORS.SubSteps.ActivateForm).show();
+
+        CURRENT_STEP = STEPS.Activate;
+
+        CnnXt.Event.fire('onActivationLinkErrorStepClosed', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            closeEvent: CLOSE_CASES.MoveToActivate
+        });
+
+        CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+    }
+
+  
+
+    function closedExternalAuthSystem(e) {
+        IsActivationFlowRunning = false;
+    }
+
+
+
+    function okGreate() {
+        $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.CloseButton;
+        //runAfterLinking();
+    }
+
+    function checkingResize() {
+        window.addEventListener('resize', function () {
+            if (IsActivationFlowRunning) {
+                setTimeout(function () {
+                    calculateCurrentStep();
+                }, 25);
+            }
+        });
+    }
+
+
+
+    //#endregion
+
+
+    return {
+        init: function (settings) {
+            //settings.ActivationFormName, settings.ActivationFormHtml
+            ACTIVATE_SETTINGS = settings;
+            AddUiListeners();
+            USER_STATES = CnnXt.Common.USER_STATES;
+            $ACTIVATION_MODAL = $(ACTIVATE_SETTINGS.ActivationFormHtml);
+
+            AUTHSYSTEM = CnnXt.Common.RegistrationTypes[CnnXt.Storage.GetLocalConfiguration().Site.RegistrationTypeId];
+
+            LOGGER = CnnXt.Logger;
+            LOGGER.debug(NAME, "Activation.Init");
+            calculateCurrentStep();
+        },
+        Run: function (options) {
+            if (ACTIVATE_SETTINGS.IsActivationOnly) {
+                CnnXt.User.CheckAccess().always(function () {
+                    if (options && options.silentmode) {
+                        return;
+                    }
+                    run(options);
+                });
+            } else {
+                run(options);
+            }
+        },
+        Login: login,
+        Register: register,
+        Activate: activate,
+        IsActivationFlowRunning: function () { return IsActivationFlowRunning; }
+    };
+};
 var CnnXt = function ($) {
-    var VERSION = '1.10.4';
+    var VERSION = '1.12.4';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
     var PROCESSTIME = {}; //holds properties for testing application speed.
     var isProcessed = false;
+    var isInitFinished = false;
     var OPTIONS; //global OPTIONS variable. This will be merge/extended between default options and passed in options.
     var DEFAULT_OPTIONS = {
         debug: false,
@@ -11791,7 +13959,7 @@ var CnnXt = function ($) {
         BatchCount: 5
     };
     var IS_CONNEXT_INITIALIZED = false;
-    var S3_DATA;
+    var S3_DATA;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     var RUN_TIMEOUT;
     var FIRST_RUN_EXECUTED = false;
     var defaultRunOffsetTime = 5000;
@@ -11803,13 +13971,12 @@ var CnnXt = function ($) {
         try {
             var fnName = "init";
             LOGGER = CnnXt.Logger;
-            LOGGER.debug(fnName, "Initializing CnnXt...");
+            //LOGGER.debug(fnName, "Initializing CnnXt...");
             //we use config code in upper case
             OPTIONS.configCode = OPTIONS.configCode.toUpperCase();
-
             //if CnnXt has been initialized already - don't initialize it again
             if (IS_CONNEXT_INITIALIZED) {
-                LOGGER.debug(fnName, "Connext has already initialized, cancel initializing");
+                //LOGGER.debug(fnName, "Connext has already initialized, cancel initializing");
                 CnnXt.Run();
             } else {
                 PROCESSTIME.PluginStartTime = new Date();
@@ -11818,7 +13985,7 @@ var CnnXt = function ($) {
                 IS_CONNEXT_INITIALIZED = true;
             }
         } catch (e) {
-            console.log("Core.Init <<EXCEPTION>>", e);
+            //LOGGER.log("Core.Init <<EXCEPTION>>", e);
         }
 
     };
@@ -11829,7 +13996,7 @@ var CnnXt = function ($) {
         testAd.className = "adsbox";
         testAd.id = "TestAdBlock";
         testAd.style.position = "absolute";
-        testAd.style.bottom = "0px";
+        testAd.style.bottom = '0';
         testAd.style.zIndex = "-1";
         document.body.appendChild(testAd);
     }
@@ -11882,6 +14049,22 @@ var CnnXt = function ($) {
         CnnXt.Action.IntegrateProduct();
     };
 
+    var proccessSuccessfulZipCodeRequest = function (data, callback) {
+        if (data.ip) {
+            CnnXt.Utils.SetIP(data.ip);
+        }
+
+        if (data.zip_code) {
+            CnnXt.Storage.SetCalculatedZipCode(data.zip_code);
+        } else {
+            CnnXt.Storage.SetCalculatedZipCode("00000");
+        }
+
+        if (_.isFunction(callback)) {
+            callback();
+        }
+    }
+
     var getZipCode = function (callback) {
         var fnName = "getZipCode";
 
@@ -11893,7 +14076,7 @@ var CnnXt = function ($) {
         }
 
         try {
-            LOGGER.debug(NAME, fnName);
+            //LOGGER.debug(NAME, fnName);
             if ($.jStorage.get(CnnXt.Common.StorageKeys.customZip)) {
                 if (_.isFunction(callback)) {
                     callback();
@@ -11903,27 +14086,24 @@ var CnnXt = function ($) {
                     url: CnnXt.Common.IPInfo,
                     type: "GET",
                     success: function (data) {
-                        if (data.ip) {
-                            CnnXt.Utils.SetIP(data.ip);
-                        }
-
-                        if (data.zip_code) {
-                            setZipCode(data.zip_code);
-                        } else {
-                            setZipCode("M6G");
-                        }
-
-                        if (_.isFunction(callback)) {
-                            callback();
-                        }
+                        proccessSuccessfulZipCodeRequest(data, callback);
                     },
                     error: function () {
-                        console.log("ZIPERROR, SETTING DEFAULT ZIP");
-                        setZipCode("00000");
+                        LOGGER.debug(NAME, fnName, 'IPInfo call failed. Calling API to get info');
 
-                        if (_.isFunction(callback)) {
-                            callback();
-                        }
+                        CnnXt.API.GetClientIpInfo()
+                            .done(function (data) {
+                                proccessSuccessfulZipCodeRequest(data, callback);
+                            })
+                            .fail(function (err) {
+                                LOGGER.debug(NAME, fnName, "API call to get info falied. We set zipcode by default as 00000", err);
+
+                                CnnXt.Storage.SetCalculatedZipCode("00000");
+
+                                if (_.isFunction(callback)) {
+                                    callback();
+                                }
+                            });
                     }
                 });
             }
@@ -11950,7 +14130,7 @@ var CnnXt = function ($) {
 
             //if we intergrated with flittz 
             if (OPTIONS.integrateFlittz) {
-                OPTIONS.silentmode = true; 
+                OPTIONS.silentmode = true;
             }
 
             //check run settings
@@ -11971,7 +14151,7 @@ var CnnXt = function ($) {
                 } else {
                     OPTIONS.runSettings.hasValidPromise = false;
 
-                    console.warn('No or invalid promise object in \'runSettings\'');
+                    LOGGER.warn('No or invalid promise object in \'runSettings\'');
                 }
 
                 if (!_.isNumber(OPTIONS.runSettings.runOffset)) {
@@ -11984,6 +14164,14 @@ var CnnXt = function ($) {
 
             //init Utils
             CnnXt.Utils.init();
+
+            var deviceType = CnnXt.Utils.GetUserMeta().deviceType;
+
+            if (deviceType == 'Mobile') {
+                $('body').addClass('mobile');
+            } else if (deviceType == 'Tablet') {
+                $('body').addClass('tablet');
+            }
 
             if (CnnXt.Utils.GetUserMeta().OS == 'IOS') {
                 $('body').addClass('ios-fix-body-styles');
@@ -12024,9 +14212,11 @@ var CnnXt = function ($) {
                 throw "No Config Code"
             }
 
-            if (!OPTIONS.silentmode) {
-                setDefaults();
-            }
+            setDefaults();
+
+            //if (!OPTIONS.silentmode) {
+            //    setDefaults();
+            //}
 
             if (OPTIONS.runSettings) {
                 setupRunSettings();
@@ -12041,7 +14231,12 @@ var CnnXt = function ($) {
         CnnXt.CloseTemplates(function () {
             CnnXt.IntegrateProduct();
             if (isProcessed) {
-                processConfiguration(CnnXt.Storage.GetLocalConfiguration());
+                var configuration = CnnXt.Storage.GetLocalConfiguration();
+                // for supporting the old auto-QA configs
+                if (!configuration.Settings.Site) {
+                    configuration.Settings.Site = configuration.Site;
+                }
+                processConfiguration(configuration);
             } else {
                 setDefaults();
             }
@@ -12081,25 +14276,35 @@ var CnnXt = function ($) {
 
             //init Events
             CnnXt.Event.init(OPTIONS);
+            CnnXt.Event.fire("onInit", null);
 
-            //init MeterCalculation
-            CnnXt.MeterCalculation.init();
-
-            //init AppInsights
-            CnnXt.AppInsights.init();
+            ////init AppInsights
+            //CnnXt.AppInsights.init();
 
             LOGGER.debug('OPTIONS.API', OPTIONS.api);
-            if (!CnnXt.Storage.GetGuid()) {
-                CnnXt.Storage.SetGuid(CnnXt.Utils.GenerateGuid());
-            }
+            //if (!CnnXt.Storage.GetGuid()) {
+            //    CnnXt.Storage.SetGuid(CnnXt.Utils.GenerateGuid());
+            //}
             Fprinting().init()
                 .done(function (id) {
                     OPTIONS.deviceId = id;
                 })
                 .always(function () {
+                    try {
+                        var masterId = CnnXt.Storage.GetUserData()
+                            ? (CnnXt.Storage.GetUserData().MasterId
+                                ? CnnXt.Storage.GetUserData().MasterId
+                                : CnnXt.Storage.GetUserData().IgmRegID)
+                            : null;
+                        //init AppInsights
+                        CnnXt.AppInsights.init(OPTIONS.deviceId, masterId);
+                    } catch (e) {
+                        LOGGER.exception(NAME, fnName, e);
+                    }
+
                     defineConfiguration();
-                    CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext,
-                        CnnXt.Utils.GetUserMeta());
+                    //CnnXt.AppInsights.trackEvent(CnnXt.Common.AppInsightEvents.LoadConnext,
+                    //    CnnXt.Utils.GetUserMeta());
                     CnnXt.Utils.HangleMatherTool();
                 });
 
@@ -12157,33 +14362,40 @@ var CnnXt = function ($) {
                         S3_DATA = CnnXt.Utils.ConvertObjectKeysToUpperCase(S3_DATA);
                         //
                         //if config code is found in config codes list - we get configuration, otherwise we don't get configuration
-                        if (S3_DATA[OPTIONS.configCode.toUpperCase()]) {
+                        if (S3_DATA[OPTIONS.configCode]) {
                             //getConfigSettings (will check for local settings first and if none exist will attempt to get settings from database).
                             //we use deferred object since we might be making an async ajax call to get data and we need to wait for that to finish.
                             getConfiguration()
                                 .done(function (configuration) {
                                     try {
                                         //this returns ConfigSettings regardless if it is from server or from local settings.
-                                        var fnName = "setDefaults.defineConfiguration.getConfiguration() <<DONE>>";
+                                        fnName = "setDefaults.defineConfiguration.getConfiguration() <<DONE>>";
                                         LOGGER.debug(NAME, fnName, "configuration", configuration);
+                                        isInitFinished = true;
                                         if (configuration) {
                                             LOGGER.debug(NAME, fnName, "CONFIGURATION FOUND", configuration);
                                             //merge configuration settings with default settings (in case any required options are for some reason not set in DB)
-                                            configuration.Settings = $.extend(true, OPTIONS.configSettings, configuration.Settings);
+                                            configuration.Settings =
+                                                $.extend(true, OPTIONS.configSettings, configuration.Settings);
                                             //add the configuration.Site object to a Settings.Site object. (Site object will have things like 'RegistrationTypeId', CSSTheme (not used now, but could be used to dynamically load CSS file based on theme).
                                             configuration.Settings.Site = configuration.Site;
 
-                                            CONFIGURATION = configuration;
-                                            //we have a configuration, init User, Campaign and Action functions with the merged configuration settings.
-                                            if (configuration.Settings.Active) {
-                                                CnnXt.User.init(configuration.Settings);
-                                                CnnXt.Campaign.init(configuration.Settings);
-                                                CnnXt.Action.init(configuration.Settings);
-                                                processConfiguration(configuration);
-                                            } else {
-                                                LOGGER.warn(NAME, fnName, 'CONFIGURATION IS INACTIVE');
-                                                CnnXt.Event.fire("onDebugNote", "Configuration is inactive.");
+                                            if (configuration.Settings.LastPublishDate !=
+                                                CnnXt.Storage.GetLastPublishDate()) {
+                                                applyGlobalPublishSettings();
+                                                CnnXt.Storage.SetLastPublishDate(configuration.Settings
+                                                    .LastPublishDate);
                                             }
+                                            CONFIGURATION = configuration;
+
+                                            CnnXt.Storage.SetLocalConfiguration(CONFIGURATION);
+
+                                            CnnXt.Event.fire('onDebugNote', 'Init is done!');
+
+                                            if (!OPTIONS.silentmode || configuration.Settings.UseActivationFlow) {
+                                                processConfiguration(configuration);
+                                            }
+
                                         } else {
                                             LOGGER.error(NAME, fnName, "No Config Settings Found");
                                             CnnXt.Event.fire("onNoConfigSettingFound", "No Config Settings Found");
@@ -12193,12 +14405,13 @@ var CnnXt = function ($) {
                                     }
                                 })
                                 .fail(function (err) {
-                                    //console.error(NAME, fnName, 'getConfigSettings.Fail', msg);
-                                    LOGGER.error(NAME, fnName, "No Config Settings Found", "Error getting Config Settings", err);
+                                    isInitFinished = true;
+                                    LOGGER.error(NAME,
+                                        fnName,
+                                        "No Config Settings Found",
+                                        "Error getting Config Settings",
+                                        err);
                                     CnnXt.Event.fire("onNoConfigSettingFound", "No Config Settings Found", err);
-                                })
-                                .always(function() {
-                                    CnnXt.Event.fire("onInit", null);
                                 });
 
                         } else {
@@ -12232,6 +14445,7 @@ var CnnXt = function ($) {
             var expired = new Date();
             expired.setMonth(expired.getMonth() + 1);
             expired = new Date(expired);
+
             LOGGER.debug(NAME, fnName, "localConfiguration", configuration);
 
             if (configuration) {
@@ -12239,18 +14453,12 @@ var CnnXt = function ($) {
                 LOGGER.debug(NAME, fnName, 'Found Local Configuration', configuration);
                 CnnXt.API.meta.config.isExistsInLocalStorage = true;
                 //we need to check if we have a 'LastPublishDate' cookie.
-                var storedLastPublishDate = CnnXt.Storage.GetLastPublishDate(), customTime = CnnXt.Utils.ParseCustomDate($.jStorage.get('CustomTime')), normalizedLastPubDate = new Date(storedLastPublishDate);
+                var storedLastPublishDate = CnnXt.Storage.GetLastPublishDate();
+
                 CnnXt.API.meta.config.localPublishDate = storedLastPublishDate;
-
-                //if we set Custom Time date in Debug Panel, we need to check date of lastPublishDate and compare it with our configuration.Settings.LastPublishDate
-
-                //we don't have a 'storedLastPublishDate' cookie or its expired (in 24 hours period), so we need to get the LastPublishDate from S3
                 LOGGER.debug(NAME, fnName, "No 'storedLastPublishDate', getting LastPublishDate from S3");
 
-                //we got data back from S3. This data will be a json string with key/vals of ConfigCode: 'LastPublishDate'.
-                //we must first parse this into a json object (the 'data' arg is really just a json string).
-
-                var s3DataConfigLastPublishDate = S3_DATA[OPTIONS.configCode.toUpperCase()];
+                var s3DataConfigLastPublishDate = S3_DATA[OPTIONS.configCode];
 
                 var isConfigOld = isConfigurationOld(S3_DATA, configuration.Settings.LastPublishDate);
 
@@ -12261,7 +14469,7 @@ var CnnXt = function ($) {
                     CnnXt.Event.fire("onDebugNote", "Current config is old.");
 
                     //TODO: this is bad because we call this function here and below when we don't have a localStorage config. There are small differences, but we should create one function that handles both scenarios.
-                    getConfigurationFromServer()
+                    getConfigurationFromServer(s3DataConfigLastPublishDate)
                         .done(function (newConfiguration) {
                             LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", newConfiguration);
 
@@ -12269,24 +14477,24 @@ var CnnXt = function ($) {
                             //this will take the newConfiguration and save it locally and merge any existing saved conversations with new data from the newConfiguration Object, while preserving appropriate data.
                             CnnXt.Utils.MergeConfiguration(newConfiguration);
                             ////this is handled in 'MergeConfiguration', might want to move it out of there and do it here
+                            CnnXt.Storage.SetLastPublishDate(newConfiguration.Settings.LastPublishDate, expired);
+
                             if (_.isObject(s3DataConfigLastPublishDate)) {
-                                if (s3DataConfigLastPublishDate.Reset && storedLastPublishDate != newConfiguration.Settings.LastPublishDate) {
+                                if (s3DataConfigLastPublishDate.Reset) {
                                     CnnXt.Storage.ResetConversationViews(null, newConfiguration.Settings.UseParentDomain);
+                                    CnnXt.Storage.RemoveWhitelistSetIdCookie();
+                                    CnnXt.Storage.RemoveWhitelistInfoboxCookie();
+                                    CnnXt.Storage.RemoveNeedHidePinTemplateCookie();
+                                    CnnXt.Storage.SetCurrentConversations({});
+                                    CnnXt.Storage.SetCurrentConversation(null);
                                 }
                             }
-                            CnnXt.Storage.SetLocalConfiguration(newConfiguration);
-                            CnnXt.Storage.SetLastPublishDate(newConfiguration.Settings.LastPublishDate, expired);
-                            ////clear articles value per another crossdomain mode
-                            //if (CnnXt.Storage.GetCurrentConverstaion()) {
-                            //    CnnXt.Storage.SetViewedArticles([], CnnXt.Storage.GetCurrentConverstaion().id, true);
-                            //}
-                            //resolve with configuration object.
+
                             deferred.resolve(newConfiguration);
 
                         }).fail(function (err) {
-                            console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
+                            LOGGER.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
 
-                            //reject with err object.
                             deferred.reject(err);
                         });
 
@@ -12298,45 +14506,55 @@ var CnnXt = function ($) {
                 }
 
                 LOGGER.debug(NAME, fnName, "isConfigOld", isConfigOld);
-            }
-            else {
+            } else {
                 CnnXt.API.meta.config.isExistsInLocalStorage = false;
                 CnnXt.API.meta.reason = CnnXt.Common.DownloadConfigReasons.noLocalConfig;
                 getConfigurationFromServer()
                     .done(function (configuration) {
                         LOGGER.debug(NAME, fnName, "getConfigurationFromServer", "<<DONE>>", configuration);
 
-                        //we clear it to process conversations again 
-                        $.jStorage.deleteKey(CnnXt.Common.StorageKeys.conversations.current);
+                        storeConfigurationFromServer(configuration, expired);
 
-                        overrideRegistrationType(configuration);
-
-                        //since we just got a new configuration from the server (and it has already been processed in the getConfigurationFromServer function, we need to store this configuration locally.
-                        CnnXt.Storage.SetLocalConfiguration(configuration);
-                        //processViews(configuration);
-                        ///////////////.... look into moving this somewhere else so it is only called once
-                        //set LastPublishDate cookie.
-                        CnnXt.Storage.SetLastPublishDate(configuration.Settings.LastPublishDate, expired);
-
-                        //resolve with configuration object.
                         deferred.resolve(configuration);
 
                     }).fail(function (err) {
-                        console.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
+                        LOGGER.error(NAME, fnName, "getConfigurationFromServer", "<<FAILS>>", err);
 
-                        //reject with err object.
                         deferred.reject(err);
                     });
             }
 
         } catch (e) {
-            //LOGGER.exception(NAME, fnName, e);
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             deferred.reject(e);
         }
-        //return promise;
+
         return deferred.promise();
     };
+
+    var applyGlobalPublishSettings = function () {
+        var s3DataConfigLastPublishDate = S3_DATA[OPTIONS.configCode];
+        if (_.isObject(s3DataConfigLastPublishDate)) {
+            if (s3DataConfigLastPublishDate.Reset) {
+                CnnXt.Storage.ResetConversationViews(null, newConfiguration.Settings.UseParentDomain);
+            }
+        }
+    }
+
+    var storeConfigurationFromServer = function (configuration, expired) {
+        var fnName = 'storeConfigurationFromServer';
+
+        try {
+            $.jStorage.deleteKey(CnnXt.Common.StorageKeys.conversations.current);
+
+            overrideRegistrationType(configuration);
+
+            CnnXt.Storage.SetLocalConfiguration(configuration);
+            CnnXt.Storage.SetLastPublishDate(configuration.Settings.LastPublishDate, expired);
+        } catch (ex) {
+            LOGGER.error(NAME, fnName, "EXCEPTION", ex);
+        }
+    }
 
     var overrideRegistrationType = function (configuration) {
         var registrationType = CnnXt.Storage.GetRegistrationType();
@@ -12353,18 +14571,59 @@ var CnnXt = function ($) {
 
     //#region MAIN FUNCTIONS
     var processConfiguration = function (configuration) {
-        /// <summary>Processes this configuration. This will determine meter level, conversation and all actions.</summary>
-        /// <param name="configuration", type="Object">configuration object</param>
-        /// <returns>Nothing</returns>
+        var fnName = "processConfiguration";
+
+        try {
+            LOGGER.debug(NAME, fnName);
+
+            if (configuration.Settings.Active) {
+                if (configuration.Settings.UseActivationFlow) {
+                    if (!isProcessed) {
+                        CnnXt.User.init(configuration.Settings);
+
+                        var activationOnlySettings = {
+                            ActivationFormName: configuration.Settings.ActivationTemplate.Name,
+                            ActivationFormHtml: configuration.Settings.ActivationTemplate.Html,
+                            IsActivationOnly: true
+                        };
+
+                        CnnXt.Activation.init(activationOnlySettings);
+                    }
+
+                    processActivationOnlyConfiguration(configuration);
+                } else {
+                    if (!isProcessed) {
+                        CnnXt.MeterCalculation.init();
+                        CnnXt.User.init(configuration.Settings);
+                        CnnXt.Campaign.init(configuration.Settings);
+                        CnnXt.Action.init(configuration.Settings);
+                        CnnXt.Whitelist.init();
+                    }
+
+                    processUsualConfiguration(configuration);
+                }
+            } else {
+                LOGGER.warn(NAME, fnName, 'CONFIGURATION IS INACTIVE');
+                CnnXt.Event.fire("onDebugNote", "Configuration is inactive.");
+            }
+
+        } catch (ex) {
+            LOGGER.log("Core.Init <<EXCEPTION>>", ex);
+        }
+    };
+
+    var processUsualConfiguration = function (configuration) {
+        var fnName = "processUsualConfiguration";
+
         try {
             isProcessed = true;
-            var fnName = "processConfiguration";
             LOGGER.debug(NAME, fnName);
+
             if (!configuration) {
                 configuration = CONFIGURATION;
             }
+
             PROCESSTIME.StartProcessingTime = new Date(); //sets start time for processing info (not dependent on getting data from API).
-            //PROCESSTIME.PluginStartTime
 
             if (configuration.Site.SiteTheme.ThemeUrl && (configuration.Site.SiteTheme.ThemeUrl !== "default")) {
                 var env = CnnXt.Common.CSSPluginUrl[OPTIONS.environment];
@@ -12393,12 +14652,14 @@ var CnnXt = function ($) {
                         })
                         .fail(function () {
                             LOGGER.debug(NAME, fnName, "User.CheckAccess.Fail");
-                        }).always(function () { //this is always fired, regardless if the user was authenticated. For now we only use this for the 'UserAuthTiming', but could use this for other things.
+                        })
+                        .always(function () { //this is always fired, regardless if the user was authenticated. For now we only use this for the 'UserAuthTiming', but could use this for other things.
                             if (!CnnXt.Storage.GetWhitelistSetIdCookie()) {
                                 CnnXt.Whitelist.checkClientIp(configuration);
                             } else {
                                 connextFinishProcessing();
                             }
+
                             var UserAuthTime = CnnXt.User.GetAuthTiming();
                             LOGGER.debug(NAME, fnName, "User.CheckAccess.Always", "UserAuthTime", UserAuthTime);
                             var EndTime = new Date().getMilliseconds();
@@ -12409,13 +14670,25 @@ var CnnXt = function ($) {
                         });
                 });
 
-
         } catch (e) {
-            console.log("Core.Init <<EXCEPTION>>", e);
+            LOGGER.log("Core.Init <<EXCEPTION>>", e);
         }
+    }
 
-    };
+    var processActivationOnlyConfiguration = function (configuration) {
+        var fnName = "processActivationOnlyConfiguration";
 
+        try {
+            LOGGER.debug(NAME, fnName);
+
+            CnnXt.Activation.Run(OPTIONS);
+
+            isProcessed = true;
+
+        } catch (ex) {
+            LOGGER.log("Core.Init <<EXCEPTION>>", ex);
+        }
+    }
 
     //#endregion MAIN FUNCTIONS
 
@@ -12449,18 +14722,16 @@ var CnnXt = function ($) {
         }
     }
 
-    var getConfigurationFromServer = function (opts) {
-        /// <summary></summary>
-        /// <param name="" type=""></param>
-        /// <returns>None</returns>
+    var getConfigurationFromServer = function (publishSettings) {
         var fnName = "getConfigurationFromServer";
 
-        //create deferred object
         var deferred = $.Deferred();
+
+        var publishDate = publishSettings && publishSettings.Date ? encodeURIComponent(publishSettings.Date) : undefined;
 
         try {
             CnnXt.API.GetConfiguration({
-                payload: { siteCode: OPTIONS.siteCode, configCode: OPTIONS.configCode },
+                payload: { siteCode: OPTIONS.siteCode, configCode: OPTIONS.configCode, publishDate: publishDate },
                 onSuccess: function (data) {
                     LOGGER.debug(NAME, fnName, "<< SUCCESS >>", "data", data);
                     //we got results from the server, we need to process them to create a friendlier json object.
@@ -12479,8 +14750,9 @@ var CnnXt = function ($) {
             });
 
         } catch (e) {
-            console.error(NAME, fnName, "<<EXCEPTION>>", e);
+            LOGGER.error(NAME, fnName, "<<EXCEPTION>>", e);
         }
+
         return deferred.promise();
     };
 
@@ -12573,7 +14845,7 @@ var CnnXt = function ($) {
                 throw "s3Data is not an object";
             }
         } catch (e) {
-            console.error(NAME, fnName, "EXCEPTION", e);
+            LOGGER.error(NAME, fnName, "EXCEPTION", e);
             //for all error we return true, which means the current data is old. This will force us getting new data from the server (we will still do a merge of this data, but it's safer to get new data and merge it when we have an error. Otherwise if this is because of a bug, we might never get new configuration data from the DB).
             return true;
         }
@@ -12589,16 +14861,49 @@ var CnnXt = function ($) {
     //    }
     //};
 
-
     var connextFinishProcessing = function () {
 
         // send view data 
         if (CnnXt.Campaign.GetCurrentConversationViewCount() !== 1
             && CnnXt.Campaign.GetCurrentConversationViewCount() % CnnXt.GetOptions().BatchCount === 0) {
-            CnnXt.API.SendViewData();
+
+            var data = {
+                UserId: CnnXt.GetOptions().deviceId,
+                ConfigCode: CnnXt.GetOptions().configCode,
+                SiteCode: CnnXt.GetOptions().siteCode,
+                SettingsKey: CnnXt.GetOptions().settingsKey,
+                ViewData: CnnXt.Campaign.GetLocalViewData()
+            };
+            if (CnnXt.User.getMasterId()) {
+                var id = CnnXt.User.getMasterId();
+                id = decodeURIComponent(id);
+                data.masterId = id;
+            }
+            CnnXt.API.SendViewData(data);
         }
         CnnXt.Event.fire("onFinish");
     };
+
+    var run = function () {
+        CnnXt.CloseTemplates(function () {
+            CnnXt.IntegrateProduct();
+            if (isInitFinished) {
+                FIRST_RUN_EXECUTED = true;
+                clearTimeout(RUN_TIMEOUT);
+                var configuration = CnnXt.Storage.GetLocalConfiguration();
+                if (configuration) {
+                    processConfiguration(configuration);
+                } else {
+                    LOGGER.warn(NAME, "Run", 'configuration is not found!!');
+                }
+            } else {
+                LOGGER.debug(NAME, "Run", 'Connext is not initialized yet, wait 100ms');
+                setTimeout(run, 100);
+            }
+        });
+    }
+
+
 
     //#endregion HELPER FUNCTIONS
 
@@ -12606,7 +14911,7 @@ var CnnXt = function ($) {
         //main function to initiate the module
         init: function (options) {
             OPTIONS = (options) ? options : {}; //if not options set to blank object
-
+            Logger: ConnextLogger($); //pass in $ object for no-conflict
             init();
 
             Connext = {
@@ -12615,29 +14920,23 @@ var CnnXt = function ($) {
                 IntegrateProduct: CnnXt.IntegrateProduct,
                 Run: CnnXt.Run,
                 GetVersion: CnnXt.GetVersion,
+                GetCurrentVersion: CnnXt.GetCurrentVersion,
                 GetOptions: CnnXt.GetOptions,
                 Storage: {
                     GetLastPublishDate: CnnXt.Storage.GetLastPublishDate,
-                    GetSiteCode: function() { return CnnXt.Storage.GetLocalConfiguration().Site.SiteCode },
+                    GetSiteCode: function () { return CnnXt.Storage.GetLocalConfiguration().Site.SiteCode },
                     GetConfigCode: function () { return CnnXt.Storage.GetLocalConfiguration().Settings.Code },
                     GetLocalConfiguration: CnnXt.Storage.GetLocalConfiguration,
                     GetCurrentConversations: CnnXt.Storage.GetCurrentConversations,
-                    GetCurrentConversation: CnnXt.Storage.GetCurrentConverstaion,
-                    GetCurrentMeterLevel: function () {
-                        var conversation = CnnXt.Storage.GetCurrentConverstaion();
-
-                        if (conversation) {
-                            return conversation.MeterLevelId;
-                        } else {
-                            return undefined;
-                        }
-                    },
+                    GetCurrentConversation: CnnXt.Storage.GetCurrentConversation,
+                    GetCurrentMeterLevel: function () { return OPTIONS.currentMeterLevel },
                     GetCampaignData: CnnXt.Storage.GetCampaignData,
                     GetRegistrationType: CnnXt.Storage.GetRegistrationType,
+                    GetActualZipCodes: CnnXt.Storage.GetActualZipCodes,
 
                     //deprecated 12.11.2017. approved with Dael
                     //GetViewedArticles: function () {
-                    //    var conversation = CnnXt.Storage.GetCurrentConverstaion();
+                    //    var conversation = CnnXt.Storage.GetCurrentConversation();
 
                     //    if (conversation) {
                     //        return CnnXt.Storage.GetViewedArticles(conversation.id);
@@ -12648,7 +14947,7 @@ var CnnXt = function ($) {
 
                     GetCurrentConversationArticlesCount: CnnXt.Campaign.GetCurrentConversationViewCount,
                     GetArticlesLeft: function () {
-                        var conversation = CnnXt.Storage.GetCurrentConverstaion();
+                        var conversation = CnnXt.Storage.GetCurrentConversation();
 
                         if (conversation) {
                             return conversation.Props.ArticleLeft;
@@ -12658,11 +14957,14 @@ var CnnXt = function ($) {
                     },
                     GetUserState: CnnXt.Storage.GetUserState,
                     GetUserZipCodes: CnnXt.Storage.GetUserZipCodes,
+                    GetActualZipCodes: CnnXt.Storage.GetActualZipCodes,
                     GetJanrainUser: CnnXt.Storage.GetJanrainUser,
                     GetUserData: CnnXt.Storage.GetUserData,
                     GetUserProfile: CnnXt.Storage.GetUserProfile,
-                    GetConnextPaywallCookie: CnnXt.Storage.GetConnextPaywallCookie,
-                    ClearUser: CnnXt.Storage.ClearUser
+                    GetConnextPaywallCookie: CnnXt.Storage.GetConnextPaywallCookie
+                },
+                Common: {
+                    USER_STATES: CnnXt.Common.USER_STATES
                 }
             }
 
@@ -12671,11 +14973,12 @@ var CnnXt = function ($) {
 
         ////set all other javascript classes within Connext object so we don't pollute the global scope with all of our js objects (all our js will be under CnnXt.)
         //most of these will pass in the jQuery $ variable. We do this because Connext passes in (jQuery) into this function which is then set to $, therefore $ is a local jQuery object and not the global one. This is necessary in case the client has set $.noConflict(true), which removes $ from the global scope.  If they do then the global $ is not available within this plugin. (CMG-Atlanta actually does this, which is how we found this out)
-        Logger: ConnextLogger($), //pass in $ object for no-conflict
+        Logger: ConnextLogger($),
         Whitelist: ConnextWhitelist($),
         MeterCalculation: ConnextMeterCalculation($),
         Campaign: ConnextCampaign($),
         Action: ConnextAction($),
+        Activation: ConnextActivation($),
         Common: ConnextCommon(),
         Utils: ConnextUtils($), //pass in $ object for no-conflict
         API: ConnextAPI($), //pass in $ object for no-conflict
@@ -12686,13 +14989,16 @@ var CnnXt = function ($) {
         CloseTemplates: closeAllTemplates,
         IntegrateProduct: IntegrateProduct,
         Run: function () {
-            reInit();
             CnnXt.Event.fire("onRun");
-            FIRST_RUN_EXECUTED = true;
-            clearTimeout(RUN_TIMEOUT);
+
+            run();
+
         },
         ReInit: reInit,
         GetVersion: function () { return VERSION },
+        GetCurrentVersion: function () {
+            return 'Version: ' + window.connextVersion + ', Build: ' + window.connextBuild;
+        },
         GetOptions: function () { return OPTIONS; },
         //
         //Below are the main public methods the client will be calling, they simply route to the appropriate js class/method.
