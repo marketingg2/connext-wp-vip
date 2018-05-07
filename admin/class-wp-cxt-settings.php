@@ -303,6 +303,19 @@ class Wp_Cxt_Settings {
 							'class' => 'chosen-select',
 						),
 					),
+					'silent_mode' => array(
+						'title' => esc_html__( 'Silent Mode', 'wp-cxt' ),
+						'render_function' => 'render_chosen_select',
+						'options' => array(
+							'true' => __( 'True', 'wp-cxt' ),
+							'false' => __( 'False', 'wp-cxt' ),
+						),
+						'default' => 'false',
+						'validation_type' => 'alphanumeric',
+						'attributes' => array(
+							'class' => 'chosen-select',
+						),
+					),
 				),
 			),
 			'display_settings' => array(
