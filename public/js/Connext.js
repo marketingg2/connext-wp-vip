@@ -5359,6 +5359,144 @@ var ConnextEvents = function ($) {
         }
     }
 
+    function onAccessGranted(event) {
+        var fnName = "onAccessGranted";
+
+        try {
+            LOGGER.debug("Fire Default onAccessGranted", event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onAccessDenied(event) {
+        var fnName = "onAccessDenied";
+
+        try {
+            LOGGER.debug("Fire Default onAccessDenied", event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationFormShown(event) {
+        var fnName = "onActivationFormShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLoginStepShown(event) {
+        var fnName = "onActivationLoginStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLoginStepClosed(event) {
+        var fnName = "onActivationLoginStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkStepShown(event) {
+        var fnName = "onActivationLinkStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkStepClosed(event) {
+        var fnName = "onActivationLinkStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    } 
+
+    function onActivationLinkStepSubmitted(event) {
+        var fnName = "onActivationLinkStepSubmitted";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkSuccessStepShown(event) {
+        var fnName = "onActivationLinkSuccessStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkSuccessStepClosed(event) {
+        var fnName = "onActivationLinkSuccessStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkErrorStepShown(event) {
+        var fnName = "onActivationLinkErrorStepShown";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onActivationLinkErrorStepClosed(event) {
+        var fnName = "onActivationLinkErrorStepClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
+    function onNewsdayButtonClick(event) {
+        LOGGER.debug("Fire Default onNewsdayButtonClick", event);
+
+        if (window.setDestUrl && _.isFunction(window.setDestUrl)) {
+            window.setDestUrl();
+        }
+    }
+
+    function onActivationFormClosed(event) {
+        var fnName = "onActivationFormClosed";
+
+        try {
+            LOGGER.debug("Fire Default " + fnName, event);
+        } catch (ex) {
+            console.error(fnName, 'EXCEPTION', ex);
+        }
+    }
+
     function onRun() {
         LOGGER.debug("Fire Default onRun", event);
     }
@@ -8071,6 +8209,7 @@ var ConnextAPI = function ($) {
             }
         }
     };
+
 
 
     var GetNewsletters = function (args) {
@@ -11605,6 +11744,7 @@ var ConnextAction = function ($) {
 
         var criteriaResult = $.Deferred();
 
+
         try {
             var promises = [];
 
@@ -12016,7 +12156,15 @@ var ConnextAction = function ($) {
                 }
             });
 
-            action.actionDom = $action;
+            $("#" + id + " [data-dismiss=banner], #"
+                + id + " [data-dismiss=info-box], #"
+                + id + " [data-dismiss=inline], #"
+                + id + "  [data-dismiss=modal]")
+                .one("click", function (e) {
+                    e.preventDefault();
+                    var $btn = $(this),
+                        href = $btn.attr('href');
+
 
             //fire show event & save start time
             if (!action.isMultipleTimeRepeatable) { // || !$action.is(':visible')
@@ -12924,6 +13072,953 @@ var ConnextWhitelist = function ($) {
     };
 };
 var ConnextAppInsights = function ($) {
+
+    var userId = null;
+    var init = function (userId, masterId) {
+
+        var appInsights = window.appInsights || function (config) {
+            function i(config) {
+                t[config] = function () {
+                    var i = arguments;
+                    t.queue.push(function () {
+                        t[config].apply(t, i);
+                        if (t.context) {
+                            //userId = t.context.user.id;
+                        }
+                    });
+                }
+            }
+            var t = {
+                    config: config
+                },
+                u = document,
+                e = window,
+                o = "script",
+                s = "AuthenticatedUserContext",
+                h = "start",
+                c = "stop",
+                l = "Track",
+                a = l + "Event",
+                v = l + "Page",
+                y = u.createElement(o),
+                r, f;
+            y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js";
+            u.getElementsByTagName(o)[0].parentNode.appendChild(y);
+            try {
+                t.cookie = u.cookie;
+            } catch (p) { }
+            for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;) i("track" + r.pop());
+            return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"),
+                config.disableExceptionTracking ||
+                (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o) {
+                    var s = f && f(config, i, u, e, o);
+                    return s !== !0 && t["_" + r](config, i, u, e, o), s;
+                }), t;
+        }({
+            instrumentationKey: CnnXt.Common.APPInsightKeys[CnnXt.GetOptions().environment],
+            disableExceptionTracking: true,
+            appUserId: userId,
+            accountId: masterId
+        });
+        window.appInsights = appInsights;
+        if (!appInsights.queue) {
+            appInsights.queue = [];
+        }
+        appInsights.queue.push(function () {
+            appInsights.context.addTelemetryInitializer(function (envelope) {
+                var telemetryItem = envelope.data.baseData;
+                if (envelope.data.baseType === 'RemoteDependencyData') {
+                    return telemetryItem.target === 'freegeoip.net'
+                        || telemetryItem.data.indexOf('connext') !== -1
+                        || telemetryItem.target.indexOf('auth0') !== -1;
+                }
+            });
+        });
+        appInsights.setAuthenticatedUserContext(userId, masterId);
+
+        appInsights.trackPageView();
+
+    }
+
+    var trackEvent = function (name, data) {
+        try {
+            var appInsightsData = getEventDataByName(name, data);
+            appInsights.trackEvent(name, appInsightsData);
+        }
+        catch (e) {
+            if (CnnXt.GetOptions().debug) {
+                console.warn("track Application insights error");
+            }
+        }
+    }
+
+    var getAppInsightsData = function (additionalData) {
+        var config = CnnXt.Storage.GetLocalConfiguration(),
+            conversation = CnnXt.Storage.GetCurrentConverstaion(),
+            metaData = CnnXt.Utils.GetUserMeta(),
+            userData = CnnXt.Storage.GetUserData(),
+            meter = CnnXt.Storage.GetMeter();
+
+        additionalData = additionalData || {};
+
+        var janrainProfile = CnnXt.Storage.GetJanrainUser();
+        var auth0Profile = CnnXt.Storage.GetUserProfile();
+        var userProfile = CnnXt.Storage.GetUserData();
+
+        var appInsightsData = {
+            cnvid: (conversation) ? conversation.id : null, //conversation id
+            cnvn: (conversation) ? conversation.Name : '',  //conversation name
+            mlm: (meter) ? meter.method : '', //meter level method
+            ml: CnnXt.GetOptions().currentMeterLevel, // current meter level
+            artlft: (conversation) ? conversation.Props.ArticleLeft : null,  //articles left
+            artc: CnnXt.Storage.GetCurrentConversationViewCount(), //acrticles count
+            cmid: (config && config.Campaign) ? config.Campaign.id : null, //campaign id
+            cmn: (config && config.Campaign) ? config.Campaign.Name : '', //campaign name
+            dmid: (config && config.DynamicMeter) ? config.DynamicMeter.id : null, //dynamic meter id
+            dmn: (config && config.DynamicMeter) ? config.DynamicMeter.Name : '', //dynamic meter name
+            cnfc: (config && config.Settings) ? config.Settings.Code : '', //config code
+            cnfn: (config && config.Settings) ? config.Settings.Name : '', //config name
+            sc: (config && config.Site) ? config.Site.SiteCode : '', //site code
+            at: (config && config.Site) ? CnnXt.Common.RegistrationTypes[config.Site.RegistrationTypeId] : '', //auth type
+            crid: (userData) ? userData.MasterId : null, //customer registration id
+            igmrid: (userData) ? userData.IgmRegID : null, //igmRegID
+            us: CnnXt.Storage.GetUserState(), //user status
+            em: (auth0Profile) ? auth0Profile.email : (janrainProfile) ? janrainProfile.email : (userProfile) ? userProfile.Email : '', //email
+            ip: CnnXt.Utils.GetIP(), //IP
+            zc: CnnXt.Storage.GetActualZipCodes(),  //zip codes
+            did: CnnXt.GetOptions().deviceId, // device id
+            dt: (metaData) ? metaData.deviceType : '', //device type
+            os: (metaData) ? metaData.OS : '', // OS
+            brw: (metaData) ? metaData.Browser : '', //browser
+            url: (metaData) ? metaData.URL : '', //URL
+            attr: CnnXt.GetOptions().attr, // device id
+            stk: CnnXt.GetOptions().settingsKey //settings key 
+        }
+
+        return appInsightsData;
+    }
+    var getEventDataByName = function (name, innerdata) {
+        var eventData = innerdata.EventData;
+        var config = CnnXt.Storage.GetLocalConfiguration();
+        var data = {
+            cnfc: (config && config.Settings) ? config.Settings.Code : '', //config code
+            sc: (config && config.Site) ? config.Site.SiteCode : '', //site code
+            stk: CnnXt.GetOptions().settingsKey //settings key 
+        };
+        switch (name) {
+        case "onDynamicMeterFound":
+            data.dmn = eventData;  //dynamic meter name
+            break;
+        case "onCampaignFound":
+            data.cmn = eventData.Name; //campaign name,
+            data.cmid = eventData.id; //campaign id
+            break;
+        case "onMeterLevelSet":
+            data.mlm = eventData.method; //dynamic meter method (default or dynamic)
+            data.ml = eventData.level; //meter level id (1,2,3)
+            data.rid = eventData.rule ? eventData.rule.id : null; //passed rule id. isn't empty if method is dynamic
+            data.rn = eventData.rule ? eventData.rule.Name : null; //passed rule name. isn't empty if method is dynamic
+            break;
+        case "onConversationDetermined":
+            data.cnvid = eventData.id; //convo id
+            data.cnvn = eventData.Name; //convo name
+            data.ml = eventData.MeterLevelId; //meter level
+            data.vws = eventData.Props.views; //current views
+            data.artlft = eventData.Props.ArticleLeft; //current articles  left
+            break;
+        case "onAuthorized":
+        case "onHasAccess":
+        case "onHasAccessNotEntitled":
+        case "onHasNoActiveSubscription":
+            data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
+            data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
+            data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
+            break;
+        case "onLoggedIn":
+            data.crid = eventData.MG2AccountData ? eventData.MG2AccountData.MasterId : null; //customer registration id
+            data.igmRegId = eventData.MG2AccountData ? eventData.MG2AccountData.IgmRegID : null; // ecrypteed customer registration id
+            data.as = eventData.MG2AccountData ? eventData.MG2AccountData.AuthSystem : null; //current auth system
+            data.us = CnnXt.Storage.GetUserState(); //current status of user
+            break;
+        case "onActionShown":
+            data.actid = eventData.id //action id
+            data.actn = eventData.Name;  //action name 
+            data.actt = eventData.ActionTypeId;  //action type
+            data.usdfdt = eventData.UserDefinedData; // user defined data
+            data.artc = eventData.ArticlesViewed; //viewed articles count
+            break;
+        case "onActionClosed":
+            data.actid = eventData.id //action id
+            data.actn = eventData.Name;  //action name 
+            data.actt = eventData.ActionTypeId;  //action type
+            data.usdfdt = eventData.UserDefinedData; // user defined data
+            data.artc = eventData.ArticlesViewed; //viewed articles count
+            data.clev = eventData.closeEvent; // close event 
+            break;
+        case "onButtonClick":
+            data.udfat = eventData.UserDefinedDataAttr;  // user defined attribut
+            data.actid = innerdata.Action ? innerdata.Action.id : null; //action id
+            data.actn = innerdata.Action ? innerdata.Action.Name : null; //action name
+            data.actt = innerdata.Action ? innerdata.Action.ActionTypeId : null; //action type
+            data.btnhtml = eventData.ButtonHTML || ''; //button html
+            break;
+        case "onFinish":
+            data = getAppInsightsData(innerdata);
+            break;
+        }
+        return data;
+    }
+
+
+    return {
+        init: init,
+        trackEvent: trackEvent,
+        getUserId: function () {
+            return userId;
+        }
+    }
+}
+var ConnextActivation = function ($) {
+    //#region GLOBALS
+    var NAME = "Activation", //base name for logging.
+        LOGGER,
+        IsActivationFlowRunning = false,
+        $ACTIVATION_MODAL,
+        ISUIListenersAdded = false,
+        ACTIVATE_SETTINGS = '',
+        USER_STATES,
+        CLOSE_CASES = {
+            CloseButton: "closeButton",
+            CloseSpan: "closeSpan",
+            ClickOutside: "clickOutside",
+            EscButton: "escButton",
+            MoveToActivate: "moveToLinkStep",
+            MoveToSuccess: "moveToSuccessStep",
+            MoveToFail: "moveToErrorStep"
+        },
+        STEPS = {
+            Authenticate: "Authenticate",
+            Activate: "Activate",
+            Success: "Success",
+            Fail: "Fail"
+        },
+        AUTHSYSTEM,
+        CURRENT_STEP,
+        UI_SELECTORS = {
+            Modal: '[data-connext-dynamic-size]',
+            Step: 'data-connext-template-step',
+            Steps: {
+                Authenticate: '[data-connext-template-step="Authenticate"]',
+                Activate: '[data-connext-template-step="Activate"]'
+            },
+            SubStep: 'data-connext-template-substep',
+            SubSteps: {
+                Login: '[data-connext-template-substep="Login"]',
+                Registration: '[data-connext-template-substep="Registration"]',
+                SubscribeLink: '[data-connext-template-substep="SubscribeLink"]',
+                UpgradeLink: '[data-connext-template-substep="UpgradeLink"]',
+                ActivateForm: '[data-connext-template-substep="ActivateForm"]',
+                SuccessActivation: '[data-connext-template-substep="Success"]',
+                FailActivation: '[data-connext-template-substep="Fail"]'
+            },
+            Run: '[data-mg2-action="activation"]',
+            Buttons: {
+                ConnextRun: '[data-mg2-action="connextRun"]:visible',
+                BackStep: '[data-mg2-acton="backStep"]:visible'
+            },
+            Inputs: {
+                common: '[data-connext-input]',
+                visible: '[data-connext-input]:visible',
+                Email: '[data-connext-input="Email"]:visible',
+                AllEmails: '[data-connext-input="Email"]',
+                Password: '[data-connext-input="Password"]:visible',
+                SearchOptions: '[data-connext-input="SearchOption"]:visible',
+                LastName: '[data-connext-input="LastName"]:visible',
+                AccountNumber: '[data-connext-input="AccountNumber"]:visible',
+                ZipCode: '[data-connext-input="ZipCode"]:visible',
+                HouseNumber: '[data-connext-input="HouseNumber"]:visible',
+                PhoneNumber: '[data-connext-input="PhoneNumber"]:visible'
+            },
+            Links: '[redirect="true"]',
+            CloseButton: '[data-connext-role="close"]',
+            ErrorMessages: {
+                LoginSubstep: '[data-connext-template-substep="LoginFormError"]',
+                RegistrationSubStep: '[data-connext-template-substep="RegistrationFormError"]',
+                Activation: '[data-connext-template-substep="ActivateFormError"]'
+            },
+            AuthSystems: {
+                Janrain: '.janrain-close-modal',
+                Auth0: '.auth0-lock-close-button'
+            }
+        },
+        SUCCESS_MESSAGES = {
+            Linked: 'Your account has been linked successfully. '
+        },
+        ERROR_MESSAGES = {
+            emailInUse: "There is already an account associated with this email address. Please enter a new email address. ",
+            emailAndPassRequired: 'Please enter email and password. ',
+            fieldsRequired: 'Please fill out all the required fields. ',
+            invalidCredits: "There was an error with your E-Mail/Password combination. Please try again. ",
+            noSubscriptions: "Subscriptions not found. ",
+            requiredEmail: "Email is required. ",
+            requiredPassword: "Password is required. ",
+            linkingFailed: "I\'m sorry, an error occurred and we can\'t complete this process.  Please contact customer service for assistance. ",
+            digitalAccessNeedUpgrade: "I\'m sorry, your subscription does not give you access to this content. Please <a data-connext-link='Upgrade' redirect='true'>upgrade</a> to get access. ",
+            digitalAccessNeedPurchase: "I\'m sorry, your subscription does not give you access to this content. Please <a data-connext-link='Subscribe' redirect='true'>subscribe</a> to get access. "
+        },
+        SEARCHOPTIONS = {
+            ActivateByAccountNumber: "ActivateByAccountNumber",
+            ActivateByZipCodeAndHouseNumber: "ActivateByZipCodeAndHouseNumber",
+            ActivateByZipCodeAndPhoneNumber: "ActivateByZipCodeAndPhoneNumber",
+            ActivateBySubscriptionId: "ActivateBySubscriptionId"
+        },
+        STEPS_WIDTH = {
+            Authenticate: 420,
+            Activate: 672
+        };
+
+
+    //#endregion
+
+
+    //#region public functions
+    var run = function (options) {
+
+        if (IsActivationFlowRunning && !(options && options.runAfterSuccessfulLogin)) {
+            return;
+        }
+
+        var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+        calculateCurrentStep();
+
+        if (CURRENT_STEP == STEPS.Activate && activationUrlParams.subscriptionNumber) {
+            autoLinkingBySubscriptionId(activationUrlParams.subscriptionNumber);
+        } else {
+            if (CURRENT_STEP == null) {
+                return false;
+            }
+
+            IsActivationFlowRunning = true;
+            hideInactiveSteps();
+            showLinksByUserStatus();
+
+            if (CURRENT_STEP == STEPS.Authenticate) {
+                LoginFunctions[AUTHSYSTEM]();
+            } else {
+                showActivationTemplate();
+            }
+        }
+    }
+
+    //#endregion
+
+    //#region private functions
+
+    var showJanrainLogin = function () {
+        if (window.janrain) {
+            janrain.capture.ui.modal.open();
+        } else {
+            console.error("No janrain global object found...");
+        }
+    }
+
+    var showAuth0Login = function () {
+        CnnXt.User.showAuth0Login();
+    }
+
+    var calculateCurrentStep = function () {
+        var userState = Connext.Storage.GetUserState();
+
+        if (userState == null) {
+            userState = USER_STATES.NotLoggedIn;
+        }
+
+        if (userState == USER_STATES.NotLoggedIn) {
+            CURRENT_STEP = STEPS.Authenticate;
+            $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH.Authenticate);
+            $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Authenticate).css("margin-left", "-" + STEPS_WIDTH.Authenticate/2 + "px");
+        } else if (userState == USER_STATES.Subscribed) {
+            CURRENT_STEP = null; //don't need to show any template
+            IsActivationFlowRunning = false;
+        } else {
+            CURRENT_STEP = STEPS.Activate;
+            $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH.Activate);
+            $ACTIVATION_MODAL.css('width', STEPS_WIDTH.Activate).css("margin-left", "-" + STEPS_WIDTH.Activate / 2 + "px");
+        }
+    }
+
+    var hideInactiveSteps = function () {
+        var $steps = $ACTIVATION_MODAL.find('[' + UI_SELECTORS.Step + ']');
+
+        $steps.each(function (index, step) {
+            var $step = $(step);
+
+            if ($step.attr(UI_SELECTORS.Step) == CURRENT_STEP) {
+                $step.show();
+            } else {
+                $step.hide();
+            }
+        });
+    }
+
+    var checkCurrentStep = function (afterAuth) {
+        calculateCurrentStep();
+
+        if (CURRENT_STEP == null && !afterAuth) {
+            hideTemplate();
+        } else if (CURRENT_STEP == null && afterAuth) {
+            CnnXt.Run()
+            CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
+        }
+    
+        hideInactiveSteps();
+
+        if (afterAuth && CURRENT_STEP == STEPS.Activate) {
+            var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+            if (activationUrlParams.subscriptionNumber) {
+                hideTemplate();
+                autoLinkingBySubscriptionId(activationUrlParams.subscriptionNumber);
+            } else {
+                CnnXt.Event.fire('onActivationLoginStepClosed', { ActivationSettings: ACTIVATE_SETTINGS, closeEvent: CLOSE_CASES.MoveToActivate });
+                CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+            }  
+        }
+    }
+
+    var showLinksByUserStatus = function () {
+        var $subscribeLink = $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.SubscribeLink),
+            $upgradeLink = $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.UpgradeLink),
+            userState = Connext.Storage.GetUserState();
+
+        if (userState == USER_STATES.SubscribedNotEntitled) {
+            $subscribeLink.hide();
+            $upgradeLink.show();
+        } else {
+            $upgradeLink.hide();
+            $subscribeLink.show();
+        }
+    }
+
+    var showActivationTemplate = function () {
+        var options = CnnXt.GetOptions(),
+            modalOptions;
+
+        if (!options.silentmode && ACTIVATE_SETTINGS.IsActivationOnly) {
+            $ACTIVATION_MODAL.find('.connext-actflow-close-wrapper, [data-connext-role="close"]').remove();
+            modalOptions = { backdrop: "static", keyboard: false };
+        } else {
+            modalOptions = { backdrop: "true" };
+        }
+
+        $ACTIVATION_MODAL.attr('data-width', STEPS_WIDTH[CURRENT_STEP]).css("margin-left", "-" + STEPS_WIDTH[CURRENT_STEP] / 2 + "px");
+        $ACTIVATION_MODAL.addClass("in").show();
+        $ACTIVATION_MODAL.connextmodal(modalOptions);
+        $ACTIVATION_MODAL.resize();
+
+        CnnXt.Event.fire('onActivationFormShown', { ActivationSettings: ACTIVATE_SETTINGS });
+
+        $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.SuccessActivation).hide();
+        $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.FailActivation).hide();
+
+        if (CURRENT_STEP == STEPS.Authenticate) {
+            CnnXt.Event.fire('onActivationLoginStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+        } else if (CURRENT_STEP == STEPS.Activate) {
+            $ACTIVATION_MODAL.find(UI_SELECTORS.SubSteps.ActivateForm).show();
+            CnnXt.Event.fire('onActivationLinkStepShown', { ActivationSettings: ACTIVATE_SETTINGS });
+        }
+
+        processActivationUrlParams();
+
+        $ACTIVATION_MODAL.closeEvent = null;
+
+        $ACTIVATION_MODAL
+            .find('[data-connext-role="close"]')
+            .on('click', function (e) {
+                var $btn = $(this),
+                    href = $btn.attr('href');
+
+                if (href && href !== "#") {
+                    if ($btn[0].hasAttribute("target")) {
+                        window.open(href, "_blank");
+                    } else {
+                        window.location.href = href;
+                    }
+                }
+
+                $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.CloseButton;
+            });
+
+        $ACTIVATION_MODAL
+            .on('keyup', function (e) {
+                if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27)) {
+                    $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.EscButton;
+                    IsActivationFlowRunning = false;
+                }
+            })
+            .one("hidden", function (e) {
+                IsActivationFlowRunning = false;
+
+                if (!$ACTIVATION_MODAL.closeEvent) {
+                    $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.ClickOutside;
+                }
+
+                var eventData = {
+                    ActivationSettings: ACTIVATE_SETTINGS,
+                    closeEvent: $ACTIVATION_MODAL.closeEvent
+                }
+
+                if (CURRENT_STEP == STEPS.Authenticate) {
+                    CnnXt.Event.fire('onActivationLoginStepClosed', eventData);
+                }
+
+                if (CURRENT_STEP == STEPS.Activate) {
+                    CnnXt.Event.fire('onActivationLinkStepClosed', eventData);
+                }
+
+                if (CURRENT_STEP == STEPS.Success) {
+                    eventData.ActivateStatus = 'success';
+                    CnnXt.Event.fire('onActivationLinkSuccessStepClosed', eventData);
+                    runAfterLinking();
+                }
+
+                if (CURRENT_STEP == STEPS.Fail) {
+                    eventData.ActivateStatus = 'error';
+                    CnnXt.Event.fire('onActivationLinkErrorStepClosed', eventData);
+                }
+
+                CnnXt.Event.fire('onActivationFormClosed', eventData);
+            });
+    }
+
+    var processActivationUrlParams = function () {
+        var activationUrlParams = CnnXt.Utils.GetActivationUrlParams();
+
+        if (CURRENT_STEP == STEPS.Authenticate) {
+            if (activationUrlParams.email) {
+                $ACTIVATION_MODAL.find(UI_SELECTORS.Inputs.AllEmails).val(activationUrlParams.email);
+            }
+        }
+
+        var $links = $ACTIVATION_MODAL.find(UI_SELECTORS.Links);
+
+        $links.each(function (index, link) {
+            var $link = $(link),
+                href = $link.attr("href");
+
+            href = CnnXt.Utils.AddReturnUrlParamToLink(href);
+
+            if ($link.attr('data-connext-link') == "Upgrade") {
+                var productCode = CnnXt.Utils.GetProductCode();
+
+                if (!productCode) {
+                    CnnXt.API.GetProductCode().then(function (responce) {
+                        href = CnnXt.Utils.AddParameterToURL(href, 'product', responce);
+                        $link.attr("href", href);
+                    }, function (error) {
+                        $link.attr("href", href);
+                    });
+                } else {
+                    href = CnnXt.Utils.AddParameterToURL(href, 'product', productCode);
+                    $link.attr("href", href);
+                }
+            } else {
+                $link.attr("href", href);
+            }
+        });
+    }
+
+    var hideTemplate = function () {
+        $ACTIVATION_MODAL.connextmodal('toggle');
+    }
+
+    var login = function (formData) {
+        var fnName = 'login';
+
+        var payload = {
+            email: formData.Email,
+            password: formData.Password
+        }
+
+        showHideErrorMessage(UI_SELECTORS.ErrorMessages.LoginSubstep, false);
+
+        return CnnXt.API.GetUserByEmailAndPassword({
+            payload: payload,
+            onSuccess: function (data) {
+                LOGGER.debug(NAME, fnName, "onSuccess", data);
+                successLogin(data, 'onSuccess', payload);
+            },
+            onError: function (error) {
+                LOGGER.debug(NAME, fnName, "onError", error);
+                showHideErrorMessage(UI_SELECTORS.ErrorMessages.LoginSubstep, ERROR_MESSAGES.invalidCredits);
+            }
+        });
+    }
+
+    var register = function (formData) {
+        var fnName = 'register';
+
+        var payload = {
+            email: formData.Email,
+            password: formData.Password,
+            DisplayName: formData.DisplayName
+        }
+
+        return CnnXt.API.CreateUser({
+            payload: payload,
+            onSuccess: function (data) {
+                LOGGER.debug(NAME, fnName, "onSuccess", data);
+                if (data.Success || data.CustomerRegistrationId) {
+                    login(formData);
+                } else {
+
+                }
+            },
+            onError: function (err) {
+                var errorMessage = '',
+                    parsedError,
+                    parsedErrMsg;
+
+                LOGGER.debug(NAME, fnName, "onError", err);
+
+                try {
+                    parsedError = $.parseJSON(err.responseText);
+                    parsedErrMsg = $.parseJSON(parsedError.Message);
+
+                    if ($.isArray(parsedErrMsg.Errors)) {
+                        parsedErrMsg.Errors.forEach(function (msg) {
+                            if (_.isString(msg)) {
+                                errorMessage += msg + ' ';
+                            } else {
+                                errorMessage += msg.Message + ' ';
+                            }
+                        });
+                    } else {
+                        errorMessage += parsedErrMsg.Message;
+                    }
+                } catch (ex) {
+                    LOGGER.error(NAME, fnName, "EXCEPTION", ex);
+                }
+
+                showHideErrorMessage(UI_SELECTORS.ErrorMessages.RegistrationSubStep, errorMessage);
+            }
+        });
+    }
+
+    var successLogin = function (data, payload) {
+        data.Email = payload.email;
+        data.AuthSystem = 'MG2';
+        CnnXt.User.processSuccessfulLogin("Form", data);
+        checkingResize();
+        checkCurrentStep(true);
+        showLinksByUserStatus();
+    }
+
+    var activate = function (formData) {
+        var fnName = 'activate';
+
+        var apiName = formData.SearchOption,
+            userData = CnnXt.Storage.GetUserData();
+
+        var payload = formData;
+
+        payload.customRegId = (userData && userData.MasterId) ? userData.MasterId : null;
+        payload.autoLink = false;
+
+        CnnXt.Event.fire('onActivationLinkStepSubmitted', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Payload: payload,
+            ActivateBy: payload.SearchOption
+        });
+
+        LOGGER.debug(NAME, fnName, payload);
+
+        return CnnXt.API[apiName]({
+            payload: payload,
+            onSuccess: function (response) {
+                checkAccessAfterLinking(response, payload);
+            },
+            onError: function (error) {
+                errorLinking(error, payload.SearchOption, payload.autoLink);
+            }
+        });
+    }
+
+    var autoLinkingBySubscriptionId = function (subscriptionId) {
+        var fnName = "autoLinkingBySubscriptionId";
+        var userData = CnnXt.Storage.GetUserData(),
+            customRegId = (userData && userData.MasterId) ? userData.MasterId : null,
+            searchOption = SEARCHOPTIONS.ActivateBySubscriptionId,
+            payload = {
+                customRegId: customRegId,
+                SubscriptionId: subscriptionId,
+                autoLink: true
+            };
+
+        CnnXt.Event.fire('onActivationLinkStepSubmitted', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Payload: payload,
+            ActivateBy: searchOption
+        });
+
+        return CnnXt.API.LinkingBySubscription({
+            payload: payload,
+            onSuccess: function (response) {
+                checkAccessAfterLinking(response, payload);
+            },
+            onError: function (error) {
+                errorLinking(error, searchOption, payload.autoLink);
+            }
+        });
+    }
+
+    function checkAccessAfterLinking(response, payload) {
+        var fnName = 'checkAccessAfterLinking';
+
+        LOGGER.debug(NAME, fnName, response);
+
+        if (_.isString(response)) {
+            try {
+                response = $.parseJSON(response);
+            } catch (ex) {
+                errorLinking(response, payload.SearchOption, payload.autoLink);
+            }
+        }
+
+        if (response.errorCode || !response.Success) {
+            errorLinking(response, payload.SearchOption, payload.autoLink);
+        } else {
+            checkDigitalAccess().then(function () {
+                successLinking(response, payload.SearchOption);
+            }, function (digitalAccessResult) {
+                errorLinking(response, payload.SearchOption, payload.autoLink, digitalAccessResult);
+            });
+        }
+    }
+
+    var checkDigitalAccess = function (masterId) {
+        var fnName = 'checkDigitalAccess';
+
+        var defer = $.Deferred(),
+            userData = CnnXt.Storage.GetUserData();
+
+        masterId = masterId || ((userData && userData.MasterId) ? userData.MasterId : null);
+
+        var payload = {
+            masterId: masterId
+        }
+
+        LOGGER.debug(NAME, fnName, 'MasterId', masterId);
+
+        CnnXt.API.CheckDigitalAccess({
+            payload: payload,
+            onSuccess: function (response) {
+                if (response) {
+                    //if status code 400
+                    if (_.isString(response)) {
+                        var result = JSON.parse(response);
+
+                        if (result && _.isArray(result.Errors)) {
+                            if (_.findWhere(result.Errors, { Code: 400 })) {
+                                defer.reject();
+                            }
+                        }
+                    }
+
+                    //check CEP response
+                    if (_.isString(response.AccessLevel)){
+                        if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Premium) {
+                            defer.resolve();
+                        } 
+
+                        if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Upgrade) {
+                            defer.reject({ needUpgrade: true });
+                        }
+
+                        if (response.AccessLevel.toUpperCase() === CnnXt.Common.DigitalAccessLevels.Purchase) {
+                            defer.reject({ needPurchase: true });
+                        }
+                    }
+
+                    //check Legacy response
+                    if (_.isObject(response.AccessLevel)){
+                        if (response.AccessLevel.IsPremium) {
+                            defer.resolve();
+                        } 
+
+                        if (response.AccessLevel.IsUpgrade){
+                            defer.reject({ needUpgrade: true });
+                        }
+
+                        if (response.AccessLevel.IsPurchase) {
+                            defer.reject({ needPurchase: true });
+                        }
+                    }
+                }
+
+                //if no resolves - call to reject
+                defer.reject();
+            },
+            onNull: function () {
+                defer.reject();
+            },
+            onError: function (error) {
+                defer.reject();
+            }
+        });
+
+        return defer.promise();
+    }
+
+    var successLinking = function (response, searchOption, autoLink) {
+        IsActivationFlowRunning = false;
+        CnnXt.Storage.SetUserState(null);
+        CURRENT_STEP = STEPS.Success;
+        if (autoLink) {
+            showActivationTemplate();
+        }
+        $('.connext-actflow-close-wrapper .closebtn').attr('data-mg2-action', 'connextRun');
+
+        $(UI_SELECTORS.SubSteps.ActivateForm).hide();
+        $(UI_SELECTORS.Steps.Activate).show();
+        $(UI_SELECTORS.Steps.Authenticate).hide();
+        $(UI_SELECTORS.SubSteps.SuccessActivation).show();
+
+        CnnXt.Event.fire('onActivationLinkStepClosed', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            closeEvent: CLOSE_CASES.MoveToSuccess
+        });
+
+        CnnXt.Event.fire('onActivationLinkSuccessStepShown', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Response: response,
+            ActivateBy: searchOption
+        });
+
+    }
+
+    var errorLinking = function (response, searchOption, autoLink, digitalAccess) {
+        CURRENT_STEP = STEPS.Fail;
+
+        if (autoLink) {
+            showActivationTemplate();
+        }
+
+        $(UI_SELECTORS.SubSteps.ActivateForm).hide();
+        $(UI_SELECTORS.Steps.Activate).show();
+        $(UI_SELECTORS.Steps.Authenticate).hide();
+        $(UI_SELECTORS.SubSteps.FailActivation).show();
+
+        var message = '';
+
+        if (digitalAccess && digitalAccess.needUpgrade) {
+            message = ERROR_MESSAGES.digitalAccessNeedUpgrade;
+        } else if (digitalAccess && digitalAccess.needPurchase) {
+            message = ERROR_MESSAGES.digitalAccessNeedPurchase;
+        } else {
+            message = ERROR_MESSAGES.linkingFailed;
+        }
+
+        $(UI_SELECTORS.SubSteps.FailActivation).find('[data-connext-role="linkingErrorMessage"] span').html(message);
+
+        if (digitalAccess && digitalAccess.needUpgrade) {
+            var upgradeLink = $(UI_SELECTORS.SubSteps.UpgradeLink).find('[data-connext-link="Upgrade"]').attr('href');
+            var $accessUpgradeLink = $(UI_SELECTORS.SubSteps.FailActivation).find('[data-connext-link="Upgrade"]');
+
+            $accessUpgradeLink.attr('href', upgradeLink);
+        }
+
+        if (digitalAccess && digitalAccess.needPurchase) {
+            var subscribeLink = $(UI_SELECTORS.SubSteps.SubscribeLink).find('[data-connext-link="Subscribe"]').attr('href');
+            var $accessSubscribeLink = $(UI_SELECTORS.SubSteps.FailActivation).find('[data-connext-link="Subscribe"]');
+
+            $accessSubscribeLink.attr('href', subscribeLink);
+        }
+
+        CURRENT_STEP = STEPS.Fail;
+
+        CnnXt.Event.fire('onActivationLinkStepClosed', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            closeEvent: CLOSE_CASES.MoveToFail
+        });
+
+        CnnXt.Event.fire('onActivationLinkErrorStepShown', {
+            ActivationSettings: ACTIVATE_SETTINGS,
+            Response: response,
+            ActivateBy: searchOption
+        });
+    }
+
+    var showHideErrorMessage = function (selector, errorMessage) {
+        var $errorMessageContainer = $(selector);
+
+        if (($errorMessageContainer).lenght == 0) {
+            return false;
+        }
+
+        if (errorMessage) {
+            $errorMessageContainer.text(errorMessage);
+            $errorMessageContainer.show();
+        } else {
+            $errorMessageContainer.hide();
+        }
+    }
+
+    var runAfterLinking = function () {
+        if (AUTHSYSTEM != 'MG2') {
+            CnnXt.Storage.SetUserData(null);
+        }
+        CnnXt.Run();
+    }
+
+    var LoginFunctions = {
+        MG2: showActivationTemplate,
+        Auth0: showAuth0Login,
+        Janrain: showJanrainLogin
+    }
+
+
+    function runActivationFlow(e) {
+        e.preventDefault();
+        run();
+    }
+
+    var AddUiListeners = function () {
+        if (ISUIListenersAdded)
+            return;
+        ISUIListenersAdded = true;
+        $("body")
+            .off("click", UI_SELECTORS.Buttons.BackStep, backToActivateStep)
+            .on("click", UI_SELECTORS.Buttons.BackStep, backToActivateStep);
+        $("body")
+            .off("click", UI_SELECTORS.AuthSystems.Auth0, closedExternalAuthSystem)
+            .on("click", UI_SELECTORS.AuthSystems.Auth0, closedExternalAuthSystem);
+
+        $("body")
+            .off("click", UI_SELECTORS.AuthSystems.Janrain, closedExternalAuthSystem)
+            .on("click", UI_SELECTORS.AuthSystems.Janrain, closedExternalAuthSystem);
+        $("body")
+            .off("click", UI_SELECTORS.Buttons.ConnextRun, okGreate)
+            .on("click", UI_SELECTORS.Buttons.ConnextRun, okGreate);
+
+        $("body")
+            .off("click", UI_SELECTORS.Run, runActivationFlow)
+            .on("click", UI_SELECTORS.Run, runActivationFlow);
+    }
+
+    return {
+        init: function (options) {
+            LOGGER = CnnXt.Logger;
+            CnnXt.Storage.UpdateWhitelistSetCookieName();
+            CnnXt.Storage.UpdateWhitelistInfoboxCookieName();
+            CnnXt.Storage.UpdateNeedHidePinTemplateCookieName();
+            LOGGER.debug(NAME, "Whitelist.Init");
+        },
+        checkClientIp: checkClientIp
+    };
+};
+var ConnextAppInsights = function ($) {
     var LOGGER;
     var userId = null;
     var init = function (userId, masterId) {
@@ -13012,41 +14107,20 @@ var ConnextAppInsights = function ($) {
 
         additionalData = additionalData || {};
 
-        var janrainProfile = CnnXt.Storage.GetJanrainUser();
-        var auth0Profile = CnnXt.Storage.GetUserProfile();
-        var userProfile = CnnXt.Storage.GetUserData();
 
-        var appInsightsData = {
-            cnvid: (conversation) ? conversation.id : null, //conversation id
-            cnvn: (conversation) ? conversation.Name : '',  //conversation name
-            mlm: (meter) ? meter.method : '', //meter level method
-            ml: CnnXt.GetOptions().currentMeterLevel, // current meter level
-            artlft: (conversation) ? conversation.Props.ArticleLeft : null,  //articles left
-            artc: CnnXt.Storage.GetCurrentConversationViewCount(), //acrticles count
-            cmid: (config && config.Campaign) ? config.Campaign.id : null, //campaign id
-            cmn: (config && config.Campaign) ? config.Campaign.Name : '', //campaign name
-            dmid: (config && config.DynamicMeter) ? config.DynamicMeter.id : null, //dynamic meter id
-            dmn: (config && config.DynamicMeter) ? config.DynamicMeter.Name : '', //dynamic meter name
-            cnfc: (config && config.Settings) ? config.Settings.Code : '', //config code
-            cnfn: (config && config.Settings) ? config.Settings.Name : '', //config name
-            sc: (config && config.Site) ? config.Site.SiteCode : '', //site code
-            at: (config && config.Site) ? CnnXt.Common.RegistrationTypes[config.Site.RegistrationTypeId] : '', //auth type
-            crid: (userData) ? userData.MasterId : null, //customer registration id
-            igmrid: (userData) ? userData.IgmRegID : null, //igmRegID
-            us: CnnXt.Storage.GetUserState(), //user status
-            em: (auth0Profile) ? auth0Profile.email : (janrainProfile) ? janrainProfile.email : (userProfile) ? userProfile.Email : '', //email
-            ip: CnnXt.Utils.GetIP(), //IP
-            zc: CnnXt.Storage.GetActualZipCodes(),  //zip codes
-            did: CnnXt.GetOptions().deviceId, // device id
-            dt: (metaData) ? metaData.deviceType : '', //device type
-            os: (metaData) ? metaData.OS : '', // OS
-            brw: (metaData) ? metaData.Browser : '', //browser
-            url: (metaData) ? metaData.URL : '', //URL
-            attr: CnnXt.GetOptions().attr, // device id
-            stk: CnnXt.GetOptions().settingsKey //settings key 
-        }
+    function okGreate() {
+        $ACTIVATION_MODAL.closeEvent = CLOSE_CASES.CloseButton;
+        //runAfterLinking();
+    }
 
-        return appInsightsData;
+    function checkingResize() {
+        window.addEventListener('resize', function () {
+            if (IsActivationFlowRunning) {
+                setTimeout(function () {
+                    calculateCurrentStep();
+                }, 25);
+            }
+        });
     }
     var getEventDataByName = function (name, innerdata) {
         var eventData = innerdata.EventData;
