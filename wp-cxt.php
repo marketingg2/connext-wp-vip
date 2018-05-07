@@ -16,7 +16,7 @@
  * Plugin Name:       Connext
  * Plugin URI:        http://marketingg2.com
  * Description:       To enable Connext pleasce contact your project manager for site configuration data.
- * Version:           1.12.2
+ * Version:           1.12.4
  * Author:            Marketing G2
  * Author URI:        http://marketingg2.com
  * License:           GPL-2.0+
@@ -33,7 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'WP_CXT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WP_CXT_URL', plugin_dir_url( __FILE__ ) );
 define( 'WP_CXT_BASENAME', plugin_basename( __FILE__ ) );
-define( 'WP_CXT_VERSION', '1.12.2' );
+define( 'WP_CXT_VERSION', '1.12.4' );
 
 /**
  * The core plugin class that is used to define internationalization,
