@@ -193,6 +193,7 @@ class Wp_Cxt_Public {
 			'settingsKey' => isset( $this->current_settings['settings_key'] ) ? esc_js( $this->current_settings['settings_key'] ) : '',
 			'debug' => isset( $this->current_settings['debug'] ) ? esc_js( $this->current_settings['debug'] ) : '',
 			'environment' => isset( $this->current_settings['environment'] ) ? esc_js( $this->current_settings['environment'] ) : '',
+			'silentMode' => isset( $this->current_settings['silent_mode'] ) ? esc_js( $this->current_settings['silent_mode'] ) : '',
 		);
 
 	}

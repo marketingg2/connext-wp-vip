@@ -305,6 +305,19 @@ class Wp_Cxt_Settings {
 					),
 				),
 			),
+			'silent_mode' => array(
+						'title' => esc_html__( 'Silent Mode', 'wp-cxt' ),
+						'render_function' => 'render_chosen_select',
+						'options' => array(
+							'true' => __( 'True', 'wp-cxt' ),
+							'false' => __( 'False', 'wp-cxt' ),
+						),
+						'default' => 'false',
+						'validation_type' => 'alphanumeric',
+						'attributes' => array(
+							'class' => 'chosen-select',
+						),
+			),
 			'display_settings' => array(
 				'section_title' => esc_html__( 'Display Settings', 'wp-cxt' ),
 				'section_description' => __( 'Choose on which pages the Connext code should render', 'wp-cxt' ),
