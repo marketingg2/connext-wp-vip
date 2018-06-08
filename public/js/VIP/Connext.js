@@ -171,11 +171,11 @@ var ConnextCommon = function () {
             localhost: "https://dev-connext-api.azurewebsites.net/",
             dev: "https://dev-connext-api.azurewebsites.net/",
             test: "https://test-connext-api.azurewebsites.net/",
-            stage: 'https://stage-mg2-proxy-connext.azurewebsites.net/',
+            stage: 'https://stage-review-journal-proxy-connext.azurewebsites.net/',
             test20: 'https://test20-connext-api.azurewebsites.net/',
             demo: 'https://demo-connext-api.azurewebsites.net/',
-            preprod: 'https://preprod-connext-api.azurewebsites.net/',
-            prod: '{{apiUrl}}'
+            preprod: 'https://preprod-review-journal-proxy-connext.azurewebsites.net/',
+            prod: 'https://prod-review-journal-proxy-connext.azurewebsites.net/'
         },
         APPInsightKeys: {
             localhost: "a57959cf-5e4d-4ab3-8a3e-d17f7e2a8bf8",
