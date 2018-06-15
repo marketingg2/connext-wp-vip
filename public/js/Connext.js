@@ -1,11 +1,3 @@
-/*
-* Version: 1.12.4 
-* Build: V.1.12.4-20180505.1 
-*/ 
-
- window.connextVersion = "1.12.4"
-
- window.connextBuild = "V.1.12.4-20180505.1"
 !function ($) {
 
 	"use strict"; // jshint ;_;
@@ -4662,7 +4654,7 @@ var ConnextCommon = function () {
             preprod: "https://cdn.mg2connext.com/preprod/1.6/themes/"
         },
         APIUrl: {
-            localhost: "http://localhost:34550/",
+            localhost: "https://stage-mng-proxy-connext.azurewebsites.net/",
             //localhost: "https://dev-connext-api.azurewebsites.net/",
             dev: "https://dev-connext-api.azurewebsites.net/",
             test: "https://test-connext-api.azurewebsites.net/",
@@ -4673,7 +4665,7 @@ var ConnextCommon = function () {
             demo: 'https://demo-connext-api.azurewebsites.net/',
             preprod: 'https://preprod-connext-api.azurewebsites.net/',
             //prod: 'https://api.mg2connext.com/'
-            prod: 'https://mng-api.mg2connext.com/'
+            prod: '{{apiUrl}}'
         },
         APPInsightKeys: {
             localhost: "a57959cf-5e4d-4ab3-8a3e-d17f7e2a8bf8",
@@ -4686,7 +4678,7 @@ var ConnextCommon = function () {
             prod: "1819964f-57a2-45c2-b878-c270d7e5d1d9"
         },
         Environments: ['localhost', 'dev', 'test', 'stage', 'demo', 'prod', 'test20'],
-        IPInfo: window.location.protocol + '//freegeoip.net/json/',
+        IPInfo: window.location.protocol + '//api-mg2.db-ip.com/v2/p14891b727f063924f0d86d8a8e5063678abd2ac/self',
         StorageKeys: {
             configuration: "Connext_Configuration",
             userToken: "Connext_UserToken",
@@ -4723,7 +4715,8 @@ var ConnextCommon = function () {
             connext_viewstructure: 'connext_viewstructure',
             connext_userLastUpdateDate: 'connext_userLastUpdateDate',
            // connext_returnUrl: 'c_desturl',
-            device_postfix: '_device'
+            device_postfix: '_device',
+            geolocationInfo: 'geolocationInfo'
         },
         MeterLevels: {
             1: "Free",
@@ -7850,6 +7843,12 @@ var ConnextStorage = function ($) {
             } catch (ex) {
                 LOGGER.exception(NAME, fnName, ex);
             }
+        },
+        SetGeolocationInfo: function (data) {
+            setLocalStorage(CnnXt.Common.StorageKeys.geolocationInfo, data);
+        },
+        GetGeolocationInfo: function () {
+            getLocalStorage(CnnXt.Common.StorageKeys.geolocationInfo);
         }
     }
 };
@@ -12593,8 +12592,8 @@ var ConnextWhitelist = function ($) {
     var wrongPinStatus = 100;
 
     var processSuccessfulIpRequest = function(data, config) {
-        if (data && data.ip) {
-            USER_IP = data.ip;
+        if (data && data.ipAddress) {
+            USER_IP = data.ipAddress;
 
             if (config && config.WhitelistSets) {
                 config.WhitelistSets.forEach(function (set) {
@@ -13936,7 +13935,7 @@ var ConnextActivation = function ($) {
     };
 };
 var CnnXt = function ($) {
-    var VERSION = '1.12.4';
+    var VERSION = '1.12.5';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER; //local reference to CnnXt.LOGGER
@@ -14050,12 +14049,13 @@ var CnnXt = function ($) {
     };
 
     var proccessSuccessfulZipCodeRequest = function (data, callback) {
-        if (data.ip) {
-            CnnXt.Utils.SetIP(data.ip);
+        CnnXt.Storage.SetGeolocationInfo(data);
+        if (data.ipAddress) {
+            CnnXt.Utils.SetIP(data.ipAddress);
         }
 
-        if (data.zip_code) {
-            CnnXt.Storage.SetCalculatedZipCode(data.zip_code);
+        if (data.zipCode) {
+            CnnXt.Storage.SetCalculatedZipCode(data.zipCode);
         } else {
             CnnXt.Storage.SetCalculatedZipCode("00000");
         }
@@ -14089,21 +14089,14 @@ var CnnXt = function ($) {
                         proccessSuccessfulZipCodeRequest(data, callback);
                     },
                     error: function () {
-                        LOGGER.debug(NAME, fnName, 'IPInfo call failed. Calling API to get info');
+                        LOGGER.debug(NAME, fnName, "Geolocation call failed. We set zipcode by default as 00000");
 
-                        CnnXt.API.GetClientIpInfo()
-                            .done(function (data) {
-                                proccessSuccessfulZipCodeRequest(data, callback);
-                            })
-                            .fail(function (err) {
-                                LOGGER.debug(NAME, fnName, "API call to get info falied. We set zipcode by default as 00000", err);
+                        CnnXt.Storage.SetCalculatedZipCode("00000");
 
-                                CnnXt.Storage.SetCalculatedZipCode("00000");
-
-                                if (_.isFunction(callback)) {
-                                    callback();
-                                }
-                            });
+                        if (_.isFunction(callback)) {
+                            callback();
+                        }
+                        //});
                     }
                 });
             }
