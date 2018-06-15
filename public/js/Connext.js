@@ -4664,8 +4664,7 @@ var ConnextCommon = function () {
             test20: 'https://test20-connext-api.azurewebsites.net/',
             demo: 'https://demo-connext-api.azurewebsites.net/',
             preprod: 'https://preprod-connext-api.azurewebsites.net/',
-            //prod: 'https://api.mg2connext.com/'
-            prod: '{{apiUrl}}'
+            prod: 'https://mng-api.mg2connext.com/'
         },
         APPInsightKeys: {
             localhost: "a57959cf-5e4d-4ab3-8a3e-d17f7e2a8bf8",
