@@ -9333,7 +9333,7 @@ var ConnextAPI = function ($) {
         ActivateByZipCodeAndPhoneNumber: __.template("user/ActivateByZipCodeAndPhoneNumber"),
         SyncUser: __.template("user/sync"),
         GetDictionaryValue: __.template("dictionary/<%- ValueName %>"),
-        CheckDigitalAccess: __.template("user/masterId/<%- masterId %>/DigitalAccess?mode=<%- mode %>"),
+        CheckDigitalAccess: __.template("user/DigitalAccess?masterId=<%= masterId %>&mode=<%= mode %>"),
         GetClientIpInfo: "utils/ipInfo"
     };
 
