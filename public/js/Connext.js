@@ -9499,7 +9499,8 @@ var ConnextAPI = function ($) {
             LOGGER.debug(NAME, fnName, 'calling...', url, 'args', args);
             return $.ajax({
                 headers: {
-                    'Site-Code': 'MNG', 'Access-Control-Allow-Origin': '*',
+                    'Site-Code': CnnXt.GetOptions().siteCode,
+                    'Access-Control-Allow-Origin': '*',
                     'Environment': CnnXt.GetOptions().environment,
                     'settingsKey': CnnXt.GetOptions().settingsKey,
                     'Version': CnnXt.GetVersion(),
