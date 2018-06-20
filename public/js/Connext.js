@@ -2166,7 +2166,7 @@ if (typeof jQuery === 'undefined') {
               .replace(escaper, function (match) { return '\\' + escapes[match]; });
 
             if (escape) {
-                source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+                source += "'+\n((__t=(" + escape + "))==null?'':__.escape(__t))+\n'";
             }
             if (interpolate) {
                 source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
@@ -10113,7 +10113,7 @@ var ConnextUser = function ($) {
 
                 var authSettings = CnnXt.GetOptions().authSettings;
 
-                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                     throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
                 }
 
@@ -10484,7 +10484,7 @@ var ConnextUser = function ($) {
             if (checkNoSubscriptions(USER_DATA)) {
                 NOTIFICATION.show("NoSubscriptionData");
             } else {
-                if (!_.isObject(USER_DATA.Subscriptions)) {
+                if (!__.isObject(USER_DATA.Subscriptions)) {
                     USER_DATA.Subscriptions = JSON.parse(USER_DATA.Subscriptions);
                 }
                 var zipCodes = null;
@@ -10568,7 +10568,7 @@ var ConnextUser = function ($) {
         var fnName = "defineUserState";
 
         try {
-            if (!data.DigitalAccess || !_.isEmpty(data.DigitalAccess.Errors)) {
+            if (!data.DigitalAccess || !__.isEmpty(data.DigitalAccess.Errors)) {
                 USER_STATE = USER_STATES.LoggedIn;
             } else if (!data.Subscriptions || data.Subscriptions.length == 0) {
                 USER_STATE = USER_STATES.LoggedIn;
@@ -10678,7 +10678,7 @@ var ConnextUser = function ($) {
             } else if (AUTH_TYPE.Auth0) {
                 var authSettings = CnnXt.GetOptions().authSettings;
 
-                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                     LOGGER.warn('No auth0Lock object in the authSettings!');
                     USER_STATE = USER_STATES.NotLoggedIn;
                     CnnXt.Storage.SetUserState(USER_STATE);
@@ -11005,7 +11005,7 @@ var ConnextUser = function ($) {
         try {
             var authSettings = CnnXt.GetOptions().authSettings;
 
-            if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+            if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                 throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
             }
 
@@ -12314,7 +12314,7 @@ var ConnextCampaign = function ($) {
                         var who = val.Who;
 
                         if (who.ViewsCriteria && !ignoreViewsFlag) {
-                            if (!_.isArray(who.ViewsCriteria)) {
+                            if (!__.isArray(who.ViewsCriteria)) {
                                 who.ViewsCriteria = [who.ViewsCriteria];
                             }
                             who.ViewsCriteria.forEach(function (criteria) {
@@ -15343,11 +15343,11 @@ var CnnXt = function ($) {
                 if (OPTIONS.runSettings.runPromise && __.isFunction(OPTIONS.runSettings.runPromise.then)) {
                     OPTIONS.runSettings.hasValidPromise = true;
 
-                    if (!_.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
+                    if (!__.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
                         OPTIONS.runSettings.onRunPromiseResolved = $.noop;
                     }
 
-                    if (!_.isFunction(OPTIONS.runSettings.onRunPromiseRejected)) {
+                    if (!__.isFunction(OPTIONS.runSettings.onRunPromiseRejected)) {
                         OPTIONS.runSettings.onRunPromiseRejected = $.noop;
                     }
                 } else {
@@ -15356,7 +15356,7 @@ var CnnXt = function ($) {
                     LOGGER.debug(NAME, fnName, 'No or invalid promise object in the \'runSettings\'');
                 }
 
-                if (!_.isNumber(OPTIONS.runSettings.runOffset)) {
+                if (!__.isNumber(OPTIONS.runSettings.runOffset)) {
                     LOGGER.debug(NAME, fnName, 'We have not run offset, so we set the \'runSettings.runOffset\' by default', defaultRunOffsetTime);
                     OPTIONS.runSettings.runOffset = defaultRunOffsetTime;
                 }
