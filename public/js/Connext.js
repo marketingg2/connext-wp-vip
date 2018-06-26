@@ -1,6 +1,6 @@
 window.connextVersion = "1.14.2"
 
-window.connextBuild = "V.1.14.2-20180530.1"
+window.connextBuild = "V.1.14.2-20180626.1"
 
 !function ($) {
 
@@ -2884,18 +2884,6 @@ if (!JSON) {
         window.Cookies = _OldCookies;
         return api;
     };
-    //if (typeof define === 'function' && define.amd) {
-    //    define(factory);
-    //} else if (typeof exports === 'object') {
-    //    module.exports = factory();
-    //} else {
-    //    var _OldCookies = window.Cookies;
-    //    var api = window.Cookies = factory();
-    //    api.noConflict = function () {
-    //        window.Cookies = _OldCookies;
-    //        return api;
-    //    };
-    //}
 }(function () {
     function extend() {
         var i = 0;
@@ -2907,6 +2895,12 @@ if (!JSON) {
             }
         }
         return result;
+    }
+    function decodeCookie(name, cookie, rdecode) {
+        if (name !== 'igmRegID' && name !== 'igmContent' && name !== 'igmAuth') {
+            cookie = cookie.replace(rdecode, decodeURIComponent);
+        }
+        return cookie;
     }
 
     function init(converter) {
@@ -2946,11 +2940,11 @@ if (!JSON) {
                 key = key.replace(/[\(\)]/g, escape);
 
                 return (document.cookie = [
-					key, '=', value,
-					attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
-					attributes.path && '; path=' + attributes.path,
-					attributes.domain && '; domain=' + attributes.domain,
-					attributes.secure ? '; secure' : ''
+                    key, '=', value,
+                    attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
+                    attributes.path && '; path=' + attributes.path,
+                    attributes.domain && '; domain=' + attributes.domain,
+                    attributes.secure ? '; secure' : ''
                 ].join(''));
             }
 
@@ -2978,9 +2972,8 @@ if (!JSON) {
 
                 try {
                     cookie = converter.read ?
-						converter.read(cookie, name) : converter(cookie, name) ||
-						cookie.replace(rdecode, decodeURIComponent);
-
+                        converter.read(cookie, name) : converter(cookie, name) ||
+                        decodeCookie(name, cookie, rdecode);
                     if (this.json) {
                         try {
                             cookie = JSON.parse(cookie);
@@ -3019,7 +3012,6 @@ if (!JSON) {
 
         return api;
     }
-
     return init(function () { });
 }));
 
@@ -4722,23 +4714,23 @@ var ConnextCommon = function () {
         S3LastPublishDatePath: "data/last_publish/<%- siteCode %>.json",
         CSSPluginUrl: {
             localhost: "//localhost:20001/plugin/assets/css/themes/",
-            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.13/themes/",
-            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.13/themes/",
-            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.13/themes/",
-            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.13/themes/",
-            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.13/themes/',
-            prod: "https://cdn.mg2connext.com/prod/1.6/themes/",
-            preprod: "https://cdn.mg2connext.com/preprod/1.6/themes/"
+            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.14/themes/",
+            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.14/themes/",
+            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.14/themes/",
+            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.14/themes/",
+            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.14/themes/',
+            prod: "https://cdn.mg2connext.com/prod/1.14/themes/",
+            preprod: "https://cdn.mg2connext.com/preprod/1.14/themes/"
         },
         APIUrl: {
             localhost: "https://dev-connext-api.azurewebsites.net/",
             dev: "https://dev-connext-api.azurewebsites.net/",
             test: "https://test-connext-api.azurewebsites.net/",
-            stage: 'https://stage-mg2-proxy-connext.azurewebsites.net/',
+            stage: 'https://stage-mng-proxy-connext.azurewebsites.net/',
             test20: 'https://test20-connext-api.azurewebsites.net/',
             demo: 'https://demo-connext-api.azurewebsites.net/',
             preprod: 'https://preprod-connext-api.azurewebsites.net/',
-            prod: '{{apiUrl}}'
+            prod: 'https://prod-mng-proxy-connext.azurewebsites.net/'
         },
         APPInsightKeys: {
             localhost: "a57959cf-5e4d-4ab3-8a3e-d17f7e2a8bf8",
@@ -7027,6 +7019,35 @@ var ConnextUtils = function ($) {
         return bytesToInt32(maskedBytes);
     }
 
+    function decodeAuthCookie(data) {
+        if (!data) {
+            return null;
+        }
+        return encodeURIComponent(decodeURIComponent(data));
+    }
+
+    function newsletterErrorHandler (data, defaultMessage) {
+        if (data) {
+            var errorData;
+            var message = JSON.parse(data.responseText);
+            if (message.Message) {
+                errorData = {
+                    Message: message.Message
+                };
+            } else {
+                errorData = {
+                    Message: defaultMessage
+                };
+            }
+
+            return errorData;
+        }
+        return {
+            Message: defaultMessage
+        };
+
+    }
+
     return {
         init: function () {
             LOGGER = CnnXt.Logger;
@@ -7798,7 +7819,9 @@ var ConnextUtils = function ($) {
                 return defaultMessage;
             }
         },
-        BreakConversationPromises: breakConversationPromises
+        NewsletterErrorHandler : newsletterErrorHandler,
+        BreakConversationPromises: breakConversationPromises,
+        DecodeAuthCookie: decodeAuthCookie
     };
 
 };
@@ -9312,6 +9335,8 @@ var ConnextAPI = function ($) {
     var API_URL;
     var BASE_API_ROUTE = "api/";
 
+    var defaultErrorMessage = 'Sorry, there\'s a server problem or a problem with the network. ';
+
 
     var ROUTES = {
         GetConfiguration: __.template("configuration/siteCode/<%- siteCode %>/configCode/<%- configCode %>?publishDate=<%- publishDate %>"),
@@ -9333,7 +9358,7 @@ var ConnextAPI = function ($) {
         ActivateByZipCodeAndPhoneNumber: __.template("user/ActivateByZipCodeAndPhoneNumber"),
         SyncUser: __.template("user/sync"),
         GetDictionaryValue: __.template("dictionary/<%- ValueName %>"),
-        CheckDigitalAccess: __.template("user/DigitalAccess?masterId=<%= masterId %>&mode=<%= mode %>"),
+        CheckDigitalAccess: __.template("user/masterId/<%- masterId %>/DigitalAccess?mode=<%- mode %>"),
         GetClientIpInfo: "utils/ipInfo"
     };
 
@@ -9419,6 +9444,7 @@ var ConnextAPI = function ($) {
             }
         }
     };
+
 
     var Post = function (args) {
         var fnName = "Post";
@@ -9527,8 +9553,10 @@ var ConnextAPI = function ($) {
                 error: function (error) {
                     LOGGER.debug(NAME, fnName, "Ajax.Error", error);
 
+                    var responseData = CnnXt.Utils.NewsletterErrorHandler(error, defaultErrorMessage);
+
                     if (__.isFunction(args.options.onError)) {
-                        args.options.onError(error);
+                        args.options.onError(responseData);
                     }
                 },
                 complete: function () {
@@ -10114,7 +10142,7 @@ var ConnextUser = function ($) {
 
                 var authSettings = CnnXt.GetOptions().authSettings;
 
-                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                     throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
                 }
 
@@ -10462,9 +10490,9 @@ var ConnextUser = function ($) {
         try {
             USER_STATE = USER_STATES.LoggedIn;
 
-            data.IgmAuth = data.IgmAuth || CnnXt.Storage.GetIgmAuth();
-            data.IgmContent = data.IgmContent || CnnXt.Storage.GetIgmContent();
-            data.IgmRegID = data.IgmRegID || CnnXt.Storage.GetigmRegID();
+            data.IgmAuth = CnnXt.Utils.DecodeAuthCookie(data.IgmAuth) || CnnXt.Storage.GetIgmAuth();
+            data.IgmContent = CnnXt.Utils.DecodeAuthCookie(data.IgmContent) || CnnXt.Storage.GetIgmContent();
+            data.IgmRegID = CnnXt.Utils.DecodeAuthCookie(data.IgmRegID) || CnnXt.Storage.GetigmRegID();
 
             USER_DATA = CnnXt.Utils.ShapeUserData(data);
 
@@ -10485,7 +10513,7 @@ var ConnextUser = function ($) {
             if (checkNoSubscriptions(USER_DATA)) {
                 NOTIFICATION.show("NoSubscriptionData");
             } else {
-                if (!_.isObject(USER_DATA.Subscriptions)) {
+                if (!__.isObject(USER_DATA.Subscriptions)) {
                     USER_DATA.Subscriptions = JSON.parse(USER_DATA.Subscriptions);
                 }
                 var zipCodes = null;
@@ -10569,7 +10597,7 @@ var ConnextUser = function ($) {
         var fnName = "defineUserState";
 
         try {
-            if (!data.DigitalAccess || !_.isEmpty(data.DigitalAccess.Errors)) {
+            if (!data.DigitalAccess || !__.isEmpty(data.DigitalAccess.Errors)) {
                 USER_STATE = USER_STATES.LoggedIn;
             } else if (!data.Subscriptions || data.Subscriptions.length == 0) {
                 USER_STATE = USER_STATES.LoggedIn;
@@ -10679,7 +10707,7 @@ var ConnextUser = function ($) {
             } else if (AUTH_TYPE.Auth0) {
                 var authSettings = CnnXt.GetOptions().authSettings;
 
-                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                     LOGGER.warn('No auth0Lock object in the authSettings!');
                     USER_STATE = USER_STATES.NotLoggedIn;
                     CnnXt.Storage.SetUserState(USER_STATE);
@@ -11006,7 +11034,7 @@ var ConnextUser = function ($) {
         try {
             var authSettings = CnnXt.GetOptions().authSettings;
 
-            if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+            if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                 throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
             }
 
@@ -11845,6 +11873,9 @@ var ConnextCampaign = function ($) {
 
             calculateArticleLeft(conversation, validActions, actions);
             CnnXt.Storage.SetCurrentConversation(conversation);
+
+            updateCurrentConversations(conversation);
+
             CnnXt.Event.fire("onConversationDetermined", conversation);
 
             proccessActivationFlow(conversation);
@@ -12315,7 +12346,7 @@ var ConnextCampaign = function ($) {
                         var who = val.Who;
 
                         if (who.ViewsCriteria && !ignoreViewsFlag) {
-                            if (!_.isArray(who.ViewsCriteria)) {
+                            if (!__.isArray(who.ViewsCriteria)) {
                                 who.ViewsCriteria = [who.ViewsCriteria];
                             }
                             who.ViewsCriteria.forEach(function (criteria) {
@@ -12499,6 +12530,12 @@ var ConnextCampaign = function ($) {
     var getCurrentConversationViewCount = function () {
         return CnnXt.Storage.GetCurrentConversationViewCount();
     };
+
+    function updateCurrentConversations (conversation) {
+        var allCurrentConversations = CnnXt.Storage.GetCurrentConversations();
+        allCurrentConversations[METER_LEVEL] = conversation;
+        CnnXt.Storage.SetCurrentConversations(allCurrentConversations);
+    }
 
     return {
         init: function (configSettings) {
@@ -15344,11 +15381,11 @@ var CnnXt = function ($) {
                 if (OPTIONS.runSettings.runPromise && __.isFunction(OPTIONS.runSettings.runPromise.then)) {
                     OPTIONS.runSettings.hasValidPromise = true;
 
-                    if (!_.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
+                    if (!__.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
                         OPTIONS.runSettings.onRunPromiseResolved = $.noop;
                     }
 
-                    if (!_.isFunction(OPTIONS.runSettings.onRunPromiseRejected)) {
+                    if (!__.isFunction(OPTIONS.runSettings.onRunPromiseRejected)) {
                         OPTIONS.runSettings.onRunPromiseRejected = $.noop;
                     }
                 } else {
@@ -15357,7 +15394,7 @@ var CnnXt = function ($) {
                     LOGGER.debug(NAME, fnName, 'No or invalid promise object in the \'runSettings\'');
                 }
 
-                if (!_.isNumber(OPTIONS.runSettings.runOffset)) {
+                if (!__.isNumber(OPTIONS.runSettings.runOffset)) {
                     LOGGER.debug(NAME, fnName, 'We have not run offset, so we set the \'runSettings.runOffset\' by default', defaultRunOffsetTime);
                     OPTIONS.runSettings.runOffset = defaultRunOffsetTime;
                 }

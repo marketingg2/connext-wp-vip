@@ -2464,6 +2464,35 @@ var ConnextUtils = function ($) {
         return bytesToInt32(maskedBytes);
     }
 
+    function decodeAuthCookie(data) {
+        if (!data) {
+            return null;
+        }
+        return encodeURIComponent(decodeURIComponent(data));
+    }
+
+    function newsletterErrorHandler (data, defaultMessage) {
+        if (data) {
+            var errorData;
+            var message = JSON.parse(data.responseText);
+            if (message.Message) {
+                errorData = {
+                    Message: message.Message
+                };
+            } else {
+                errorData = {
+                    Message: defaultMessage
+                };
+            }
+
+            return errorData;
+        }
+        return {
+            Message: defaultMessage
+        };
+
+    }
+
     return {
         init: function () {
             LOGGER = CnnXt.Logger;
@@ -3235,7 +3264,9 @@ var ConnextUtils = function ($) {
                 return defaultMessage;
             }
         },
-        BreakConversationPromises: breakConversationPromises
+        NewsletterErrorHandler : newsletterErrorHandler,
+        BreakConversationPromises: breakConversationPromises,
+        DecodeAuthCookie: decodeAuthCookie
     };
 
 };
@@ -4749,6 +4780,8 @@ var ConnextAPI = function ($) {
     var API_URL;
     var BASE_API_ROUTE = "api/";
 
+    var defaultErrorMessage = 'Sorry, there\'s a server problem or a problem with the network. ';
+
 
     var ROUTES = {
         GetConfiguration: __.template("configuration/siteCode/<%- siteCode %>/configCode/<%- configCode %>?publishDate=<%- publishDate %>"),
@@ -4857,6 +4890,7 @@ var ConnextAPI = function ($) {
         }
     };
 
+
     var Post = function (args) {
         var fnName = "Post";
 
@@ -4936,7 +4970,8 @@ var ConnextAPI = function ($) {
             LOGGER.debug(NAME, fnName, 'calling...', url, 'args', args);
             return $.ajax({
                 headers: {
-                    'Site-Code': 'MNG', 'Access-Control-Allow-Origin': '*',
+                    'Site-Code': CnnXt.GetOptions().siteCode,
+                    'Access-Control-Allow-Origin': '*',
                     'Environment': CnnXt.GetOptions().environment,
                     'settingsKey': CnnXt.GetOptions().settingsKey,
                     'Version': CnnXt.GetVersion(),
@@ -4963,8 +4998,10 @@ var ConnextAPI = function ($) {
                 error: function (error) {
                     LOGGER.debug(NAME, fnName, "Ajax.Error", error);
 
+                    var responseData = CnnXt.Utils.NewsletterErrorHandler(error, defaultErrorMessage);
+
                     if (__.isFunction(args.options.onError)) {
-                        args.options.onError(error);
+                        args.options.onError(responseData);
                     }
                 },
                 complete: function () {
@@ -5550,7 +5587,7 @@ var ConnextUser = function ($) {
 
                 var authSettings = CnnXt.GetOptions().authSettings;
 
-                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                     throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
                 }
 
@@ -5898,9 +5935,9 @@ var ConnextUser = function ($) {
         try {
             USER_STATE = USER_STATES.LoggedIn;
 
-            data.IgmAuth = data.IgmAuth || CnnXt.Storage.GetIgmAuth();
-            data.IgmContent = data.IgmContent || CnnXt.Storage.GetIgmContent();
-            data.IgmRegID = data.IgmRegID || CnnXt.Storage.GetigmRegID();
+            data.IgmAuth = CnnXt.Utils.DecodeAuthCookie(data.IgmAuth) || CnnXt.Storage.GetIgmAuth();
+            data.IgmContent = CnnXt.Utils.DecodeAuthCookie(data.IgmContent) || CnnXt.Storage.GetIgmContent();
+            data.IgmRegID = CnnXt.Utils.DecodeAuthCookie(data.IgmRegID) || CnnXt.Storage.GetigmRegID();
 
             USER_DATA = CnnXt.Utils.ShapeUserData(data);
 
@@ -5921,7 +5958,7 @@ var ConnextUser = function ($) {
             if (checkNoSubscriptions(USER_DATA)) {
                 NOTIFICATION.show("NoSubscriptionData");
             } else {
-                if (!_.isObject(USER_DATA.Subscriptions)) {
+                if (!__.isObject(USER_DATA.Subscriptions)) {
                     USER_DATA.Subscriptions = JSON.parse(USER_DATA.Subscriptions);
                 }
                 var zipCodes = null;
@@ -6005,7 +6042,7 @@ var ConnextUser = function ($) {
         var fnName = "defineUserState";
 
         try {
-            if (!data.DigitalAccess || !_.isEmpty(data.DigitalAccess.Errors)) {
+            if (!data.DigitalAccess || !__.isEmpty(data.DigitalAccess.Errors)) {
                 USER_STATE = USER_STATES.LoggedIn;
             } else if (!data.Subscriptions || data.Subscriptions.length == 0) {
                 USER_STATE = USER_STATES.LoggedIn;
@@ -6115,7 +6152,7 @@ var ConnextUser = function ($) {
             } else if (AUTH_TYPE.Auth0) {
                 var authSettings = CnnXt.GetOptions().authSettings;
 
-                if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+                if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                     LOGGER.warn('No auth0Lock object in the authSettings!');
                     USER_STATE = USER_STATES.NotLoggedIn;
                     CnnXt.Storage.SetUserState(USER_STATE);
@@ -6442,7 +6479,7 @@ var ConnextUser = function ($) {
         try {
             var authSettings = CnnXt.GetOptions().authSettings;
 
-            if (!authSettings && !_.isObject(authSettings.auth0Lock)) {
+            if (!authSettings && !__.isObject(authSettings.auth0Lock)) {
                 throw CnnXt.Common.ERROR.NO_AUTH0_LOCK;
             }
 
@@ -7281,6 +7318,9 @@ var ConnextCampaign = function ($) {
 
             calculateArticleLeft(conversation, validActions, actions);
             CnnXt.Storage.SetCurrentConversation(conversation);
+
+            updateCurrentConversations(conversation);
+
             CnnXt.Event.fire("onConversationDetermined", conversation);
 
             proccessActivationFlow(conversation);
@@ -7751,7 +7791,7 @@ var ConnextCampaign = function ($) {
                         var who = val.Who;
 
                         if (who.ViewsCriteria && !ignoreViewsFlag) {
-                            if (!_.isArray(who.ViewsCriteria)) {
+                            if (!__.isArray(who.ViewsCriteria)) {
                                 who.ViewsCriteria = [who.ViewsCriteria];
                             }
                             who.ViewsCriteria.forEach(function (criteria) {
@@ -7935,6 +7975,12 @@ var ConnextCampaign = function ($) {
     var getCurrentConversationViewCount = function () {
         return CnnXt.Storage.GetCurrentConversationViewCount();
     };
+
+    function updateCurrentConversations (conversation) {
+        var allCurrentConversations = CnnXt.Storage.GetCurrentConversations();
+        allCurrentConversations[METER_LEVEL] = conversation;
+        CnnXt.Storage.SetCurrentConversations(allCurrentConversations);
+    }
 
     return {
         init: function (configSettings) {
@@ -10780,11 +10826,11 @@ var CnnXt = function ($) {
                 if (OPTIONS.runSettings.runPromise && __.isFunction(OPTIONS.runSettings.runPromise.then)) {
                     OPTIONS.runSettings.hasValidPromise = true;
 
-                    if (!_.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
+                    if (!__.isFunction(OPTIONS.runSettings.onRunPromiseResolved)) {
                         OPTIONS.runSettings.onRunPromiseResolved = $.noop;
                     }
 
-                    if (!_.isFunction(OPTIONS.runSettings.onRunPromiseRejected)) {
+                    if (!__.isFunction(OPTIONS.runSettings.onRunPromiseRejected)) {
                         OPTIONS.runSettings.onRunPromiseRejected = $.noop;
                     }
                 } else {
@@ -10793,7 +10839,7 @@ var CnnXt = function ($) {
                     LOGGER.debug(NAME, fnName, 'No or invalid promise object in the \'runSettings\'');
                 }
 
-                if (!_.isNumber(OPTIONS.runSettings.runOffset)) {
+                if (!__.isNumber(OPTIONS.runSettings.runOffset)) {
                     LOGGER.debug(NAME, fnName, 'We have not run offset, so we set the \'runSettings.runOffset\' by default', defaultRunOffsetTime);
                     OPTIONS.runSettings.runOffset = defaultRunOffsetTime;
                 }
