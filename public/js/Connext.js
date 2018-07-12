@@ -1,6 +1,6 @@
 window.connextVersion = "1.14.2"
 
-window.connextBuild = "V.1.14.2-20180530.1"
+window.connextBuild = "V.1.14.2-20180626.1"
 
 !function ($) {
 
@@ -2166,7 +2166,7 @@ if (typeof jQuery === 'undefined') {
               .replace(escaper, function (match) { return '\\' + escapes[match]; });
 
             if (escape) {
-                source += "'+\n((__t=(" + escape + "))==null?'':__.escape(__t))+\n'";
+                source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
             }
             if (interpolate) {
                 source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
@@ -2884,18 +2884,6 @@ if (!JSON) {
         window.Cookies = _OldCookies;
         return api;
     };
-    //if (typeof define === 'function' && define.amd) {
-    //    define(factory);
-    //} else if (typeof exports === 'object') {
-    //    module.exports = factory();
-    //} else {
-    //    var _OldCookies = window.Cookies;
-    //    var api = window.Cookies = factory();
-    //    api.noConflict = function () {
-    //        window.Cookies = _OldCookies;
-    //        return api;
-    //    };
-    //}
 }(function () {
     function extend() {
         var i = 0;
@@ -2907,6 +2895,12 @@ if (!JSON) {
             }
         }
         return result;
+    }
+    function decodeCookie(name, cookie, rdecode) {
+        if (name !== 'igmRegID' && name !== 'igmContent' && name !== 'igmAuth') {
+            cookie = cookie.replace(rdecode, decodeURIComponent);
+        }
+        return cookie;
     }
 
     function init(converter) {
@@ -2946,11 +2940,11 @@ if (!JSON) {
                 key = key.replace(/[\(\)]/g, escape);
 
                 return (document.cookie = [
-					key, '=', value,
-					attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
-					attributes.path && '; path=' + attributes.path,
-					attributes.domain && '; domain=' + attributes.domain,
-					attributes.secure ? '; secure' : ''
+                    key, '=', value,
+                    attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
+                    attributes.path && '; path=' + attributes.path,
+                    attributes.domain && '; domain=' + attributes.domain,
+                    attributes.secure ? '; secure' : ''
                 ].join(''));
             }
 
@@ -2978,9 +2972,8 @@ if (!JSON) {
 
                 try {
                     cookie = converter.read ?
-						converter.read(cookie, name) : converter(cookie, name) ||
-						cookie.replace(rdecode, decodeURIComponent);
-
+                        converter.read(cookie, name) : converter(cookie, name) ||
+                        decodeCookie(name, cookie, rdecode);
                     if (this.json) {
                         try {
                             cookie = JSON.parse(cookie);
@@ -3019,7 +3012,6 @@ if (!JSON) {
 
         return api;
     }
-
     return init(function () { });
 }));
 
@@ -4722,13 +4714,13 @@ var ConnextCommon = function () {
         S3LastPublishDatePath: "data/last_publish/<%- siteCode %>.json",
         CSSPluginUrl: {
             localhost: "//localhost:20001/plugin/assets/css/themes/",
-            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.13/themes/",
-            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.13/themes/",
-            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.13/themes/",
-            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.13/themes/",
-            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.13/themes/',
-            prod: "https://cdn.mg2connext.com/prod/1.6/themes/",
-            preprod: "https://cdn.mg2connext.com/preprod/1.6/themes/"
+            dev: "https://mg2assetsdev.blob.core.windows.net/connext/dev/1.14/themes/",
+            test: "https://mg2assetsdev.blob.core.windows.net/connext/test/1.14/themes/",
+            stage: "https://prodmg2.blob.core.windows.net/connext/stage/1.14/themes/",
+            demo: "https://prodmg2.blob.core.windows.net/connext/demo/1.14/themes/",
+            test20: 'https://prodmg2.blob.core.windows.net/connext/test20/1.14/themes/',
+            prod: "https://cdn.mg2connext.com/prod/1.14/themes/",
+            preprod: "https://cdn.mg2connext.com/preprod/1.14/themes/"
         },
         APIUrl: {
             localhost: "https://dev-connext-api.azurewebsites.net/",
@@ -7027,6 +7019,35 @@ var ConnextUtils = function ($) {
         return bytesToInt32(maskedBytes);
     }
 
+    function decodeAuthCookie(data) {
+        if (!data) {
+            return null;
+        }
+        return encodeURIComponent(decodeURIComponent(data));
+    }
+
+    function newsletterErrorHandler (data, defaultMessage) {
+        if (data) {
+            var errorData;
+            var message = JSON.parse(data.responseText);
+            if (message.Message) {
+                errorData = {
+                    Message: message.Message
+                };
+            } else {
+                errorData = {
+                    Message: defaultMessage
+                };
+            }
+
+            return errorData;
+        }
+        return {
+            Message: defaultMessage
+        };
+
+    }
+
     return {
         init: function () {
             LOGGER = CnnXt.Logger;
@@ -7798,7 +7819,9 @@ var ConnextUtils = function ($) {
                 return defaultMessage;
             }
         },
-        BreakConversationPromises: breakConversationPromises
+        NewsletterErrorHandler : newsletterErrorHandler,
+        BreakConversationPromises: breakConversationPromises,
+        DecodeAuthCookie: decodeAuthCookie
     };
 
 };
@@ -9312,6 +9335,8 @@ var ConnextAPI = function ($) {
     var API_URL;
     var BASE_API_ROUTE = "api/";
 
+    var defaultErrorMessage = 'Sorry, there\'s a server problem or a problem with the network. ';
+
 
     var ROUTES = {
         GetConfiguration: __.template("configuration/siteCode/<%- siteCode %>/configCode/<%- configCode %>?publishDate=<%- publishDate %>"),
@@ -9333,7 +9358,7 @@ var ConnextAPI = function ($) {
         ActivateByZipCodeAndPhoneNumber: __.template("user/ActivateByZipCodeAndPhoneNumber"),
         SyncUser: __.template("user/sync"),
         GetDictionaryValue: __.template("dictionary/<%- ValueName %>"),
-        CheckDigitalAccess: __.template("user/DigitalAccess?masterId=<%= masterId %>&mode=<%= mode %>"),
+        CheckDigitalAccess: __.template("user/masterId/<%- masterId %>/DigitalAccess?mode=<%- mode %>"),
         GetClientIpInfo: "utils/ipInfo"
     };
 
@@ -9419,6 +9444,7 @@ var ConnextAPI = function ($) {
             }
         }
     };
+
 
     var Post = function (args) {
         var fnName = "Post";
@@ -9527,8 +9553,10 @@ var ConnextAPI = function ($) {
                 error: function (error) {
                     LOGGER.debug(NAME, fnName, "Ajax.Error", error);
 
+                    var responseData = CnnXt.Utils.NewsletterErrorHandler(error, defaultErrorMessage);
+
                     if (__.isFunction(args.options.onError)) {
-                        args.options.onError(error);
+                        args.options.onError(responseData);
                     }
                 },
                 complete: function () {
@@ -10462,9 +10490,9 @@ var ConnextUser = function ($) {
         try {
             USER_STATE = USER_STATES.LoggedIn;
 
-            data.IgmAuth = data.IgmAuth || CnnXt.Storage.GetIgmAuth();
-            data.IgmContent = data.IgmContent || CnnXt.Storage.GetIgmContent();
-            data.IgmRegID = data.IgmRegID || CnnXt.Storage.GetigmRegID();
+            data.IgmAuth = CnnXt.Utils.DecodeAuthCookie(data.IgmAuth) || CnnXt.Storage.GetIgmAuth();
+            data.IgmContent = CnnXt.Utils.DecodeAuthCookie(data.IgmContent) || CnnXt.Storage.GetIgmContent();
+            data.IgmRegID = CnnXt.Utils.DecodeAuthCookie(data.IgmRegID) || CnnXt.Storage.GetigmRegID();
 
             USER_DATA = CnnXt.Utils.ShapeUserData(data);
 
@@ -11845,6 +11873,9 @@ var ConnextCampaign = function ($) {
 
             calculateArticleLeft(conversation, validActions, actions);
             CnnXt.Storage.SetCurrentConversation(conversation);
+
+            updateCurrentConversations(conversation);
+
             CnnXt.Event.fire("onConversationDetermined", conversation);
 
             proccessActivationFlow(conversation);
@@ -12499,6 +12530,12 @@ var ConnextCampaign = function ($) {
     var getCurrentConversationViewCount = function () {
         return CnnXt.Storage.GetCurrentConversationViewCount();
     };
+
+    function updateCurrentConversations (conversation) {
+        var allCurrentConversations = CnnXt.Storage.GetCurrentConversations();
+        allCurrentConversations[METER_LEVEL] = conversation;
+        CnnXt.Storage.SetCurrentConversations(allCurrentConversations);
+    }
 
     return {
         init: function (configSettings) {
