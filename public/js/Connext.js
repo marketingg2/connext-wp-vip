@@ -1,6 +1,6 @@
-window.connextVersion = "1.14.2"
+window.connextVersion = "1.14.3"
 
-window.connextBuild = "V.1.14.2-20180626.1"
+window.connextBuild = "V.1.14.3-20180725.1"
 
 !function ($) {
 
@@ -2897,9 +2897,7 @@ if (!JSON) {
         return result;
     }
     function decodeCookie(name, cookie, rdecode) {
-        if (name !== 'igmRegID' && name !== 'igmContent' && name !== 'igmAuth') {
-            cookie = cookie.replace(rdecode, decodeURIComponent);
-        }
+        cookie = cookie.replace(rdecode, decodeURIComponent);
         return cookie;
     }
 
@@ -2926,14 +2924,13 @@ if (!JSON) {
                         value = result;
                     }
                 } catch (e) { }
-                if (key != 'igmRegID' && key != 'igmContent' && key != 'igmAuth') {
-                    if (!converter.write) {
-                        value = encodeURIComponent(String(value))
-                            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-                    } else {
-                        value = converter.write(value, key);
-                    }
-                }
+
+				if (!converter.write) {
+					value = encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+				} else {
+					value = converter.write(value, key);
+				}
 
                 key = encodeURIComponent(String(key));
                 key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
@@ -8674,26 +8671,26 @@ var ConnextStorage = function ($) {
         SetigmRegID: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 30);
-            return setCookie(CnnXt.Common.StorageKeys.igmRegID, value, expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmRegID, decodeURIComponent(value), expire);
         },
         GetigmRegID: function () {
-            return Cookies.get(CnnXt.Common.StorageKeys.igmRegID);
+            return CnnXt.Utils.DecodeAuthCookie(Cookies.get(CnnXt.Common.StorageKeys.igmRegID));
         },
         SetIgmContent: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 30);
-            return setCookie(CnnXt.Common.StorageKeys.igmContent, value, expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmContent, decodeURIComponent(value), expire);
         },
         GetIgmContent: function () {
-            return getCookie(CnnXt.Common.StorageKeys.igmContent);
+            return CnnXt.Utils.DecodeAuthCookie(getCookie(CnnXt.Common.StorageKeys.igmContent));
         },
         SetIgmAuth: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 1);
-            return setCookie(CnnXt.Common.StorageKeys.igmAuth, value, expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmAuth, decodeURIComponent(value), expire);
         }, 
         GetIgmAuth: function () {
-            return getCookie(CnnXt.Common.StorageKeys.igmAuth);
+            return CnnXt.Utils.DecodeAuthCookie(getCookie(CnnXt.Common.StorageKeys.igmAuth));
         },
         SetExternalUserId: function (value) {
             var expire = new Date();
