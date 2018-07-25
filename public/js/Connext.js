@@ -15139,7 +15139,7 @@ var ConnextActivation = function ($) {
     };
 };
 var CnnXt = function ($) {
-    var VERSION = '1.14.2';
+    var VERSION = '1.14.3';
     var CONFIGURATION = null;
     var NAME = "Core";
     var LOGGER;
