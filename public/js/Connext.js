@@ -2877,142 +2877,6 @@ if (!JSON) {
     }
 }());
 
-(function (factory) {
-    var _OldCookies = window.Cookies;
-    var api = window.Cookies = factory();
-    api.noConflict = function () {
-        window.Cookies = _OldCookies;
-        return api;
-    };
-}(function () {
-    function extend() {
-        var i = 0;
-        var result = {};
-        for (; i < arguments.length; i++) {
-            var attributes = arguments[i];
-            for (var key in attributes) {
-                result[key] = attributes[key];
-            }
-        }
-        return result;
-    }
-    function decodeCookie(name, cookie, rdecode) {
-        cookie = cookie.replace(rdecode, decodeURIComponent);
-        return cookie;
-    }
-
-    function init(converter) {
-        function api(key, value, attributes) {
-            var result;
-
-            // Write
-
-            if (arguments.length > 1) {
-                attributes = extend({
-                    path: '/'
-                }, api.defaults, attributes);
-
-                if (typeof attributes.expires === 'number') {
-                    var expires = new Date();
-                    expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
-                    attributes.expires = expires;
-                }
-
-                try {
-                    result = JSON.stringify(value);
-                    if (/^[\{\[]/.test(result)) {
-                        value = result;
-                    }
-                } catch (e) { }
-
-				if (!converter.write) {
-					value = encodeURIComponent(String(value))
-						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-				} else {
-					value = converter.write(value, key);
-				}
-
-                key = encodeURIComponent(String(key));
-                key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
-                key = key.replace(/[\(\)]/g, escape);
-
-                return (document.cookie = [
-                    key, '=', value,
-                    attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
-                    attributes.path && '; path=' + attributes.path,
-                    attributes.domain && '; domain=' + attributes.domain,
-                    attributes.secure ? '; secure' : ''
-                ].join(''));
-            }
-
-            // Read
-
-            if (!key) {
-                result = {};
-            }
-
-            // To prevent the for loop in the first place assign an empty array
-            // in case there are no cookies at all. Also prevents odd result when
-            // calling "get()"
-            var cookies = document.cookie ? document.cookie.split('; ') : [];
-            var rdecode = /(%[0-9A-Z]{2})+/g;
-            var i = 0;
-
-            for (; i < cookies.length; i++) {
-                var parts = cookies[i].split('=');
-                var name = parts[0].replace(rdecode, decodeURIComponent);
-                var cookie = parts.slice(1).join('=');
-
-                if (cookie.charAt(0) === '"') {
-                    cookie = cookie.slice(1, -1);
-                }
-
-                try {
-                    cookie = converter.read ?
-                        converter.read(cookie, name) : converter(cookie, name) ||
-                        decodeCookie(name, cookie, rdecode);
-                    if (this.json) {
-                        try {
-                            cookie = JSON.parse(cookie);
-                        } catch (e) { }
-                    }
-
-                    if (key === name) {
-                        result = cookie;
-                        break;
-                    }
-
-                    if (!key) {
-                        result[name] = cookie;
-                    }
-                } catch (e) { }
-            }
-
-            return result;
-        }
-
-        api.get = api.set = api;
-        api.getJSON = function () {
-            return api.apply({
-                json: true
-            }, [].slice.call(arguments));
-        };
-        api.defaults = {};
-
-        api.remove = function (key, attributes) {
-            api(key, '', extend(attributes, {
-                expires: -1
-            }));
-        };
-
-        api.withConverter = init;
-
-        return api;
-    }
-    return init(function () { });
-}));
-
-
 var MD5 = function (s) { function L(k, d) { return (k << d) | (k >>> (32 - d)) } function K(G, k) { var I, d, F, H, x; F = (G & 2147483648); H = (k & 2147483648); I = (G & 1073741824); d = (k & 1073741824); x = (G & 1073741823) + (k & 1073741823); if (I & d) { return (x ^ 2147483648 ^ F ^ H) } if (I | d) { if (x & 1073741824) { return (x ^ 3221225472 ^ F ^ H) } else { return (x ^ 1073741824 ^ F ^ H) } } else { return (x ^ F ^ H) } } function r(d, F, k) { return (d & F) | ((~d) & k) } function q(d, F, k) { return (d & k) | (F & (~k)) } function p(d, F, k) { return (d ^ F ^ k) } function n(d, F, k) { return (F ^ (d | (~k))) } function u(G, F, aa, Z, k, H, I) { G = K(G, K(K(r(F, aa, Z), k), I)); return K(L(G, H), F) } function f(G, F, aa, Z, k, H, I) { G = K(G, K(K(q(F, aa, Z), k), I)); return K(L(G, H), F) } function D(G, F, aa, Z, k, H, I) { G = K(G, K(K(p(F, aa, Z), k), I)); return K(L(G, H), F) } function t(G, F, aa, Z, k, H, I) { G = K(G, K(K(n(F, aa, Z), k), I)); return K(L(G, H), F) } function e(G) { var Z; var F = G.length; var x = F + 8; var k = (x - (x % 64)) / 64; var I = (k + 1) * 16; var aa = Array(I - 1); var d = 0; var H = 0; while (H < F) { Z = (H - (H % 4)) / 4; d = (H % 4) * 8; aa[Z] = (aa[Z] | (G.charCodeAt(H) << d)); H++ } Z = (H - (H % 4)) / 4; d = (H % 4) * 8; aa[Z] = aa[Z] | (128 << d); aa[I - 2] = F << 3; aa[I - 1] = F >>> 29; return aa } function B(x) { var k = "", F = "", G, d; for (d = 0; d <= 3; d++) { G = (x >>> (d * 8)) & 255; F = "0" + G.toString(16); k = k + F.substr(F.length - 2, 2) } return k } function J(k) { k = k.replace(/rn/g, "n"); var d = ""; for (var F = 0; F < k.length; F++) { var x = k.charCodeAt(F); if (x < 128) { d += String.fromCharCode(x) } else { if ((x > 127) && (x < 2048)) { d += String.fromCharCode((x >> 6) | 192); d += String.fromCharCode((x & 63) | 128) } else { d += String.fromCharCode((x >> 12) | 224); d += String.fromCharCode(((x >> 6) & 63) | 128); d += String.fromCharCode((x & 63) | 128) } } } return d } var C = Array(); var P, h, E, v, g, Y, X, W, V; var S = 7, Q = 12, N = 17, M = 22; var A = 5, z = 9, y = 14, w = 20; var o = 4, m = 11, l = 16, j = 23; var U = 6, T = 10, R = 15, O = 21; s = J(s); C = e(s); Y = 1732584193; X = 4023233417; W = 2562383102; V = 271733878; for (P = 0; P < C.length; P += 16) { h = Y; E = X; v = W; g = V; Y = u(Y, X, W, V, C[P + 0], S, 3614090360); V = u(V, Y, X, W, C[P + 1], Q, 3905402710); W = u(W, V, Y, X, C[P + 2], N, 606105819); X = u(X, W, V, Y, C[P + 3], M, 3250441966); Y = u(Y, X, W, V, C[P + 4], S, 4118548399); V = u(V, Y, X, W, C[P + 5], Q, 1200080426); W = u(W, V, Y, X, C[P + 6], N, 2821735955); X = u(X, W, V, Y, C[P + 7], M, 4249261313); Y = u(Y, X, W, V, C[P + 8], S, 1770035416); V = u(V, Y, X, W, C[P + 9], Q, 2336552879); W = u(W, V, Y, X, C[P + 10], N, 4294925233); X = u(X, W, V, Y, C[P + 11], M, 2304563134); Y = u(Y, X, W, V, C[P + 12], S, 1804603682); V = u(V, Y, X, W, C[P + 13], Q, 4254626195); W = u(W, V, Y, X, C[P + 14], N, 2792965006); X = u(X, W, V, Y, C[P + 15], M, 1236535329); Y = f(Y, X, W, V, C[P + 1], A, 4129170786); V = f(V, Y, X, W, C[P + 6], z, 3225465664); W = f(W, V, Y, X, C[P + 11], y, 643717713); X = f(X, W, V, Y, C[P + 0], w, 3921069994); Y = f(Y, X, W, V, C[P + 5], A, 3593408605); V = f(V, Y, X, W, C[P + 10], z, 38016083); W = f(W, V, Y, X, C[P + 15], y, 3634488961); X = f(X, W, V, Y, C[P + 4], w, 3889429448); Y = f(Y, X, W, V, C[P + 9], A, 568446438); V = f(V, Y, X, W, C[P + 14], z, 3275163606); W = f(W, V, Y, X, C[P + 3], y, 4107603335); X = f(X, W, V, Y, C[P + 8], w, 1163531501); Y = f(Y, X, W, V, C[P + 13], A, 2850285829); V = f(V, Y, X, W, C[P + 2], z, 4243563512); W = f(W, V, Y, X, C[P + 7], y, 1735328473); X = f(X, W, V, Y, C[P + 12], w, 2368359562); Y = D(Y, X, W, V, C[P + 5], o, 4294588738); V = D(V, Y, X, W, C[P + 8], m, 2272392833); W = D(W, V, Y, X, C[P + 11], l, 1839030562); X = D(X, W, V, Y, C[P + 14], j, 4259657740); Y = D(Y, X, W, V, C[P + 1], o, 2763975236); V = D(V, Y, X, W, C[P + 4], m, 1272893353); W = D(W, V, Y, X, C[P + 7], l, 4139469664); X = D(X, W, V, Y, C[P + 10], j, 3200236656); Y = D(Y, X, W, V, C[P + 13], o, 681279174); V = D(V, Y, X, W, C[P + 0], m, 3936430074); W = D(W, V, Y, X, C[P + 3], l, 3572445317); X = D(X, W, V, Y, C[P + 6], j, 76029189); Y = D(Y, X, W, V, C[P + 9], o, 3654602809); V = D(V, Y, X, W, C[P + 12], m, 3873151461); W = D(W, V, Y, X, C[P + 15], l, 530742520); X = D(X, W, V, Y, C[P + 2], j, 3299628645); Y = t(Y, X, W, V, C[P + 0], U, 4096336452); V = t(V, Y, X, W, C[P + 7], T, 1126891415); W = t(W, V, Y, X, C[P + 14], R, 2878612391); X = t(X, W, V, Y, C[P + 5], O, 4237533241); Y = t(Y, X, W, V, C[P + 12], U, 1700485571); V = t(V, Y, X, W, C[P + 3], T, 2399980690); W = t(W, V, Y, X, C[P + 10], R, 4293915773); X = t(X, W, V, Y, C[P + 1], O, 2240044497); Y = t(Y, X, W, V, C[P + 8], U, 1873313359); V = t(V, Y, X, W, C[P + 15], T, 4264355552); W = t(W, V, Y, X, C[P + 6], R, 2734768916); X = t(X, W, V, Y, C[P + 13], O, 1309151649); Y = t(Y, X, W, V, C[P + 4], U, 4149444226); V = t(V, Y, X, W, C[P + 11], T, 3174756917); W = t(W, V, Y, X, C[P + 2], R, 718787259); X = t(X, W, V, Y, C[P + 9], O, 3951481745); Y = K(Y, h); X = K(X, E); W = K(W, v); V = K(V, g) } var i = B(Y) + B(X) + B(W) + B(V); return i.toLowerCase() };
 (function () {
     'use strict';
@@ -6901,11 +6765,11 @@ var ConnextUtils = function ($) {
         var cookieKey = CnnXt.Common.StorageKeys.connext_check_domain_write,
             result = false;
 
-        Cookies.set(cookieKey, 'Done!', { domain: domain });
+        CnnXt.Cookies.set(cookieKey, 'Done!', { domain: domain });
 
-        result = !!Cookies.get(cookieKey);
+        result = !!CnnXt.Cookies.get(cookieKey);
 
-        Cookies.set(cookieKey, 'null', { domain: domain, expires: -1 });
+        CnnXt.Cookies.set(cookieKey, 'null', { domain: domain, expires: -1 });
 
         return result;
     }
@@ -7895,7 +7759,7 @@ var ConnextStorage = function ($) {
 
             LOGGER.debug(NAME, fnName, 'cookieKey', cookieKey);
 
-            return Cookies.get(cookieKey);
+            return CnnXt.Cookies.get(cookieKey);
         } catch (ex) {
             LOGGER.exception(NAME, fnName, ex);
         }
@@ -7950,9 +7814,9 @@ var ConnextStorage = function ($) {
             if (expiration) {
                 LOGGER.debug(NAME, fnName, 'HasExpiration', 'key', key, 'expiration', expiration);
 
-                return Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { expires: expiration, domain: curdomain });
+                return CnnXt.Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { expires: expiration, domain: curdomain });
             } else {
-                return Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { domain: curdomain });
+                return CnnXt.Cookies.set(CnnXt.Common.StorageKeys[key] || key, data, { domain: curdomain });
             }
         } catch (ex) {
             LOGGER.exception(NAME, fnName, ex);
@@ -7968,8 +7832,8 @@ var ConnextStorage = function ($) {
             var domain = CnnXt.Storage.GetDomain(),
                 rootDomain = CnnXt.Storage.GetDomain(true);
 
-            Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: domain, expires: -1 });
-            Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: rootDomain, expires: -1 });
+            CnnXt.Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: domain, expires: -1 });
+            CnnXt.Cookies.set(CnnXt.Common.StorageKeys[key] || key, 'null', { domain: rootDomain, expires: -1 });
         } catch (ex) {
             LOGGER.exception(NAME, fnName, ex);
         }
@@ -8310,10 +8174,10 @@ var ConnextStorage = function ($) {
     };
 
     var clearUserStorage = function () {
-        Cookies.remove(CnnXt.Common.StorageKeys.userToken);
-        Cookies.remove(CnnXt.Common.StorageKeys.accessToken);
-        Cookies.remove("userToken");
-        Cookies.remove("userMasterId");
+        CnnXt.Cookies.remove(CnnXt.Common.StorageKeys.userToken);
+        CnnXt.Cookies.remove(CnnXt.Common.StorageKeys.accessToken);
+        CnnXt.Cookies.remove("userToken");
+        CnnXt.Cookies.remove("userMasterId");
         localStorage.removeItem("janrainCaptureProfileData");
         localStorage.removeItem("janrainCaptureReturnExperienceData");
         $.jStorage.deleteKey(CnnXt.Common.StorageKeys.user.zipCodes);
@@ -8671,26 +8535,26 @@ var ConnextStorage = function ($) {
         SetigmRegID: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 30);
-            return setCookie(CnnXt.Common.StorageKeys.igmRegID, decodeURIComponent(value), expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmRegID, value, expire);
         },
         GetigmRegID: function () {
-            return CnnXt.Utils.DecodeAuthCookie(Cookies.get(CnnXt.Common.StorageKeys.igmRegID));
+            return CnnXt.Cookies.get(CnnXt.Common.StorageKeys.igmRegID);
         },
         SetIgmContent: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 30);
-            return setCookie(CnnXt.Common.StorageKeys.igmContent, decodeURIComponent(value), expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmContent, value, expire);
         },
         GetIgmContent: function () {
-            return CnnXt.Utils.DecodeAuthCookie(getCookie(CnnXt.Common.StorageKeys.igmContent));
+            return getCookie(CnnXt.Common.StorageKeys.igmContent);
         },
         SetIgmAuth: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 1);
-            return setCookie(CnnXt.Common.StorageKeys.igmAuth, decodeURIComponent(value), expire);
+            return setCookie(CnnXt.Common.StorageKeys.igmAuth, value, expire);
         }, 
         GetIgmAuth: function () {
-            return CnnXt.Utils.DecodeAuthCookie(getCookie(CnnXt.Common.StorageKeys.igmAuth));
+            return getCookie(CnnXt.Common.StorageKeys.igmAuth);
         },
         SetExternalUserId: function (value) {
             var expire = new Date();
@@ -8698,7 +8562,7 @@ var ConnextStorage = function ($) {
             return setCookie('ExternalUserId', value, expire);
         },
         GetExternalUserId: function () {
-            return Cookies.get("ExternalUserId");
+            return CnnXt.Cookies.get("ExternalUserId");
         },
         SetUserRegId: function (token) {
             return setCookie("userMasterId", token, 365);
@@ -8855,10 +8719,10 @@ var ConnextStorage = function ($) {
         SetAccountDataExpirationCookie: function (value) {
             var expire = new Date();
             expire.setDate(expire.getDate() + 1);
-            return Cookies.set('Connext_AccountDataExpirationCookie', value, { expires: expire });
+            return CnnXt.Cookies.set('Connext_AccountDataExpirationCookie', value, { expires: expire });
         },
         GetAccountDataExpirationCookie: function () {
-            return Cookies.get("Connext_AccountDataExpirationCookie");
+            return CnnXt.Cookies.get("Connext_AccountDataExpirationCookie");
         },
         WrongPin: function () {
             var useCurDomain = !Connext.Storage.GetLocalConfiguration().Settings.UseParentDomain;
@@ -9298,10 +9162,10 @@ var CookieMigration = function ($) {
                 { str = str.trim(); }
                 str = decodeURIComponent(str);
                 if (str.startsWith('Connext_ViewedArticles') || str.startsWith('sub_Connext_ViewedArticles')) {
-                    Cookies.remove(str);
+                    CnnXt.Cookies.remove(str);
                     var domainArr = location.host.split('.');
                     var rootDomain = '.' + domainArr[(domainArr.length - 2)] + '.' + domainArr[(domainArr.length - 1)];
-                    Cookies.remove(str, { domain: rootDomain });
+                    CnnXt.Cookies.remove(str, { domain: rootDomain });
                 }
             });
         } catch (ex) {
@@ -16170,3 +16034,129 @@ var CnnXt = function ($) {
 var Connext = {
     init: CnnXt.init
 };
+
+(function (factory) {
+    CnnXt.Cookies = factory();
+}(function () {
+    function extend() {
+        var i = 0;
+        var result = {};
+        for (; i < arguments.length; i++) {
+            var attributes = arguments[i];
+            for (var key in attributes) {
+                result[key] = attributes[key];
+            }
+        }
+        return result;
+    }
+    function decodeCookie(name, cookie, rdecode) {
+        if (name !== 'igmRegID' && name !== 'igmContent' && name !== 'igmAuth') {
+            cookie = cookie.replace(rdecode, decodeURIComponent);
+        }
+        return cookie;
+    }
+
+    function init(converter) {
+        function api(key, value, attributes) {
+            var result;
+
+            if (arguments.length > 1) {
+                attributes = extend({
+                    path: '/'
+                }, api.defaults, attributes);
+
+                if (typeof attributes.expires === 'number') {
+                    var expires = new Date();
+                    expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+                    attributes.expires = expires;
+                }
+
+                try {
+                    result = JSON.stringify(value);
+                    if (/^[\{\[]/.test(result)) {
+                        value = result;
+                    }
+                } catch (e) { }
+                if (key != 'igmRegID' && key != 'igmContent' && key != 'igmAuth') {
+                    if (!converter.write) {
+                        value = encodeURIComponent(String(value))
+                            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+                    } else {
+                        value = converter.write(value, key);
+                    }
+                }
+
+                key = encodeURIComponent(String(key));
+                key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+                key = key.replace(/[\(\)]/g, escape);
+
+                return (document.cookie = [
+                    key, '=', value,
+                    attributes.expires && '; expires=' + attributes.expires.toUTCString(),
+                    attributes.path && '; path=' + attributes.path,
+                    attributes.domain && '; domain=' + attributes.domain,
+                    attributes.secure ? '; secure' : ''
+                ].join(''));
+            }
+
+            if (!key) {
+                result = {};
+            }
+
+            var cookies = document.cookie ? document.cookie.split('; ') : [];
+            var rdecode = /(%[0-9A-Z]{2})+/g;
+            var i = 0;
+
+            for (; i < cookies.length; i++) {
+                var parts = cookies[i].split('=');
+                var name = parts[0].replace(rdecode, decodeURIComponent);
+                var cookie = parts.slice(1).join('=');
+
+                if (cookie.charAt(0) === '"') {
+                    cookie = cookie.slice(1, -1);
+                }
+
+                try {
+                    cookie = converter.read ?
+                        converter.read(cookie, name) : converter(cookie, name) ||
+                        decodeCookie(name, cookie, rdecode);
+                    if (this.json) {
+                        try {
+                            cookie = JSON.parse(cookie);
+                        } catch (e) { }
+                    }
+
+                    if (key === name) {
+                        result = cookie;
+                        break;
+                    }
+
+                    if (!key) {
+                        result[name] = cookie;
+                    }
+                } catch (e) { }
+            }
+
+            return result;
+        }
+
+        api.get = api.set = api;
+        api.getJSON = function () {
+            return api.apply({
+                json: true
+            }, [].slice.call(arguments));
+        };
+        api.defaults = {};
+
+        api.remove = function (key, attributes) {
+            api(key, '', extend(attributes, {
+                expires: -1
+            }));
+        };
+
+        api.withConverter = init;
+
+        return api;
+    }
+    return init(function () { });
+}));
