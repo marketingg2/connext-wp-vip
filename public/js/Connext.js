@@ -1,6 +1,6 @@
 window.connextVersion = "1.14.3"
 
-window.connextBuild = "V.1.14.3-20180725.1"
+window.connextBuild = "V.1.14.3-20180731.1"
 
 !function ($) {
 
@@ -12579,6 +12579,7 @@ var ConnextAction = function ($) {
         var fnName = "executeAction";
 
         LOGGER.debug(NAME, fnName, 'Starting executing action...', action);
+		var CONTENT_SELECTOR, CONTENT_POSITION;
 
         try {
             if (action.What.Type == ACTION_TYPE.Paywall) {
@@ -13511,6 +13512,7 @@ var ConnextWhitelist = function ($) {
     };
 
     var TEMPLATE_CLOSED = true;
+	var MAX_PIN_ATTEMPTS = 5;
 
     var $tpl;
     var configuration;
@@ -13671,7 +13673,7 @@ var ConnextWhitelist = function ($) {
     var checkPinAttempts = function () {
         var pinAttempts = CnnXt.Storage.GetPinAttempts();
         var someAttemptsLeft = true;
-        if (pinAttempts && pinAttempts >= 5) {
+        if (pinAttempts && pinAttempts >= MAX_PIN_ATTEMPTS - 1) {
             someAttemptsLeft = false;
         }
         return someAttemptsLeft;
