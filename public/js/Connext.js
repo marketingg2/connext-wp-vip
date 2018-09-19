@@ -7049,7 +7049,7 @@ var ConnextUtils = function ($) {
             return diff;
         },
         GetUrl: function () {
-            return location.protocol + "//" + location.host + location.pathname + location.hash;
+            return location.href.match(/.+?(?=[\/])[^?# ]+/g) == null ? location.protocol + "//" + location.host + location.pathname : location.href.match(/.+?(?=[\/])[^?# ]+/g).join('');
         },
         GetHiddenFormFieldValue: function (selector) { //we take any jquery selector, so it can be a class, id, data atrribute etc...
             try {
